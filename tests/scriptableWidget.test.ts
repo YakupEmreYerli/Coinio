@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 /** Minimal stand-ins for the Scriptable APIs the widget uses; texts are collected for assertions. */
-function sandbox(family: string, response: unknown, opts: { fail?: boolean; cached?: string } = {}) {
+function sandbox(family: string, response: unknown, opts: { fail?: boolean; cached?: string; status?: number; url?: string } = {}) {
   const texts: string[] = [];
   const node = () => {
     const n: Record<string, unknown> = {
@@ -21,6 +21,7 @@ function sandbox(family: string, response: unknown, opts: { fail?: boolean; cach
   }
   const files = new Map<string, string>(opts.cached ? [['/docs/coinio-widget.json', opts.cached]] : []);
   let shown: unknown = null;
+  const urls: string[] = [];
   const g = {
     ListWidget,
     Font: new Proxy({}, { get: () => () => ({}) }),
@@ -29,6 +30,10 @@ function sandbox(family: string, response: unknown, opts: { fail?: boolean; cach
     Request: class {
       headers = {};
       timeoutInterval = 0;
+      response = { statusCode: opts.status ?? 200 };
+      constructor(url: string) {
+        urls.push(url);
+      }
       async loadJSON() {
         if (opts.fail) throw new Error('offline');
         return response;
@@ -39,9 +44,9 @@ function sandbox(family: string, response: unknown, opts: { fail?: boolean; cach
     config: { widgetFamily: family, runsInWidget: true },
     Script: { setWidget: (w: unknown) => (shown = w), complete: () => {} },
   };
-  const src = readFileSync('widget/coinio-widget.js', 'utf8').replace('https://subs.example.com', 'https://subs.test');
+  const src = readFileSync('widget/coinio-widget.js', 'utf8').replace('https://subs.example.com', opts.url ?? 'https://subs.test');
   const run = new Function(...Object.keys(g), `return (async () => {${src}})();`);
-  return { texts, files, done: run(...Object.values(g)) as Promise<void>, shown: () => shown };
+  return { texts, files, urls, done: run(...Object.values(g)) as Promise<void>, shown: () => shown };
 }
 
 const data = {
@@ -81,7 +86,37 @@ describe('Scriptable widget script', () => {
   it('falls back to the cached response and says offline', async () => {
     const s = sandbox('small', null, { fail: true, cached: JSON.stringify(data) });
     await s.done;
-    expect(s.texts).toContain('çevrimdışı');
+    expect(s.texts.some((x) => /^çevrimdışı · \d\d:\d\d$/.test(x))).toBe(true);
     expect(s.texts.join(' ')).toContain('Hetzner VPS');
+  });
+
+  it('a rejected key says so instead of showing old data as offline', async () => {
+    const s = sandbox('medium', { error: 'invalid_token' }, { status: 401, cached: JSON.stringify(data) });
+    await s.done;
+    expect(s.texts).toEqual(["API anahtarı kabul edilmedi, API_KEY'i kontrol et"]);
+  });
+
+  it('without a connection or cache it says the server cannot be reached', async () => {
+    const s = sandbox('medium', null, { fail: true });
+    await s.done;
+    expect(s.texts).toEqual(["Coinio'ya ulaşılamıyor"]);
+  });
+
+  it('tolerates a trailing slash in SERVER_URL', async () => {
+    const s = sandbox('medium', data, { url: 'https://subs.test/' });
+    await s.done;
+    expect(s.urls).toEqual(['https://subs.test/api/widget']);
+  });
+
+  it('medium rows show the due date next to the amount', async () => {
+    const s = sandbox('medium', data);
+    await s.done;
+    expect(s.texts).toContain('22 Kas · ₺868');
+  });
+
+  it('circular lock screen widget shows days to the next payment', async () => {
+    const s = sandbox('accessoryCircular', { ...data, items: data.items.slice(1) });
+    await s.done;
+    expect(s.texts).toEqual(['3', 'ChatGPT Plus']);
   });
 });
