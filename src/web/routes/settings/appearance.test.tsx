@@ -64,6 +64,22 @@ describe('appearance settings', () => {
     expect(puts()).toHaveLength(0);
   });
 
+  it('importing a theme asks first, and warns when it brings CSS or HTML', async () => {
+    const { puts } = setup();
+    const user = userEvent.setup();
+    const theme = { ...DEFAULT_APPEARANCE, theme: 'night', customCss: 'body{color:red}', htmlCards: [{ id: 'w', title: 'Weather', html: '<script>1</script>', height: 120 }] };
+    await user.upload(await screen.findByLabelText(/tema dosyası yükle/i), new File([JSON.stringify(theme)], 'theme.json', { type: 'application/json' }));
+    const dialog = await screen.findByRole('dialog', { name: /tema yüklensin mi/i });
+    expect(within(dialog).getByText(/1 HTML kartı var/)).toBeInTheDocument();
+    await user.click(within(dialog).getByRole('button', { name: /vazgeç|iptal/i }));
+    await new Promise((r) => setTimeout(r, 800));
+    expect(puts()).toHaveLength(0);
+
+    await user.upload(screen.getByLabelText(/tema dosyası yükle/i), new File([JSON.stringify(theme)], 'theme.json', { type: 'application/json' }));
+    await user.click(within(await screen.findByRole('dialog')).getByRole('button', { name: /^tema yükle$/i }));
+    await vi.waitFor(() => expect(puts().at(-1)).toMatchObject({ theme: 'night', customCss: 'body{color:red}' }), { timeout: 2000 });
+  });
+
   it('custom css textarea updates style tag', async () => {
     setup();
     const user = userEvent.setup();

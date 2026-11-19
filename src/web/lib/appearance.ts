@@ -3,13 +3,32 @@ import type { Appearance } from './types';
 
 const CACHE_KEY = 'coinio.appearance';
 const STYLE_ID = 'st-custom-css';
+const VARS_ID = 'st-appearance-vars';
+
+/** `?nocss` in the address turns custom CSS and HTML cards off until the next full reload. */
+export function safeModeFrom(search: string): boolean {
+  return new URLSearchParams(search).has('nocss');
+}
+
+/** Read once at load, so the flag survives moving around the app to fix the CSS. */
+export const SAFE_MODE = typeof location !== 'undefined' && safeModeFrom(location.search);
+
+function styleElement(id: string, before?: HTMLElement): HTMLElement {
+  let el = document.getElementById(id);
+  if (!el) {
+    el = document.createElement('style');
+    el.id = id;
+    document.head.insertBefore(el, before ?? null);
+  }
+  return el;
+}
 
 /**
  * Puts the appearance on the root element: data attributes (theme, stack, density, logo shape) that
  * styles.css keys on, accent and radius variables, and the user's CSS last. "system" follows the OS
- * dark mode live; the returned function stops listening.
+ * dark mode live; the returned function stops listening. In safe mode the custom CSS is left out.
  */
-export function applyAppearance(a: Appearance, root: HTMLElement = document.documentElement): () => void {
+export function applyAppearance(a: Appearance, root: HTMLElement = document.documentElement, safe = SAFE_MODE): () => void {
   let stop = () => {};
   if (a.theme === 'system') {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
@@ -22,16 +41,13 @@ export function applyAppearance(a: Appearance, root: HTMLElement = document.docu
   root.dataset.stack = a.stack;
   root.dataset.density = a.density;
   root.dataset.logo = a.logoShape;
-  root.style.setProperty('--accent', a.accent);
-  root.style.setProperty('--radius', `${a.radius}px`);
-
-  let style = document.getElementById(STYLE_ID);
-  if (!style) {
-    style = document.createElement('style');
-    style.id = STYLE_ID;
-    document.head.appendChild(style);
-  }
-  style.textContent = a.customCss;
+  // A style rule, not an inline style: inline values would beat `:root { --accent: … }` in custom CSS.
+  // The first-paint script in index.html sets --accent inline, so that copy is removed here.
+  root.style.removeProperty('--accent');
+  root.style.removeProperty('--radius');
+  const custom = styleElement(STYLE_ID);
+  styleElement(VARS_ID, custom).textContent = `:root { --accent: ${a.accent}; --radius: ${a.radius}px; }`;
+  custom.textContent = safe ? '' : a.customCss;
   void loadStackFonts(a.stack);
   return stop;
 }

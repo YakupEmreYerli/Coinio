@@ -5,6 +5,7 @@ import { Button } from '../../../components/ui/Button';
 import { Dialog, DialogBody, DialogContent, DialogFooter } from '../../../components/ui/Dialog';
 import { Input } from '../../../components/ui/Input';
 import { Textarea } from '../../../components/ui/Textarea';
+import { cardDocument } from '../../../dashboard/cards/HtmlCard';
 import { t } from '../../../i18n';
 import type { Appearance } from '../../../lib/types';
 
@@ -52,12 +53,12 @@ export function HtmlCards({ appearance, update }: { appearance: Appearance; upda
         {t('look.htmlAdd')}
       </Button>
       <p className="text-xs text-text-3">{t('look.htmlSafety')}</p>
-      <HtmlCardDialog card={editing} onClose={() => setEditing(null)} onSave={save} />
+      <HtmlCardDialog appearance={appearance} card={editing} onClose={() => setEditing(null)} onSave={save} />
     </>
   );
 }
 
-function HtmlCardDialog({ card, onClose, onSave }: { card: HtmlCard | null; onClose: () => void; onSave: (c: HtmlCard) => void }) {
+function HtmlCardDialog({ appearance, card, onClose, onSave }: { appearance: Appearance; card: HtmlCard | null; onClose: () => void; onSave: (c: HtmlCard) => void }) {
   const [draft, setDraft] = useState<HtmlCard | null>(card);
   if (card && draft?.id !== card.id) setDraft(card);
   return (
@@ -83,7 +84,7 @@ function HtmlCardDialog({ card, onClose, onSave }: { card: HtmlCard | null; onCl
               </div>
               <div className="flex flex-col gap-1.5">
                 <span className="text-[13px] font-medium text-text-2">{t('look.preview')}</span>
-                <iframe title={t('look.preview')} sandbox="allow-scripts" srcDoc={draft.html} className="w-full rounded-ctl border border-line bg-white" style={{ height: Math.min(draft.height, 320) }} />
+                <iframe title={t('look.preview')} sandbox="allow-scripts" srcDoc={cardDocument(draft.html, appearance)} className="w-full rounded-ctl border border-line" style={{ height: Math.min(draft.height, 320) }} />
               </div>
             </DialogBody>
             <DialogFooter>

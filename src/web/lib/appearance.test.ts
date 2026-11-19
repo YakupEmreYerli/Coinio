@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_APPEARANCE } from '../../shared/appearance';
-import { applyAppearance, cacheAppearance, readCachedAppearance } from './appearance';
+import { applyAppearance, cacheAppearance, readCachedAppearance, safeModeFrom } from './appearance';
 
 function mockScheme(dark: boolean) {
   const listeners = new Set<(e: { matches: boolean }) => void>();
@@ -11,6 +11,7 @@ function mockScheme(dark: boolean) {
 
 afterEach(() => {
   document.getElementById('st-custom-css')?.remove();
+  document.getElementById('st-appearance-vars')?.remove();
   vi.restoreAllMocks();
 });
 
@@ -21,8 +22,25 @@ describe('applyAppearance', () => {
     expect(root.dataset.theme).toBe('night');
     expect(root.dataset.density).toBe('compact');
     expect(root.dataset.logo).toBe('rounded');
-    expect(root.style.getPropertyValue('--accent')).toBe('#ea6a12');
-    expect(root.style.getPropertyValue('--radius')).toBe('4px');
+    expect(document.getElementById('st-appearance-vars')?.textContent).toBe(':root { --accent: #ea6a12; --radius: 4px; }');
+  });
+
+  it('custom css comes after the accent and radius so it can override them', () => {
+    const root = document.createElement('html');
+    root.style.setProperty('--accent', '#111111'); // what the first-paint script leaves inline
+    applyAppearance({ ...DEFAULT_APPEARANCE, customCss: ':root { --accent: #ff3d7f; }' }, root);
+    expect(root.style.getPropertyValue('--accent')).toBe('');
+    const ids = [...document.head.querySelectorAll('style')].map((el) => el.id);
+    expect(ids.indexOf('st-appearance-vars')).toBeLessThan(ids.indexOf('st-custom-css'));
+    expect(document.documentElement.ownerDocument.defaultView!.getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()).toBe('#ff3d7f');
+  });
+
+  it('safe mode (?nocss) leaves the custom css out', () => {
+    expect(safeModeFrom('?nocss')).toBe(true);
+    expect(safeModeFrom('?x=1&nocss=1')).toBe(true);
+    expect(safeModeFrom('')).toBe(false);
+    applyAppearance({ ...DEFAULT_APPEARANCE, customCss: 'body{display:none}' }, document.createElement('html'), true);
+    expect(document.getElementById('st-custom-css')?.textContent).toBe('');
   });
 
   it('system theme follows matchMedia change', () => {

@@ -8,7 +8,7 @@ import { Card } from '../../components/ui/Card';
 import { SegmentedControl } from '../../components/ui/SegmentedControl';
 import { Switch } from '../../components/ui/Switch';
 import { t } from '../../i18n';
-import { loadStackFonts } from '../../lib/appearance';
+import { SAFE_MODE, loadStackFonts } from '../../lib/appearance';
 import { useAppearanceEditor } from '../../lib/appearanceEditor';
 import { useCategoryColor } from '../../lib/categoryColor';
 import { cn } from '../../lib/cn';
@@ -68,6 +68,7 @@ export function Appearance() {
   const categories = [...new Set(subs.map((s) => s.category).filter(Boolean))] as string[];
   const [importError, setImportError] = useState<string | null>(null);
   const [confirmAll, setConfirmAll] = useState(false);
+  const [pendingTheme, setPendingTheme] = useState<AppearanceData | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
     // Previews show every stack in its own type.
@@ -89,7 +90,7 @@ export function Appearance() {
     try {
       const parsed: unknown = JSON.parse(await file.text());
       if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('not an object');
-      update(mergeAppearance(parsed));
+      setPendingTheme(mergeAppearance(parsed));
     } catch {
       setImportError(t('look.importError'));
     }
@@ -98,6 +99,7 @@ export function Appearance() {
 
   return (
     <div className="flex flex-col gap-[var(--gap)]">
+      {SAFE_MODE && <p className="rounded-card border border-line bg-accent-soft px-5 py-3 text-sm">{t('look.safeMode')}</p>}
       <Block title={t('look.theme')} onReset={() => update({ theme: d.theme })}>
         <R.Root aria-label={t('look.theme')} value={a.theme} onValueChange={(v) => update({ theme: v as Theme })} className="grid grid-cols-2 gap-2.5 sm:grid-cols-5">
           {THEMES.map((th) => {
@@ -206,6 +208,7 @@ export function Appearance() {
 
       <Block title={t('look.css')} description={t('look.cssDesc')} onReset={() => update({ customCss: '' })}>
         <CssEditor value={a.customCss} onChange={(customCss) => update({ customCss })} />
+        <p className="text-xs text-text-3">{t('look.cssEscape')}</p>
       </Block>
 
       <Block title={t('look.share')} description={t('look.shareDesc')}>
@@ -235,8 +238,26 @@ export function Appearance() {
         confirmLabel={t('look.resetAll')}
         onConfirm={() => update(DEFAULT_APPEARANCE as AppearanceData)}
       />
+      <ConfirmDialog
+        open={!!pendingTheme}
+        onOpenChange={(v) => !v && setPendingTheme(null)}
+        title={t('look.importTitle')}
+        body={importSummary(pendingTheme)}
+        confirmLabel={t('look.import')}
+        danger={hasCode(pendingTheme)}
+        onConfirm={() => pendingTheme && update(pendingTheme)}
+      />
     </div>
   );
+}
+
+const hasCode = (theme: AppearanceData | null) => !!theme && (theme.customCss.trim() !== '' || theme.htmlCards.length > 0);
+
+/** What loading a theme file replaces, and a warning when it brings its own CSS or HTML. */
+function importSummary(theme: AppearanceData | null): string {
+  if (!theme) return '';
+  const body = t('look.importBody');
+  return hasCode(theme) ? `${body} ${t('look.importCode', { n: theme.htmlCards.length })}` : body;
 }
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
