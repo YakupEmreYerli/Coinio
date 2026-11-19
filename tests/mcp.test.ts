@@ -49,6 +49,26 @@ describe('mcp tools', () => {
     expect(db.select().from(subscriptions).all()).toHaveLength(0);
   });
 
+  it('tells the client a read-only connection cannot change anything', async () => {
+    const { connect } = await setup();
+    expect((await connect('read')).getInstructions()).toMatch(/read-only.*Full access/s);
+    expect((await connect('full')).getInstructions()).toBeUndefined();
+  });
+
+  it('rejects malformed due dates for mark_paid and skip_payment', async () => {
+    const { connect, db, text } = await setup();
+    const c = await connect('full');
+    const subId = text(await c.callTool({ name: 'add_subscription', arguments: netflix })).subscription.id;
+    for (const name of ['mark_paid', 'skip_payment']) {
+      for (const due_date of ['bad', '2026-02-30']) {
+        const res = await c.callTool({ name, arguments: { id: subId, due_date } });
+        expect(res.isError, `${name} ${due_date}`).toBe(true);
+      }
+    }
+    expect(text(await c.callTool({ name: 'get_payment_history', arguments: {} })).payments).toHaveLength(0);
+    expect(db.select().from(subscriptions).get()?.nextDue).toBe('2026-12-01');
+  });
+
   it('add_subscription stores minor units and returns decimal amount', async () => {
     const { connect, db, text } = await setup();
     const res = await (await connect('full')).callTool({ name: 'add_subscription', arguments: netflix });
@@ -62,6 +82,8 @@ describe('mcp tools', () => {
     const c = await connect('full');
     const bad = await c.callTool({ name: 'add_subscription', arguments: { ...netflix, currency: 'XXXX' } });
     expect(bad.isError).toBe(true);
+    const unknown = await c.callTool({ name: 'add_subscription', arguments: { ...netflix, currency: 'XXX' } });
+    expect(unknown.isError).toBe(true);
     const missing = await c.callTool({ name: 'delete_subscription', arguments: { id: 999 } });
     expect(missing.isError).toBe(true);
     expect(JSON.stringify(missing.content)).toContain('subscription not found');

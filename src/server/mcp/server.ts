@@ -17,6 +17,7 @@ import {
   updateSubscription,
 } from '../services/subscriptions.js';
 import { VERSION } from '../../shared/brand.js';
+import { isoDate as validIsoDate } from '../../shared/types.js';
 
 export type McpCtx = ServiceCtx & { userId: number; scope: Scope };
 
@@ -78,7 +79,7 @@ function tool<A>(fn: (args: A) => object): (args: A) => CallToolResult {
 }
 
 const money = z.number().min(0).describe('Decimal amount, e.g. 229.99');
-const isoDate = z.string().describe('Date as YYYY-MM-DD');
+const isoDate = validIsoDate.describe('Date as YYYY-MM-DD');
 const id = z.number().int().positive();
 
 const writableFields = {
@@ -117,8 +118,17 @@ function toServiceFields(a: Fields) {
   };
 }
 
+/** Read-only connections only see the read tools; this tells the assistant why the rest is missing. */
+const READ_ONLY_INSTRUCTIONS =
+  'This Coinio connection is read-only: it can read subscriptions and payments but cannot add, change, pay, skip or delete anything. ' +
+  'If the user asks for a change, tell them this connection is read-only and that they can do it in the Coinio app, ' +
+  'or reconnect with a Full access API key (Settings › API keys) or an OAuth grant that includes subscriptions:write.';
+
 export function buildMcpServer(ctx: McpCtx): McpServer {
-  const server = new McpServer({ name: 'coinio', version: VERSION });
+  const server = new McpServer(
+    { name: 'coinio', version: VERSION },
+    ctx.scope === 'full' ? {} : { instructions: READ_ONLY_INSTRUCTIONS },
+  );
   const { userId } = ctx;
   const readOnly = { readOnlyHint: true } as const;
 

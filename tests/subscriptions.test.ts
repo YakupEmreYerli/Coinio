@@ -46,6 +46,7 @@ describe('subscriptions REST', () => {
       { ...netflix, amountMinor: -1 },
       { ...netflix, currency: 'JPY' },
       { ...netflix, currency: 'try' },
+      { ...netflix, currency: 'XXX' },
       { ...netflix, nextDue: '2026-02-30' },
       { ...netflix, name: '' },
       { ...netflix, intervalCount: 37 },

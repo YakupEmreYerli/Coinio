@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const isoDate = z
+export const isoDate = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/)
   .refine((s) => {
@@ -15,6 +15,8 @@ const currency = z
   .regex(/^[A-Z]{3}$/)
   .refine((code) => {
     try {
+      // Intl formats any three letters (XXX, ABC) with 2 decimals, so check the known-code list too.
+      if (typeof Intl.supportedValuesOf === 'function' && !Intl.supportedValuesOf('currency').includes(code)) return false;
       return new Intl.NumberFormat('en', { style: 'currency', currency: code }).resolvedOptions().maximumFractionDigits === 2;
     } catch {
       return false;
