@@ -1,0 +1,10 @@
+/install /install.sh 200
+# Deep links into the live demo (a single-page app under /demo/)
+/demo/subscriptions /demo/index.html 200
+/demo/subscriptions/* /demo/index.html 200
+/demo/calendar /demo/index.html 200
+/demo/payments /demo/index.html 200
+/demo/reports /demo/index.html 200
+/demo/settings /demo/index.html 200
+/demo/settings/* /demo/index.html 200
+/demo/welcome /demo/index.html 200
