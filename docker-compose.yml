@@ -1,0 +1,17 @@
+# Start with: docker compose up -d   then open http://localhost:8080
+services:
+  coinio:
+    image: ghcr.io/yakupemreyerli/coinio:latest
+    # build: .   # uncomment to build from this folder instead of pulling the image
+    container_name: coinio
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/data
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # Container time zone; set TZ in .env to your own, e.g. Europe/Berlin.
+      TZ: ${TZ:-UTC}

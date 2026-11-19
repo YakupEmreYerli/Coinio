@@ -1,0 +1,21 @@
+{
+  "version": "3",
+  "templates": [
+    {
+      "type": 1,
+      "title": "Coinio",
+      "description": "Self-hosted subscription and bill tracker with Telegram reminders, an MCP server and an iPhone widget.",
+      "categories": ["Tools", "Finance"],
+      "platform": "linux",
+      "logo": "https://raw.githubusercontent.com/YakupEmreYerli/coinio/main/public/icon-512.png",
+      "image": "ghcr.io/yakupemreyerli/coinio:latest",
+      "ports": ["8080:8080/tcp"],
+      "volumes": [{ "container": "/data", "bind": "/opt/coinio/data" }],
+      "env": [
+        { "name": "TZ", "label": "Time zone", "default": "UTC" },
+        { "name": "COINIO_PUBLIC_URL", "label": "Public https URL (optional, e.g. https://subs.example.com)" }
+      ],
+      "restart_policy": "unless-stopped"
+    }
+  ]
+}

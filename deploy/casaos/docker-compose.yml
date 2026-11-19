@@ -1,0 +1,39 @@
+name: coinio
+services:
+  coinio:
+    image: ghcr.io/yakupemreyerli/coinio:latest
+    restart: unless-stopped
+    ports:
+      - target: 8080
+        published: "8080"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /DATA/AppData/coinio
+        target: /data
+    environment:
+      TZ: $TZ
+    x-casaos:
+      volumes:
+        - container: /data
+          description:
+            en_us: Database and logos.
+      ports:
+        - container: "8080"
+          description:
+            en_us: Web interface.
+x-casaos:
+  architectures: [amd64, arm64]
+  main: coinio
+  author: YakupEmreYerli
+  category: Utilities
+  description:
+    en_us: Self-hosted subscription and bill tracker with Telegram reminders, an MCP server and an iPhone widget.
+  tagline:
+    en_us: Every subscription on one calm page.
+  title:
+    en_us: Coinio
+  icon: https://raw.githubusercontent.com/YakupEmreYerli/coinio/main/public/icon-512.png
+  port_map: "8080"
+  scheme: http
+  index: /

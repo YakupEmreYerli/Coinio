@@ -1,0 +1,12 @@
+node_modules
+dist
+.data
+data
+.git
+.superpowers
+.internal
+docs-site
+docs/banner
+coverage
+*.log
+.env
