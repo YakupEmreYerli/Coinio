@@ -68,8 +68,10 @@ For Claude Code, Cursor, Claude Desktop and other local clients. This also works
 
 Create a key in **Settings › API keys**. It is shown once; copy it then. Choose the access:
 
-- **Read only** (`coi_read_...`): the four reading tools below.
+- **Read only** (`coi_read_...`): the four reading tools below. The write tools are not offered at all, and Coinio tells the assistant the connection is read-only, so it can explain why it cannot mark something paid.
 - **Full access** (`coi_full_...`): every tool.
+
+The form starts on **Full access**; switch it to **Read only** for anything that only needs to look.
 
 Claude Code:
 
@@ -90,6 +92,8 @@ Cursor, Claude Desktop and other clients that take an `mcp.json`:
   }
 }
 ```
+
+Check that Claude Code connected with `claude mcp list` (it should say *Connected*). Without the `--header` part, Claude Code signs in with OAuth instead (this needs the https `COINIO_PUBLIC_URL` above) and `claude mcp list` shows *Needs authentication* until you sign in from `/mcp` inside Claude Code.
 
 Revoke a key in **Settings › API keys**; apps using it stop working immediately.
 

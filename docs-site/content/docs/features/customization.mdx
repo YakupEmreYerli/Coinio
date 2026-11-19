@@ -36,16 +36,19 @@ Six font pairs, for headings and amounts and for text. Only the fonts of the pai
 
 ## Dashboard cards
 
-Reorder the dashboard by dragging (or with the arrow buttons), and hide cards with the switch: Greeting, This month, Summary, Upcoming payments, Quick add, This week, Monthly breakdown, Recent activity, All subscriptions, and your own HTML cards.
+In **Settings › Appearance › Dashboard cards**, reorder the dashboard by dragging (or with the arrow buttons), and hide cards with the switch: Greeting, This month, Summary, Upcoming payments, Quick add, This week, Monthly breakdown, Recent activity, All subscriptions, and your own HTML cards. A new HTML card is added at the bottom; move it up with the arrows.
 
 ## Custom HTML cards
 
 Add up to 20 cards with your own HTML: notes, links, an embedded widget. Each has a title, a height (80 to 1200 px) and up to 50,000 characters of HTML, with a live preview.
 
+A card follows the light or dark theme (its text colour adapts and its background is transparent) and starts with your accent colour as `--accent`, so `color: var(--accent)` works inside it. Your own styles override these.
+
 <Callout title="How cards are sealed">
   Each card runs in an `iframe` with `sandbox="allow-scripts"` and without `allow-same-origin`. Scripts in the card
   run, but in a separate, anonymous origin: they cannot read your session cookie, call the Coinio API or see your
-  subscriptions. A card only knows what you wrote into it.
+  subscriptions. A card only knows what you wrote into it, so it cannot show your payments or totals; for live
+  numbers use the [iPhone widget](/docs/integrations/iphone-widget) or an [MCP client](/docs/integrations/mcp).
 </Callout>
 
 ## Custom CSS
@@ -56,12 +59,18 @@ Up to 50,000 characters of CSS, applied live on top of everything. The whole int
 :root {
   --accent: #e5484d;
   --radius: 4px;
-  --font-text: 'IBM Plex Sans', sans-serif;
+  --font-text: Georgia, serif;
 }
 ```
 
+Your CSS wins over the accent colour and corner settings above. Coinio does not download fonts for custom CSS: use a font installed on your devices, or one of the font pairs under **Type** (their fonts are only loaded while that pair is selected).
+
 The editor lists the main variables with their current values: `--bg`, `--card`, `--sunk`, `--line`, `--text`, `--text-2`, `--accent`, `--primary`, `--pos`, `--neg`, `--radius`, `--gap`, `--logo`, `--font-text`, `--font-display`, `--font-num`. Click one to add it.
+
+### If your CSS hides the app
+
+Add `?nocss` to the address, for example `https://coinio.example.com/settings/appearance?nocss`. Coinio then loads without your custom CSS and HTML cards until the next full reload, so you can fix or clear the CSS.
 
 ## Share a theme
 
-**Download theme** saves all appearance settings, including custom CSS and HTML cards, as `coinio-theme.json`. **Load theme** applies such a file. Values a file gets wrong fall back to the defaults instead of failing, so themes from older versions still load. Theme files never contain subscriptions or account data.
+**Download theme** saves all appearance settings, including custom CSS and HTML cards, as `coinio-theme.json`. **Load theme** applies such a file after asking first: it replaces your current appearance, including your HTML cards and custom CSS, and warns when the file brings its own CSS or HTML. Download your own theme first if you want to keep it. Values a file gets wrong fall back to the defaults instead of failing, so themes from older versions still load. Theme files never contain subscriptions or account data.
