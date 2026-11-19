@@ -4,7 +4,7 @@ import { SettingsPatch, type Settings } from '../../shared/types.js';
 import type { ServiceCtx } from './context.js';
 
 const DEFAULTS: Settings = {
-  baseCurrency: 'TRY',
+  baseCurrency: 'USD',
   timezone: 'UTC',
   locale: 'en',
   reminderTime: '09:00',

@@ -4,9 +4,10 @@ import { describe, expect, it } from 'vitest';
 import { payments, subscriptions, users } from '../src/server/db/schema.js';
 import { makeTestApp } from './helpers.js';
 
-async function login(t = makeTestApp()) {
+async function login(t = makeTestApp(), base: string | null = 'TRY') {
   const agent = request.agent(t.app);
   await agent.post('/api/auth/setup').send({ username: 'yakup', password: 'correct horse battery' });
+  if (base) await agent.patch('/api/settings').send({ baseCurrency: base }); // scenarios below are priced in lira
   return { ...t, agent };
 }
 
@@ -171,9 +172,9 @@ describe('subscriptions REST', () => {
 
 describe('settings REST', () => {
   it('returns defaults, patches, masks the telegram token, lets env win', async () => {
-    const { agent } = await login();
+    const { agent } = await login(makeTestApp(), null);
     expect((await agent.get('/api/settings')).body).toEqual({
-      baseCurrency: 'TRY', timezone: 'UTC', locale: 'en', reminderTime: '09:00', telegramBotToken: null, telegramChatId: null,
+      baseCurrency: 'USD', timezone: 'UTC', locale: 'en', reminderTime: '09:00', telegramBotToken: null, telegramChatId: null,
     });
     const res = await agent.patch('/api/settings').send({ locale: 'tr', telegramBotToken: '123456:ABCDEFwxyz', telegramChatId: '42' });
     expect(res.body).toMatchObject({ locale: 'tr', telegramBotToken: '****wxyz', telegramChatId: '42' });

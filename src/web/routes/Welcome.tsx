@@ -47,7 +47,7 @@ export function Welcome({ onDone, initialStep = 0 }: { onDone: () => void; initi
   const [step, setStep] = useState(initialStep);
   const [currency, setCurrency] = useState<string | null>(null);
   const [zone, setZone] = useState<string | null>(null);
-  const cur = currency ?? (settings?.baseCurrency && settings.baseCurrency !== 'TRY' ? settings.baseCurrency : guessCurrency());
+  const cur = currency ?? (settings?.baseCurrency && settings.baseCurrency !== 'USD' ? settings.baseCurrency : guessCurrency());
   const tz = zone ?? browserZone();
 
   const finish = useMutation({

@@ -3,7 +3,7 @@ import { Money } from '../../components/Money';
 import { Card, CardHeader } from '../../components/ui/Card';
 import { t, useLocale } from '../../i18n';
 import { shortDate } from '../../lib/dates';
-import { usePayments, useSubscriptions, useUndoPayment } from '../../lib/hooks';
+import { usePayments, useSettings, useSubscriptions, useUndoPayment } from '../../lib/hooks';
 import { Link } from 'react-router-dom';
 
 /** The last five payments (or skips), each undoable. */
@@ -12,6 +12,7 @@ export function Activity() {
   const payments = usePayments().data ?? [];
   const byId = new Map((useSubscriptions().data ?? []).map((s) => [s.id, s]));
   const undo = useUndoPayment();
+  const base = useSettings().data?.baseCurrency ?? 'USD';
   const recent = payments
     .filter((p) => p.status !== 'void' && byId.has(p.subscriptionId))
     .sort((a, b) => b.paidAt.localeCompare(a.paidAt))
@@ -34,7 +35,7 @@ export function Activity() {
                 </span>
               </div>
               {p.status !== 'skipped' && (
-                p.actualBaseMinor !== null ? <Money minor={p.actualBaseMinor} currency={s.currency === p.currency ? p.currency : 'TRY'} size="sm" /> : <Money minor={p.amountMinor} currency={p.currency} size="sm" />
+                p.actualBaseMinor !== null ? <Money minor={p.actualBaseMinor} currency={s.currency === p.currency ? p.currency : base} size="sm" /> : <Money minor={p.amountMinor} currency={p.currency} size="sm" />
               )}
               <button type="button" className="text-xs text-accent hover:underline" onClick={() => undo.mutate(p.id)}>
                 {t('common.undo')}

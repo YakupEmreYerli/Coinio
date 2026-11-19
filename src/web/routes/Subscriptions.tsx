@@ -30,7 +30,7 @@ export function Subscriptions() {
   const subs = useSubscriptions();
   const summary = useSummary().data;
   const settings = useSettings().data;
-  const base = summary?.base ?? settings?.baseCurrency ?? 'TRY';
+  const base = summary?.base ?? settings?.baseCurrency ?? 'USD';
   const update = useUpdateSubscription();
   const del = useDeleteSubscription();
   const [selected, setSelected] = useState<Set<number>>(new Set());

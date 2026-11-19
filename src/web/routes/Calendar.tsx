@@ -32,7 +32,7 @@ export function Calendar() {
   const [selected, setSelected] = useState<string | null>(null);
 
   const subs = useMemo(() => new Map((subsQuery.data ?? []).map((s) => [s.id, s])), [subsQuery.data]);
-  const base = summary?.base ?? settings?.baseCurrency ?? 'TRY';
+  const base = summary?.base ?? settings?.baseCurrency ?? 'USD';
   const days = useMemo(
     () => projectMonth(subsQuery.data ?? [], payments ?? [], month, today, { base, rates: summary?.rates ?? {} }),
     [subsQuery.data, payments, month, today, base, summary?.rates],

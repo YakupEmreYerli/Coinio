@@ -9,7 +9,7 @@ export type KeyScope = 'read' | 'full';
 const hashKey = (raw: string) => createHash('sha256').update(raw).digest('hex');
 
 export function createApiKey(ctx: ServiceCtx, userId: number, name: string, scope: KeyScope): { key: string; id: number } {
-  const key = `st_${scope}_${randomBytes(32).toString('base64url')}`;
+  const key = `coi_${scope}_${randomBytes(32).toString('base64url')}`;
   const row = ctx.db
     .insert(apiKeys)
     .values({ userId, name, keyHash: hashKey(key), prefix: key.slice(0, 12), scope, createdAt: ctx.now().toISOString() })

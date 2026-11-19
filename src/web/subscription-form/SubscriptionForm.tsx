@@ -77,7 +77,7 @@ export function SubscriptionForm({
 }) {
   const { locale } = useLocale();
   const qc = useQueryClient();
-  const base = useSettings().data?.baseCurrency ?? 'TRY';
+  const base = useSettings().data?.baseCurrency ?? 'USD';
   const existing = useSubscription(editId ?? 0);
   const editing = editId !== undefined;
   const sub = editing ? (existing.data ?? null) : null;

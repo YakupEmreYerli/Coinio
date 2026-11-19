@@ -54,7 +54,7 @@ export function QuickAdd() {
         domain: isDomain ? text.trim().toLowerCase() : (known?.domain ?? null),
         category: known ? CATEGORY_LABELS[known.category][locale] : null,
         amountMinor,
-        currency: settings?.baseCurrency ?? 'TRY',
+        currency: settings?.baseCurrency ?? 'USD',
         cycle,
         intervalCount: 1,
         nextDue: todayIn(settings?.timezone ?? 'UTC'),

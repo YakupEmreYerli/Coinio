@@ -46,8 +46,8 @@ describe('settings', () => {
       'GET /api/settings': settings,
       'GET /api/keys': () => keys,
       'POST /api/keys': () => {
-        keys = [{ id: 1, name: 'Widget', prefix: 'st_read_abcd', scope: 'read', createdAt: '2026-11-19T00:00:00Z', lastUsedAt: null }];
-        return { id: 1, name: 'Widget', scope: 'read', prefix: 'st_read_abcd', key: 'st_read_abcdSECRETSECRET' };
+        keys = [{ id: 1, name: 'Widget', prefix: 'coi_read_abcd', scope: 'read', createdAt: '2026-11-19T00:00:00Z', lastUsedAt: null }];
+        return { id: 1, name: 'Widget', scope: 'read', prefix: 'coi_read_abcd', key: 'coi_read_abcdSECRETSECRET' };
       },
     });
     open('keys');
@@ -55,16 +55,16 @@ describe('settings', () => {
     await user.type(await screen.findByLabelText(/anahtar adı/i), 'Widget');
     await user.click(screen.getByRole('radio', { name: /yalnız okuma/i }));
     await user.click(screen.getByRole('button', { name: /anahtar oluştur/i }));
-    expect(await screen.findByText('st_read_abcdSECRETSECRET')).toBeInTheDocument();
+    expect(await screen.findByText('coi_read_abcdSECRETSECRET')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /tamam/i }));
-    expect(screen.queryByText('st_read_abcdSECRETSECRET')).not.toBeInTheDocument();
-    expect(await screen.findByText(/st_read_abcd/)).toBeInTheDocument();
+    expect(screen.queryByText('coi_read_abcdSECRETSECRET')).not.toBeInTheDocument();
+    expect(await screen.findByText(/coi_read_abcd/)).toBeInTheDocument();
   });
 
   it('revoke key asks confirmation', async () => {
     const calls = mockApi({
       'GET /api/settings': settings,
-      'GET /api/keys': [{ id: 4, name: 'Claude Code', prefix: 'st_full_xxxx', scope: 'full', createdAt: '2026-11-19T00:00:00Z', lastUsedAt: null }],
+      'GET /api/keys': [{ id: 4, name: 'Claude Code', prefix: 'coi_full_xxxx', scope: 'full', createdAt: '2026-11-19T00:00:00Z', lastUsedAt: null }],
     });
     open('keys');
     const user = userEvent.setup();

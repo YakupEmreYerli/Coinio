@@ -8,6 +8,7 @@ async function setup() {
   const t = makeTestApp();
   const agent = request.agent(t.app);
   await agent.post('/api/auth/setup').send({ username: 'yakup', password: 'correct horse battery' });
+  await agent.patch('/api/settings').send({ baseCurrency: 'TRY' }); // scenarios below are priced in lira
   const key = async (scope: 'read' | 'full') => (await agent.post('/api/keys').send({ name: scope, scope })).body.key as string;
   return { ...t, agent, key };
 }
@@ -36,7 +37,7 @@ describe('widget', () => {
   it('rejects missing and malformed Authorization with 401', async () => {
     const { app } = await setup();
     expect((await request(app).get('/api/widget')).status).toBe(401);
-    for (const h of ['Bearer', 'Bearer ', 'Basic abc', 'garbage', 'Bearer a b', 'Bearer st_read_nope']) {
+    for (const h of ['Bearer', 'Bearer ', 'Basic abc', 'garbage', 'Bearer a b', 'Bearer coi_read_nope']) {
       const res = await request(app).get('/api/widget').set('Authorization', h);
       expect(res.status, h).toBe(401);
     }

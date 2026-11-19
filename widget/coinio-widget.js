@@ -3,7 +3,7 @@
 // widget and pick this script. A read-only API key (Settings › API keys) is enough.
 
 const SERVER_URL = 'https://subs.example.com'; // where you open the app, no trailing slash
-const API_KEY = 'st_read_…'; // Settings › API keys › Read only
+const API_KEY = 'coi_read_…'; // Settings › API keys › Read only
 
 const CACHE_FILE = 'coinio-widget.json';
 const ACCENT = new Color('#4f5bd5');

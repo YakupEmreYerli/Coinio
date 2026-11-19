@@ -7,6 +7,7 @@ async function login() {
   const t = makeTestApp(); // now: 2026-11-18
   const agent = request.agent(t.app);
   await agent.post('/api/auth/setup').send({ username: 'yakup', password: 'correct horse battery' });
+  await agent.patch('/api/settings').send({ baseCurrency: 'TRY' }); // scenarios below are priced in lira
   t.db.insert(fxRates).values({ base: 'TRY', quote: 'USD', rate: 42.5, date: '2026-11-17', fetchedAt: '2026-11-18' }).run();
   return { ...t, agent };
 }

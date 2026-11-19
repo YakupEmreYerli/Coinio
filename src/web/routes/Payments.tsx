@@ -20,7 +20,7 @@ export function Payments() {
   const { locale } = useLocale();
   const mobile = useIsMobile(); // the top bar carries Export on wider screens
   const [params, setParams] = useSearchParams();
-  const base = useSettings().data?.baseCurrency ?? 'TRY';
+  const base = useSettings().data?.baseCurrency ?? 'USD';
   const subs = useSubscriptions().data ?? [];
   const byId = new Map(subs.map((s) => [s.id, s]));
   const undo = useUndoPayment();

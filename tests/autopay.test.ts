@@ -15,6 +15,7 @@ function setup(now = '2026-11-18T09:00:00Z') {
   const t = makeTestApp({ now: new Date(now) });
   const ctx: ServiceCtx = { db: t.db, config: t.config, fetch, now: () => t.clock.now };
   const user = t.db.insert(users).values({ username: 'y', passwordHash: 'x', createdAt: now }).returning().get();
+  t.db.insert(settings).values({ key: 'baseCurrency', value: 'TRY' }).run(); // scenarios below are priced in lira
   const add = (over: Partial<typeof subscriptions.$inferInsert> = {}) =>
     t.db
       .insert(subscriptions)

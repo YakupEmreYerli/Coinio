@@ -14,7 +14,7 @@ describe('api keys', () => {
     const { agent } = await setup();
     const created = await agent.post('/api/keys').send({ name: 'phone', scope: 'read' });
     expect(created.status).toBe(201);
-    expect(created.body.key).toMatch(/^st_read_[A-Za-z0-9_-]{43}$/);
+    expect(created.body.key).toMatch(/^coi_read_[A-Za-z0-9_-]{43}$/);
     expect(created.body.prefix).toBe(created.body.key.slice(0, 12));
     const list = await agent.get('/api/keys');
     expect(list.status).toBe(200);

@@ -7,6 +7,7 @@ import { makeTestApp } from './helpers.js';
 async function login(t = makeTestApp()) {
   const agent = request.agent(t.app);
   await agent.post('/api/auth/setup').send({ username: 'yakup', password: 'correct horse battery' });
+  await agent.patch('/api/settings').send({ baseCurrency: 'TRY' }); // scenarios below are priced in lira
   return { ...t, agent };
 }
 
