@@ -1,0 +1,47 @@
+---
+title: iPhone widget
+description: Home Screen and Lock Screen widgets through the free Scriptable app.
+---
+
+The widget shows what is left to pay this month and your next payments. It comes in all Home Screen sizes (small, medium, large) and the Lock Screen's inline and rectangular slots. No App Store app of ours is needed; it runs in [Scriptable](https://apps.apple.com/app/scriptable/id1405459188).
+
+Your phone has to reach Coinio wherever it is, so you need an [https address](/docs/expose). A LAN address only works while you are at home.
+
+## Set it up
+
+<Steps>
+<Step>
+
+Install **Scriptable** from the App Store.
+
+</Step>
+<Step>
+
+In Coinio, open **Settings › API keys** and create a **Read only** key. Copy it; it is shown once.
+
+</Step>
+<Step>
+
+In Scriptable, tap **+** to make a new script and paste the contents of [`widget/coinio-widget.js`](https://raw.githubusercontent.com/yakupemreyerli/coinio/main/widget/coinio-widget.js). Fill in the two lines at the top:
+
+```js
+const SERVER_URL = 'https://coinio.example.com'; // where you open the app, no trailing slash
+const API_KEY = 'st_read_…'; // Settings › API keys › Read only
+```
+
+</Step>
+<Step>
+
+Long-press the Home Screen (or **Lock Screen › Customize**), add a **Scriptable** widget, tap it and choose the script.
+
+</Step>
+</Steps>
+
+## How it behaves
+
+- It refreshes about every 30 minutes; iOS decides the exact timing.
+- It shows up to six items, overdue ones first. Overdue payments are red on the Home Screen and marked ⚠ on the Lock Screen, which is drawn in one colour.
+- Without a connection it shows the last data it saw and marks it *offline*.
+- Text follows the phone's language (English or Turkish).
+
+The widget reads `GET /api/widget` with the key; see [API](/docs/reference/api#widget). A read-only key cannot change anything, so a lost phone cannot edit your data. Revoke the key in **Settings › API keys** if you lose it.

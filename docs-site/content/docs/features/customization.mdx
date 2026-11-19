@@ -1,0 +1,67 @@
+---
+title: Appearance and customization
+description: Themes, colours, fonts, dashboard cards, custom CSS and HTML cards.
+---
+
+Everything in **Settings › Appearance** applies right away and is saved a moment later. **Back to default** and **Reset everything** undo it.
+
+<Screenshot name="appearance" alt="Settings, Appearance: theme, accent colour and font pairs" />
+
+## Theme and colour
+
+- **Theme:** Paper (default), White, Night, Black, or System to follow your device. The account menu has a quick light/dark switch.
+- **Accent colour:** buttons, highlights and the chart line. Pick a preset or your own colour.
+- **Category colours:** the colour of each category in the breakdown and reports.
+
+## Type
+
+Six font pairs, for headings and amounts and for text. Only the fonts of the pair you choose are downloaded.
+
+| Name | Fonts |
+| --- | --- |
+| Refined (default) | Geist + Geist Mono |
+| Editorial | Instrument Serif + Inter |
+| Warm | Fraunces + Manrope |
+| Technical | Space Grotesk + IBM Plex Mono |
+| Bold | Bricolage Grotesque + Inter |
+| System font | Your device's own font |
+
+## Layout and numbers
+
+- **Density:** roomy or compact.
+- **Corner roundness:** 0 to 20 px.
+- **Logo shape:** circle or rounded square.
+- **Cents:** small and raised, inline, or hidden.
+- **Show the original currency** under converted amounts.
+
+## Dashboard cards
+
+Reorder the dashboard by dragging (or with the arrow buttons), and hide cards with the switch: Greeting, This month, Summary, Upcoming payments, Quick add, This week, Monthly breakdown, Recent activity, All subscriptions, and your own HTML cards.
+
+## Custom HTML cards
+
+Add up to 20 cards with your own HTML: notes, links, an embedded widget. Each has a title, a height (80 to 1200 px) and up to 50,000 characters of HTML, with a live preview.
+
+<Callout title="How cards are sealed">
+  Each card runs in an `iframe` with `sandbox="allow-scripts"` and without `allow-same-origin`. Scripts in the card
+  run, but in a separate, anonymous origin: they cannot read your session cookie, call the Coinio API or see your
+  subscriptions. A card only knows what you wrote into it.
+</Callout>
+
+## Custom CSS
+
+Up to 50,000 characters of CSS, applied live on top of everything. The whole interface reads its colours, sizes and fonts from CSS variables, so overriding a few is usually enough:
+
+```css
+:root {
+  --accent: #e5484d;
+  --radius: 4px;
+  --font-text: 'IBM Plex Sans', sans-serif;
+}
+```
+
+The editor lists the main variables with their current values: `--bg`, `--card`, `--sunk`, `--line`, `--text`, `--text-2`, `--accent`, `--primary`, `--pos`, `--neg`, `--radius`, `--gap`, `--logo`, `--font-text`, `--font-display`, `--font-num`. Click one to add it.
+
+## Share a theme
+
+**Download theme** saves all appearance settings, including custom CSS and HTML cards, as `coinio-theme.json`. **Load theme** applies such a file. Values a file gets wrong fall back to the defaults instead of failing, so themes from older versions still load. Theme files never contain subscriptions or account data.
