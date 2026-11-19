@@ -21,7 +21,7 @@ const currency = z
     } catch {
       return false;
     }
-  }, 'unsupported currency (needs exactly 2 decimals)');
+  }, 'unsupported currency (unknown code or not exactly 2 decimals)');
 
 const optionalText = (max: number) => z.string().max(max).nullable().optional();
 
