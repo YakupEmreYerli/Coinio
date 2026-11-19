@@ -1,0 +1,36 @@
+import { fileURLToPath } from 'node:url';
+
+export type Config = {
+  dataDir: string;
+  port: number;
+  publicUrl: string | null;
+  telegramBotToken: string | null;
+  telegramChatId: string | null;
+  migrationsDir: string;
+  /** Built web UI; served only when it contains index.html. */
+  webDir: string;
+};
+
+type Env = Record<string, string | undefined>;
+
+const orNull = (v: string | undefined) => (v && v.length > 0 ? v : null);
+
+/** OAuth issuers must be https (localhost is allowed for testing); any other public URL leaves OAuth off. */
+export function oauthUrlOf(publicUrl: string | null): string | null {
+  if (!publicUrl) return null;
+  const url = new URL(publicUrl);
+  const local = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+  return url.protocol === 'https:' || local ? publicUrl : null;
+}
+
+export function loadConfig(env: Env = process.env): Config {
+  return {
+    dataDir: orNull(env.COINIO_DATA_DIR) ?? '/data',
+    port: Number(orNull(env.PORT) ?? 8080),
+    publicUrl: orNull(env.COINIO_PUBLIC_URL),
+    telegramBotToken: orNull(env.COINIO_TELEGRAM_BOT_TOKEN),
+    telegramChatId: orNull(env.COINIO_TELEGRAM_CHAT_ID),
+    migrationsDir: fileURLToPath(new URL('./db/migrations', import.meta.url)),
+    webDir: orNull(env.COINIO_WEB_DIR) ?? fileURLToPath(new URL('../web', import.meta.url)),
+  };
+}
