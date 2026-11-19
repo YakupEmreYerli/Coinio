@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://docs.getcoinio.me
+    about: Installation, configuration, MCP, the iPhone widget and troubleshooting.
+  - name: Questions and ideas
+    url: https://github.com/yakupemreyerli/coinio/discussions
+    about: Ask how to do something or talk an idea through before opening an issue.
+  - name: Report a security problem
+    url: https://github.com/yakupemreyerli/coinio/security/advisories/new
+    about: Please report vulnerabilities privately, not as an issue.

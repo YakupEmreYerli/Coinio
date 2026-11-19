@@ -1,0 +1,112 @@
+<!doctype html>
+<!--
+  Source of docs/banner.en.png and docs/banner.tr.png (1280×640, README header and GitHub social preview).
+  Open banner.html?lang=en or ?lang=tr at a 1280×640 viewport and take a screenshot.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Coinio banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07080c;
+    --line: rgba(255, 255, 255, 0.07);
+    --text: #eceef6;
+    --muted: #9a9fb4;
+    --brand: #4f5bd5;
+    --tint: #8e96ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1280px; height: 640px; overflow: hidden; background: var(--bg); }
+  body {
+    position: relative;
+    font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Fine grid fading out toward the edges, one indigo glow: same background as getcoinio.me. */
+  .grid {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 56px 56px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 85% 90% at 40% 45%, #000 30%, transparent 85%);
+            mask-image: radial-gradient(ellipse 85% 90% at 40% 45%, #000 30%, transparent 85%);
+  }
+  .glow {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 55% 45% at 22% 0%, rgba(79, 91, 213, 0.30), transparent 70%),
+      radial-gradient(ellipse 45% 55% at 82% 70%, rgba(79, 91, 213, 0.22), transparent 70%);
+  }
+  .copy {
+    position: absolute; left: 72px; top: 0; bottom: 0; width: 530px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .logo { height: 46px; width: auto; align-self: flex-start; }
+  h1 {
+    margin: 38px 0 0;
+    font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800; font-size: 54px; line-height: 1.06; letter-spacing: -0.035em;
+    color: #f4f5fb;
+  }
+  h1 .pd { color: var(--tint); }
+  p { margin: 22px 0 0; font-size: 20px; line-height: 1.5; color: var(--muted); max-width: 470px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+  .chip {
+    font-size: 14px; font-weight: 500; color: #d6d9ee;
+    padding: 7px 13px; border-radius: 999px;
+    border: 1px solid rgba(142, 150, 255, 0.22);
+    background: linear-gradient(180deg, rgba(79, 91, 213, 0.18), rgba(79, 91, 213, 0.05));
+  }
+  .shot {
+    position: absolute; left: 628px; top: 88px; width: 860px; height: 560px;
+    border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 40px 120px -30px rgba(79, 91, 213, 0.65), 0 20px 50px -20px rgba(0, 0, 0, 0.8);
+    background: #0f1117;
+    /* Fades the screenshot into the background at the bottom edge. */
+    -webkit-mask-image: linear-gradient(#000 70%, transparent 96%);
+            mask-image: linear-gradient(#000 70%, transparent 96%);
+  }
+  .shot img { display: block; width: 1120px; height: auto; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="glow"></div>
+
+  <div class="shot"><img src="../../site/assets/dashboard-night.webp" alt=""></div>
+
+  <div class="copy">
+    <img class="logo" src="../brand/export/coinio-logo-on-dark.svg" alt="Coinio">
+    <h1 data-t="headline"></h1>
+    <p data-t="lede"></p>
+    <div class="chips" data-t="chips"></div>
+  </div>
+
+<script>
+  const TEXT = {
+    en: {
+      headline: 'Every subscription,<br>one calm page<span class="pd">.</span>',
+      lede: 'A self-hosted tracker for subscriptions and bills. Reminders before every charge, totals in your own currency.',
+      chips: ['Open source · MIT', 'One Docker container', 'MCP for Claude &amp; ChatGPT'],
+    },
+    tr: {
+      headline: 'Bütün aboneliklerin<br>tek sakin sayfada<span class="pd">.</span>',
+      lede: 'Kendi sunucunda çalışan abonelik ve fatura takibi. Her ödemeden önce hatırlatır, toplamı kendi para biriminde gösterir.',
+      chips: ['Açık kaynak · MIT', 'Tek Docker kapsayıcısı', 'Claude ve ChatGPT için MCP'],
+    },
+  };
+  const lang = new URLSearchParams(location.search).get('lang') === 'tr' ? 'tr' : 'en';
+  const t = TEXT[lang];
+  document.documentElement.lang = lang;
+  document.querySelector('[data-t="headline"]').innerHTML = t.headline;
+  document.querySelector('[data-t="lede"]').textContent = t.lede;
+  document.querySelector('[data-t="chips"]').innerHTML = t.chips.map((c) => `<span class="chip">${c}</span>`).join('');
+</script>
+</body>
+</html>
