@@ -1,0 +1,10 @@
+node_modules/
+dist/
+data/
+*.db
+*.db-*
+.data/
+docs-site/.next/
+docs-site/out/
+docs-site/.source/
+docs-site/node_modules/

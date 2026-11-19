@@ -1,0 +1,4 @@
+# Packages allowed to run install scripts (pnpm refuses unknown ones in clean installs).
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
