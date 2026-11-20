@@ -226,13 +226,13 @@ const fold = (s: string) =>
 
 const INDEX = CATALOG.map((s) => ({ s, name: fold(s.name), domain: s.domain }));
 
-/** Name or domain search, case- and accent-insensitive (Turkish rules); name prefixes first. */
+/** Name or domain search, case- and accent-insensitive (Turkish rules); name prefixes first, mid-word matches only from 3 letters. */
 export function searchCatalog(query: string, limit = 8): CatalogEntry[] {
   const q = fold(query);
   if (!q) return [];
   const scored: { s: CatalogEntry; score: number }[] = [];
   for (const { s, name, domain } of INDEX) {
-    const score = name.startsWith(q) ? 0 : name.split(' ').some((w) => w.startsWith(q)) ? 1 : domain.startsWith(q) ? 2 : name.includes(q) || domain.includes(q) ? 3 : -1;
+    const score = name.startsWith(q) ? 0 : name.split(' ').some((w) => w.startsWith(q)) ? 1 : domain.startsWith(q) ? 2 : q.length >= 3 && name.includes(q) ? 3 : -1;
     if (score >= 0) scored.push({ s, score });
   }
   return scored.sort((a, b) => a.score - b.score || a.s.name.length - b.s.name.length).slice(0, limit).map((x) => x.s);

@@ -26,7 +26,8 @@ export function useLogoCandidates(name: string, domain: string | null | undefine
   return useQuery({
     queryKey: ['logo-candidates', q, d],
     queryFn: () => api.get<{ candidates: LogoCandidate[] }>(`/logos/candidates?q=${encodeURIComponent(q)}&domain=${encodeURIComponent(d)}`),
-    enabled: q.length > 0 || d.length > 0,
+    // Two letters match dozens of unrelated brands; wait for a real word or a website.
+    enabled: q.length >= 3 || d.length > 0,
     staleTime: 5 * 60_000,
   });
 }

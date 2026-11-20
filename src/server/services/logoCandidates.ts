@@ -53,7 +53,7 @@ function scoredBrands(query: string): { brand: Brand; score: number }[] {
     const title = NORM_TITLES.get(brand.slug)!;
     const score =
       brand.slug === key || title === key ? 0
-      : title.startsWith(key) || brand.slug.startsWith(key) ? 1
+      : key.length >= 3 && (title.startsWith(key) || brand.slug.startsWith(key)) ? 1
       : key.length >= 3 && title.includes(key) ? 2
       : -1;
     if (score >= 0) out.push({ brand, score });

@@ -14,13 +14,14 @@ export function CatalogSuggestions({ query, hidden, onPick }: { query: string; h
             type="button"
             role="option"
             aria-selected={false}
-            className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-sunk"
+            className="flex w-full min-w-0 flex-col px-3 py-2 text-left text-sm hover:bg-sunk focus-visible:bg-sunk focus-visible:outline-none"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onPick(s, CATEGORY_LABELS[s.category][locale])}
           >
-            <span className="font-medium">{s.name}</span>
-            <span className="text-xs text-text-3">{s.domain}</span>
-            <span className="ml-auto text-xs text-text-3">{CATEGORY_LABELS[s.category][locale]}</span>
+            <span className="truncate font-medium">{s.name}</span>
+            <span className="truncate text-xs text-text-3">
+              {s.domain} · {CATEGORY_LABELS[s.category][locale]}
+            </span>
           </button>
         </li>
       ))}

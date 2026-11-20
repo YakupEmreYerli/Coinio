@@ -26,6 +26,8 @@ describe('catalog', () => {
   it('prefix matches rank first', () => {
     const r = searchCatalog('net');
     expect(r[0]?.name).toBe('Netflix');
+    expect(searchCatalog('na').map((s) => s.name)).not.toContain('YNAB');
+    expect(searchCatalog('na').every((s) => /(^|\s)na/i.test(s.name) || s.domain.startsWith('na'))).toBe(true);
     expect(searchCatalog('zzzz')).toEqual([]);
     expect(searchCatalog('')).toEqual([]);
   });
