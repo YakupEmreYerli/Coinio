@@ -1,4 +1,7 @@
-// Install tabs, copy buttons, theme switch, live demo, nav border on scroll.
+// Install tabs, copy buttons, theme switch, live demo, nav border on scroll, language hint.
+// Texts in the page's language come from data attributes on <body>, set by site-src/build.mjs.
+const T = document.body.dataset;
+const LANG = document.documentElement.lang;
 
 for (const box of document.querySelectorAll('[data-tabs]')) {
   const tabs = [...box.querySelectorAll('[role="tab"]')];
@@ -44,18 +47,19 @@ async function copyText(text) {
 for (const btn of document.querySelectorAll('.copy')) {
   const label = btn.querySelector('span');
   const original = label.textContent;
+  const originalAria = btn.getAttribute('aria-label');
   let timer;
   btn.addEventListener('click', async () => {
     const text = btn.dataset.copy ?? btn.parentElement.querySelector('code').textContent.trim();
     const ok = await copyText(text);
-    label.textContent = ok ? 'Copied' : 'Press Ctrl+C';
+    label.textContent = ok ? T.copied : T.copyFallback;
     btn.classList.toggle('is-done', ok);
-    btn.setAttribute('aria-label', ok ? 'Copied' : 'Copy failed');
+    btn.setAttribute('aria-label', ok ? T.copied : T.copyFailed);
     clearTimeout(timer);
     timer = setTimeout(() => {
       label.textContent = original;
       btn.classList.remove('is-done');
-      btn.setAttribute('aria-label', 'Copy');
+      btn.setAttribute('aria-label', originalAria);
     }, 1800);
   });
 }
@@ -69,7 +73,7 @@ const currentTheme = () => (root.dataset.theme === 'light' ? 'light' : 'dark');
 function applyTheme(theme, remember) {
   root.dataset.theme = theme;
   themeMeta.content = theme === 'light' ? '#f8f8fb' : '#07080c';
-  themeBtn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+  themeBtn.setAttribute('aria-label', theme === 'light' ? T.toDark : T.toLight);
   if (remember) {
     try { localStorage.setItem('coinio-site-theme', theme); } catch { /* storage blocked */ }
   }
@@ -87,7 +91,7 @@ window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e
 const frame = document.querySelector('.demo-view iframe');
 const win = document.querySelector('.demo-win');
 const appTheme = () => (currentTheme() === 'light' ? 'paper' : 'night');
-const demoUrl = () => `demo/?theme=${currentTheme()}`;
+const demoUrl = () => `/demo/?theme=${currentTheme()}${LANG === 'en' ? '' : `&lang=${LANG}`}`;
 
 function syncDemoTheme() {
   for (const a of document.querySelectorAll('[data-demo-link]')) a.href = demoUrl();
@@ -138,3 +142,65 @@ const nav = document.querySelector('.nav');
 const onScroll = () => nav.classList.toggle('is-stuck', window.scrollY > 8);
 onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
+
+// Language menu: close on outside click or Escape.
+const langMenu = document.querySelector('details.lang');
+if (langMenu) {
+  document.addEventListener('click', (e) => {
+    if (langMenu.open && !langMenu.contains(e.target)) langMenu.open = false;
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && langMenu.open) {
+      langMenu.open = false;
+      langMenu.querySelector('summary').focus();
+    }
+  });
+}
+
+// No redirect by browser language: at most a small, dismissible hint pointing at the visitor's language.
+const HINT_KEY = 'coinio-site-lang-hint';
+function preferredLang(codes) {
+  for (const tag of navigator.languages ?? [navigator.language]) {
+    const t = String(tag).toLowerCase();
+    const base = t.split('-')[0];
+    const hit = codes.find((c) => c.toLowerCase() === t) ?? codes.find((c) => c.split('-')[0] === base);
+    if (hit) return hit;
+  }
+  return null;
+}
+async function langHint() {
+  try {
+    if (localStorage.getItem(HINT_KEY)) return;
+  } catch { /* storage blocked: still fine to show */ }
+  const base = (navigator.languages?.[0] ?? navigator.language ?? '').toLowerCase().split('-')[0];
+  if (!base || base === LANG.toLowerCase().split('-')[0]) return;
+  const res = await fetch('/langs.json');
+  if (!res.ok) return;
+  const langs = await res.json();
+  const want = preferredLang(Object.keys(langs));
+  if (!want || want === LANG) return;
+  const l = langs[want];
+  const bar = document.createElement('div');
+  bar.className = 'lang-hint';
+  bar.lang = want;
+  bar.setAttribute('role', 'region');
+  bar.setAttribute('aria-label', l.go);
+  const text = document.createElement('span');
+  text.textContent = l.text;
+  const go = document.createElement('a');
+  go.href = l.path;
+  go.hreflang = want;
+  go.textContent = l.go;
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.setAttribute('aria-label', l.dismiss);
+  close.title = l.dismiss;
+  close.textContent = '×';
+  close.addEventListener('click', () => {
+    bar.remove();
+    try { localStorage.setItem(HINT_KEY, '1'); } catch { /* storage blocked */ }
+  });
+  bar.append(text, go, close);
+  document.body.append(bar);
+}
+langHint().catch(() => {});

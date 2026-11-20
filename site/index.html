@@ -3,10 +3,53 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Coinio: every subscription, one calm page</title>
-  <meta name="description" content="Coinio is an open-source subscription and bill tracker you run on your own server. Reminders, any currency, an MCP server for Claude and ChatGPT, and an iPhone widget. One Docker image.">
+  <title>Coinio: free, open-source self-hosted subscription tracker</title>
+  <meta name="description" content="Track subscriptions and bills on your own server. Coinio is a free, open-source Wallos alternative with renewal reminders, any currency and one Docker image.">
   <meta name="theme-color" content="#07080c">
   <meta name="color-scheme" content="dark light">
+  <link rel="canonical" href="https://getcoinio.me/">
+  <link rel="alternate" hreflang="en" href="https://getcoinio.me/">
+  <link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/">
+  <link rel="alternate" hreflang="de" href="https://getcoinio.me/de/">
+  <link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/">
+  <link rel="alternate" hreflang="es" href="https://getcoinio.me/es/">
+  <link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/">
+  <link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/">
+  <link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/">
+  <link rel="alternate" hreflang="x-default" href="https://getcoinio.me/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Coinio">
+  <meta property="og:title" content="Coinio: every subscription, one calm page">
+  <meta property="og:description" content="Open-source subscription and bill tracker you run on your own server. One Docker image.">
+  <meta property="og:url" content="https://getcoinio.me/">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="tr_TR">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:locale:alternate" content="es_ES">
+  <meta property="og:locale:alternate" content="pt_BR">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:image" content="https://getcoinio.me/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Coinio: every subscription, one calm page">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Coinio: every subscription, one calm page">
+  <meta name="twitter:description" content="Open-source subscription and bill tracker you run on your own server. One Docker image.">
+  <meta name="twitter:image" content="https://getcoinio.me/assets/og.png">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="preload" href="/assets/fonts/geist-latin.19f9c925.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/plus-jakarta-sans-latin.153fc85b.woff2" as="font" type="font/woff2" crossorigin>
+  <style>@font-face{font-family:"Geist";font-style:normal;font-weight:100 900;font-display:swap;src:url(/assets/fonts/geist-latin.19f9c925.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Geist";font-style:normal;font-weight:100 900;font-display:swap;src:url(/assets/fonts/geist-latin-ext.824f485b.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Geist Mono";font-style:normal;font-weight:100 900;font-display:swap;src:url(/assets/fonts/geist-mono-latin.684ad5b5.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Geist Mono";font-style:normal;font-weight:100 900;font-display:swap;src:url(/assets/fonts/geist-mono-latin-ext.1a189eb9.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:100 900;font-display:swap;src:url(/assets/fonts/plus-jakarta-sans-latin.153fc85b.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:100 900;font-display:swap;src:url(/assets/fonts/plus-jakarta-sans-latin-ext.38e3b8fd.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}</style>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareApplication","name":"Coinio","url":"https://getcoinio.me/","description":"Self-hosted subscription and bill tracker with renewal reminders, multi-currency totals, a calendar, Wallos import, an MCP server for Claude and ChatGPT, and an iPhone widget.","applicationCategory":"FinanceApplication","applicationSubCategory":"Subscription tracker","operatingSystem":"Docker, Linux","softwareVersion":"0.1.0","isAccessibleForFree":true,"license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/yakupemreyerli/coinio","installUrl":"https://getcoinio.me/install","screenshot":"https://getcoinio.me/assets/dashboard-night.webp","image":"https://getcoinio.me/assets/og.png","inLanguage":["en","tr","de","fr","es","pt-BR","zh-CN","ja"],"sameAs":["https://github.com/yakupemreyerli/coinio"]},{"@type":"FAQPage","inLanguage":"en","url":"https://getcoinio.me/","mainEntity":[{"@type":"Question","name":"Is Coinio free? What's the license?","acceptedAnswer":{"@type":"Answer","text":"Yes. Coinio is open source under the MIT license. There is no paid tier and no account with us; you run it, you own it. The code is on GitHub ."}},{"@type":"Question","name":"What do I need to run it?","acceptedAnswer":{"@type":"Answer","text":"A machine with Docker: a VPS, a home server, a NAS or a Raspberry Pi. Images are built for amd64 and arm64. There is no separate database to run, and it idles at around 60 MB of memory."}},{"@type":"Question","name":"Where does my data live, and how do I back it up?","acceptedAnswer":{"@type":"Answer","text":"Everything sits in the container's /data folder: one SQLite file ( coinio.db ) and the logos you picked. Back up that volume and you have it all. With the install script or docker run the volume is called coinio-data : docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine \\ tar czf /backup/coinio-backup.tgz -C /data . With Compose it is the ./data folder next to the file. You can also download your subscriptions and payments as CSV or JSON from the app."}},{"@type":"Question","name":"How do I get HTTPS and open it on my phone?","acceptedAnswer":{"@type":"Answer","text":"The install script offers a Cloudflare Tunnel: paste a tunnel token and Coinio gets an https address without opening any ports. If you already run a reverse proxy (Caddy, Traefik, Nginx, Dokploy), point a domain at port 8080 instead. Either way, set COINIO_PUBLIC_URL to that https address. The claude.ai connector and secure cookies need it."}},{"@type":"Question","name":"How do updates work?","acceptedAnswer":{"@type":"Answer","text":"Pull the new image and recreate the container. Your data stays in the volume, and database changes are applied on start. With Compose that is docker compose pull && docker compose up -d . With docker run , pull the image, remove the old container and run the same command again."}},{"@type":"Question","name":"Does it phone home? Where do exchange rates come from?","acceptedAnswer":{"@type":"Answer","text":"No telemetry, no analytics, no account. Exchange rates come once a day from Frankfurter , which publishes the European Central Bank's reference rates, and only for the currencies you use. The other outside requests happen because you asked for them: fetching the icon of a website you add, and Telegram reminders if you set them up."}},{"@type":"Question","name":"Can my family use it?","acceptedAnswer":{"@type":"Answer","text":"Each install has one account, and a household can share it to keep every bill in one place. If two people want separate data, run a second container on another port; it takes one more command."}},{"@type":"Question","name":"Can I import from another tracker?","acceptedAnswer":{"@type":"Answer","text":"Wallos, yes: export your subscriptions there as JSON and load the file in Settings › Import. You see a preview and any warnings before anything is saved. From anywhere else, adding by hand is quick: 161 common services fill in their logo, category and billing cycle as you type. Or connect Claude and ask it to add them for you."}},{"@type":"Question","name":"Which languages does it speak?","acceptedAnswer":{"@type":"Answer","text":"The app comes in English, Turkish, German, French, Spanish, Brazilian Portuguese, Simplified Chinese and Japanese. It starts in your browser's language and you can switch any time in Settings. Dates, amounts and currencies are formatted for the language you choose."}},{"@type":"Question","name":"What is MCP, and how do Claude or ChatGPT connect?","acceptedAnswer":{"@type":"Answer","text":"MCP (Model Context Protocol) is an open standard that lets AI assistants use tools. Coinio serves one at /mcp , so an assistant can list what renews this week, add a subscription or mark a bill paid. In claude.ai or the Claude mobile app, add a custom connector with your Coinio address and sign in; no key needed. Claude Code, Claude Desktop and Cursor use an API key from Settings. ChatGPT's custom connectors take the same address. All of this needs the https address from above."}},{"@type":"Question","name":"Is there an iPhone app?","acceptedAnswer":{"@type":"Answer","text":"Not in the App Store. There is a free Scriptable widget for the Home Screen and Lock Screen that reads your upcoming payments with a read-only key and keeps showing the last data when offline. The web app can also be added to the Home Screen, where it opens like an app."}},{"@type":"Question","name":"Why not a spreadsheet?","acceptedAnswer":{"@type":"Answer","text":"A spreadsheet holds amounts, but it does not move due dates forward, convert currencies every day, or tell you on Tuesday that something renews on Friday. Coinio does those, records automatic charges on their own, and keeps a history you can report on."}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -17,120 +60,8 @@
       document.querySelector('meta[name="theme-color"]').content = t === 'light' ? '#f8f8fb' : '#07080c';
     })();
   </script>
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Coinio: every subscription, one calm page">
-  <meta property="og:description" content="Open-source subscription and bill tracker you run on your own server. One Docker image.">
-  <meta property="og:url" content="https://getcoinio.me/">
-  <meta property="og:image" content="https://getcoinio.me/assets/og.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://getcoinio.me/assets/og.png">
-  <link rel="canonical" href="https://getcoinio.me/">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is Coinio free? What's the license?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Coinio is open source under the MIT license. There is no paid tier and no account with us; you run it, you own it. The code is on GitHub."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What do I need to run it?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "A machine with Docker: a VPS, a home server, a NAS or a Raspberry Pi. Images are built for amd64 and arm64. There is no separate database to run, and it idles at around 60 MB of memory."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Where does my data live, and how do I back it up?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Everything sits in the container's /data folder: one SQLite file (coinio.db) and the logos you picked. Back up that volume and you have it all. With the install script or docker run the volume is called coinio-data: docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine   tar czf /backup/coinio-backup.tgz -C /data . With Compose it is the ./data folder next to the file. You can also download your subscriptions and payments as CSV or JSON from the app."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I get HTTPS and open it on my phone?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The install script offers a Cloudflare Tunnel: paste a tunnel token and Coinio gets an https address without opening any ports. If you already run a reverse proxy (Caddy, Traefik, Nginx, Dokploy), point a domain at port 8080 instead. Either way, set COINIO_PUBLIC_URL to that https address. The claude.ai connector and secure cookies need it."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do updates work?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Pull the new image and recreate the container. Your data stays in the volume, and database changes are applied on start. With Compose that is docker compose pull && docker compose up -d. With docker run, pull the image, remove the old container and run the same command again."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does it phone home? Where do exchange rates come from?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No telemetry, no analytics, no account. Exchange rates come once a day from Frankfurter, which publishes the European Central Bank's reference rates, and only for the currencies you use. The other outside requests happen because you asked for them: fetching the icon of a website you add, and Telegram reminders if you set them up."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can my family use it?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Each install has one account, and a household can share it to keep every bill in one place. If two people want separate data, run a second container on another port; it takes one more command."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I import from another tracker?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Wallos, yes: export your subscriptions there as JSON and load the file in Settings › Import. You see a preview and any warnings before anything is saved. From anywhere else, adding by hand is quick: 161 common services fill in their logo, category and billing cycle as you type. Or connect Claude and ask it to add them for you."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is MCP, and how do Claude or ChatGPT connect?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "MCP (Model Context Protocol) is an open standard that lets AI assistants use tools. Coinio serves one at /mcp, so an assistant can list what renews this week, add a subscription or mark a bill paid. In claude.ai or the Claude mobile app, add a custom connector with your Coinio address and sign in; no key needed. Claude Code, Claude Desktop and Cursor use an API key from Settings. ChatGPT's custom connectors take the same address. All of this needs the https address from above."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is there an iPhone app?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Not in the App Store. There is a free Scriptable widget for the Home Screen and Lock Screen that reads your upcoming payments with a read-only key and keeps showing the last data when offline. The web app can also be added to the Home Screen, where it opens like an app."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Why not a spreadsheet?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "A spreadsheet holds amounts, but it does not move due dates forward, convert currencies every day, or tell you on Tuesday that something renews on Friday. Coinio does those, records automatic charges on their own, and keeps a history you can report on."
-      }
-    }
-  ]
-}
-  </script>
 </head>
-<body>
+<body data-copied="Copied" data-copy-fallback="Press Ctrl+C" data-copy-failed="Copy failed" data-copy="Copy" data-to-dark="Switch to dark theme" data-to-light="Switch to light theme">
   <div class="bg" aria-hidden="true"></div>
 
   <header class="nav">
@@ -144,6 +75,19 @@
           <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           <span>GitHub</span>
         </a>
+        <details class="lang">
+          <summary aria-label="Language: English" title="Language"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25"/><path d="M1.75 8h12.5M8 1.75c1.8 1.9 2.6 3.9 2.6 6.25S9.8 12.35 8 14.25C6.2 12.35 5.4 10.35 5.4 8S6.2 3.65 8 1.75z"/></svg><span>EN</span></summary>
+          <ul class="lang-menu">
+            <li><a href="/" hreflang="en" lang="en" aria-current="page">English</a></li>
+            <li><a href="/tr/" hreflang="tr" lang="tr">Türkçe</a></li>
+            <li><a href="/de/" hreflang="de" lang="de">Deutsch</a></li>
+            <li><a href="/fr/" hreflang="fr" lang="fr">Français</a></li>
+            <li><a href="/es/" hreflang="es" lang="es">Español</a></li>
+            <li><a href="/pt-br/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a></li>
+            <li><a href="/zh/" hreflang="zh-CN" lang="zh-CN">简体中文</a></li>
+            <li><a href="/ja/" hreflang="ja" lang="ja">日本語</a></li>
+          </ul>
+        </details>
         <button class="theme-btn" type="button" aria-label="Switch to light theme" title="Switch theme">
           <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
           <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
@@ -201,7 +145,7 @@
 <pre class="wrap"><code><span class="p">curl -fsSL <span class="nw">https://getcoinio.me/install | sh</span></span></code></pre>
             <button class="copy" type="button" aria-label="Copy command"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>Copy</span></button>
           </div>
-          <p class="note">Checks for Docker, starts Coinio on port 8080 and offers a Cloudflare Tunnel for https. <a href="install.sh">Read the script</a></p>
+          <p class="note">Checks for Docker, starts Coinio on port 8080 and offers a Cloudflare Tunnel for https. <a href="/install.sh">Read the script</a></p>
         </div>
 
         <div class="panel" role="tabpanel" id="p-docker" aria-labelledby="t-docker" hidden>
@@ -266,7 +210,7 @@
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
             Expand
           </button>
-          <a class="btn" href="demo/" target="_blank" rel="noopener" data-demo-link>
+          <a class="btn" href="/demo/" target="_blank" rel="noopener" data-demo-link>
             Open in new tab
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 3.5h-3v9h9v-3M9.5 2.5h4v4M13.5 2.5 7.5 8.5"/></svg>
           </a>
@@ -282,7 +226,7 @@
               <button class="win-tool win-expand" type="button" aria-label="Expand the demo" title="Expand" data-demo-expand>
                 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
               </button>
-              <a class="win-tool" href="demo/" target="_blank" rel="noopener" aria-label="Open the demo in a new tab" title="Open in new tab" data-demo-link>
+              <a class="win-tool" href="/demo/" target="_blank" rel="noopener" aria-label="Open the demo in a new tab" title="Open in new tab" data-demo-link>
                 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 3.5h-3v9h9v-3M9.5 2.5h4v4M13.5 2.5 7.5 8.5"/></svg>
               </a>
               <button class="win-tool win-close" type="button" aria-label="Close the demo (Esc)" title="Close (Esc)" data-demo-close>
@@ -291,11 +235,11 @@
             </div>
           </div>
           <div class="demo-view">
-            <iframe title="Coinio live demo" data-src="demo/" loading="lazy" referrerpolicy="same-origin"></iframe>
+            <iframe title="Coinio live demo" data-src="/demo/" loading="lazy" referrerpolicy="same-origin"></iframe>
             <div class="demo-poster">
-              <img class="is-on" data-theme="dark" src="assets/dashboard-night.webp" width="2880" height="1800" alt="The Coinio home page with sample data: money left this month, a chart of upcoming payments with service logos, and the upcoming list." loading="lazy">
-              <img data-theme="light" src="assets/dashboard-light.webp" width="2880" height="1800" alt="" loading="lazy">
-              <a class="btn btn-primary demo-open demo-open-m" href="demo/" data-demo-link>Open the live demo</a>
+              <img class="is-on" data-theme="dark" src="/assets/dashboard-night.webp" width="2880" height="1800" alt="The Coinio home page with sample data: money left this month, a chart of upcoming payments with service logos, and the upcoming list." loading="lazy">
+              <img data-theme="light" src="/assets/dashboard-light.webp" width="2880" height="1800" alt="" loading="lazy">
+              <a class="btn btn-primary demo-open demo-open-m" href="/demo/" data-demo-link>Open the live demo</a>
             </div>
           </div>
         </div>
@@ -398,7 +342,7 @@
             <div class="faq-a">
               <p>Everything sits in the container's <code>/data</code> folder: one SQLite file (<code>coinio.db</code>) and the logos you picked. Back up that volume and you have it all. With the install script or <code>docker run</code> the volume is called <code>coinio-data</code>:</p>
               <pre><code>docker run --rm -v coinio-data:/data -v "$PWD":/backup alpine \
-  tar czf /backup/coinio-backup.tgz -C /data .</code></pre>
+                tar czf /backup/coinio-backup.tgz -C /data .</code></pre>
               <p>With Compose it is the <code>./data</code> folder next to the file. You can also download your subscriptions and payments as CSV or JSON from the app.</p>
             </div>
           </details>
@@ -436,6 +380,12 @@
             </div>
           </details>
           <details>
+            <summary>Which languages does it speak?</summary>
+            <div class="faq-a">
+              <p>The app comes in English, Turkish, German, French, Spanish, Brazilian Portuguese, Simplified Chinese and Japanese. It starts in your browser's language and you can switch any time in Settings. Dates, amounts and currencies are formatted for the language you choose.</p>
+            </div>
+          </details>
+          <details>
             <summary>What is MCP, and how do Claude or ChatGPT connect?</summary>
             <div class="faq-a">
               <p>MCP (Model Context Protocol) is an open standard that lets AI assistants use tools. Coinio serves one at <code>/mcp</code>, so an assistant can list what renews this week, add a subscription or mark a bill paid.</p>
@@ -468,7 +418,7 @@
           <button class="copy" type="button" aria-label="Copy command"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>Copy</span></button>
         </div>
       </div>
-      <p class="final-links"><a href="#install">Docker, Compose, Dokploy, Unraid</a><span class="dot">·</span><a href="install.sh">Read the script</a></p>
+      <p class="final-links"><a href="#install">Docker, Compose, Dokploy, Unraid</a><span class="dot">·</span><a href="/install.sh">Read the script</a></p>
     </section>
   </main>
 
@@ -480,11 +430,12 @@
         <a href="https://docs.getcoinio.me">Docs</a>
         <a href="https://github.com/yakupemreyerli/coinio/blob/main/LICENSE">MIT License</a>
         <a href="https://github.com/yakupemreyerli/coinio/issues">Issues</a>
-        <a href="install.sh">install.sh</a>
+        <a href="/install.sh">install.sh</a>
       </nav>
+      <nav class="footer-langs" aria-label="Languages"><a href="/" hreflang="en" lang="en" aria-current="page">English</a><a href="/tr/" hreflang="tr" lang="tr">Türkçe</a><a href="/de/" hreflang="de" lang="de">Deutsch</a><a href="/fr/" hreflang="fr" lang="fr">Français</a><a href="/es/" hreflang="es" lang="es">Español</a><a href="/pt-br/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/" hreflang="ja" lang="ja">日本語</a></nav>
     </div>
   </footer>
 
-  <script src="main.js" defer></script>
+  <script src="/main.js" defer></script>
 </body>
 </html>

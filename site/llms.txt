@@ -1,0 +1,30 @@
+# Coinio
+
+> Coinio is a free, open-source (MIT), self-hosted subscription and bill tracker. It runs as one Docker image with one SQLite file on your own server (VPS, home server, NAS, Raspberry Pi; amd64 and arm64). No account with a vendor, no cloud, no telemetry, no paid tier.
+
+Coinio keeps every recurring payment on one page: what is due this week, what is left to pay this month and what the year costs, converted into one main currency with daily exchange rates. It is often used as a Wallos alternative and can import Wallos exports.
+
+## Features
+
+- Real billing cycles: weekly, monthly or yearly, every N cycles, charged automatically or paid by hand; mark paid, skip a period, pause.
+- Calendar of due dates and daily Telegram reminders before anything renews.
+- Any currency per subscription; totals converted with daily European Central Bank reference rates (via Frankfurter).
+- 161 built-in services with logos, categories and billing cycles; other sites get their own icon.
+- History and reports by category; export to CSV or JSON; import from Wallos.
+- Built-in MCP server (Model Context Protocol) with OAuth at /mcp, so Claude, ChatGPT and other MCP clients can list, add and update subscriptions.
+- iPhone Home Screen and Lock Screen widgets through Scriptable; installable web app.
+- Themes, accent colour, fonts, density, dashboard card order, custom CSS and sandboxed HTML cards.
+- Interface in English, Turkish, German, French, Spanish, Brazilian Portuguese, Simplified Chinese and Japanese.
+
+## Install
+
+- Script: `curl -fsSL https://getcoinio.me/install | sh` (checks for Docker, starts Coinio on port 8080, offers a Cloudflare Tunnel for https)
+- Docker: `docker run -d --name coinio --restart unless-stopped -p 8080:8080 -v coinio-data:/data ghcr.io/yakupemreyerli/coinio:latest`
+- Also: Docker Compose, Dokploy, Unraid, CasaOS, Portainer.
+
+## Links
+
+- [Website](https://getcoinio.me/): overview, install commands and FAQ (also in /tr/, /de/, /fr/, /es/, /pt-br/, /zh/, /ja/)
+- [Live demo](https://getcoinio.me/demo/): the real web app running in the browser with sample data
+- [Documentation](https://docs.getcoinio.me/): install, configuration, backups, MCP, widget
+- [Source code](https://github.com/yakupemreyerli/coinio): MIT license
