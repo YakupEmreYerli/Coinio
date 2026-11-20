@@ -11,7 +11,7 @@ import { Select } from '../components/ui/Select';
 import { Switch } from '../components/ui/Switch';
 import { Textarea } from '../components/ui/Textarea';
 import { toast } from '../components/ui/Toaster';
-import { t, useLocale } from '../i18n';
+import { t, useLocale, type Locale } from '../i18n';
 import type { SubscriptionPrefill } from '../layout/subscriptionForm';
 import { useSettings, useSubscription, useSubscriptions } from '../lib/hooks';
 import type { ApiSubscription, Cycle } from '../lib/types';
@@ -42,7 +42,7 @@ function localToday(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-function toValues(s: ApiSubscription | null, prefill: SubscriptionPrefill | undefined, base: string, locale: 'en' | 'tr'): Values {
+function toValues(s: ApiSubscription | null, prefill: SubscriptionPrefill | undefined, base: string, locale: Locale): Values {
   return {
     name: s?.name ?? prefill?.name ?? '',
     domain: s?.domain ?? prefill?.domain ?? '',
@@ -167,7 +167,7 @@ export function SubscriptionForm({
               <Input label={t('form.domain')} placeholder="netflix.com" {...register('domain')} hint={t('form.domainHint')} autoComplete="off" inputMode="url" />
             </div>
             <div className="grid grid-cols-[1fr_120px] gap-3">
-              <Input label={t('form.amount')} inputMode="decimal" placeholder={locale === 'tr' ? '99,99' : '99.99'} {...register('amount', { required: t('form.amountInvalid') })} error={err.amount?.message} />
+              <Input label={t('form.amount')} inputMode="decimal" placeholder={formatAmountInput(9999, locale)} {...register('amount', { required: t('form.amountInvalid') })} error={err.amount?.message} />
               <Controller
                 control={control}
                 name="currency"

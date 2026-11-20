@@ -10,6 +10,10 @@ describe('amount input', () => {
     expect(parseAmount('1,234.50', 'en')).toBe(123450);
     expect(parseAmount('99.9', 'en')).toBe(9990);
     expect(parseAmount(' ₺ 49,99 ', 'tr')).toBe(4999);
+    expect(parseAmount('1.234,50', 'de')).toBe(123450);
+    expect(parseAmount('1 234,50', 'fr')).toBe(123450);
+    expect(parseAmount('12,90', 'pt-BR')).toBe(1290);
+    expect(parseAmount('1,234.50', 'zh-CN')).toBe(123450);
   });
 
   it('rejects garbage, negatives and more than two decimals', () => {
@@ -19,5 +23,7 @@ describe('amount input', () => {
   it('formats minor units for editing', () => {
     expect(formatAmountInput(123450, 'tr')).toBe('1234,50');
     expect(formatAmountInput(123450, 'en')).toBe('1234.50');
+    expect(formatAmountInput(123450, 'de')).toBe('1234,50');
+    expect(formatAmountInput(123450, 'ja')).toBe('1234.50');
   });
 });

@@ -1,3 +1,4 @@
+import type { Locale } from './locales';
 // Built-in list of popular services for quick adding. No prices: they differ by country and go stale.
 // To add one: keep the id unique, the domain bare (it drives the logo), and use an existing category.
 
@@ -24,28 +25,28 @@ export type CategoryKey =
   | 'telecom'
   | 'bundle';
 
-export const CATEGORY_LABELS: Record<CategoryKey, { en: string; tr: string }> = {
-  streaming: { en: 'Streaming', tr: 'Dizi ve film' },
-  music: { en: 'Music', tr: 'Müzik' },
-  books: { en: 'Books & audio', tr: 'Kitap ve sesli kitap' },
-  ai: { en: 'AI', tr: 'Yapay zekâ' },
-  cloud: { en: 'Cloud storage', tr: 'Bulut depolama' },
-  productivity: { en: 'Productivity', tr: 'Verimlilik' },
-  security: { en: 'Passwords & security', tr: 'Parola ve güvenlik' },
-  email: { en: 'Email', tr: 'E-posta' },
-  vpn: { en: 'VPN', tr: 'VPN' },
-  design: { en: 'Design & photo', tr: 'Tasarım ve fotoğraf' },
-  devtools: { en: 'Developer tools', tr: 'Geliştirici araçları' },
-  hosting: { en: 'Hosting & domains', tr: 'Sunucu ve alan adı' },
-  gaming: { en: 'Gaming', tr: 'Oyun' },
-  social: { en: 'Social & community', tr: 'Sosyal ve topluluk' },
-  news: { en: 'News & reading', tr: 'Haber ve okuma' },
-  education: { en: 'Learning', tr: 'Eğitim' },
-  health: { en: 'Health & fitness', tr: 'Sağlık ve spor' },
-  shopping: { en: 'Shopping & delivery', tr: 'Alışveriş ve teslimat' },
-  finance: { en: 'Finance', tr: 'Finans' },
-  telecom: { en: 'Phone & internet', tr: 'Telefon ve internet' },
-  bundle: { en: 'Bundles', tr: 'Paketler' },
+export const CATEGORY_LABELS: Record<CategoryKey, Record<Locale, string>> = {
+  streaming: { en: 'Streaming', tr: 'Dizi ve film', de: 'Streaming', fr: 'Streaming', es: 'Streaming', 'pt-BR': 'Streaming', 'zh-CN': '视频流媒体', ja: '動画配信' },
+  music: { en: 'Music', tr: 'Müzik', de: 'Musik', fr: 'Musique', es: 'Música', 'pt-BR': 'Música', 'zh-CN': '音乐', ja: '音楽' },
+  books: { en: 'Books & audio', tr: 'Kitap ve sesli kitap', de: 'Bücher & Hörbücher', fr: 'Livres & audio', es: 'Libros y audio', 'pt-BR': 'Livros e áudio', 'zh-CN': '图书与有声书', ja: '本・オーディオブック' },
+  ai: { en: 'AI', tr: 'Yapay zekâ', de: 'KI', fr: 'IA', es: 'IA', 'pt-BR': 'IA', 'zh-CN': 'AI', ja: 'AI' },
+  cloud: { en: 'Cloud storage', tr: 'Bulut depolama', de: 'Cloud-Speicher', fr: 'Stockage cloud', es: 'Almacenamiento en la nube', 'pt-BR': 'Armazenamento em nuvem', 'zh-CN': '云存储', ja: 'クラウドストレージ' },
+  productivity: { en: 'Productivity', tr: 'Verimlilik', de: 'Produktivität', fr: 'Productivité', es: 'Productividad', 'pt-BR': 'Produtividade', 'zh-CN': '效率工具', ja: '仕事効率化' },
+  security: { en: 'Passwords & security', tr: 'Parola ve güvenlik', de: 'Passwörter & Sicherheit', fr: 'Mots de passe & sécurité', es: 'Contraseñas y seguridad', 'pt-BR': 'Senhas e segurança', 'zh-CN': '密码与安全', ja: 'パスワード・セキュリティ' },
+  email: { en: 'Email', tr: 'E-posta', de: 'E-Mail', fr: 'E-mail', es: 'Correo', 'pt-BR': 'E-mail', 'zh-CN': '电子邮件', ja: 'メール' },
+  vpn: { en: 'VPN', tr: 'VPN', de: 'VPN', fr: 'VPN', es: 'VPN', 'pt-BR': 'VPN', 'zh-CN': 'VPN', ja: 'VPN' },
+  design: { en: 'Design & photo', tr: 'Tasarım ve fotoğraf', de: 'Design & Foto', fr: 'Design & photo', es: 'Diseño y foto', 'pt-BR': 'Design e foto', 'zh-CN': '设计与摄影', ja: 'デザイン・写真' },
+  devtools: { en: 'Developer tools', tr: 'Geliştirici araçları', de: 'Entwicklertools', fr: 'Outils de développement', es: 'Herramientas de desarrollo', 'pt-BR': 'Ferramentas de desenvolvimento', 'zh-CN': '开发者工具', ja: '開発ツール' },
+  hosting: { en: 'Hosting & domains', tr: 'Sunucu ve alan adı', de: 'Hosting & Domains', fr: 'Hébergement & domaines', es: 'Hosting y dominios', 'pt-BR': 'Hospedagem e domínios', 'zh-CN': '主机与域名', ja: 'ホスティング・ドメイン' },
+  gaming: { en: 'Gaming', tr: 'Oyun', de: 'Gaming', fr: 'Jeux vidéo', es: 'Videojuegos', 'pt-BR': 'Jogos', 'zh-CN': '游戏', ja: 'ゲーム' },
+  social: { en: 'Social & community', tr: 'Sosyal ve topluluk', de: 'Social & Community', fr: 'Réseaux sociaux', es: 'Redes y comunidad', 'pt-BR': 'Redes e comunidade', 'zh-CN': '社交与社区', ja: 'SNS・コミュニティ' },
+  news: { en: 'News & reading', tr: 'Haber ve okuma', de: 'News & Lesen', fr: 'Actualités & lecture', es: 'Noticias y lectura', 'pt-BR': 'Notícias e leitura', 'zh-CN': '新闻与阅读', ja: 'ニュース・読み物' },
+  education: { en: 'Learning', tr: 'Eğitim', de: 'Lernen', fr: 'Apprentissage', es: 'Aprendizaje', 'pt-BR': 'Educação', 'zh-CN': '学习', ja: '学習' },
+  health: { en: 'Health & fitness', tr: 'Sağlık ve spor', de: 'Gesundheit & Fitness', fr: 'Santé & forme', es: 'Salud y fitness', 'pt-BR': 'Saúde e fitness', 'zh-CN': '健康与健身', ja: '健康・フィットネス' },
+  shopping: { en: 'Shopping & delivery', tr: 'Alışveriş ve teslimat', de: 'Shopping & Lieferung', fr: 'Shopping & livraison', es: 'Compras y envíos', 'pt-BR': 'Compras e entregas', 'zh-CN': '购物与外卖', ja: 'ショッピング・配達' },
+  finance: { en: 'Finance', tr: 'Finans', de: 'Finanzen', fr: 'Finance', es: 'Finanzas', 'pt-BR': 'Finanças', 'zh-CN': '金融', ja: '金融' },
+  telecom: { en: 'Phone & internet', tr: 'Telefon ve internet', de: 'Telefon & Internet', fr: 'Téléphone & internet', es: 'Teléfono e internet', 'pt-BR': 'Celular e internet', 'zh-CN': '话费与宽带', ja: '通信・インターネット' },
+  bundle: { en: 'Bundles', tr: 'Paketler', de: 'Pakete', fr: 'Offres groupées', es: 'Paquetes', 'pt-BR': 'Pacotes', 'zh-CN': '套餐', ja: 'セットプラン' },
 };
 
 export type CatalogEntry = { id: string; name: string; domain: string; category: CategoryKey; cycle: 'monthly' | 'yearly' };

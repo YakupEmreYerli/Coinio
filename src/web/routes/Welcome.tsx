@@ -8,7 +8,7 @@ import { SlicedMark } from '../brand/SlicedMark';
 import { browserZone, guessCurrency } from '../components/pickers/data';
 import { CurrencyPicker, TimeZonePicker } from '../components/pickers/Pickers';
 import { Button } from '../components/ui/Button';
-import { setLocale, t, useLocale, type Locale } from '../i18n';
+import { LOCALES, LOCALE_NAMES, setLocale, t, useLocale, type Locale } from '../i18n';
 import { useSettings } from '../lib/hooks';
 import { cn } from '../lib/cn';
 import { AuthLayout } from '../onboarding/AuthLayout';
@@ -18,10 +18,6 @@ export type OnboardingState = { completed: boolean; hasSamples: boolean };
 export const useOnboarding = () => useQuery({ queryKey: ['onboarding'], queryFn: () => api.get<OnboardingState>('/onboarding') });
 
 const STEPS = ['language', 'basics', 'start'] as const;
-const LANGUAGES: { value: Locale; native: string }[] = [
-  { value: 'en', native: 'English' },
-  { value: 'tr', native: 'Türkçe' },
-];
 
 /** Left panel of the wizard: where you are and what is left. */
 function Stepper({ step }: { step: number }) {
@@ -175,17 +171,17 @@ export function Welcome({ onDone, initialStep = 0 }: { onDone: () => void; initi
           <>
             <StepHeading step={0} title={t('welcome.title')} intro={t('welcome.intro')} />
             <div ref={firstField}>
-              <R.Root aria-label={t('settings.language')} value={locale} onValueChange={(v) => setLocale(v as Locale)} className="grid gap-2.5 sm:grid-cols-2">
-                {LANGUAGES.map((l) => (
+              <R.Root aria-label={t('settings.language')} value={locale} onValueChange={(v) => setLocale(v as Locale)} className="grid grid-cols-2 gap-2.5">
+                {LOCALES.map((l) => (
                   <R.Item
-                    key={l.value}
-                    value={l.value}
-                    lang={l.value}
-                    aria-label={l.native}
+                    key={l}
+                    value={l}
+                    lang={l}
+                    aria-label={LOCALE_NAMES[l]}
                     className="group relative flex flex-col items-start rounded-card border border-line bg-card px-4 py-3.5 text-left transition-[border-color,box-shadow] hover:border-line-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-soft data-[state=checked]:border-accent data-[state=checked]:shadow-[0_0_0_3px_var(--accent-soft)]"
                   >
-                    <span className="text-[16px] font-medium text-text">{l.native}</span>
-                    <span className="text-[12.5px] text-text-3">{new Intl.DisplayNames(locale, { type: 'language' }).of(l.value)}</span>
+                    <span className="pr-7 text-[16px] font-medium text-text">{LOCALE_NAMES[l]}</span>
+                    <span className="pr-7 text-[12.5px] text-text-3" lang={locale}>{new Intl.DisplayNames(locale, { type: 'language' }).of(l === 'zh-CN' ? 'zh-Hans' : l)}</span>
                     <span className="absolute top-3.5 right-3.5 grid size-5 place-items-center rounded-full border border-line-2 group-data-[state=checked]:border-accent group-data-[state=checked]:bg-accent">
                       <R.Indicator>
                         <Check className="size-3 text-white" strokeWidth={3} />

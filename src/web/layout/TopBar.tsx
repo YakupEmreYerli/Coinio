@@ -3,8 +3,20 @@ import type { ReactNode } from 'react';
 import { api } from '../api';
 import { DEMO } from '../demo/flag';
 import { Button } from '../components/ui/Button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../components/ui/DropdownMenu';
-import { t, useLocale } from '../i18n';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '../components/ui/DropdownMenu';
+import { LOCALES, LOCALE_NAMES, isLocale, t, useLocale } from '../i18n';
 import { useUpdateSettings } from '../lib/hooks';
 import { useThemeToggle } from '../lib/themeToggle';
 import { useSubscriptionForm } from './subscriptionForm';
@@ -45,10 +57,21 @@ export function TopBar({ username, onSearch, onLogout, extra }: { username: stri
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>{username}</DropdownMenuLabel>
-          <DropdownMenuItem onSelect={() => saveSettings.mutate({ locale: locale === 'tr' ? 'en' : 'tr' })}>
-            <Languages />
-            {locale === 'tr' ? 'English' : 'Türkçe'}
-          </DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <Languages />
+              {LOCALE_NAMES[locale]}
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup value={locale} onValueChange={(v) => isLocale(v) && saveSettings.mutate({ locale: v })}>
+                {LOCALES.map((l) => (
+                  <DropdownMenuRadioItem key={l} value={l} lang={l}>
+                    {LOCALE_NAMES[l]}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
           <DropdownMenuItem onSelect={theme.toggle}>
             {theme.dark ? <Sun /> : <Moon />}
             {theme.dark ? t('top.lightMode') : t('top.darkMode')}

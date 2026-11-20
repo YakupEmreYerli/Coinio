@@ -1,7 +1,8 @@
 import { siIcloud, siNetflix, siSpotify } from 'simple-icons';
 import type { ReactNode } from 'react';
 import { SlicedMark } from '../brand/SlicedMark';
-import { getLocale, setLocale, t, useLocale, type Locale } from '../i18n';
+import { LOCALES, LOCALE_NAMES, getLocale, isLocale, setLocale, t, useLocale } from '../i18n';
+import { Select } from '../components/ui/Select';
 import { Wordmark } from '../layout/Wordmark';
 import { cn } from '../lib/cn';
 import { guessCurrency } from '../components/pickers/data';
@@ -87,27 +88,14 @@ export function BrandPanel({ children }: { children?: ReactNode }) {
 
 function LanguageSwitch() {
   const { locale } = useLocale();
-  const options: { value: Locale; label: string }[] = [
-    { value: 'en', label: 'English' },
-    { value: 'tr', label: 'Türkçe' },
-  ];
   return (
-    <div role="group" aria-label={t('settings.language')} className="flex items-center gap-1 text-[12.5px]">
-      {options.map((o, i) => (
-        <span key={o.value} className="flex items-center gap-1">
-          {i > 0 && <span className="text-text-3" aria-hidden>·</span>}
-          <button
-            type="button"
-            lang={o.value}
-            aria-pressed={locale === o.value}
-            onClick={() => setLocale(o.value)}
-            className={cn('rounded-[6px] px-1.5 py-0.5 transition-colors', locale === o.value ? 'font-medium text-text' : 'text-text-3 hover:text-text-2')}
-          >
-            {o.label}
-          </button>
-        </span>
-      ))}
-    </div>
+    <Select
+      aria-label={t('settings.language')}
+      value={locale}
+      onChange={(v) => isLocale(v) && setLocale(v)}
+      options={LOCALES.map((l) => ({ value: l, label: LOCALE_NAMES[l] }))}
+      className="h-8 w-auto border-transparent bg-transparent px-2 text-[12.5px] text-text-2 hover:border-line-2"
+    />
   );
 }
 

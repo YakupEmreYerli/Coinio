@@ -12,7 +12,7 @@ import { useSubscriptionForm } from '../../layout/subscriptionForm';
 import { todayIn } from '../../lib/dates';
 import { useSettings } from '../../lib/hooks';
 import type { ApiSubscription, Cycle } from '../../lib/types';
-import { parseAmount } from '../../subscription-form/amount';
+import { formatAmountInput, parseAmount } from '../../subscription-form/amount';
 import { CATEGORY_LABELS, searchCatalog } from '../../../shared/catalog';
 
 const DOMAIN_RE = /^[a-z0-9-]+(\.[a-z0-9-]+)+$/i;
@@ -97,7 +97,7 @@ export function QuickAdd() {
           autoComplete="off"
         />
         <div className="grid grid-cols-2 gap-2.5">
-          <Input aria-label={t('form.amount')} inputMode="decimal" placeholder={locale === 'tr' ? '99,99' : '99.99'} value={amount} onChange={(e) => setAmount(e.target.value)} />
+          <Input aria-label={t('form.amount')} inputMode="decimal" placeholder={formatAmountInput(9999, locale)} value={amount} onChange={(e) => setAmount(e.target.value)} />
           <Select
             aria-label={t('form.cycle')}
             value={cycle}
