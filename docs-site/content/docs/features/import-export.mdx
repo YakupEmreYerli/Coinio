@@ -50,7 +50,7 @@ The **Export** menu in the top bar (on phones, on the **History** page) download
 
 Files are named like `coinio-subscriptions-2026-11-20.csv`. Amounts are plain decimals (`1234.56`) in each record's own currency. Subscription exports include paused subscriptions.
 
-CSV columns for subscriptions: `id`, `name`, `domain`, `amount`, `currency`, `variable_amount`, `cycle`, `interval_count`, `next_due`, `auto_pay`, `payment_method`, `category`, `notes`, `reminder_days`, `active`, `created_at`.
+CSV columns for subscriptions: `id`, `name`, `domain`, `amount`, `currency`, `variable_amount`, `cycle`, `interval_count`, `next_due`, `auto_pay`, `payment_method`, `category`, `notes`, `reminder_offsets` (days separated by `;`, empty for the defaults), `trial_ends_at`, `active`, `created_at`.
 
 CSV columns for payments: `id`, `subscription_id`, `subscription_name`, `due_date`, `paid_at`, `amount`, `currency`, `actual_base_amount`, `source`, `status`.
 

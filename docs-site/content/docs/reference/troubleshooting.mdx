@@ -49,12 +49,12 @@ Coinio retries on its own; there is nothing to restart.
 - Open `https://<your-address>/api/health` from your phone's mobile data. If it does not load, the problem is the tunnel or proxy, not Coinio.
 - For the widget, check the key: `curl -H "Authorization: Bearer <key>" https://<your-address>/api/widget` must return JSON, not `invalid_token`.
 
-## Telegram messages do not arrive
+## Notifications do not arrive
 
-- Click **Send test message** in **Settings › Notifications**. "Telegram did not accept the message" means the token or chat ID is wrong.
-- Send your bot a message first; bots cannot start a conversation.
-- Environment variables override the app: if `COINIO_TELEGRAM_BOT_TOKEN` is set, the token in the app is ignored.
-- The daily message is skipped on days with nothing to report.
+- Open the channel in **Settings › Notifications** and click **Send test**. The error shown is the service's own answer: `chat not found` means a wrong chat ID, `Unauthorized` a wrong token, `Invalid login` a wrong SMTP password.
+- Telegram: send your bot a message first; bots cannot start a conversation. For a forum group, check the topic ID.
+- **Recent notifications** at the bottom of the page lists failures with their error; temporary failures are retried for about 15 hours.
+- Reminders only go out on the configured days (by default 3 and 1 days before, 30, 7 and 1 for yearly) at the send time, in the time zone from **Settings › General**.
 
 ## Too many login attempts
 

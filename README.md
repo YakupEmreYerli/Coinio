@@ -18,7 +18,7 @@ Coinio keeps every recurring payment on one page: streaming, cloud storage, the 
 
 - **Real billing cycles.** Weekly, monthly or yearly, every N cycles, charged automatically or paid by hand. Mark a payment paid, skip a period or pause a subscription; the history stays.
 - **161 services built in.** Type "spot" and Spotify fills in with its logo, category and cycle. Any other site gets its own icon.
-- **Calendar and reminders.** Payment days months ahead, plus a daily Telegram message about what is due and overdue.
+- **Calendar and reminders.** Payment days months ahead. Reminders, digests and trial, budget and price alerts by email, Telegram, Discord, Slack, ntfy, Gotify, Pushover, webhooks or Apprise, with editable templates.
 - **Any currency.** Each subscription keeps its own currency; totals are converted with daily exchange rates.
 - **History and reports.** What you paid over the last 12 months and what to expect in the next 12, by category.
 - **Import and export.** Bring your subscriptions over from Wallos; export subscriptions and payments as CSV or JSON.
@@ -71,8 +71,9 @@ Coinio is configured with environment variables. Everything else (currency, time
 | Variable | Default | What it does |
 | --- | --- | --- |
 | `COINIO_PUBLIC_URL` | not set | The address you reach Coinio at, e.g. `https://coinio.example.com`. Turns on OAuth for remote MCP clients and secure session cookies. Must be `https://` (or `http://localhost`); with a plain `http://` address OAuth stays off. |
-| `COINIO_TELEGRAM_BOT_TOKEN` | not set | Telegram bot token. Overrides the one saved in **Settings › Notifications**. |
-| `COINIO_TELEGRAM_CHAT_ID` | not set | Telegram chat ID. Overrides the one saved in the app. |
+| `COINIO_TELEGRAM_BOT_TOKEN` | not set | Telegram bot token. With the chat ID, creates a Telegram channel on first start; then manage it in **Settings › Notifications**. |
+| `COINIO_TELEGRAM_CHAT_ID` | not set | Telegram chat ID for that channel. |
+| `COINIO_TELEGRAM_THREAD_ID` | not set | Optional topic ID in a forum group. |
 | `PORT` | `8080` | Port the server listens on inside the container. |
 | `COINIO_DATA_DIR` | `/data` | Folder for the database (`coinio.db`) and logos (`logos/`). |
 | `COINIO_WEB_DIR` | built-in | Folder with the built web app; only useful in development. |
@@ -126,7 +127,7 @@ docker run --rm -v coinio-data:/data -v "$PWD":/backup alpine \
 docker start coinio
 ```
 
-With Compose, archive the `./data` folder while the container is stopped. The backup holds API keys, the Telegram token and sessions, so store it like a password. You can also export subscriptions and payments as CSV or JSON from the app. Restore steps: [docs.getcoinio.me/docs/maintenance](https://docs.getcoinio.me/docs/maintenance).
+With Compose, archive the `./data` folder while the container is stopped. The backup holds API keys, notification tokens and sessions, so store it like a password. You can also export subscriptions and payments as CSV or JSON from the app. Restore steps: [docs.getcoinio.me/docs/maintenance](https://docs.getcoinio.me/docs/maintenance).
 
 ## Development
 

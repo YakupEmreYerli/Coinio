@@ -72,7 +72,7 @@ When it is on, Coinio posts a read-only summary into the card with `postMessage`
 - `leftThisMonthMinor`: what is still due this month, in hundredths of `base` (12999 means 129.99).
 - `monthlyAverageMinor`: the monthly average of all active subscriptions, in hundredths.
 - `ratesStale`: `true` when exchange rates are out of date and converted amounts are approximate.
-- `items`: up to six due payments, overdue first. Each has `subscriptionId`, `name`, `dueDate` (`YYYY-MM-DD`), `amountMinor` and `currency` in the subscription's own currency, `baseMinor` (converted, or `null` without a rate), `daysLeft` (negative when overdue), `autoPay`, `variableAmount`, `reminderDays` and `logoPath`.
+- `items`: up to six due payments, overdue first. Each has `subscriptionId`, `name`, `dueDate` (`YYYY-MM-DD`), `amountMinor` and `currency` in the subscription's own currency, `baseMinor` (converted, or `null` without a rate), `daysLeft` (negative when overdue), `autoPay`, `variableAmount` and `logoPath`.
 - `generatedAt`: when the summary was made (ISO 8601).
 
 A small card that shows the next payment:

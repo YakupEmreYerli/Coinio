@@ -46,7 +46,7 @@ docker run --rm -v coinio-data:/data -v "$PWD":/backup alpine \
 docker start coinio
 ```
 
-This writes `coinio-backup.tar.gz` to the current folder. It holds the database (including API keys, the Telegram token and sessions) and the logos, so store it like a password.
+This writes `coinio-backup.tar.gz` to the current folder. It holds the database (including API keys, notification passwords and tokens, and sessions) and the logos, so store it like a password.
 
 With Compose, archive the folder directly: `docker compose stop`, `tar czf coinio-backup.tar.gz -C data .`, `docker compose start`.
 

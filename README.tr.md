@@ -18,7 +18,7 @@ Coinio düzenli ödediğin her şeyi tek sayfada toplar: dizi platformu, bulut d
 
 - **Gerçek ödeme dönemleri.** Haftalık, aylık, yıllık ya da her N dönemde bir; otomatik çekilen ya da elle ödenen. Ödemeyi ödendi diye işaretle, bir dönemi atla ya da aboneliği duraklat; geçmiş silinmez.
 - **161 hazır servis.** "spot" yazınca Spotify logosu, kategorisi ve dönemiyle gelir. Listede olmayan sitenin kendi ikonu bulunur.
-- **Takvim ve hatırlatma.** Ödeme günlerini aylar öncesinden görürsün; her gün Telegram'dan yaklaşan ve geciken ödemeler için mesaj gelir.
+- **Takvim ve hatırlatma.** Ödeme günlerini aylar öncesinden görürsün. Hatırlatmalar, özetler ve deneme, bütçe, fiyat uyarıları e-posta, Telegram, Discord, Slack, ntfy, Gotify, Pushover, webhook ya da Apprise ile gelir; mesaj şablonlarını sen düzenlersin.
 - **Her para birimi.** Her abonelik kendi para biriminde kalır, toplamlar günlük kurla çevrilir.
 - **Geçmiş ve raporlar.** Son 12 ayda ne ödediğin, önümüzdeki 12 ayda ne bekleyeceğin, kategoriye göre.
 - **İçe ve dışa aktarma.** Wallos'taki aboneliklerini taşı; abonelikleri ve ödemeleri CSV ya da JSON olarak indir.
@@ -71,8 +71,9 @@ Coinio ortam değişkenleriyle ayarlanır. Geri kalan her şey (para birimi, saa
 | Değişken | Varsayılan | Ne işe yarar |
 | --- | --- | --- |
 | `COINIO_PUBLIC_URL` | yok | Coinio'yu açtığın adres, örneğin `https://coinio.example.com`. Uzaktaki MCP istemcileri için OAuth'u ve güvenli oturum çerezlerini açar. `https://` (ya da `http://localhost`) olmalı; düz `http://` adreste OAuth kapalı kalır. |
-| `COINIO_TELEGRAM_BOT_TOKEN` | yok | Telegram bot token'ı. **Ayarlar › Bildirimler**'de kayıtlı olanın yerine geçer. |
-| `COINIO_TELEGRAM_CHAT_ID` | yok | Telegram sohbet kimliği. Uygulamada kayıtlı olanın yerine geçer. |
+| `COINIO_TELEGRAM_BOT_TOKEN` | yok | Telegram bot token'ı. Sohbet kimliğiyle birlikte ilk açılışta bir Telegram kanalı kurar; sonrasını **Ayarlar › Bildirimler**'den yönetirsin. |
+| `COINIO_TELEGRAM_CHAT_ID` | yok | O kanalın sohbet kimliği. |
+| `COINIO_TELEGRAM_THREAD_ID` | yok | Konulu gruplarda isteğe bağlı konu kimliği. |
 | `PORT` | `8080` | Sunucunun kapsayıcı içinde dinlediği port. |
 | `COINIO_DATA_DIR` | `/data` | Veritabanının (`coinio.db`) ve logoların (`logos/`) klasörü. |
 | `COINIO_WEB_DIR` | imajın içinde | Derlenmiş web uygulamasının klasörü; yalnız geliştirmede işe yarar. |
@@ -126,7 +127,7 @@ docker run --rm -v coinio-data:/data -v "$PWD":/backup alpine \
 docker start coinio
 ```
 
-Compose'da kapsayıcı dururken `./data` klasörünü arşivle. Yedekte API anahtarları, Telegram token'ı ve oturumlar da var; onu parola gibi sakla. Abonelikleri ve ödemeleri uygulamadan CSV ya da JSON olarak da indirebilirsin. Geri yükleme: [docs.getcoinio.me/docs/maintenance](https://docs.getcoinio.me/docs/maintenance).
+Compose'da kapsayıcı dururken `./data` klasörünü arşivle. Yedekte API anahtarları, bildirim token'ları ve oturumlar da var; onu parola gibi sakla. Abonelikleri ve ödemeleri uygulamadan CSV ya da JSON olarak da indirebilirsin. Geri yükleme: [docs.getcoinio.me/docs/maintenance](https://docs.getcoinio.me/docs/maintenance).
 
 ## Geliştirme
 

@@ -114,8 +114,8 @@ Amounts are decimal numbers in the subscription's own currency (`229.99`), dates
 
 | Tool | What it does |
 | --- | --- |
-| `add_subscription` | Create a subscription. |
-| `update_subscription` | Change any fields; `active: false` pauses it. |
+| `add_subscription` | Create a subscription, optionally with its own reminder days (`reminder_offsets`) and a free trial end date (`trial_ends_at`). |
+| `update_subscription` | Change any fields; `active: false` pauses it, `reminder_offsets: null` goes back to the default reminders. |
 | `mark_paid` | Record a payment (by default for the next due date), optionally with the real amount. |
 | `skip_payment` | Skip one period. |
 | `undo_payment` | Undo a payment by its id. |
