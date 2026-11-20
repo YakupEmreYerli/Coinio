@@ -1,39 +1,102 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Download, FlaskConical, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, FileInput, FlaskConical, Loader2, Plus } from 'lucide-react';
 import { RadioGroup as R } from 'radix-ui';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
+import { SlicedMark } from '../brand/SlicedMark';
+import { browserZone, guessCurrency } from '../components/pickers/data';
+import { CurrencyPicker, TimeZonePicker } from '../components/pickers/Pickers';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
-import { Input } from '../components/ui/Input';
-import { Select } from '../components/ui/Select';
 import { setLocale, t, useLocale, type Locale } from '../i18n';
-import { Wordmark } from '../layout/Wordmark';
 import { useSettings } from '../lib/hooks';
-
-const CURRENCIES = ['TRY', 'USD', 'EUR', 'GBP', 'CHF', 'CAD', 'AUD', 'SEK', 'NOK', 'DKK', 'PLN', 'CZK'];
-const browserZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-/** Currency guess from the browser region: TR → TRY, euro countries → EUR, else USD. */
-function guessCurrency(): string {
-  const region = (navigator.language.split('-')[1] ?? '').toUpperCase();
-  if (region === 'TR') return 'TRY';
-  if (region === 'GB') return 'GBP';
-  if (['DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'AT', 'IE', 'PT', 'FI', 'GR'].includes(region)) return 'EUR';
-  return 'USD';
-}
+import { cn } from '../lib/cn';
+import { AuthLayout } from '../onboarding/AuthLayout';
+import { FormError } from './AuthForm';
 
 export type OnboardingState = { completed: boolean; hasSamples: boolean };
 export const useOnboarding = () => useQuery({ queryKey: ['onboarding'], queryFn: () => api.get<OnboardingState>('/onboarding') });
 
-function Choice({ icon, title, body, onClick }: { icon: ReactNode; title: string; body: string; onClick: () => void }) {
+const STEPS = ['language', 'basics', 'start'] as const;
+const LANGUAGES: { value: Locale; native: string }[] = [
+  { value: 'en', native: 'English' },
+  { value: 'tr', native: 'Türkçe' },
+];
+
+/** Left panel of the wizard: where you are and what is left. */
+function Stepper({ step }: { step: number }) {
   return (
-    <button type="button" onClick={onClick} className="flex items-start gap-4 rounded-card border border-line bg-card p-4 text-left transition-shadow hover:border-accent hover:shadow-[0_0_0_3px_var(--accent-soft)]">
-      <span className="grid size-10 shrink-0 place-items-center rounded-full bg-accent-soft text-accent [&_svg]:size-5">{icon}</span>
-      <span>
-        <b className="block font-medium">{title}</b>
-        <span className="text-[13px] text-text-2">{body}</span>
+    <div className="flex w-full max-w-[380px] flex-col items-start text-left">
+      <div className="brand-rings mb-12 size-14">
+        <span className="brand-halo" />
+        <SlicedMark size={56} coin animated className="relative" />
+      </div>
+      <p className="num mb-5 text-[11.5px] tracking-[0.12em] text-[#8e96ff] uppercase">{t('welcome.eyebrow')}</p>
+      <ol className="flex w-full flex-col">
+        {STEPS.map((id, i) => {
+          const done = i < step;
+          const current = i === step;
+          return (
+            <li key={id} aria-current={current ? 'step' : undefined} className="relative flex gap-4 pb-7 last:pb-0">
+              {i < STEPS.length - 1 && <span className={cn('absolute top-8 bottom-1 left-[13px] w-px', done ? 'bg-[#4f5bd5]' : 'bg-white/10')} aria-hidden />}
+              <span
+                className={cn(
+                  'relative grid size-[27px] shrink-0 place-items-center rounded-full border text-[12px] font-semibold',
+                  done && 'border-[#4f5bd5] bg-[#4f5bd5] text-white',
+                  current && 'border-[#8e96ff] bg-[#4f5bd5]/15 text-[#e6e8ff] shadow-[0_0_0_4px_rgb(79_91_213/0.18)]',
+                  !done && !current && 'border-white/15 text-[#646a80]',
+                )}
+              >
+                {done ? <Check className="size-3.5" strokeWidth={3} /> : i + 1}
+              </span>
+              <span className="pt-0.5">
+                <span className={cn('block text-[15px] font-medium', current || done ? 'text-[#f2f3f9]' : 'text-[#9a9fb4]')}>{t(`welcome.steps.${id}`)}</span>
+                <span className="mt-0.5 block text-[13px] leading-snug text-[#7d8299]">{t(`welcome.steps.${id}Desc`)}</span>
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
+function StepHeading({ step, title, intro }: { step: number; title: string; intro: string }) {
+  return (
+    <div>
+      <div className="mb-6 flex items-center gap-3 lg:hidden" aria-hidden>
+        <div className="grid flex-1 grid-cols-3 gap-1.5">
+          {STEPS.map((id, i) => (
+            <span key={id} className={cn('h-1 rounded-full', i <= step ? 'bg-accent' : 'bg-line')} />
+          ))}
+        </div>
+      </div>
+      <p className="mb-2 text-[12.5px] font-medium text-text-3">{t('welcome.step', { n: step + 1, total: STEPS.length })}</p>
+      <h1 className="font-display text-[28px] leading-[1.15] text-text">{title}</h1>
+      <p className="mt-2 text-[14px] leading-relaxed text-text-2">{intro}</p>
+    </div>
+  );
+}
+
+function Choice({ icon, title, body, badge, busy, disabled, onClick }: { icon: ReactNode; title: string; body: string; badge?: string; busy?: boolean; disabled?: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group flex w-full items-center gap-4 rounded-card border border-line bg-card p-4 text-left transition-[border-color,box-shadow,background] hover:border-accent/60 hover:shadow-[0_0_0_3px_var(--accent-soft)] focus-visible:border-accent focus-visible:shadow-[0_0_0_3px_var(--accent-soft)] focus-visible:outline-none disabled:opacity-60"
+    >
+      <span className="grid size-10 shrink-0 place-items-center rounded-[10px] border border-line bg-sunk text-text-2 transition-colors group-hover:border-accent/30 group-hover:bg-accent-soft group-hover:text-accent [&_svg]:size-[18px]">
+        {busy ? <Loader2 className="animate-spin" /> : icon}
       </span>
+      <span className="min-w-0 flex-1">
+        <span className="flex items-center gap-2">
+          <b className="font-medium text-text">{title}</b>
+          {badge && <span className="rounded-full bg-accent-soft px-2 py-px text-[11px] font-medium text-accent">{badge}</span>}
+        </span>
+        <span className="mt-0.5 block text-[13px] leading-snug text-text-2">{body}</span>
+      </span>
+      <ArrowRight className="size-4 shrink-0 text-text-3 transition-transform group-hover:translate-x-0.5 group-hover:text-accent" aria-hidden />
     </button>
   );
 }
@@ -47,8 +110,17 @@ export function Welcome({ onDone, initialStep = 0 }: { onDone: () => void; initi
   const [step, setStep] = useState(initialStep);
   const [currency, setCurrency] = useState<string | null>(null);
   const [zone, setZone] = useState<string | null>(null);
+  const [choice, setChoice] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const cur = currency ?? (settings?.baseCurrency && settings.baseCurrency !== 'USD' ? settings.baseCurrency : guessCurrency());
   const tz = zone ?? browserZone();
+  const firstField = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Each step starts with focus on its first control, so the whole wizard works from the keyboard.
+    const root = firstField.current;
+    (root?.querySelector<HTMLElement>('[role="radio"][data-state="checked"]') ?? root?.querySelector<HTMLElement>('button, [role="radio"], input'))?.focus();
+  }, [step]);
 
   const finish = useMutation({
     mutationFn: async (then?: () => Promise<unknown>) => {
@@ -59,70 +131,125 @@ export function Welcome({ onDone, initialStep = 0 }: { onDone: () => void; initi
       await qc.invalidateQueries();
       onDone();
     },
+    onError: () => {
+      setChoice(null);
+      setError(t('error.generic'));
+    },
   });
 
-  const saveBasics = async () => {
-    await api.patch('/settings', { locale, baseCurrency: cur, timezone: tz });
-    setStep(2);
+  const saveBasics = useMutation({
+    mutationFn: () => api.patch('/settings', { locale, baseCurrency: cur, timezone: tz }),
+    onSuccess: () => {
+      setError(null);
+      setStep(2);
+    },
+    onError: () => setError(t('error.generic')),
+  });
+
+  const next = (e: FormEvent) => {
+    e.preventDefault();
+    if (step === 0) setStep(1);
+    else if (step === 1) saveBasics.mutate();
   };
 
+  const start = (id: string, then?: () => Promise<unknown>) => {
+    setChoice(id);
+    finish.mutate(then);
+  };
+
+  const sample = new Intl.NumberFormat(locale, { style: 'currency', currency: cur }).format(1234.56);
+
   return (
-    <main className="flex min-h-dvh flex-col items-center bg-bg px-4 py-10">
-      <div className="flex w-full max-w-[560px] items-center gap-2.5 text-[15px] font-medium">
-        <Wordmark height={26} label={t('app.name')} />
-        <span className="ml-auto text-xs text-text-3">{t('welcome.step', { n: step + 1, total: 3 })}</span>
-        <Button variant="ghost" size="sm" onClick={() => finish.mutate(undefined)}>
+    <AuthLayout
+      wide
+      languageSwitch={false}
+      aside={<Stepper step={step} />}
+      header={
+        <Button variant="ghost" size="sm" onClick={() => finish.mutate(undefined)} disabled={finish.isPending}>
           {t('welcome.skip')}
         </Button>
-      </div>
-      <Card className="mt-8 w-full max-w-[560px] p-7 shadow-[var(--shadow)]">
+      }
+    >
+      <form onSubmit={next} className="flex flex-col gap-7">
         {step === 0 && (
-          <div className="flex flex-col gap-5">
-            <div>
-              <h1 className="font-display text-[28px] leading-tight">{t('welcome.title')}</h1>
-              <p className="mt-1.5 text-text-2">{t('welcome.intro')}</p>
+          <>
+            <StepHeading step={0} title={t('welcome.title')} intro={t('welcome.intro')} />
+            <div ref={firstField}>
+              <R.Root aria-label={t('settings.language')} value={locale} onValueChange={(v) => setLocale(v as Locale)} className="grid gap-2.5 sm:grid-cols-2">
+                {LANGUAGES.map((l) => (
+                  <R.Item
+                    key={l.value}
+                    value={l.value}
+                    lang={l.value}
+                    aria-label={l.native}
+                    className="group relative flex flex-col items-start rounded-card border border-line bg-card px-4 py-3.5 text-left transition-[border-color,box-shadow] hover:border-line-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-soft data-[state=checked]:border-accent data-[state=checked]:shadow-[0_0_0_3px_var(--accent-soft)]"
+                  >
+                    <span className="text-[16px] font-medium text-text">{l.native}</span>
+                    <span className="text-[12.5px] text-text-3">{new Intl.DisplayNames(locale, { type: 'language' }).of(l.value)}</span>
+                    <span className="absolute top-3.5 right-3.5 grid size-5 place-items-center rounded-full border border-line-2 group-data-[state=checked]:border-accent group-data-[state=checked]:bg-accent">
+                      <R.Indicator>
+                        <Check className="size-3 text-white" strokeWidth={3} />
+                      </R.Indicator>
+                    </span>
+                  </R.Item>
+                ))}
+              </R.Root>
             </div>
-            <R.Root aria-label={t('settings.language')} value={locale} onValueChange={(v) => setLocale(v as Locale)} className="grid grid-cols-2 gap-2.5">
-              {(['tr', 'en'] as const).map((l) => (
-                <R.Item key={l} value={l} aria-label={l === 'tr' ? 'Türkçe' : 'English'} className="rounded-ctl border border-line p-3 text-left font-medium data-[state=checked]:border-accent data-[state=checked]:shadow-[0_0_0_3px_var(--accent-soft)]">
-                  {l === 'tr' ? 'Türkçe' : 'English'}
-                </R.Item>
-              ))}
-            </R.Root>
-            <Button variant="primary" className="self-end" onClick={() => setStep(1)}>
-              {t('welcome.continue')}
-            </Button>
-          </div>
+          </>
         )}
         {step === 1 && (
-          <div className="flex flex-col gap-5">
-            <div>
-              <h1 className="font-display text-[26px] leading-tight">{t('welcome.basicsTitle')}</h1>
-              <p className="mt-1.5 text-text-2">{t('welcome.basicsIntro')}</p>
+          <>
+            <StepHeading step={1} title={t('welcome.basicsTitle')} intro={t('welcome.basicsIntro')} />
+            <div ref={firstField} className="flex flex-col gap-5">
+              <CurrencyPicker value={cur} onChange={setCurrency} hint={t('welcome.currencyHint', { sample })} />
+              <TimeZonePicker value={tz} onChange={setZone} hint={tz === browserZone() ? t('welcome.zoneHint') : t('welcome.zoneHintManual')} />
             </div>
-            <Select label={t('settings.baseCurrency')} value={cur} onChange={setCurrency} options={[...new Set([cur, ...CURRENCIES])].map((c) => ({ value: c, label: c }))} />
-            <Input label={t('settings.timezone')} value={tz} onChange={(e) => setZone(e.target.value)} hint={t('welcome.zoneHint')} />
-            <div className="flex justify-between">
-              <Button onClick={() => setStep(0)}>{t('welcome.back')}</Button>
-              <Button variant="primary" onClick={() => void saveBasics()}>
-                {t('welcome.continue')}
-              </Button>
-            </div>
-          </div>
+          </>
         )}
         {step === 2 && (
-          <div className="flex flex-col gap-4">
-            <div>
-              <h1 className="font-display text-[26px] leading-tight">{t('welcome.startTitle')}</h1>
-              <p className="mt-1.5 text-text-2">{t('welcome.startIntro')}</p>
+          <>
+            <StepHeading step={2} title={t('welcome.startTitle')} intro={t('welcome.startIntro')} />
+            <div ref={firstField} className="flex flex-col gap-2.5">
+              <Choice
+                icon={<FlaskConical />}
+                title={t('welcome.samples')}
+                body={t('welcome.samplesBody')}
+                badge={t('welcome.recommended')}
+                busy={choice === 'samples'}
+                disabled={finish.isPending}
+                onClick={() => start('samples', () => api.post('/onboarding/samples'))}
+              />
+              <Choice icon={<Plus />} title={t('welcome.empty')} body={t('welcome.emptyBody')} busy={choice === 'empty'} disabled={finish.isPending} onClick={() => start('empty')} />
+              <Choice
+                icon={<FileInput />}
+                title={t('welcome.wallos')}
+                body={t('welcome.wallosBody')}
+                busy={choice === 'wallos'}
+                disabled={finish.isPending}
+                onClick={() => start('wallos', async () => navigate('/settings/import'))}
+              />
             </div>
-            <Choice icon={<Download />} title={t('welcome.wallos')} body={t('welcome.wallosBody')} onClick={() => finish.mutate(async () => navigate('/settings/import'))} />
-            <Choice icon={<FlaskConical />} title={t('welcome.samples')} body={t('welcome.samplesBody')} onClick={() => finish.mutate(() => api.post('/onboarding/samples'))} />
-            <Choice icon={<Sparkles />} title={t('welcome.empty')} body={t('welcome.emptyBody')} onClick={() => finish.mutate(undefined)} />
-          </div>
+          </>
         )}
-      </Card>
-    </main>
+        {error && <FormError>{error}</FormError>}
+        <div className={cn('flex items-center gap-3 border-t border-line pt-5', step === 0 ? 'justify-end' : 'justify-between')}>
+          {step > 0 && (
+            <Button variant="ghost" onClick={() => setStep(step - 1)}>
+              <ArrowLeft />
+              {t('welcome.back')}
+            </Button>
+          )}
+          {step < 2 && (
+            <Button type="submit" variant="primary" className="h-10 px-4" disabled={saveBasics.isPending}>
+              {saveBasics.isPending && <Loader2 className="animate-spin" />}
+              {t('welcome.continue')}
+              {!saveBasics.isPending && <ArrowRight />}
+            </Button>
+          )}
+          {step === 2 && <span className="text-[12.5px] text-text-3">{t('welcome.changeLater')}</span>}
+        </div>
+      </form>
+    </AuthLayout>
   );
 }
 
@@ -133,10 +260,10 @@ export function SampleBanner() {
   const clear = useMutation({ mutationFn: () => api.del('/onboarding/samples'), onSuccess: () => qc.invalidateQueries() });
   if (!state?.hasSamples) return null;
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded-card border border-accent bg-accent-soft px-4 py-2.5 text-sm">
+    <div className="flex flex-wrap items-center gap-3 rounded-card border border-accent/30 bg-accent-soft px-4 py-2.5 text-sm">
       <FlaskConical className="size-4 text-accent" />
-      <span className="flex-1">{t('welcome.bannerText')}</span>
-      <Button size="sm" variant="primary" onClick={() => clear.mutate()}>
+      <span className="flex-1 text-text">{t('welcome.bannerText')}</span>
+      <Button size="sm" variant="secondary" onClick={() => clear.mutate()} disabled={clear.isPending}>
         {t('welcome.clearSamples')}
       </Button>
     </div>

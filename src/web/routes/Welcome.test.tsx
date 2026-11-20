@@ -18,7 +18,7 @@ describe('Welcome wizard', () => {
     await user.click(await screen.findByRole('radio', { name: 'English' }));
     await user.click(screen.getByRole('button', { name: /continue|devam/i }));
     await user.click(await screen.findByRole('combobox', { name: /main currency|ana para birimi/i }));
-    await user.click(await screen.findByRole('option', { name: 'USD' }));
+    await user.click((await screen.findAllByRole('option', { name: /USD/ }))[0]!);
     await user.click(screen.getByRole('button', { name: /continue|devam/i }));
     await vi.waitFor(() => expect(calls.filter((c) => c.method === 'PATCH').map((c) => c.body)).toContainEqual(expect.objectContaining({ baseCurrency: 'USD', locale: 'en' })));
   });
@@ -27,7 +27,7 @@ describe('Welcome wizard', () => {
     const calls = mockApi({ 'GET /api/settings': settings, 'PATCH /api/settings': settings, 'POST /api/onboarding/samples': { ids: [1] }, 'POST /api/onboarding/complete': undefined });
     const onDone = vi.fn();
     renderApp(<Welcome onDone={onDone} initialStep={2} />);
-    await userEvent.setup().click(await screen.findByRole('button', { name: /örnek verilerle dene/i }));
+    await userEvent.setup().click(await screen.findByRole('button', { name: /örnek verilerle keşfet/i }));
     await vi.waitFor(() => expect(onDone).toHaveBeenCalled());
     expect(calls.map((c) => `${c.method} ${c.url}`)).toEqual(expect.arrayContaining(['POST /api/onboarding/samples', 'POST /api/onboarding/complete']));
   });
@@ -36,7 +36,7 @@ describe('Welcome wizard', () => {
     const calls = mockApi({ 'GET /api/settings': settings, 'POST /api/onboarding/complete': undefined });
     const onDone = vi.fn();
     renderApp(<Welcome onDone={onDone} />);
-    await userEvent.setup().click(await screen.findByRole('button', { name: /atla/i }));
+    await userEvent.setup().click(await screen.findByRole('button', { name: /kurulumu atla/i }));
     await vi.waitFor(() => expect(onDone).toHaveBeenCalled());
     expect(calls.some((c) => c.method === 'POST' && c.url === '/api/onboarding/complete')).toBe(true);
   });
@@ -44,7 +44,7 @@ describe('Welcome wizard', () => {
   it('banner clears samples', async () => {
     const calls = mockApi({ 'GET /api/onboarding': { completed: true, hasSamples: true } });
     renderApp(<SampleBanner />);
-    await userEvent.setup().click(await screen.findByRole('button', { name: /örnekleri temizle/i }));
+    await userEvent.setup().click(await screen.findByRole('button', { name: /örnek verileri kaldır/i }));
     await vi.waitFor(() => expect(calls).toContainEqual(expect.objectContaining({ method: 'DELETE', url: '/api/onboarding/samples' })));
   });
 });
