@@ -25,7 +25,9 @@ export const LANGS = [
 
 // Content hashes in the asset URLs, so a phone that cached the old CSS or JS (max-age 4h) fetches the new one.
 const assetHash = (f) => createHash('sha256').update(readFileSync(join(site, f))).digest('hex').slice(0, 10);
-const ASSET_V = { css: assetHash('styles.css'), js: assetHash('main.js') };
+const ASSET_V = { js: assetHash('main.js') };
+// The stylesheet is inlined: one round trip less before first paint (it is ~7 KB gzipped).
+const CSS = readFileSync(join(site, 'styles.css'), 'utf8');
 
 const FAQ = ['free', 'needs', 'data', 'https', 'updates', 'privacy', 'family', 'import', 'languages', 'mcp', 'iphone', 'sheet'];
 
@@ -141,7 +143,7 @@ function head(lang, t, fonts) {
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   ${fonts.preloads}
   <style>${fonts.faces}</style>
-  <link rel="stylesheet" href="/styles.css?v=${ASSET_V.css}">
+  <style>${CSS}</style>
   ${jsonLd(graph)}`;
 }
 
@@ -166,7 +168,7 @@ function langPicker(lang, t) {
   ).join('\n');
   const short = lang.code.split('-')[0].toUpperCase();
   return `        <details class="lang">
-          <summary aria-label="${escAttr(`${t['lang.label']}: ${lang.name}`)}" title="${escAttr(t['lang.label'])}">${GLOBE}<span>${short}</span></summary>
+          <summary aria-label="${escAttr(`${short}, ${t['lang.label']}: ${lang.name}`)}" title="${escAttr(t['lang.label'])}">${GLOBE}<span>${short}</span></summary>
           <ul class="lang-menu">
 ${items}
           </ul>

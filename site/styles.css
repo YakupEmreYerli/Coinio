@@ -6,7 +6,7 @@
   --line-2: rgba(255, 255, 255, 0.11);
   --text: #eceef6;
   --muted: #9a9fb4;
-  --dim: #646a80;
+  --dim: #878ca3;
   --brand: #4f5bd5;
   --tint: #8e96ff;
   --tint-2: #b6bbff;
@@ -71,7 +71,7 @@
   --line-2: #d9dbe8;
   --text: #16172b;
   --muted: #565a74;
-  --dim: #868aa1;
+  --dim: #61657d;
   --tint: #4f5bd5;
   --tint-2: #6c77ee;
   --heading: #0b0c1d;
@@ -272,10 +272,12 @@ main, .nav, .footer { position: relative; z-index: 1; }
   16% { opacity: 0; }
   100% { opacity: 0; }
 }
+/* transform only, so the pulse runs on the compositor; the glow itself is static */
+.coin { filter: drop-shadow(0 0 5px var(--coin-glow)); transform-box: fill-box; transform-origin: center; }
 @keyframes coin-pulse {
-  0%, 30% { filter: drop-shadow(0 0 4px var(--coin-glow)); }
-  36% { filter: drop-shadow(0 0 10px var(--coin-glow-hot)); }
-  50%, 100% { filter: drop-shadow(0 0 4px var(--coin-glow)); }
+  0%, 30% { transform: scale(1); }
+  36% { transform: scale(1.12); }
+  50%, 100% { transform: scale(1); }
 }
 .slices path:nth-child(1) { animation-delay: .00s; } .lit path:nth-child(1) { animation-delay: 2.00s; }
 .slices path:nth-child(2) { animation-delay: .08s; } .lit path:nth-child(2) { animation-delay: 2.22s; }
@@ -764,8 +766,8 @@ h2 {
 .faq-intro { position: sticky; top: 112px; }
 .faq-intro .eyebrow { text-align: left; }
 .faq-intro p:not(.eyebrow) { margin: 18px 0 0; color: var(--muted); font-size: 17px; max-width: 360px; }
-.faq-intro a { color: var(--tint); text-decoration: none; }
-.faq-intro a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.faq-intro a { color: var(--tint); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.faq-intro a:hover { text-decoration-thickness: 2px; }
 .faq-list { border-top: 1px solid var(--line-2); }
 .faq-list details { border-bottom: 1px solid var(--line-2); }
 .faq-list summary {
