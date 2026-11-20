@@ -161,7 +161,7 @@ export function SubscriptionForm({
           <DialogBody>
             <LogoPicker name={name} domain={domain} value={logo} onChange={setLogo} current={sub} />
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="flex flex-col gap-4">
+              <div className="relative">
               <Input label={t('form.name')} {...register('name', { validate: (s) => s.trim().length > 0 || t('form.nameRequired') })} error={err.name?.message} maxLength={80} autoComplete="off" data-1p-ignore="" data-lpignore="true" data-bwignore="" />
               <CatalogSuggestions
                 query={name}
