@@ -1,30 +1,51 @@
 import { useSyncExternalStore } from 'react';
+import { LOCALES, isLocale, pickLocale, type Locale } from '../../shared/locales';
 import en from './en.json';
-import tr from './tr.json';
 
-export type Locale = 'en' | 'tr';
-const catalogs: Record<Locale, Record<string, string>> = { en, tr };
+export { LOCALES, LOCALE_NAMES, isLocale } from '../../shared/locales';
+export type { Locale };
 
-const isLocale = (v: unknown): v is Locale => v === 'en' || v === 'tr';
+/** A string, or its plural forms by CLDR category ("one", "other", …). */
+export type Message = string | Partial<Record<Intl.LDMLPluralRule, string>>;
+export type Catalog = Record<string, Message>;
+
+// English ships in the main bundle; the other languages load on first use.
+const loaders = import.meta.glob<{ default: Catalog }>(['./*.json', '!./en.json']);
+const catalogs: Partial<Record<Locale, Catalog>> & { en: Catalog } = { en };
+
+export async function loadLocale(locale: Locale): Promise<void> {
+  if (catalogs[locale]) return;
+  const load = loaders[`./${locale}.json`];
+  if (load) catalogs[locale] = (await load()).default;
+}
+
+/** Every language at once (tests). */
+export const loadAllLocales = () => Promise.all(LOCALES.map(loadLocale));
 
 /** Priority: saved setting, then browser language, then English. */
 export function resolveLocale(setting: string | null | undefined, browserLanguages: readonly string[]): Locale {
-  if (isLocale(setting)) return setting;
-  for (const lang of browserLanguages) {
-    const base = lang.toLowerCase().split('-')[0];
-    if (isLocale(base)) return base;
-  }
-  return 'en';
+  return isLocale(setting) ? setting : pickLocale(browserLanguages);
 }
 
 let current: Locale = resolveLocale(null, typeof navigator === 'undefined' ? [] : navigator.languages);
+let requested: Locale = current;
+if (typeof document !== 'undefined') document.documentElement.lang = current;
 const listeners = new Set<() => void>();
 
-export function setLocale(locale: Locale): void {
+function apply(locale: Locale): void {
   if (locale === current) return;
   current = locale;
   if (typeof document !== 'undefined') document.documentElement.lang = locale;
   listeners.forEach((l) => l());
+}
+
+/** Switches at once when the language is loaded, otherwise as soon as it arrives. */
+export function setLocale(locale: Locale): void {
+  requested = locale;
+  if (catalogs[locale]) return apply(locale);
+  void loadLocale(locale).then(() => {
+    if (requested === locale) apply(locale);
+  });
 }
 
 export function getLocale(): Locale {
@@ -44,8 +65,22 @@ export function useLocale(): { locale: Locale; setLocale: (l: Locale) => void } 
 
 export type Vars = Record<string, string | number>;
 
+const pluralRules = new Map<Locale, Intl.PluralRules>();
+const pluralOf = (locale: Locale, n: number) => {
+  let rules = pluralRules.get(locale);
+  if (!rules) pluralRules.set(locale, (rules = new Intl.PluralRules(locale)));
+  return rules.select(n);
+};
+
+function pick(message: Message | undefined, locale: Locale, n: unknown): string | undefined {
+  if (message === undefined || typeof message === 'string') return message;
+  const form = typeof n === 'number' ? pluralOf(locale, n) : 'other';
+  return message[form] ?? message.other;
+}
+
+/** Looks up a key; plural messages choose their form from `vars.n`. */
 export function t(key: string, vars?: Vars): string {
-  const template = catalogs[current][key] ?? catalogs.en[key] ?? key;
+  const template = pick(catalogs[current]?.[key], current, vars?.n) ?? pick(catalogs.en[key], 'en', vars?.n) ?? key;
   return vars ? template.replace(/\{(\w+)\}/g, (m, name: string) => (name in vars ? String(vars[name]) : m)) : template;
 }
 

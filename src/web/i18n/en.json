@@ -98,15 +98,27 @@
   "confirm.deleteBody": "Its payment history is deleted too. This can't be undone.",
   "rel.today": "today",
   "rel.tomorrow": "tomorrow",
-  "rel.inDays": "in {n} days",
-  "rel.late": "{n} days late",
+  "rel.inDays": {
+    "one": "in {n} day",
+    "other": "in {n} days"
+  },
+  "rel.late": {
+    "one": "{n} day late",
+    "other": "{n} days late"
+  },
   "greet.night": "Good night",
   "greet.morning": "Good morning",
   "greet.afternoon": "Good afternoon",
   "greet.evening": "Good evening",
-  "greet.left": "{n} payments left this month",
+  "greet.left": {
+    "one": "{n} payment left this month",
+    "other": "{n} payments left this month"
+  },
   "greet.nothingLeft": "nothing left to pay this month",
-  "greet.late": "{n} overdue",
+  "greet.late": {
+    "one": "{n} overdue",
+    "other": "{n} overdue"
+  },
   "month.left": "Left this month",
   "month.total": "{month} total",
   "month.paid": "Paid",
@@ -116,7 +128,10 @@
   "month.today": "Today",
   "month.chartLabel": "Spending this month",
   "stats.monthly": "Monthly average",
-  "stats.active": "{n} active subscriptions",
+  "stats.active": {
+    "one": "{n} active subscription",
+    "other": "{n} active subscriptions"
+  },
   "stats.yearly": "Yearly total",
   "stats.foreign": "Foreign currency, monthly",
   "stats.foreignSub": "{p}% of the total",
@@ -128,7 +143,10 @@
   "upcoming.foreign": "Foreign currency",
   "upcoming.allCategories": "All categories",
   "upcoming.window": "Time range",
-  "upcoming.days": "{n} days",
+  "upcoming.days": {
+    "one": "{n} day",
+    "other": "{n} days"
+  },
   "upcoming.noRate": "no exchange rate",
   "upcoming.autoLabel": "Charged automatically",
   "upcoming.paid": "Paid",
@@ -177,8 +195,10 @@
   "calendar.monthTotal": "This month",
   "calendar.paidSoFar": "Paid",
   "calendar.remaining": "Remaining",
-  "calendar.count": "{n} payments",
-  "calendar.countOne": "1 payment",
+  "calendar.count": {
+    "one": "{n} payment",
+    "other": "{n} payments"
+  },
   "calendar.autoShort": "Auto",
   "calendar.selectedDay": "Selected day",
   "nav.reports": "Reports",
@@ -245,15 +265,24 @@
   "subs.active": "Active",
   "subs.paused": "Paused",
   "subs.resume": "Resume",
-  "subs.selected": "{n} selected",
+  "subs.selected": {
+    "one": "{n} selected",
+    "other": "{n} selected"
+  },
   "subs.setCategory": "Set category",
   "subs.clearSelection": "Clear selection",
   "subs.selectAll": "Select all",
   "subs.select": "Select {name}",
   "subs.monthlyCost": "Monthly cost",
   "subs.noMatch": "Nothing matches",
-  "subs.bulkDeleteTitle": "Delete {n} subscriptions?",
-  "subs.daysBefore": "{n} days before",
+  "subs.bulkDeleteTitle": {
+    "one": "Delete {n} subscription?",
+    "other": "Delete {n} subscriptions?"
+  },
+  "subs.daysBefore": {
+    "one": "{n} day before",
+    "other": "{n} days before"
+  },
   "history.title": "Payment history",
   "history.empty": "No payments yet.",
   "history.actual": "Amount charged",
@@ -334,9 +363,18 @@
   "import.where": "Wallos › Settings › Export subscriptions (JSON)",
   "import.file": "Wallos file",
   "import.badFile": "This file could not be read as a Wallos export.",
-  "import.found": "{n} subscriptions found. Check them, then import.",
-  "import.run": "Import {n} subscriptions",
-  "import.done": "{n} subscriptions imported.",
+  "import.found": {
+    "one": "{n} subscription found. Check it, then import.",
+    "other": "{n} subscriptions found. Check them, then import."
+  },
+  "import.run": {
+    "one": "Import {n} subscription",
+    "other": "Import {n} subscriptions"
+  },
+  "import.done": {
+    "one": "{n} subscription imported.",
+    "other": "{n} subscriptions imported."
+  },
   "settings.account": "Account",
   "account.password": "Change password",
   "account.signedInAs": "Signed in as {name}.",
@@ -349,7 +387,10 @@
   "account.othersOut": "Other devices are signed out when you change it.",
   "account.session": "Session",
   "nav.payments": "History",
-  "payments.count": "{n} records",
+  "payments.count": {
+    "one": "{n} record",
+    "other": "{n} records"
+  },
   "payments.from": "From",
   "payments.to": "To",
   "payments.allSubs": "All subscriptions",
@@ -435,7 +476,10 @@
   "look.cssEscape": "If your CSS hides the app, add ?nocss to the address (for example /settings/appearance?nocss) to load it without custom CSS and HTML cards.",
   "look.importTitle": "Load this theme?",
   "look.importBody": "It replaces your current appearance, including your HTML cards and custom CSS.",
-  "look.importCode": "This file contains custom CSS and {n} HTML card(s). Cards can run scripts in their sealed frame and CSS can change how anything looks. Load it only if you trust where it came from.",
+  "look.importCode": {
+    "one": "This file contains custom CSS and {n} HTML card. Cards can run scripts in their sealed frame and CSS can change how anything looks. Load it only if you trust where it came from.",
+    "other": "This file contains custom CSS and {n} HTML cards. Cards can run scripts in their sealed frame and CSS can change how anything looks. Load it only if you trust where it came from."
+  },
   "look.resetAll": "Reset everything",
   "look.resetAllTitle": "Reset all appearance settings?",
   "look.resetAllBody": "Theme, fonts, colours, card layout, custom CSS and HTML cards go back to the defaults.",
@@ -446,7 +490,10 @@
   "look.htmlShareTitle": "Show your data to this card?",
   "look.htmlShareWarning": "The card's code will be able to read your upcoming payments, amounts and totals, and it could send them elsewhere. Turn this on only for code you wrote or trust.",
   "look.htmlShareConfirm": "Show my data",
-  "totals.excluded": "{n} subscriptions not in the total (no exchange rate)",
+  "totals.excluded": {
+    "one": "{n} subscription not in the total (no exchange rate)",
+    "other": "{n} subscriptions not in the total (no exchange rate)"
+  },
   "catalog.suggestions": "Popular services",
   "welcome.step": "Step {n} of {total}",
   "welcome.skip": "Skip setup",
@@ -486,7 +533,10 @@
   "auth.brand.lede": "See what renews next in any currency, on a server you own.",
   "auth.brand.footer": "Open source · Self-hosted · No tracking",
   "auth.preview.title": "Up next",
-  "auth.preview.in": "In {n} days",
+  "auth.preview.in": {
+    "one": "In {n} day",
+    "other": "In {n} days"
+  },
   "auth.password.hint": "At least {min} characters. A short sentence works well.",
   "auth.password.short": "Too short. Use at least {min} characters.",
   "auth.password.score2": "Fair. A few more characters make it stronger.",

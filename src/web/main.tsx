@@ -6,11 +6,13 @@ import { DemoBar } from './demo/DemoBar';
 import { DEMO } from './demo/flag';
 import { Toaster } from './components/ui/Toaster';
 import { TooltipProvider } from './components/ui/Tooltip';
+import { getLocale, loadLocale } from './i18n';
 import { queryClient } from './lib/query';
 import './fonts';
 import './styles.css';
 
-createRoot(document.getElementById('root')!).render(
+// First paint in the browser's language: its strings load before the app renders.
+void loadLocale(getLocale()).finally(() => createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -20,4 +22,4 @@ createRoot(document.getElementById('root')!).render(
       </TooltipProvider>
     </QueryClientProvider>
   </StrictMode>,
-);
+));

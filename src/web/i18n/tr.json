@@ -98,15 +98,27 @@
   "confirm.deleteBody": "Ödeme geçmişi de silinir. Bu geri alınamaz.",
   "rel.today": "bugün",
   "rel.tomorrow": "yarın",
-  "rel.inDays": "{n} gün sonra",
-  "rel.late": "{n} gün gecikti",
+  "rel.inDays": {
+    "one": "{n} gün sonra",
+    "other": "{n} gün sonra"
+  },
+  "rel.late": {
+    "one": "{n} gün gecikti",
+    "other": "{n} gün gecikti"
+  },
   "greet.night": "İyi geceler",
   "greet.morning": "Günaydın",
   "greet.afternoon": "İyi günler",
   "greet.evening": "İyi akşamlar",
-  "greet.left": "bu ay {n} ödeme kaldı",
+  "greet.left": {
+    "one": "bu ay {n} ödeme kaldı",
+    "other": "bu ay {n} ödeme kaldı"
+  },
   "greet.nothingLeft": "bu ay ödenecek bir şey kalmadı",
-  "greet.late": "{n} tanesi gecikti",
+  "greet.late": {
+    "one": "{n} tanesi gecikti",
+    "other": "{n} tanesi gecikti"
+  },
   "month.left": "Bu ay kalan",
   "month.total": "{month} toplamı",
   "month.paid": "Ödendi",
@@ -116,7 +128,10 @@
   "month.today": "Bugün",
   "month.chartLabel": "Bu ayki harcama",
   "stats.monthly": "Aylık ortalama",
-  "stats.active": "{n} etkin abonelik",
+  "stats.active": {
+    "one": "{n} etkin abonelik",
+    "other": "{n} etkin abonelik"
+  },
   "stats.yearly": "Yıllık toplam",
   "stats.foreign": "Dövizli, aylık",
   "stats.foreignSub": "toplam içinde %{p}",
@@ -128,7 +143,10 @@
   "upcoming.foreign": "Dövizli",
   "upcoming.allCategories": "Tüm kategoriler",
   "upcoming.window": "Zaman aralığı",
-  "upcoming.days": "{n} gün",
+  "upcoming.days": {
+    "one": "{n} gün",
+    "other": "{n} gün"
+  },
   "upcoming.noRate": "kur yok",
   "upcoming.autoLabel": "Otomatik çekilir",
   "upcoming.paid": "Ödendi",
@@ -177,8 +195,10 @@
   "calendar.monthTotal": "Bu ay",
   "calendar.paidSoFar": "Ödenen",
   "calendar.remaining": "Kalan",
-  "calendar.count": "{n} ödeme",
-  "calendar.countOne": "1 ödeme",
+  "calendar.count": {
+    "one": "{n} ödeme",
+    "other": "{n} ödeme"
+  },
   "calendar.autoShort": "Otomatik",
   "calendar.selectedDay": "Seçili gün",
   "nav.reports": "Raporlar",
@@ -245,15 +265,24 @@
   "subs.active": "Etkin",
   "subs.paused": "Duraklatıldı",
   "subs.resume": "Devam ettir",
-  "subs.selected": "{n} seçili",
+  "subs.selected": {
+    "one": "{n} seçili",
+    "other": "{n} seçili"
+  },
   "subs.setCategory": "Kategori ata",
   "subs.clearSelection": "Seçimi temizle",
   "subs.selectAll": "Tümünü seç",
   "subs.select": "{name} seç",
   "subs.monthlyCost": "Aylık maliyet",
   "subs.noMatch": "Eşleşen yok",
-  "subs.bulkDeleteTitle": "{n} abonelik silinsin mi?",
-  "subs.daysBefore": "{n} gün önce",
+  "subs.bulkDeleteTitle": {
+    "one": "{n} abonelik silinsin mi?",
+    "other": "{n} abonelik silinsin mi?"
+  },
+  "subs.daysBefore": {
+    "one": "{n} gün önce",
+    "other": "{n} gün önce"
+  },
   "history.title": "Ödeme geçmişi",
   "history.empty": "Henüz ödeme yok.",
   "history.actual": "Karttan çekilen tutar",
@@ -334,9 +363,18 @@
   "import.where": "Wallos › Ayarlar › Abonelikleri dışa aktar (JSON)",
   "import.file": "Wallos dosyası",
   "import.badFile": "Bu dosya Wallos dışa aktarımı olarak okunamadı.",
-  "import.found": "{n} abonelik bulundu. Kontrol et, sonra içe aktar.",
-  "import.run": "{n} aboneliği içe aktar",
-  "import.done": "{n} abonelik içe aktarıldı.",
+  "import.found": {
+    "one": "{n} abonelik bulundu. Kontrol et, sonra içe aktar.",
+    "other": "{n} abonelik bulundu. Kontrol et, sonra içe aktar."
+  },
+  "import.run": {
+    "one": "{n} aboneliği içe aktar",
+    "other": "{n} aboneliği içe aktar"
+  },
+  "import.done": {
+    "one": "{n} abonelik içe aktarıldı.",
+    "other": "{n} abonelik içe aktarıldı."
+  },
   "settings.account": "Hesap",
   "account.password": "Parolayı değiştir",
   "account.signedInAs": "{name} olarak giriş yapıldı.",
@@ -349,7 +387,10 @@
   "account.othersOut": "Değiştirince diğer cihazlarda oturum kapanır.",
   "account.session": "Oturum",
   "nav.payments": "Geçmiş",
-  "payments.count": "{n} kayıt",
+  "payments.count": {
+    "one": "{n} kayıt",
+    "other": "{n} kayıt"
+  },
   "payments.from": "Başlangıç",
   "payments.to": "Bitiş",
   "payments.allSubs": "Tüm abonelikler",
@@ -435,7 +476,10 @@
   "look.cssEscape": "CSS'in uygulamayı gizlerse adresin sonuna ?nocss ekle (örneğin /settings/appearance?nocss); sayfa özel CSS ve HTML kartları olmadan açılır.",
   "look.importTitle": "Bu tema yüklensin mi?",
   "look.importBody": "Şu anki görünümünün yerine geçer; HTML kartların ve özel CSS'in de buna dahil.",
-  "look.importCode": "Bu dosyada özel CSS ve {n} HTML kartı var. Kartlar kendi kapalı çerçevelerinde betik çalıştırabilir, CSS her şeyin görünüşünü değiştirebilir. Yalnız güvendiğin bir yerden geldiyse yükle.",
+  "look.importCode": {
+    "one": "Bu dosyada özel CSS ve {n} HTML kartı var. Kartlar kendi kapalı çerçevelerinde betik çalıştırabilir, CSS her şeyin görünüşünü değiştirebilir. Yalnız güvendiğin bir yerden geldiyse yükle.",
+    "other": "Bu dosyada özel CSS ve {n} HTML kartı var. Kartlar kendi kapalı çerçevelerinde betik çalıştırabilir, CSS her şeyin görünüşünü değiştirebilir. Yalnız güvendiğin bir yerden geldiyse yükle."
+  },
   "look.resetAll": "Hepsini sıfırla",
   "look.resetAllTitle": "Tüm görünüm ayarları sıfırlansın mı?",
   "look.resetAllBody": "Tema, yazılar, renkler, kart düzeni, özel CSS ve HTML kartları varsayılana döner.",
@@ -446,7 +490,10 @@
   "look.htmlShareTitle": "Verilerin bu karta gösterilsin mi?",
   "look.htmlShareWarning": "Kartın kodu yaklaşan ödemelerini, tutarları ve toplamları okuyabilir, bunları başka bir yere de gönderebilir. Yalnız kendi yazdığın ya da güvendiğin kod için aç.",
   "look.htmlShareConfirm": "Verilerimi göster",
-  "totals.excluded": "{n} abonelik toplama girmedi (kur yok)",
+  "totals.excluded": {
+    "one": "{n} abonelik toplama girmedi (kur yok)",
+    "other": "{n} abonelik toplama girmedi (kur yok)"
+  },
   "catalog.suggestions": "Popüler servisler",
   "welcome.step": "Adım {n} / {total}",
   "welcome.skip": "Kurulumu atla",
@@ -486,7 +533,10 @@
   "auth.brand.lede": "Sırada ne yenileniyor, hangi para biriminde olursa olsun gör. Verin kendi sunucunda kalır.",
   "auth.brand.footer": "Açık kaynak · Kendi sunucunda · İzleme yok",
   "auth.preview.title": "Sıradakiler",
-  "auth.preview.in": "{n} gün sonra",
+  "auth.preview.in": {
+    "one": "{n} gün sonra",
+    "other": "{n} gün sonra"
+  },
   "auth.password.hint": "En az {min} karakter. Kısa bir cümle iyi iş görür.",
   "auth.password.short": "Çok kısa. En az {min} karakter olmalı.",
   "auth.password.score2": "Fena değil. Birkaç karakter daha eklersen güçlenir.",

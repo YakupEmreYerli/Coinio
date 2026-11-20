@@ -19,7 +19,7 @@ import { usePayments, useSettings, useSubscriptions, useSummary } from '../lib/h
 import { useIsMobile } from '../lib/useMediaQuery';
 import { useSubscriptionForm } from '../layout/subscriptionForm';
 
-const countLabel = (n: number) => (n === 1 ? t('calendar.countOne') : t('calendar.count', { n }));
+const countLabel = (n: number) => t('calendar.count', { n });
 
 export function Calendar() {
   const { locale } = useLocale();

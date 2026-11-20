@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { LOCALES, type Locale } from './locales';
 
 export const isoDate = z
   .string()
@@ -114,7 +115,7 @@ export const SettingsPatch = z
         return false;
       }
     }, 'unknown timezone'),
-    locale: z.enum(['en', 'tr']),
+    locale: z.enum(LOCALES),
     reminderTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
     telegramBotToken: z.string().min(1).max(200).nullable(),
     telegramChatId: z.string().min(1).max(100).nullable(),
@@ -125,7 +126,7 @@ export type SettingsPatch = z.infer<typeof SettingsPatch>;
 export type Settings = {
   baseCurrency: string;
   timezone: string;
-  locale: 'en' | 'tr';
+  locale: Locale;
   reminderTime: string;
   telegramBotToken: string | null;
   telegramChatId: string | null;

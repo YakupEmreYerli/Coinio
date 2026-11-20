@@ -186,7 +186,7 @@ describe('settings REST', () => {
     await agent.patch('/api/settings').send({ telegramBotToken: '123456:ABCDEFwxyz' });
     expect((await agent.get('/api/settings')).body.telegramBotToken).toBe('****wxyz');
     expect((await agent.patch('/api/settings').send({ telegramBotToken: null })).body.telegramBotToken).toBeNull();
-    for (const bad of [{ timezone: 'Mars/Base' }, { reminderTime: '25:00' }, { baseCurrency: 'JPY' }, { locale: 'de' }]) {
+    for (const bad of [{ timezone: 'Mars/Base' }, { reminderTime: '25:00' }, { baseCurrency: 'JPY' }, { locale: 'ko' }]) {
       expect((await agent.patch('/api/settings').send(bad)).status).toBe(400);
     }
   });
