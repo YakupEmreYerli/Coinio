@@ -1,0 +1,52 @@
+{
+  "consent.signInTitle": "Entrar no Coinio",
+  "consent.signInLead": "Que bom ver você de novo. Entre com sua conta do Coinio.",
+  "consent.signInLeadConnect": "Entre para continuar conectando um app ao seu Coinio.",
+  "consent.username": "Usuário",
+  "consent.password": "Senha",
+  "consent.showPassword": "Mostrar senha",
+  "consent.hidePassword": "Ocultar senha",
+  "consent.signIn": "Entrar",
+  "consent.signingIn": "Entrando…",
+  "consent.wrongCredentials": "Usuário ou senha incorretos.",
+  "consent.tooManyAttempts": "Muitas tentativas. Tente de novo em alguns minutos.",
+  "consent.networkError": "Não foi possível conectar ao Coinio. Confira sua conexão e tente de novo.",
+  "consent.consentTitle": "Permitir acesso",
+  "consent.wantsAccess": "{client} quer acessar seu Coinio",
+  "consent.signedInAs": "Conectado como <strong>{user}</strong>",
+  "consent.willBeAbleTo": "Ele vai poder",
+  "consent.scopeRead": "Ver suas assinaturas e pagamentos",
+  "consent.scopeWrite": "Adicionar, alterar e excluir assinaturas e registrar pagamentos",
+  "consent.scopeReadTag": "Somente leitura",
+  "consent.scopeWriteTag": "Pode fazer alterações",
+  "consent.returnTo": "Você vai voltar para <strong>{host}</strong>",
+  "consent.deny": "Negar",
+  "consent.allow": "Permitir acesso",
+  "consent.revokeHint": "Você pode revogar o acesso quando quiser em Configurações › Integrações.",
+  "consent.expiredTitle": "Esta solicitação expirou",
+  "consent.expiredBody": "Volte ao app que você estava conectando e comece de novo.",
+  "consent.signedOutTitle": "Você saiu da sua conta",
+  "consent.signedOutBody": "Volte ao app que você estava conectando e comece de novo.",
+  "consent.invalidTitle": "Solicitação inválida",
+  "consent.invalidBody": "Recarregue a página e tente de novo.",
+  "consent.openApp": "Abrir o Coinio",
+  "telegram.title": "Lembretes de pagamento",
+  "telegram.overdue": "Em atraso",
+  "telegram.upcoming": "Próximos",
+  "telegram.paidToday": "Cobrado hoje",
+  "telegram.tomorrow": "cobrança amanhã",
+  "telegram.today": "vence hoje",
+  "telegram.autoIn": {
+    "one": "cobrança em {n} dia",
+    "other": "cobrança em {n} dias"
+  },
+  "telegram.manualIn": {
+    "one": "vence em {n} dia",
+    "other": "vence em {n} dias"
+  },
+  "telegram.late": {
+    "one": "{n} dia de atraso",
+    "other": "{n} dias de atraso"
+  },
+  "telegram.test": "Mensagem de teste do Coinio: o Telegram está conectado."
+}

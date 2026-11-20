@@ -1,6 +1,7 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { APP_NAME } from '../../shared/brand.js';
+import type { Locale } from '../../shared/locales.js';
 
 /** Copied from src/web/layout/Wordmark.tsx (the server has no bundler to share it). */
 export const WORDMARK_SLICES = [
@@ -74,8 +75,9 @@ const CSS = `
   --warn:#9a520b;--warn-soft:rgba(180,97,14,.09);--warn-line:rgba(180,97,14,.24);--neg:#b42d27;--neg-soft:#fbeceb;
   --grid-line:rgba(79,91,213,.11);--glow:rgba(79,91,213,.16);
   --shadow:0 1px 2px rgba(20,22,60,.05),0 18px 48px -12px rgba(30,34,90,.16);
-  --head:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;
-  --body:'Geist',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --cjk:system-ui;
+  --head:'Plus Jakarta Sans',var(--cjk),ui-sans-serif,system-ui,sans-serif;
+  --body:'Geist',var(--cjk),ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   color-scheme:light;
 }
@@ -89,6 +91,8 @@ const CSS = `
   --shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 0 1px rgba(0,0,0,.4),0 30px 80px -30px rgba(79,91,213,.4),0 12px 30px -12px rgba(0,0,0,.6);
   color-scheme:dark;
 }}
+:root:lang(ja){--cjk:'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic UI','Yu Gothic',Meiryo,'Noto Sans JP','Noto Sans CJK JP',system-ui}
+:root:lang(zh-CN){--cjk:'PingFang SC','Hiragino Sans GB','Microsoft YaHei UI','Microsoft YaHei','Noto Sans SC','Noto Sans CJK SC',system-ui}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--text);font:400 15px/1.55 var(--body);
@@ -177,7 +181,7 @@ code{font:500 12px/1 var(--mono)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:1.5s!important}}
 `;
 
-export type PageOptions = { lang: 'en' | 'tr'; title: string; body: string; fonts: string };
+export type PageOptions = { lang: Locale; title: string; body: string; fonts: string };
 
 export function renderPage({ lang, title, body, fonts }: PageOptions): string {
   return `<!doctype html>

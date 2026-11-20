@@ -33,8 +33,13 @@ describe('localeFromAcceptLanguage', () => {
     ['', 'en'],
     ['tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7', 'tr'],
     ['en-US,en;q=0.9,tr;q=0.8', 'en'],
-    ['de-DE,tr;q=0.8,en;q=0.5', 'tr'],
-    ['fr,de', 'en'],
+    ['de-DE,tr;q=0.8,en;q=0.5', 'de'],
+    ['xx,tr;q=0.8,en;q=0.5', 'tr'],
+    ['fr,de', 'fr'],
+    ['ko-KR,ko;q=0.9', 'en'],
+    ['pt-PT,pt;q=0.9', 'pt-BR'],
+    ['zh-Hans-CN,zh;q=0.9', 'zh-CN'],
+    ['ja-JP', 'ja'],
     ['en;q=0.4,tr;q=0.9', 'tr'],
     ['tr;q=0,en', 'en'],
   ])('%s → %s', (header, want) => {
@@ -86,6 +91,18 @@ describe('consent page', () => {
     await request(t.app).patch('/api/settings').set('Cookie', t.cookie).send({ locale: 'tr' }).expect(200);
     const page = await request(t.app).get(await consentPath(t)).set('Cookie', t.cookie).set('Accept-Language', 'en-US');
     expect(page.text).toContain('<html lang="tr">');
+  });
+
+  it('speaks every supported language, from the saved setting or the browser', async () => {
+    const t = await setup();
+    const path = await consentPath(t);
+    const ja = await request(t.app).get(path).set('Cookie', t.cookie).set('Accept-Language', 'ja-JP,ja;q=0.9');
+    expect(ja.text).toContain('<html lang="ja">');
+    expect(ja.headers['content-language']).toBe('ja');
+    await request(t.app).patch('/api/settings').set('Cookie', t.cookie).send({ locale: 'de' }).expect(200);
+    const de = await request(t.app).get(path).set('Cookie', t.cookie).set('Accept-Language', 'ja-JP');
+    expect(de.text).toContain('<html lang="de">');
+    expect(de.text).not.toContain('Allow access');
   });
 
   it('keeps escaping the client name in Turkish too', async () => {

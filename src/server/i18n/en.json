@@ -1,0 +1,52 @@
+{
+  "consent.signInTitle": "Sign in to Coinio",
+  "consent.signInLead": "Welcome back. Sign in with your Coinio account.",
+  "consent.signInLeadConnect": "Sign in to continue connecting an app to your Coinio.",
+  "consent.username": "Username",
+  "consent.password": "Password",
+  "consent.showPassword": "Show password",
+  "consent.hidePassword": "Hide password",
+  "consent.signIn": "Sign in",
+  "consent.signingIn": "Signing in…",
+  "consent.wrongCredentials": "Wrong username or password.",
+  "consent.tooManyAttempts": "Too many attempts. Try again in a few minutes.",
+  "consent.networkError": "Couldn’t reach Coinio. Check your connection and try again.",
+  "consent.consentTitle": "Allow access",
+  "consent.wantsAccess": "{client} wants access to your Coinio",
+  "consent.signedInAs": "Signed in as <strong>{user}</strong>",
+  "consent.willBeAbleTo": "It will be able to",
+  "consent.scopeRead": "See your subscriptions and payments",
+  "consent.scopeWrite": "Add, change and delete subscriptions and record payments",
+  "consent.scopeReadTag": "Read only",
+  "consent.scopeWriteTag": "Can make changes",
+  "consent.returnTo": "You’ll return to <strong>{host}</strong>",
+  "consent.deny": "Deny",
+  "consent.allow": "Allow access",
+  "consent.revokeHint": "You can revoke access anytime in Settings › Integrations.",
+  "consent.expiredTitle": "This request expired",
+  "consent.expiredBody": "Go back to the app you were connecting and start again.",
+  "consent.signedOutTitle": "You’re signed out",
+  "consent.signedOutBody": "Go back to the app you were connecting and start again.",
+  "consent.invalidTitle": "Invalid request",
+  "consent.invalidBody": "Reload the page and try again.",
+  "consent.openApp": "Open Coinio",
+  "telegram.title": "Payment reminders",
+  "telegram.overdue": "Overdue",
+  "telegram.upcoming": "Coming up",
+  "telegram.paidToday": "Charged today",
+  "telegram.tomorrow": "will be charged tomorrow",
+  "telegram.today": "due today",
+  "telegram.autoIn": {
+    "one": "will be charged in {n} day",
+    "other": "will be charged in {n} days"
+  },
+  "telegram.manualIn": {
+    "one": "due in {n} day",
+    "other": "due in {n} days"
+  },
+  "telegram.late": {
+    "one": "{n} day overdue",
+    "other": "{n} days overdue"
+  },
+  "telegram.test": "Coinio test message: Telegram is connected."
+}

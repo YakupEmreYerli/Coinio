@@ -1,0 +1,52 @@
+{
+  "consent.signInTitle": "Connexion à Coinio",
+  "consent.signInLead": "Bon retour parmi nous. Connectez-vous avec votre compte Coinio.",
+  "consent.signInLeadConnect": "Connectez-vous pour continuer à relier une application à votre Coinio.",
+  "consent.username": "Nom d’utilisateur",
+  "consent.password": "Mot de passe",
+  "consent.showPassword": "Afficher le mot de passe",
+  "consent.hidePassword": "Masquer le mot de passe",
+  "consent.signIn": "Se connecter",
+  "consent.signingIn": "Connexion…",
+  "consent.wrongCredentials": "Nom d’utilisateur ou mot de passe incorrect.",
+  "consent.tooManyAttempts": "Trop de tentatives. Réessayez dans quelques minutes.",
+  "consent.networkError": "Impossible de joindre Coinio. Vérifiez votre connexion et réessayez.",
+  "consent.consentTitle": "Autoriser l’accès",
+  "consent.wantsAccess": "{client} demande l’accès à votre Coinio",
+  "consent.signedInAs": "Connecté en tant que <strong>{user}</strong>",
+  "consent.willBeAbleTo": "Cette application pourra",
+  "consent.scopeRead": "Voir vos abonnements et vos paiements",
+  "consent.scopeWrite": "Ajouter, modifier et supprimer des abonnements, et enregistrer des paiements",
+  "consent.scopeReadTag": "Lecture seule",
+  "consent.scopeWriteTag": "Peut modifier",
+  "consent.returnTo": "Vous serez redirigé vers <strong>{host}</strong>",
+  "consent.deny": "Refuser",
+  "consent.allow": "Autoriser l’accès",
+  "consent.revokeHint": "Vous pouvez révoquer l’accès à tout moment dans Paramètres › Intégrations.",
+  "consent.expiredTitle": "Cette demande a expiré",
+  "consent.expiredBody": "Revenez à l’application que vous connectiez et recommencez.",
+  "consent.signedOutTitle": "Vous êtes déconnecté",
+  "consent.signedOutBody": "Revenez à l’application que vous connectiez et recommencez.",
+  "consent.invalidTitle": "Demande non valide",
+  "consent.invalidBody": "Rechargez la page et réessayez.",
+  "consent.openApp": "Ouvrir Coinio",
+  "telegram.title": "Rappels de paiement",
+  "telegram.overdue": "En retard",
+  "telegram.upcoming": "À venir",
+  "telegram.paidToday": "Prélevés aujourd’hui",
+  "telegram.tomorrow": "prélèvement demain",
+  "telegram.today": "à payer aujourd’hui",
+  "telegram.autoIn": {
+    "one": "prélèvement dans {n} jour",
+    "other": "prélèvement dans {n} jours"
+  },
+  "telegram.manualIn": {
+    "one": "à payer dans {n} jour",
+    "other": "à payer dans {n} jours"
+  },
+  "telegram.late": {
+    "one": "{n} jour de retard",
+    "other": "{n} jours de retard"
+  },
+  "telegram.test": "Message test de Coinio : Telegram est bien connecté."
+}

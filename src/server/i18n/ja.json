@@ -1,0 +1,49 @@
+{
+  "consent.signInTitle": "Coinio にサインイン",
+  "consent.signInLead": "おかえりなさい。Coinio アカウントでサインインしてください。",
+  "consent.signInLeadConnect": "アプリと Coinio の連携を続けるには、サインインしてください。",
+  "consent.username": "ユーザー名",
+  "consent.password": "パスワード",
+  "consent.showPassword": "パスワードを表示",
+  "consent.hidePassword": "パスワードを隠す",
+  "consent.signIn": "サインイン",
+  "consent.signingIn": "サインインしています…",
+  "consent.wrongCredentials": "ユーザー名またはパスワードが正しくありません。",
+  "consent.tooManyAttempts": "試行回数が多すぎます。数分後にもう一度お試しください。",
+  "consent.networkError": "Coinio に接続できませんでした。接続を確認して、もう一度お試しください。",
+  "consent.consentTitle": "アクセスの許可",
+  "consent.wantsAccess": "{client} が Coinio へのアクセスを求めています",
+  "consent.signedInAs": "<strong>{user}</strong> としてサインイン中",
+  "consent.willBeAbleTo": "許可される操作",
+  "consent.scopeRead": "サブスクリプションと支払いの閲覧",
+  "consent.scopeWrite": "サブスクリプションの追加・変更・削除と支払いの記録",
+  "consent.scopeReadTag": "閲覧のみ",
+  "consent.scopeWriteTag": "変更可能",
+  "consent.returnTo": "許可後は <strong>{host}</strong> に戻ります",
+  "consent.deny": "拒否",
+  "consent.allow": "アクセスを許可",
+  "consent.revokeHint": "アクセスは「設定 › 連携」からいつでも取り消せます。",
+  "consent.expiredTitle": "このリクエストは期限切れです",
+  "consent.expiredBody": "連携しようとしていたアプリに戻り、最初からやり直してください。",
+  "consent.signedOutTitle": "サインアウトしています",
+  "consent.signedOutBody": "連携しようとしていたアプリに戻り、最初からやり直してください。",
+  "consent.invalidTitle": "無効なリクエスト",
+  "consent.invalidBody": "ページを再読み込みして、もう一度お試しください。",
+  "consent.openApp": "Coinio を開く",
+  "telegram.title": "支払いのリマインダー",
+  "telegram.overdue": "期限超過",
+  "telegram.upcoming": "まもなく",
+  "telegram.paidToday": "本日引き落とし済み",
+  "telegram.tomorrow": "明日引き落とし",
+  "telegram.today": "本日が期限",
+  "telegram.autoIn": {
+    "other": "{n}日後に引き落とし"
+  },
+  "telegram.manualIn": {
+    "other": "{n}日後が期限"
+  },
+  "telegram.late": {
+    "other": "{n}日超過"
+  },
+  "telegram.test": "Coinio のテストメッセージ：Telegram と連携しました。"
+}

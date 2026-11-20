@@ -1,0 +1,52 @@
+{
+  "consent.signInTitle": "Bei Coinio anmelden",
+  "consent.signInLead": "Willkommen zurück. Melden Sie sich mit Ihrem Coinio-Konto an.",
+  "consent.signInLeadConnect": "Melden Sie sich an, um eine App weiter mit Ihrem Coinio zu verbinden.",
+  "consent.username": "Benutzername",
+  "consent.password": "Passwort",
+  "consent.showPassword": "Passwort anzeigen",
+  "consent.hidePassword": "Passwort verbergen",
+  "consent.signIn": "Anmelden",
+  "consent.signingIn": "Anmeldung läuft …",
+  "consent.wrongCredentials": "Benutzername oder Passwort falsch.",
+  "consent.tooManyAttempts": "Zu viele Versuche. Versuchen Sie es in ein paar Minuten erneut.",
+  "consent.networkError": "Coinio ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+  "consent.consentTitle": "Zugriff erlauben",
+  "consent.wantsAccess": "{client} möchte auf Ihr Coinio zugreifen",
+  "consent.signedInAs": "Angemeldet als <strong>{user}</strong>",
+  "consent.willBeAbleTo": "Die App kann dann",
+  "consent.scopeRead": "Ihre Abos und Zahlungen ansehen",
+  "consent.scopeWrite": "Abos hinzufügen, ändern und löschen sowie Zahlungen erfassen",
+  "consent.scopeReadTag": "Nur lesen",
+  "consent.scopeWriteTag": "Kann Änderungen vornehmen",
+  "consent.returnTo": "Sie kehren zu <strong>{host}</strong> zurück",
+  "consent.deny": "Ablehnen",
+  "consent.allow": "Zugriff erlauben",
+  "consent.revokeHint": "Sie können den Zugriff jederzeit unter Einstellungen › Integrationen widerrufen.",
+  "consent.expiredTitle": "Diese Anfrage ist abgelaufen",
+  "consent.expiredBody": "Kehren Sie zu der App zurück, die Sie verbinden wollten, und beginnen Sie erneut.",
+  "consent.signedOutTitle": "Sie sind abgemeldet",
+  "consent.signedOutBody": "Kehren Sie zu der App zurück, die Sie verbinden wollten, und beginnen Sie erneut.",
+  "consent.invalidTitle": "Ungültige Anfrage",
+  "consent.invalidBody": "Laden Sie die Seite neu und versuchen Sie es erneut.",
+  "consent.openApp": "Coinio öffnen",
+  "telegram.title": "Zahlungserinnerungen",
+  "telegram.overdue": "Überfällig",
+  "telegram.upcoming": "Demnächst",
+  "telegram.paidToday": "Heute abgebucht",
+  "telegram.tomorrow": "wird morgen abgebucht",
+  "telegram.today": "heute fällig",
+  "telegram.autoIn": {
+    "one": "wird in {n} Tag abgebucht",
+    "other": "wird in {n} Tagen abgebucht"
+  },
+  "telegram.manualIn": {
+    "one": "fällig in {n} Tag",
+    "other": "fällig in {n} Tagen"
+  },
+  "telegram.late": {
+    "one": "{n} Tag überfällig",
+    "other": "{n} Tage überfällig"
+  },
+  "telegram.test": "Coinio-Testnachricht: Telegram ist verbunden."
+}

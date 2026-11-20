@@ -1,0 +1,49 @@
+{
+  "consent.signInTitle": "登录 Coinio",
+  "consent.signInLead": "欢迎回来。请使用 Coinio 账户登录。",
+  "consent.signInLeadConnect": "登录后继续将应用连接到你的 Coinio。",
+  "consent.username": "用户名",
+  "consent.password": "密码",
+  "consent.showPassword": "显示密码",
+  "consent.hidePassword": "隐藏密码",
+  "consent.signIn": "登录",
+  "consent.signingIn": "正在登录…",
+  "consent.wrongCredentials": "用户名或密码错误。",
+  "consent.tooManyAttempts": "尝试次数过多，请几分钟后再试。",
+  "consent.networkError": "无法连接 Coinio，请检查网络后重试。",
+  "consent.consentTitle": "授权访问",
+  "consent.wantsAccess": "{client} 请求访问你的 Coinio",
+  "consent.signedInAs": "当前登录：<strong>{user}</strong>",
+  "consent.willBeAbleTo": "授权后它将可以",
+  "consent.scopeRead": "查看你的订阅和付款",
+  "consent.scopeWrite": "添加、修改、删除订阅，以及记录付款",
+  "consent.scopeReadTag": "只读",
+  "consent.scopeWriteTag": "可修改",
+  "consent.returnTo": "完成后将返回 <strong>{host}</strong>",
+  "consent.deny": "拒绝",
+  "consent.allow": "授权访问",
+  "consent.revokeHint": "可随时在“设置 › 集成”中撤销访问权限。",
+  "consent.expiredTitle": "此请求已过期",
+  "consent.expiredBody": "请返回正在连接的应用，重新开始。",
+  "consent.signedOutTitle": "你已退出登录",
+  "consent.signedOutBody": "请返回正在连接的应用，重新开始。",
+  "consent.invalidTitle": "请求无效",
+  "consent.invalidBody": "请重新加载页面后重试。",
+  "consent.openApp": "打开 Coinio",
+  "telegram.title": "付款提醒",
+  "telegram.overdue": "已逾期",
+  "telegram.upcoming": "即将到期",
+  "telegram.paidToday": "今日已扣款",
+  "telegram.tomorrow": "明天扣款",
+  "telegram.today": "今天到期",
+  "telegram.autoIn": {
+    "other": "{n} 天后扣款"
+  },
+  "telegram.manualIn": {
+    "other": "{n} 天后到期"
+  },
+  "telegram.late": {
+    "other": "逾期 {n} 天"
+  },
+  "telegram.test": "Coinio 测试消息：Telegram 已连接。"
+}

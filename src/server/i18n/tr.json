@@ -1,0 +1,52 @@
+{
+  "consent.signInTitle": "Coinio’ya giriş yap",
+  "consent.signInLead": "Tekrar hoş geldin. Coinio hesabınla giriş yap.",
+  "consent.signInLeadConnect": "Bir uygulamayı Coinio hesabına bağlamaya devam etmek için giriş yap.",
+  "consent.username": "Kullanıcı adı",
+  "consent.password": "Parola",
+  "consent.showPassword": "Parolayı göster",
+  "consent.hidePassword": "Parolayı gizle",
+  "consent.signIn": "Giriş yap",
+  "consent.signingIn": "Giriş yapılıyor…",
+  "consent.wrongCredentials": "Kullanıcı adı ya da parola yanlış.",
+  "consent.tooManyAttempts": "Çok fazla deneme yaptın. Birkaç dakika sonra yeniden dene.",
+  "consent.networkError": "Coinio’ya ulaşılamadı. Bağlantını kontrol edip yeniden dene.",
+  "consent.consentTitle": "Erişim izni",
+  "consent.wantsAccess": "{client}, Coinio hesabına erişmek istiyor",
+  "consent.signedInAs": "<strong>{user}</strong> olarak giriş yaptın",
+  "consent.willBeAbleTo": "İstediği izinler",
+  "consent.scopeRead": "Abonelikleri ve ödemeleri görme",
+  "consent.scopeWrite": "Abonelik ekleme, değiştirme, silme ve ödeme kaydetme",
+  "consent.scopeReadTag": "Yalnız okuma",
+  "consent.scopeWriteTag": "Değişiklik yapabilir",
+  "consent.returnTo": "Ardından <strong>{host}</strong> adresine döneceksin",
+  "consent.deny": "Reddet",
+  "consent.allow": "İzin ver",
+  "consent.revokeHint": "Erişimi istediğin zaman Ayarlar › Entegrasyonlar bölümünden kaldırabilirsin.",
+  "consent.expiredTitle": "Bu isteğin süresi doldu",
+  "consent.expiredBody": "Bağlamak istediğin uygulamaya dön ve yeniden başlat.",
+  "consent.signedOutTitle": "Oturumun kapalı",
+  "consent.signedOutBody": "Bağlamak istediğin uygulamaya dön ve yeniden başlat.",
+  "consent.invalidTitle": "Geçersiz istek",
+  "consent.invalidBody": "Sayfayı yenile ve yeniden dene.",
+  "consent.openApp": "Coinio’yu aç",
+  "telegram.title": "Ödeme hatırlatması",
+  "telegram.overdue": "Geciken",
+  "telegram.upcoming": "Yaklaşan",
+  "telegram.paidToday": "Bugün çekildi",
+  "telegram.tomorrow": "yarın çekilecek",
+  "telegram.today": "bugün",
+  "telegram.autoIn": {
+    "one": "{n} gün sonra çekilecek",
+    "other": "{n} gün sonra çekilecek"
+  },
+  "telegram.manualIn": {
+    "one": "{n} gün sonra",
+    "other": "{n} gün sonra"
+  },
+  "telegram.late": {
+    "one": "{n} gün gecikti",
+    "other": "{n} gün gecikti"
+  },
+  "telegram.test": "Coinio test mesajı: Telegram bağlı."
+}

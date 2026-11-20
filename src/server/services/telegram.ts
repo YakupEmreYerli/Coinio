@@ -2,39 +2,12 @@ import { asc } from 'drizzle-orm';
 import { users } from '../db/schema.js';
 import { todayIn } from '../../shared/schedule.js';
 import type { DueItem, Summary } from '../domain/summary.js';
+import { toLocale, translate, type Locale } from '../i18n/index.js';
 import type { ServiceCtx } from './context.js';
 import { getInternalValue, getSettings, setInternalValue } from './settings.js';
 import { getSummary, listPayments, listSubscriptions } from './subscriptions.js';
 
-type Locale = 'en' | 'tr';
 export type PaidLike = { name: string; amountMinor: number; currency: string };
-
-const T = {
-  en: {
-    title: 'Payment reminders',
-    overdue: 'Overdue',
-    upcoming: 'Coming up',
-    paidToday: 'Charged today',
-    tomorrow: 'will be charged tomorrow',
-    today: 'due today',
-    autoIn: (n: number) => `will be charged in ${n} days`,
-    manualIn: (n: number) => `due in ${n} days`,
-    late: (n: number) => (n === 1 ? '1 day overdue' : `${n} days overdue`),
-    test: 'Coinio test message: Telegram is connected.',
-  },
-  tr: {
-    title: 'Ödeme hatırlatması',
-    overdue: 'Geciken',
-    upcoming: 'Yaklaşan',
-    paidToday: 'Bugün çekildi',
-    tomorrow: 'yarın çekilecek',
-    today: 'bugün',
-    autoIn: (n: number) => `${n} gün sonra çekilecek`,
-    manualIn: (n: number) => `${n} gün sonra`,
-    late: (n: number) => `${n} gün gecikti`,
-    test: 'Coinio test mesajı: Telegram bağlı.',
-  },
-} as const;
 
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -63,17 +36,17 @@ export function buildReminderMessage(input: {
   locale: Locale;
 }): string | null {
   const { summary, todayAutoPaid, locale } = input;
-  const t = T[locale];
+  const t = (key: string, n?: number) => escapeHtml(translate(locale, `telegram.${key}`, n === undefined ? undefined : { n }));
   const line = (i: DueItem, note: string) =>
     `${escapeHtml(i.name)} · ${formatDate(i.dueDate, locale)} · ${formatAmount(i.amountMinor, i.currency, locale)} (${note})`;
 
-  const overdue = summary.overdue.map((i) => line(i, t.late(-i.daysLeft)));
+  const overdue = summary.overdue.map((i) => line(i, t('late', -i.daysLeft)));
   const upcoming = summary.upcoming
     .filter((i) => i.daysLeft <= i.reminderDays)
     .map((i) => {
-      const note = i.daysLeft === 0 ? t.today
-        : i.autoPay ? (i.daysLeft === 1 ? t.tomorrow : t.autoIn(i.daysLeft))
-        : t.manualIn(i.daysLeft);
+      const note = i.daysLeft === 0 ? t('today')
+        : i.autoPay ? (i.daysLeft === 1 ? t('tomorrow') : t('autoIn', i.daysLeft))
+        : t('manualIn', i.daysLeft);
       return line(i, note);
     });
   const paid = todayAutoPaid.map((p) => `${escapeHtml(p.name)} · ${formatAmount(p.amountMinor, p.currency, locale)}`);
@@ -81,11 +54,11 @@ export function buildReminderMessage(input: {
   if (!overdue.length && !upcoming.length && !paid.length) return null;
   const section = (title: string, lines: string[]) => (lines.length ? [`<b>${title}</b>`, ...lines, ''] : []);
   return [
-    `<b>${t.title}</b>`,
+    `<b>${t('title')}</b>`,
     '',
-    ...section(t.overdue, overdue),
-    ...section(t.upcoming, upcoming),
-    ...section(t.paidToday, paid),
+    ...section(t('overdue'), overdue),
+    ...section(t('upcoming'), upcoming),
+    ...section(t('paidToday'), paid),
   ].join('\n').trimEnd();
 }
 
@@ -106,7 +79,7 @@ export async function sendTelegram(ctx: ServiceCtx, token: string, chatId: strin
 export async function sendTestMessage(ctx: ServiceCtx): Promise<'sent' | 'not_configured' | 'failed'> {
   const s = getSettings(ctx);
   if (!s.telegramBotToken || !s.telegramChatId) return 'not_configured';
-  const ok = await sendTelegram(ctx, s.telegramBotToken, s.telegramChatId, T[s.locale as Locale]?.test ?? T.en.test);
+  const ok = await sendTelegram(ctx, s.telegramBotToken, s.telegramChatId, translate(toLocale(s.locale), 'telegram.test'));
   return ok ? 'sent' : 'failed';
 }
 
@@ -125,7 +98,7 @@ export async function sendDueReminders(ctx: ServiceCtx): Promise<'sent' | 'skipp
   const user = ctx.db.select().from(users).orderBy(asc(users.id)).get();
   if (!user) return 'skipped';
 
-  const locale: Locale = s.locale === 'tr' ? 'tr' : 'en';
+  const locale = toLocale(s.locale);
   const summary = getSummary(ctx, user.id, now);
   const names = new Map(listSubscriptions(ctx, user.id, { includeInactive: true }).map((x) => [x.id, x.name]));
   const todayAutoPaid = listPayments(ctx, user.id)

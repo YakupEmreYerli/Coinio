@@ -64,6 +64,18 @@ describe('buildReminderMessage', () => {
     expect(tr).toContain('yarın çekilecek');
   });
 
+  it('writes the reminder in any supported language with its own plural forms', () => {
+    const s = setup();
+    s.add({ name: 'Netflix', nextDue: '2026-11-21', anchorDay: 21, reminderDays: 5 });
+    const summary = getSummary(s.ctx, s.user.id, s.clock.now);
+    const de = buildReminderMessage({ summary, todayAutoPaid: [], today: '2026-11-18', locale: 'de' })!;
+    expect(de).toContain('Netflix · 21. Nov.');
+    expect(de).not.toContain('due in');
+    const ja = buildReminderMessage({ summary, todayAutoPaid: [], today: '2026-11-18', locale: 'ja' })!;
+    expect(ja).toContain('Netflix · 11月21日');
+    expect(ja).toContain('3');
+  });
+
   it('returns null when nothing is due soon', () => {
     const s = setup();
     s.add({ name: 'Far', nextDue: '2026-12-30', anchorDay: 30 });

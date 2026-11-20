@@ -3,7 +3,8 @@ import { eq } from 'drizzle-orm';
 import { SESSION_COOKIE, findSessionUserId } from '../auth/sessions.js';
 import { settings, users } from '../db/schema.js';
 import type { ServiceCtx } from '../services/context.js';
-import { STRINGS, localeFromAcceptLanguage, type ConsentLocale } from './consentI18n.js';
+import { isLocale } from '../../shared/locales.js';
+import { consentStrings, localeFromAcceptLanguage, type ConsentLocale } from './consentI18n.js';
 import { escapeHtml, fontFaceCss, markSvg, renderPage } from './consentPage.js';
 import type { SqliteOAuthProvider } from './provider.js';
 
@@ -43,7 +44,7 @@ export function consentRouter(ctx: ServiceCtx, provider: SqliteOAuthProvider): R
   const localeOf = (req: Request, userId = sessionUserId(req)): ConsentLocale => {
     if (userId !== null) {
       const saved = ctx.db.select().from(settings).where(eq(settings.key, 'locale')).get()?.value;
-      if (saved === 'tr' || saved === 'en') return saved;
+      if (isLocale(saved)) return saved;
     }
     return localeFromAcceptLanguage(req.get('accept-language'));
   };
@@ -51,38 +52,38 @@ export function consentRouter(ctx: ServiceCtx, provider: SqliteOAuthProvider): R
     res.status(status).set({ ...SECURITY_HEADERS, 'Content-Language': lang }).send(renderPage({ lang, title, body, fonts }));
   };
   const statusPage = (res: Response, status: number, lang: ConsentLocale, kind: 'expired' | 'signedOut' | 'invalid') => {
-    const t = STRINGS[lang];
+    const t = consentStrings(lang);
     const pages: Record<typeof kind, [string, string, string]> = {
-      expired: [t.expiredTitle, t.expiredBody, ICON.clock],
-      signedOut: [t.signedOutTitle, t.signedOutBody, ICON.lock],
-      invalid: [t.invalidTitle, t.invalidBody, ICON.alert.replace('width="15" height="15"', 'width="20" height="20"')],
+      expired: [t('expiredTitle'), t('expiredBody'), ICON.clock],
+      signedOut: [t('signedOutTitle'), t('signedOutBody'), ICON.lock],
+      invalid: [t('invalidTitle'), t('invalidBody'), ICON.alert.replace('width="15" height="15"', 'width="20" height="20"')],
     };
     const [title, body, icon] = pages[kind];
     sendPage(res, status, lang, title, `<section class="card status">
 <div class="status-icon${kind === 'invalid' ? ' warn' : ''}">${icon}</div>
 <h1>${escapeHtml(title)}</h1><p class="lead">${escapeHtml(body)}</p>
-<a class="btn btn-secondary" href="/">${escapeHtml(t.openApp)}</a></section>`);
+<a class="btn btn-secondary" href="/">${escapeHtml(t('openApp'))}</a></section>`);
   };
 
   // Minimal login for the OAuth flow; it posts to the regular rate-limited login API.
   router.get('/oauth/login', (req, res) => {
     const lang = localeOf(req);
-    const t = STRINGS[lang];
+    const t = consentStrings(lang);
     const next = typeof req.query.next === 'string' && CONSENT_NEXT.test(req.query.next) ? req.query.next : '/';
     const attr = (s: string) => escapeHtml(s);
-    sendPage(res, 200, lang, t.signIn, `<section class="card">
-<h1>${escapeHtml(t.signInTitle)}</h1>
-<p class="lead">${escapeHtml(next === '/' ? t.signInLead : t.signInLeadConnect)}</p>
-<form id="login" novalidate data-next="${attr(next)}" data-wrong="${attr(t.wrongCredentials)}" data-limited="${attr(t.tooManyAttempts)}"
- data-offline="${attr(t.networkError)}" data-busy="${attr(t.signingIn)}" data-show="${attr(t.showPassword)}" data-hide="${attr(t.hidePassword)}">
-<label class="field"><span class="field-label">${escapeHtml(t.username)}</span>
+    sendPage(res, 200, lang, t('signIn'), `<section class="card">
+<h1>${escapeHtml(t('signInTitle'))}</h1>
+<p class="lead">${escapeHtml(next === '/' ? t('signInLead') : t('signInLeadConnect'))}</p>
+<form id="login" novalidate data-next="${attr(next)}" data-wrong="${attr(t('wrongCredentials'))}" data-limited="${attr(t('tooManyAttempts'))}"
+ data-offline="${attr(t('networkError'))}" data-busy="${attr(t('signingIn'))}" data-show="${attr(t('showPassword'))}" data-hide="${attr(t('hidePassword'))}">
+<label class="field"><span class="field-label">${escapeHtml(t('username'))}</span>
 <input class="input" id="username" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required autofocus></label>
-<label class="field" for="password"><span class="field-label">${escapeHtml(t.password)}</span></label>
+<label class="field" for="password"><span class="field-label">${escapeHtml(t('password'))}</span></label>
 <div class="input-wrap has-toggle"><input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
-<button class="toggle" type="button" id="toggle" aria-controls="password" aria-pressed="false" aria-label="${attr(t.showPassword)}" title="${attr(t.showPassword)}">
+<button class="toggle" type="button" id="toggle" aria-controls="password" aria-pressed="false" aria-label="${attr(t('showPassword'))}" title="${attr(t('showPassword'))}">
 <span class="eye">${ICON.eye}</span><span class="eye-off">${ICON.eyeOff}</span></button></div>
 <div class="alert" id="err" role="alert" hidden>${ICON.alert}<span id="err-text"></span></div>
-<button class="btn btn-primary submit" type="submit" id="submit"><span class="spinner" aria-hidden="true"></span><span id="submit-label">${escapeHtml(t.signIn)}</span></button>
+<button class="btn btn-primary submit" type="submit" id="submit"><span class="spinner" aria-hidden="true"></span><span id="submit-label">${escapeHtml(t('signIn'))}</span></button>
 </form></section>
 <script>
 const f = document.getElementById('login'), d = f.dataset, pw = f.password, tg = document.getElementById('toggle');
@@ -123,7 +124,7 @@ f.addEventListener('submit', async (e) => {
       return;
     }
     const lang = localeOf(req, userId);
-    const t = STRINGS[lang];
+    const t = consentStrings(lang);
     const p = provider.pendingAuthorization(id);
     if (!p) return statusPage(res, 400, lang, 'expired');
     const name = escapeHtml(p.clientName);
@@ -132,25 +133,25 @@ f.addEventListener('submit', async (e) => {
       .map((s) => {
         const write = s === 'subscriptions:write';
         const known = write || s === 'subscriptions:read';
-        const title = known ? (write ? t.scopeWrite : t.scopeRead) : s;
+        const title = known ? (write ? t('scopeWrite') : t('scopeRead')) : s;
         return `<li class="scope${write ? ' write' : ''}"><span class="glyph">${write ? ICON.pencil : ICON.check}</span>
 <div class="scope-text"><div class="scope-title">${escapeHtml(title)}</div>
-<div class="scope-sub">${known ? `<span class="tag">${escapeHtml(write ? t.scopeWriteTag : t.scopeReadTag)}</span>` : ''}<code>${escapeHtml(s)}</code></div></div></li>`;
+<div class="scope-sub">${known ? `<span class="tag">${escapeHtml(write ? t('scopeWriteTag') : t('scopeReadTag'))}</span>` : ''}<code>${escapeHtml(s)}</code></div></div></li>`;
       })
       .join('');
     const initial = escapeHtml(Array.from(p.clientName.trim())[0]?.toUpperCase() ?? '?');
-    sendPage(res, 200, lang, t.consentTitle, `<section class="card">
+    sendPage(res, 200, lang, t('consentTitle'), `<section class="card">
 <div class="connect" aria-hidden="true"><span class="tile">${initial}</span><span class="link"><i></i><i></i><i></i></span><span class="tile coinio">${markSvg(26)}</span></div>
-<h1>${t.wantsAccess(name)}</h1>
-${username ? `<p class="meta"><span class="dot"></span><span>${t.signedInAs(escapeHtml(username))}</span></p>` : ''}
-<h2 class="section">${escapeHtml(t.willBeAbleTo)}</h2>
+<h1>${t('wantsAccess', { client: name })}</h1>
+${username ? `<p class="meta"><span class="dot"></span><span>${t('signedInAs', { user: escapeHtml(username) })}</span></p>` : ''}
+<h2 class="section">${escapeHtml(t('willBeAbleTo'))}</h2>
 <ul class="scopes">${scopes}</ul>
-<p class="return">${ICON.arrow}<span>${t.returnTo(escapeHtml(new URL(p.redirectUri).host))}</span></p>
+<p class="return">${ICON.arrow}<span>${t('returnTo', { host: escapeHtml(new URL(p.redirectUri).host) })}</span></p>
 <form method="post" action="/oauth/consent">
 <input type="hidden" name="req" value="${escapeHtml(id)}"><input type="hidden" name="csrf" value="${escapeHtml(p.csrf)}">
-<div class="actions"><button class="btn btn-secondary" name="decision" value="deny">${escapeHtml(t.deny)}</button><button class="btn btn-primary" name="decision" value="allow">${escapeHtml(t.allow)}</button></div>
+<div class="actions"><button class="btn btn-secondary" name="decision" value="deny">${escapeHtml(t('deny'))}</button><button class="btn btn-primary" name="decision" value="allow">${escapeHtml(t('allow'))}</button></div>
 </form>
-<p class="foot">${escapeHtml(t.revokeHint)}</p></section>`);
+<p class="foot">${escapeHtml(t('revokeHint'))}</p></section>`);
   });
 
   router.post('/oauth/consent', express.urlencoded({ extended: false }), (req, res) => {
