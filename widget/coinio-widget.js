@@ -9,10 +9,21 @@ const BASE_URL = SERVER_URL.replace(/\/+$/, ''); // a pasted trailing slash woul
 const CACHE_FILE = 'coinio-widget.json';
 const ACCENT = new Color('#4f5bd5');
 const RED = new Color('#e5484d');
-const TR = Device.language().startsWith('tr');
-const L = TR
-  ? { left: 'Bu ay kalan', today: 'bugün', tomorrow: 'yarın', inDays: (n) => `${n} gün`, late: (n) => `${n} gün gecikti`, none: 'Yaklaşan ödeme yok', offline: 'çevrimdışı', unreachable: "Coinio'ya ulaşılamıyor", auth: "API anahtarı kabul edilmedi, API_KEY'i kontrol et", setup: 'SERVER_URL ve API_KEY ayarla' }
-  : { left: 'Left this month', today: 'today', tomorrow: 'tomorrow', inDays: (n) => `in ${n}d`, late: (n) => `${n}d late`, none: 'No upcoming payments', offline: 'offline', unreachable: "Can't reach Coinio", auth: 'API key rejected, check API_KEY', setup: 'Set SERVER_URL and API_KEY' };
+// Texts follow the device language; English when it isn't one Coinio speaks.
+const STRINGS = {
+  en: { left: 'Left this month', today: 'today', tomorrow: 'tomorrow', inDays: (n) => `in ${n}d`, late: (n) => `${n}d late`, none: 'No upcoming payments', offline: 'offline', unreachable: "Can't reach Coinio", auth: 'API key rejected, check API_KEY', setup: 'Set SERVER_URL and API_KEY' },
+  tr: { left: 'Bu ay kalan', today: 'bugün', tomorrow: 'yarın', inDays: (n) => `${n} gün`, late: (n) => `${n} gün gecikti`, none: 'Yaklaşan ödeme yok', offline: 'çevrimdışı', unreachable: "Coinio'ya ulaşılamıyor", auth: "API anahtarı kabul edilmedi, API_KEY'i kontrol et", setup: 'SERVER_URL ve API_KEY ayarla' },
+  de: { left: 'Diesen Monat offen', today: 'heute', tomorrow: 'morgen', inDays: (n) => `in ${n} T.`, late: (n) => `${n} T. überfällig`, none: 'Keine anstehenden Zahlungen', offline: 'offline', unreachable: 'Coinio nicht erreichbar', auth: 'API-Schlüssel abgelehnt, API_KEY prüfen', setup: 'SERVER_URL und API_KEY eintragen' },
+  fr: { left: 'Reste ce mois-ci', today: 'aujourd’hui', tomorrow: 'demain', inDays: (n) => `dans ${n} j`, late: (n) => `${n} j de retard`, none: 'Aucun paiement à venir', offline: 'hors ligne', unreachable: 'Coinio injoignable', auth: 'Clé API refusée, vérifiez API_KEY', setup: 'Renseignez SERVER_URL et API_KEY' },
+  es: { left: 'Queda este mes', today: 'hoy', tomorrow: 'mañana', inDays: (n) => `en ${n} d`, late: (n) => `${n} d de retraso`, none: 'No hay pagos próximos', offline: 'sin conexión', unreachable: 'No se puede conectar con Coinio', auth: 'Clave API rechazada, revisa API_KEY', setup: 'Configura SERVER_URL y API_KEY' },
+  pt: { left: 'Falta este mês', today: 'hoje', tomorrow: 'amanhã', inDays: (n) => `em ${n} d`, late: (n) => `${n} d de atraso`, none: 'Nenhum pagamento próximo', offline: 'offline', unreachable: 'Não foi possível acessar o Coinio', auth: 'Chave de API recusada, confira a API_KEY', setup: 'Defina SERVER_URL e API_KEY' },
+  zh: { left: '本月待付', today: '今天', tomorrow: '明天', inDays: (n) => `${n} 天后`, late: (n) => `逾期 ${n} 天`, none: '近期没有付款', offline: '离线', unreachable: '无法连接 Coinio', auth: 'API 密钥被拒绝，请检查 API_KEY', setup: '请设置 SERVER_URL 和 API_KEY' },
+  ja: { left: '今月の残り', today: '今日', tomorrow: '明日', inDays: (n) => `${n}日後`, late: (n) => `${n}日超過`, none: '予定の支払いはありません', offline: 'オフライン', unreachable: 'Coinio に接続できません', auth: 'API キーが拒否されました。API_KEY を確認してください', setup: 'SERVER_URL と API_KEY を設定してください' },
+};
+const INTL = { en: 'en-US', tr: 'tr-TR', de: 'de-DE', fr: 'fr-FR', es: 'es-ES', pt: 'pt-BR', zh: 'zh-CN', ja: 'ja-JP' };
+const LANG = String(Device.language() || 'en').toLowerCase().split(/[-_]/)[0];
+const L = STRINGS[LANG] || STRINGS.en;
+const LOCALE = INTL[LANG] || INTL.en;
 
 // A rejected key is reported as such (not as "offline" over old data); anything else falls back to the cache.
 async function load() {
@@ -37,13 +48,13 @@ async function load() {
 const money = (minor, currency) => {
   try {
     const digits = minor % 100 === 0 ? 0 : 2;
-    return new Intl.NumberFormat(TR ? 'tr-TR' : 'en-US', { style: 'currency', currency, minimumFractionDigits: digits, maximumFractionDigits: digits }).format(minor / 100);
+    return new Intl.NumberFormat(LOCALE, { style: 'currency', currency, minimumFractionDigits: digits, maximumFractionDigits: digits }).format(minor / 100);
   } catch {
     return `${(minor / 100).toFixed(2)} ${currency}`;
   }
 };
-const clock = (iso) => new Intl.DateTimeFormat(TR ? 'tr-TR' : 'en-US', { hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
-const shortDate = (iso) => new Intl.DateTimeFormat(TR ? 'tr-TR' : 'en-US', { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(new Date(`${iso}T00:00:00Z`));
+const clock = (iso) => new Intl.DateTimeFormat(LOCALE, { hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
+const shortDate = (iso) => new Intl.DateTimeFormat(LOCALE, { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(new Date(`${iso}T00:00:00Z`));
 const when = (d) => (d < 0 ? L.late(-d) : d === 0 ? L.today : d === 1 ? L.tomorrow : L.inDays(d));
 const amountOf = (it, base) => (it.baseMinor != null ? money(it.baseMinor, base) : money(it.amountMinor, it.currency));
 

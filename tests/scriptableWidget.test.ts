@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 /** Minimal stand-ins for the Scriptable APIs the widget uses; texts are collected for assertions. */
-function sandbox(family: string, response: unknown, opts: { fail?: boolean; cached?: string; status?: number; url?: string } = {}) {
+function sandbox(family: string, response: unknown, opts: { fail?: boolean; cached?: string; status?: number; url?: string; language?: string } = {}) {
   const texts: string[] = [];
   const node = () => {
     const n: Record<string, unknown> = {
@@ -40,7 +40,7 @@ function sandbox(family: string, response: unknown, opts: { fail?: boolean; cach
       }
     },
     FileManager: { local: () => ({ documentsDirectory: () => '/docs', joinPath: (a: string, b: string) => `${a}/${b}`, writeString: (p: string, s: string) => files.set(p, s), fileExists: (p: string) => files.has(p), readString: (p: string) => files.get(p) }) },
-    Device: { language: () => 'tr' },
+    Device: { language: () => opts.language ?? 'tr' },
     config: { widgetFamily: family, runsInWidget: true },
     Script: { setWidget: (w: unknown) => (shown = w), complete: () => {} },
   };
@@ -69,6 +69,18 @@ describe('Scriptable widget script', () => {
     expect(s.shown()).not.toBeNull();
     expect(s.texts).toContain('Bu ay kalan');
     expect(s.texts.join(' ')).toMatch(/Hetzner VPS.*ChatGPT Plus.*Trendyol Plus/);
+  });
+
+  it('follows the device language, with English for the rest', async () => {
+    const ja = sandbox('medium', data, { language: 'ja' });
+    await ja.done;
+    expect(ja.texts).toContain('今月の残り');
+    const pt = sandbox('medium', data, { language: 'pt-PT' });
+    await pt.done;
+    expect(pt.texts).toContain('Falta este mês');
+    const ko = sandbox('medium', data, { language: 'ko' });
+    await ko.done;
+    expect(ko.texts).toContain('Left this month');
   });
 
   it('lock screen marks overdue with a warning sign', async () => {
