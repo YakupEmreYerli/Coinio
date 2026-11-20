@@ -70,7 +70,7 @@ export function MonthGrid({
 
   return (
     // Rows share the height left under the page header, so a six-week month still fits a 900px-tall window.
-    <div className="overflow-hidden rounded-card border border-line bg-card" style={{ '--cal-row': 'clamp(76px, calc((100dvh - 336px) / 6), 104px)' } as React.CSSProperties}>
+    <div className="overflow-hidden rounded-card border border-line bg-card" style={{ '--cal-row': 'clamp(96px, calc((100dvh - 336px) / 6), 112px)' } as React.CSSProperties}>
       <div className="grid grid-cols-[repeat(7,minmax(0,1fr))_minmax(84px,0.95fr)] border-b border-line">
         {weekdays.map((w, i) => (
           <div key={w} className={cn('px-2.5 py-2 text-[11.5px] font-medium tracking-wide text-text-3 uppercase', i >= 5 && 'text-text-3/80')}>
