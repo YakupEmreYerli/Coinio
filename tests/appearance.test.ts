@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { CARD_IDS, DEFAULT_APPEARANCE, mergeAppearance } from '../src/shared/appearance.js';
+import { CARD_IDS, DEFAULT_APPEARANCE, forImport, mergeAppearance } from '../src/shared/appearance.js';
 import { makeTestApp } from './helpers.js';
 
 async function login() {
@@ -59,5 +59,20 @@ describe('appearance', () => {
     });
     expect(merged.cards.map((c) => c.id)).toContain('html:note');
     expect(merged.cards.map((c) => c.id)).not.toContain('html:gone');
+  });
+
+  it('html card shareData: missing reads as false, true is kept, non-boolean is a 400', async () => {
+    expect(mergeAppearance({ htmlCards: [{ id: 'a', title: '', html: '', height: 100 }] }).htmlCards[0]!.shareData).toBe(false);
+    const { agent } = await login();
+    const card = { id: 'a', title: '', html: '', height: 100, shareData: true };
+    const res = await agent.put('/api/appearance').send({ ...DEFAULT_APPEARANCE, htmlCards: [card] });
+    expect(res.status).toBe(200);
+    expect((await agent.get('/api/appearance')).body.htmlCards[0].shareData).toBe(true);
+    expect((await agent.put('/api/appearance').send({ ...DEFAULT_APPEARANCE, htmlCards: [{ ...card, shareData: 'yes' }] })).status).toBe(400);
+  });
+
+  it('forImport turns data sharing off on every imported card', () => {
+    const theme = mergeAppearance({ htmlCards: [{ id: 'a', title: '', html: '', height: 100, shareData: true }] });
+    expect(forImport(theme).htmlCards.every((c) => !c.shareData)).toBe(true);
   });
 });

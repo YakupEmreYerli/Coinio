@@ -1,26 +1,51 @@
 import { Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import type { HtmlCard } from '../../../../shared/appearance';
+import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { Button } from '../../../components/ui/Button';
 import { Dialog, DialogBody, DialogContent, DialogFooter } from '../../../components/ui/Dialog';
 import { Input } from '../../../components/ui/Input';
+import { Switch } from '../../../components/ui/Switch';
 import { Textarea } from '../../../components/ui/Textarea';
-import { cardDocument } from '../../../dashboard/cards/HtmlCard';
+import { CardDataBridge, cardDocument } from '../../../dashboard/cards/HtmlCard';
 import { t } from '../../../i18n';
 import type { Appearance } from '../../../lib/types';
 
 type Update = (change: Partial<Appearance> | ((a: Appearance) => Appearance)) => void;
 
+/**
+ * A new card goes right below the greeting (or first, when the greeting is not in the list), so it
+ * shows up at the top of the dashboard instead of out of sight at the bottom.
+ */
+export function insertNewCard(a: Appearance, card: HtmlCard): Appearance {
+  const at = a.cards.findIndex((c) => c.id === 'greeting') + 1;
+  const cards = [...a.cards];
+  cards.splice(at, 0, { id: `html:${card.id}`, visible: true });
+  return { ...a, htmlCards: [...a.htmlCards, card], cards };
+}
+
 /** Add, edit and remove the user's own HTML cards shown on the dashboard. */
 export function HtmlCards({ appearance, update }: { appearance: Appearance; update: Update }) {
   const [editing, setEditing] = useState<HtmlCard | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const [removing, setRemoving] = useState<HtmlCard | null>(null);
+  const [params, setParams] = useSearchParams();
+  const section = useRef<HTMLButtonElement>(null);
+  // The dashboard card menu's "Edit" links here with ?editCard=<id>.
+  const editId = params.get('editCard');
+  useEffect(() => {
+    if (!editId) return;
+    const card = appearance.htmlCards.find((c) => c.id === editId);
+    if (card) {
+      section.current?.scrollIntoView({ block: 'center' });
+      setIsNew(false);
+      setEditing(card);
+    }
+    setParams((p) => (p.delete('editCard'), p), { replace: true });
+  }, [editId, appearance.htmlCards, setParams]);
   const save = (card: HtmlCard) => {
-    update((a) =>
-      isNew
-        ? { ...a, htmlCards: [...a.htmlCards, card], cards: [...a.cards, { id: `html:${card.id}`, visible: true }] }
-        : { ...a, htmlCards: a.htmlCards.map((c) => (c.id === card.id ? card : c)) },
-    );
+    update((a) => (isNew ? insertNewCard(a, card) : { ...a, htmlCards: a.htmlCards.map((c) => (c.id === card.id ? card : c)) }));
     setEditing(null);
   };
   const remove = (id: string) => update((a) => ({ ...a, htmlCards: a.htmlCards.filter((c) => c.id !== id), cards: a.cards.filter((c) => c.id !== `html:${id}`) }));
@@ -34,7 +59,7 @@ export function HtmlCards({ appearance, update }: { appearance: Appearance; upda
               <Button size="icon-sm" variant="ghost" aria-label={t('upcoming.edit')} onClick={() => (setIsNew(false), setEditing(c))}>
                 <Pencil />
               </Button>
-              <Button size="icon-sm" variant="ghost" aria-label={t('common.delete')} onClick={() => remove(c.id)}>
+              <Button size="icon-sm" variant="ghost" aria-label={t('common.delete')} onClick={() => setRemoving(c)}>
                 <Trash2 />
               </Button>
             </li>
@@ -42,11 +67,12 @@ export function HtmlCards({ appearance, update }: { appearance: Appearance; upda
         </ul>
       )}
       <Button
+        ref={section}
         className="self-start"
         disabled={appearance.htmlCards.length >= 20}
         onClick={() => {
           setIsNew(true);
-          setEditing({ id: `c${Date.now().toString(36)}`, title: '', html: '', height: 240 });
+          setEditing({ id: `c${Date.now().toString(36)}`, title: '', html: '', height: 240, shareData: false });
         }}
       >
         <Plus />
@@ -54,12 +80,22 @@ export function HtmlCards({ appearance, update }: { appearance: Appearance; upda
       </Button>
       <p className="text-xs text-text-3">{t('look.htmlSafety')}</p>
       <HtmlCardDialog appearance={appearance} card={editing} onClose={() => setEditing(null)} onSave={save} />
+      <ConfirmDialog
+        open={!!removing}
+        onOpenChange={(v) => !v && setRemoving(null)}
+        title={t('look.htmlDeleteTitle', { name: removing?.title || t('look.htmlUntitled') })}
+        body={t('look.htmlDeleteBody')}
+        confirmLabel={t('common.delete')}
+        onConfirm={() => removing && remove(removing.id)}
+      />
     </>
   );
 }
 
 function HtmlCardDialog({ appearance, card, onClose, onSave }: { appearance: Appearance; card: HtmlCard | null; onClose: () => void; onSave: (c: HtmlCard) => void }) {
   const [draft, setDraft] = useState<HtmlCard | null>(card);
+  const [askShare, setAskShare] = useState(false);
+  const preview = useRef<HTMLIFrameElement>(null);
   if (card && draft?.id !== card.id) setDraft(card);
   return (
     <Dialog open={!!card} onOpenChange={(v) => !v && onClose()}>
@@ -84,8 +120,15 @@ function HtmlCardDialog({ appearance, card, onClose, onSave }: { appearance: App
               </div>
               <div className="flex flex-col gap-1.5">
                 <span className="text-[13px] font-medium text-text-2">{t('look.preview')}</span>
-                <iframe title={t('look.preview')} sandbox="allow-scripts" srcDoc={cardDocument(draft.html, appearance)} className="w-full rounded-ctl border border-line" style={{ height: Math.min(draft.height, 320) }} />
+                <iframe key={String(draft.shareData)} ref={preview} title={t('look.preview')} sandbox="allow-scripts" srcDoc={cardDocument(draft.html, appearance)} className="w-full rounded-ctl border border-line" style={{ height: Math.min(draft.height, 320) }} />
+                {draft.shareData && <CardDataBridge frame={preview} />}
               </div>
+              <Switch
+                checked={draft.shareData}
+                onChange={(v) => (v ? setAskShare(true) : setDraft({ ...draft, shareData: false }))}
+                label={t('look.htmlShare')}
+                description={t('look.htmlShareDesc')}
+              />
             </DialogBody>
             <DialogFooter>
               <Button onClick={onClose}>{t('common.cancel')}</Button>
@@ -95,6 +138,14 @@ function HtmlCardDialog({ appearance, card, onClose, onSave }: { appearance: App
             </DialogFooter>
           </form>
         )}
+        <ConfirmDialog
+          open={askShare}
+          onOpenChange={setAskShare}
+          title={t('look.htmlShareTitle')}
+          body={t('look.htmlShareWarning')}
+          confirmLabel={t('look.htmlShareConfirm')}
+          onConfirm={() => draft && setDraft({ ...draft, shareData: true })}
+        />
       </DialogContent>
     </Dialog>
   );

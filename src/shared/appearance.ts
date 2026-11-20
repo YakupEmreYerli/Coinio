@@ -16,6 +16,8 @@ const HtmlCard = z.object({
   title: z.string().max(80),
   html: z.string().max(50_000),
   height: z.number().int().min(80).max(1200),
+  /** The owner let this card read a summary of their data (off unless turned on for this card). */
+  shareData: z.boolean().default(false),
 });
 
 const CardEntry = z.object({
@@ -39,6 +41,11 @@ export const Appearance = z.object({
 });
 export type Appearance = z.infer<typeof Appearance>;
 export type HtmlCard = z.infer<typeof HtmlCard>;
+
+/** A theme file never carries data permission: every imported HTML card starts with shareData off. */
+export function forImport(theme: Appearance): Appearance {
+  return { ...theme, htmlCards: theme.htmlCards.map((c) => ({ ...c, shareData: false })) };
+}
 
 export const DEFAULT_APPEARANCE: Appearance = {
   theme: 'paper',

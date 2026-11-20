@@ -4,7 +4,7 @@ import { DEFAULT_APPEARANCE } from '../../../shared/appearance';
 import { AppearanceProvider } from '../../lib/appearanceContext';
 import { HtmlCard, cardDocument } from './HtmlCard';
 
-const note = { id: 'note', title: 'Not', html: '<b>merhaba</b><script>parent.document.title="x"</script>', height: 200 };
+const note = { id: 'note', title: 'Not', html: '<b>merhaba</b><script>parent.document.title="x"</script>', height: 200, shareData: false };
 
 describe('HtmlCard', () => {
   it('html card iframe has sandbox allow-scripts without allow-same-origin', () => {

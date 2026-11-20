@@ -36,7 +36,9 @@ Six font pairs, for headings and amounts and for text. Only the fonts of the pai
 
 ## Dashboard cards
 
-In **Settings › Appearance › Dashboard cards**, reorder the dashboard by dragging (or with the arrow buttons), and hide cards with the switch: Greeting, This month, Summary, Upcoming payments, Quick add, This week, Monthly breakdown, Recent activity, All subscriptions, and your own HTML cards. A new HTML card is added at the bottom; move it up with the arrows.
+In **Settings › Appearance › Dashboard cards**, reorder the dashboard by dragging (or with the arrow buttons), and hide cards with the switch: Greeting, This month, Summary, Upcoming payments, Quick add, This week, Monthly breakdown, Recent activity, All subscriptions, and your own HTML cards.
+
+On the dashboard itself, every card has a **⋯** menu (top right, shown on hover or focus) to move it up or down or hide it; HTML cards also have **Edit card**. A new HTML card is placed right below the greeting so you see it straight away.
 
 ## Custom HTML cards
 
@@ -47,9 +49,49 @@ A card follows the light or dark theme (its text colour adapts and its backgroun
 <Callout title="How cards are sealed">
   Each card runs in an `iframe` with `sandbox="allow-scripts"` and without `allow-same-origin`. Scripts in the card
   run, but in a separate, anonymous origin: they cannot read your session cookie, call the Coinio API or see your
-  subscriptions. A card only knows what you wrote into it, so it cannot show your payments or totals; for live
-  numbers use the [iPhone widget](/docs/integrations/iphone-widget) or an [MCP client](/docs/integrations/mcp).
+  subscriptions. By default a card only knows what you wrote into it; to give it live numbers, turn on
+  **Show my data to this card** (below).
 </Callout>
+
+Deleting a card asks first; it cannot be undone.
+
+### Let a card read your data
+
+Each HTML card has a **Show my data to this card** switch, off by default. Turning it on asks for confirmation: the card's code can then read your upcoming payments, amounts and totals, and could send them anywhere, so turn it on only for code you wrote or trust. Loading a theme file always turns it off on every card in that file.
+
+When it is on, Coinio posts a read-only summary into the card with `postMessage`: once the card has loaded, again whenever your data changes, and whenever the card asks for it. The card still cannot call the API or change anything.
+
+| Message | Direction | Shape |
+| --- | --- | --- |
+| `coinio:data` | Coinio → card | `{ type: 'coinio:data', version: 1, data }` |
+| `coinio:request-data` | card → Coinio | `{ type: 'coinio:request-data' }` (asks for a fresh `coinio:data`) |
+
+`data` has the same shape as the [widget endpoint](/docs/integrations/iphone-widget) (`GET /api/widget`):
+
+- `base`: your main currency code, for example `"EUR"`.
+- `leftThisMonthMinor`: what is still due this month, in hundredths of `base` (12999 means 129.99).
+- `monthlyAverageMinor`: the monthly average of all active subscriptions, in hundredths.
+- `ratesStale`: `true` when exchange rates are out of date and converted amounts are approximate.
+- `items`: up to six due payments, overdue first. Each has `subscriptionId`, `name`, `dueDate` (`YYYY-MM-DD`), `amountMinor` and `currency` in the subscription's own currency, `baseMinor` (converted, or `null` without a rate), `daysLeft` (negative when overdue), `autoPay`, `variableAmount`, `reminderDays` and `logoPath`.
+- `generatedAt`: when the summary was made (ISO 8601).
+
+A small card that shows the next payment:
+
+```html
+<p id="next" style="margin:16px;font:500 15px system-ui">Loading…</p>
+<script>
+  const money = (minor, currency) =>
+    new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(minor / 100);
+  addEventListener('message', (e) => {
+    if (e.data?.type !== 'coinio:data') return;
+    const next = e.data.data.items[0];
+    document.getElementById('next').textContent = next
+      ? `${next.name}: ${money(next.amountMinor, next.currency)} on ${next.dueDate}`
+      : 'Nothing due.';
+  });
+  parent.postMessage({ type: 'coinio:request-data' }, '*');
+</script>
+```
 
 ## Custom CSS
 
