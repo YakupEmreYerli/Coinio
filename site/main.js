@@ -124,7 +124,7 @@ function openDemo() {
   win.querySelector('.win-close').focus();
 }
 function closeDemo() {
-  if (!win.classList.contains('is-expanded')) return;
+  if (!win?.classList.contains('is-expanded')) return;
   win.classList.remove('is-expanded');
   root.classList.remove('is-demo-open');
   lastFocus?.focus?.();
@@ -188,7 +188,9 @@ async function langHint() {
   const text = document.createElement('span');
   text.textContent = l.text;
   const go = document.createElement('a');
-  go.href = l.path;
+  // The same page in that language when this page has one (comparison pages), else its home page.
+  const alt = document.querySelector(`link[rel="alternate"][hreflang="${want}"]`);
+  go.href = alt ? new URL(alt.href).pathname : l.path;
   go.hreflang = want;
   go.textContent = l.go;
   const close = document.createElement('button');

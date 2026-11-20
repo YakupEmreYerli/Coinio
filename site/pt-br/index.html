@@ -974,8 +974,143 @@ h2 {
 pre .nw { white-space: nowrap; }
 /* The expanded demo must sit above the sticky nav */
 .is-demo-open main { z-index: 20; }
+
+/* Text for screen readers and search engines only */
+.vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+/* The hero eyebrow sits inside the h1 and keeps its own look */
+h1 .eyebrow { display: block; }
+
+/* Comparison pages (/wallos-alternative/, /self-hosted-subscription-trackers/) */
+.page-hero {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 64px var(--gutter) 0;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+}
+.page-hero h1 { font-size: clamp(36px, 5.6vw, 68px); line-height: 1.05; overflow-wrap: anywhere; }
+.page-lede { max-width: 720px; margin: 24px auto 0; font-size: 19px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+.page-hero .term-solo { margin-top: 36px; }
+.page-cta-note { margin: 14px 0 0; font-size: 14px; color: var(--dim); }
+.page-cta { margin: 22px 0 0; }
+.page-cta .btn svg { margin-right: -4px; }
+.checked { margin: 28px 0 0; font: 400 12.5px/1.6 var(--mono); color: var(--dim); max-width: 640px; }
+.crumbs { margin-bottom: 36px; font: 400 13px/1.4 var(--mono); }
+.crumbs ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 8px; }
+.crumbs li { color: var(--dim); }
+.crumbs li + li::before { content: "/"; margin-right: 8px; color: var(--dot); }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.sub .section { padding-top: 120px; }
+.prose-head { max-width: 760px; margin-bottom: 36px; }
+.prose-head h2 { font-size: clamp(28px, 3.4vw, 42px); }
+.prose-head p { margin: 16px 0 0; font-size: 18px; color: var(--muted); text-wrap: pretty; }
+
+/* Tables scroll inside their own box on narrow screens */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  background: var(--spec-panel);
+  box-shadow: var(--spec-shadow);
+  -webkit-overflow-scrolling: touch;
+}
+.cmp { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.55; }
+.cmp-2 { min-width: 620px; }
+.cmp-5 { min-width: 1040px; font-size: 14.5px; }
+.cmp th, .cmp td { padding: 14px 18px; text-align: left; vertical-align: top; }
+.cmp thead th {
+  font: 600 15px/1.3 var(--head);
+  color: var(--heading);
+  border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.cmp tbody tr + tr > * { border-top: 1px solid var(--row-line); }
+.cmp tbody th { width: 21%; font-weight: 500; color: var(--text); }
+.cmp-2 tbody th { width: 24%; }
+.cmp td { color: var(--muted); }
+.cmp .is-us { background: var(--wash-1); }
+.cmp thead .is-us { color: var(--tint); }
+.table-note { margin: 14px 0 0; font-size: 14px; color: var(--dim); }
+
+/* Cards */
+.cards { display: grid; gap: 20px; }
+.cards-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cards-trackers { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.card {
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  background: var(--spec-panel);
+  box-shadow: var(--spec-shadow);
+  padding: 28px 28px 30px;
+}
+.card-us { border-color: var(--icon-border); }
+.card h3 { font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: var(--heading); }
+.card h3 a { text-decoration: none; }
+.card h3 a:hover { color: var(--tint); }
+.ticks { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 12px; }
+.ticks li { position: relative; padding-left: 22px; font-size: 16px; color: var(--muted); }
+.ticks li::before {
+  content: "";
+  position: absolute; left: 2px; top: 0.62em;
+  width: 7px; height: 7px; border-radius: 2px;
+  background: var(--brand);
+  box-shadow: 0 0 0 3px rgba(79,91,213,0.18);
+}
+.aside-note { margin: 22px 0 0; font-size: 15px; color: var(--dim); max-width: 760px; }
+.tracker dl { margin: 16px 0 0; display: grid; gap: 12px; }
+.tracker dl div { display: grid; gap: 2px; }
+.tracker dt { font: 500 11.5px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); }
+.tracker dd { margin: 0; font-size: 15.5px; color: var(--muted); }
+
+/* Steps and prose */
+.steps { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.steps li {
+  counter-increment: step;
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  padding: 24px 24px 26px;
+  background: var(--wash-1);
+}
+.steps li::before {
+  content: counter(step);
+  display: inline-grid; place-items: center;
+  width: 30px; height: 30px; margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid var(--icon-border);
+  background: var(--icon-bg);
+  font: 600 14px/1 var(--mono);
+  color: var(--tint);
+}
+.steps p { margin: 0; font-size: 16px; color: var(--muted); }
+.steps strong, .prose strong { color: var(--text); font-weight: 600; }
+.prose { max-width: 760px; margin-top: 36px; }
+.prose h3 { font-size: 20px; font-weight: 600; color: var(--heading); }
+.prose p { margin: 12px 0 0; font-size: 16.5px; color: var(--muted); }
+.arrow, .choose a { color: var(--tint); text-decoration: none; font-weight: 500; }
+.arrow::after { content: "\00a0\2192"; }
+.arrow:hover, .choose a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.choose { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.choose li { background: var(--feature-bg); padding: 28px 30px 30px; }
+.choose h3 { font-size: 18px; font-weight: 600; color: var(--heading); letter-spacing: -0.01em; }
+.choose p { margin: 10px 0 0; font-size: 16px; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .cards-2, .steps, .choose { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .page-hero { padding-top: 36px; }
+  .crumbs { margin-bottom: 24px; }
+  .page-lede { font-size: 16.5px; }
+  .sub .section { padding-top: 80px; }
+  .prose-head p { font-size: 16.5px; }
+  .cards-trackers { grid-template-columns: 1fr; }
+  .card { padding: 22px 20px 24px; }
+  .cmp th, .cmp td { padding: 12px 14px; }
+  .choose li { padding: 22px 20px 24px; }
+}
 </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareApplication","name":"Coinio","url":"https://getcoinio.me/pt-br/","description":"Gerenciador de assinaturas e contas auto-hospedado, com lembretes de renovação, totais em várias moedas, calendário, importação do Wallos, servidor MCP para Claude e ChatGPT e widget para iPhone.","applicationCategory":"FinanceApplication","applicationSubCategory":"Subscription tracker","operatingSystem":"Docker, Linux","softwareVersion":"0.1.1","isAccessibleForFree":true,"license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/yakupemreyerli/coinio","installUrl":"https://getcoinio.me/install","screenshot":"https://getcoinio.me/assets/dashboard-night.webp","image":"https://getcoinio.me/assets/og.png","inLanguage":["en","tr","de","fr","es","pt-BR","zh-CN","ja"],"sameAs":["https://github.com/yakupemreyerli/coinio"]},{"@type":"FAQPage","inLanguage":"pt-BR","url":"https://getcoinio.me/pt-br/","mainEntity":[{"@type":"Question","name":"O Coinio é grátis? Qual é a licença?","acceptedAnswer":{"@type":"Answer","text":"Sim. O Coinio é código aberto, sob a licença MIT. Não existe plano pago nem conta com a gente: você roda, você é o dono. O código está no GitHub ."}},{"@type":"Question","name":"O que eu preciso para rodar?","acceptedAnswer":{"@type":"Answer","text":"Uma máquina com Docker: uma VPS, um servidor em casa, um NAS ou um Raspberry Pi. As imagens são feitas para amd64 e arm64. Não há banco de dados separado para manter, e ele fica em uns 60 MB de memória quando ocioso."}},{"@type":"Question","name":"Onde ficam meus dados e como faço backup?","acceptedAnswer":{"@type":"Answer","text":"Tudo fica na pasta /data do contêiner: um arquivo SQLite ( coinio.db ) e os logos que você escolheu. Faça backup desse volume e você tem tudo. Com o script de instalação ou com docker run , o volume se chama coinio-data : docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine \\ tar czf /backup/coinio-backup.tgz -C /data . Com o Compose, é a pasta ./data ao lado do arquivo. Você também pode baixar suas assinaturas e pagamentos em CSV ou JSON pelo app."}},{"@type":"Question","name":"Como tenho HTTPS e abro no celular?","acceptedAnswer":{"@type":"Answer","text":"O script de instalação oferece um Cloudflare Tunnel: cole o token do túnel e o Coinio ganha um endereço https sem abrir nenhuma porta. Se você já usa um proxy reverso (Caddy, Traefik, Nginx, Dokploy), aponte um domínio para a porta 8080. Nos dois casos, defina COINIO_PUBLIC_URL com esse endereço https. O conector do claude.ai e os cookies seguros precisam dele."}},{"@type":"Question","name":"Como funcionam as atualizações?","acceptedAnswer":{"@type":"Answer","text":"Baixe a imagem nova e recrie o contêiner. Seus dados continuam no volume, e as mudanças no banco de dados são aplicadas na inicialização. Com o Compose, é docker compose pull && docker compose up -d . Com docker run , baixe a imagem, remova o contêiner antigo e rode o mesmo comando de novo."}},{"@type":"Question","name":"Ele envia dados para fora? De onde vêm as cotações?","acceptedAnswer":{"@type":"Answer","text":"Sem telemetria, sem analytics, sem conta. As cotações chegam uma vez por dia do Frankfurter , que publica as taxas de referência do Banco Central Europeu, e só para as moedas que você usa. As outras chamadas externas acontecem porque você pediu: buscar o ícone de um site que você adicionou e enviar os lembretes do Telegram, se você configurar."}},{"@type":"Question","name":"Minha família pode usar?","acceptedAnswer":{"@type":"Answer","text":"Cada instalação tem uma conta, e a casa toda pode compartilhá-la para manter as contas num só lugar. Se duas pessoas quiserem dados separados, rode um segundo contêiner em outra porta; é só mais um comando."}},{"@type":"Question","name":"Posso importar de outro app?","acceptedAnswer":{"@type":"Answer","text":"Do Wallos, sim: exporte suas assinaturas lá em JSON e carregue o arquivo em Configurações › Importar. Você vê uma prévia e os avisos antes de qualquer coisa ser salva. De qualquer outro lugar, adicionar à mão é rápido: 161 serviços populares preenchem logo, categoria e ciclo de cobrança enquanto você digita. Ou conecte o Claude e peça para ele adicionar por você."}},{"@type":"Question","name":"Em quais idiomas ele está?","acceptedAnswer":{"@type":"Answer","text":"O app está em inglês, turco, alemão, francês, espanhol, português do Brasil, chinês simplificado e japonês. Ele abre no idioma do seu navegador e você pode trocar quando quiser em Configurações. Datas, valores e moedas seguem o formato do idioma escolhido."}},{"@type":"Question","name":"O que é MCP e como o Claude ou o ChatGPT se conectam?","acceptedAnswer":{"@type":"Answer","text":"MCP (Model Context Protocol) é um padrão aberto que permite que assistentes de IA usem ferramentas. O Coinio oferece um em /mcp , então um assistente pode listar o que renova esta semana, adicionar uma assinatura ou marcar uma conta como paga. No claude.ai ou no app do Claude para celular, adicione um conector personalizado com o endereço do seu Coinio e entre na conta; não precisa de chave. O Claude Code, o Claude Desktop e o Cursor usam uma chave de API criada em Configurações. Os conectores personalizados do ChatGPT aceitam o mesmo endereço. Tudo isso precisa do endereço https lá de cima."}},{"@type":"Question","name":"Tem app para iPhone?","acceptedAnswer":{"@type":"Answer","text":"Não na App Store. Existe um widget do Scriptable gratuito para a Tela de Início e a Tela Bloqueada, que lê seus próximos pagamentos com uma chave somente leitura e continua mostrando os últimos dados quando está offline. O app web também pode ser adicionado à Tela de Início, onde abre como um app."}},{"@type":"Question","name":"Por que não uma planilha?","acceptedAnswer":{"@type":"Answer","text":"Uma planilha guarda valores, mas não avança os vencimentos, não converte moedas todo dia e não avisa na terça que algo renova na sexta. O Coinio faz isso, registra as cobranças automáticas sozinho e guarda um histórico que vira relatório."}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareApplication","name":"Coinio","url":"https://getcoinio.me/pt-br/","description":"Gerenciador de assinaturas e contas auto-hospedado, com lembretes de renovação, totais em várias moedas, calendário, importação do Wallos, servidor MCP para Claude e ChatGPT e widget para iPhone.","applicationCategory":"FinanceApplication","applicationSubCategory":"Subscription tracker","operatingSystem":"Docker, Linux","softwareVersion":"0.1.1","isAccessibleForFree":true,"license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/yakupemreyerli/coinio","installUrl":"https://getcoinio.me/install","screenshot":"https://getcoinio.me/assets/dashboard-night.webp","image":"https://getcoinio.me/assets/og.png","inLanguage":["en","tr","de","fr","es","pt-BR","zh-CN","ja"],"sameAs":["https://github.com/yakupemreyerli/coinio"]},{"@type":"FAQPage","inLanguage":"pt-BR","url":"https://getcoinio.me/pt-br/","mainEntity":[{"@type":"Question","name":"O Coinio é grátis? Qual é a licença?","acceptedAnswer":{"@type":"Answer","text":"Sim. O Coinio é código aberto, sob a licença MIT. Não existe plano pago nem conta com a gente: você roda, você é o dono. O código está no GitHub ."}},{"@type":"Question","name":"O que eu preciso para rodar?","acceptedAnswer":{"@type":"Answer","text":"Uma máquina com Docker: uma VPS, um servidor em casa, um NAS ou um Raspberry Pi. As imagens são feitas para amd64 e arm64. Não há banco de dados separado para manter, e ele fica em uns 60 MB de memória quando ocioso."}},{"@type":"Question","name":"Onde ficam meus dados e como faço backup?","acceptedAnswer":{"@type":"Answer","text":"Tudo fica na pasta /data do contêiner: um arquivo SQLite ( coinio.db ) e os logos que você escolheu. Faça backup desse volume e você tem tudo. Com o script de instalação ou com docker run , o volume se chama coinio-data : docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine \\ tar czf /backup/coinio-backup.tgz -C /data . Com o Compose, é a pasta ./data ao lado do arquivo. Você também pode baixar suas assinaturas e pagamentos em CSV ou JSON pelo app."}},{"@type":"Question","name":"Como tenho HTTPS e abro no celular?","acceptedAnswer":{"@type":"Answer","text":"O script de instalação oferece um Cloudflare Tunnel: cole o token do túnel e o Coinio ganha um endereço https sem abrir nenhuma porta. Se você já usa um proxy reverso (Caddy, Traefik, Nginx, Dokploy), aponte um domínio para a porta 8080. Nos dois casos, defina COINIO_PUBLIC_URL com esse endereço https. O conector do claude.ai e os cookies seguros precisam dele."}},{"@type":"Question","name":"Como funcionam as atualizações?","acceptedAnswer":{"@type":"Answer","text":"Baixe a imagem nova e recrie o contêiner. Seus dados continuam no volume, e as mudanças no banco de dados são aplicadas na inicialização. Com o Compose, é docker compose pull && docker compose up -d . Com docker run , baixe a imagem, remova o contêiner antigo e rode o mesmo comando de novo."}},{"@type":"Question","name":"Ele envia dados para fora? De onde vêm as cotações?","acceptedAnswer":{"@type":"Answer","text":"Sem telemetria, sem analytics, sem conta. As cotações chegam uma vez por dia do Frankfurter , que publica as taxas de referência do Banco Central Europeu, e só para as moedas que você usa. As outras chamadas externas acontecem porque você pediu: buscar o ícone de um site que você adicionou e enviar os lembretes do Telegram, se você configurar."}},{"@type":"Question","name":"Minha família pode usar?","acceptedAnswer":{"@type":"Answer","text":"Cada instalação tem uma conta, e a casa toda pode compartilhá-la para manter as contas num só lugar. Se duas pessoas quiserem dados separados, rode um segundo contêiner em outra porta; é só mais um comando."}},{"@type":"Question","name":"Posso importar de outro app?","acceptedAnswer":{"@type":"Answer","text":"Do Wallos, sim: exporte suas assinaturas lá em JSON e carregue o arquivo em Configurações › Importar. Você vê uma prévia e os avisos antes de qualquer coisa ser salva. Na dúvida entre os dois? Veja como o Coinio se compara ao Wallos . De qualquer outro lugar, adicionar à mão é rápido: 161 serviços populares preenchem logo, categoria e ciclo de cobrança enquanto você digita. Ou conecte o Claude e peça para ele adicionar por você."}},{"@type":"Question","name":"Em quais idiomas ele está?","acceptedAnswer":{"@type":"Answer","text":"O app está em inglês, turco, alemão, francês, espanhol, português do Brasil, chinês simplificado e japonês. Ele abre no idioma do seu navegador e você pode trocar quando quiser em Configurações. Datas, valores e moedas seguem o formato do idioma escolhido."}},{"@type":"Question","name":"O que é MCP e como o Claude ou o ChatGPT se conectam?","acceptedAnswer":{"@type":"Answer","text":"MCP (Model Context Protocol) é um padrão aberto que permite que assistentes de IA usem ferramentas. O Coinio oferece um em /mcp , então um assistente pode listar o que renova esta semana, adicionar uma assinatura ou marcar uma conta como paga. No claude.ai ou no app do Claude para celular, adicione um conector personalizado com o endereço do seu Coinio e entre na conta; não precisa de chave. O Claude Code, o Claude Desktop e o Cursor usam uma chave de API criada em Configurações. Os conectores personalizados do ChatGPT aceitam o mesmo endereço. Tudo isso precisa do endereço https lá de cima."}},{"@type":"Question","name":"Tem app para iPhone?","acceptedAnswer":{"@type":"Answer","text":"Não na App Store. Existe um widget do Scriptable gratuito para a Tela de Início e a Tela Bloqueada, que lê seus próximos pagamentos com uma chave somente leitura e continua mostrando os últimos dados quando está offline. O app web também pode ser adicionado à Tela de Início, onde abre como um app."}},{"@type":"Question","name":"Por que não uma planilha?","acceptedAnswer":{"@type":"Answer","text":"Uma planilha guarda valores, mas não avança os vencimentos, não converte moedas todo dia e não avisa na terça que algo renova na sexta. O Coinio faz isso, registra as cobranças automáticas sozinho e guarda um histórico que vira relatório."}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -1051,8 +1186,7 @@ pre .nw { white-space: nowrap; }
         </svg>
       </div>
 
-      <p class="eyebrow">Controle de assinaturas de código aberto</p>
-      <h1>Todas as assinaturas,<br>numa página tranquila<span class="pd">.</span></h1>
+      <h1><span class="eyebrow">Controle de assinaturas de código aberto<span class="vh">: </span></span> Todas as assinaturas,<br>numa página tranquila<span class="pd">.</span></h1>
       <p class="lede">O Coinio acompanha tudo o que você paga, avisa antes de qualquer renovação e roda no seu próprio servidor. Seus dados nunca saem de lá.</p>
 
       <div class="term" id="install" data-tabs>
@@ -1171,7 +1305,7 @@ pre .nw { white-space: nowrap; }
         </div>
         <div class="demo-scrim" data-demo-close aria-hidden="true"></div>
       </div>
-      <p class="demo-note">Dados de exemplo em dólar. As alterações ficam só nesta aba. Telegram, chaves de API e importação precisam do seu próprio servidor.</p>
+      <p class="demo-note">Dados de exemplo em reais. As alterações ficam só nesta aba. Telegram, chaves de API e importação precisam do seu próprio servidor.</p>
     </section>
 
     <!-- Features -->
@@ -1301,7 +1435,7 @@ pre .nw { white-space: nowrap; }
           <details>
             <summary>Posso importar de outro app?</summary>
             <div class="faq-a">
-              <p>Do Wallos, sim: exporte suas assinaturas lá em JSON e carregue o arquivo em Configurações › Importar. Você vê uma prévia e os avisos antes de qualquer coisa ser salva.</p>
+              <p>Do Wallos, sim: exporte suas assinaturas lá em JSON e carregue o arquivo em Configurações › Importar. Você vê uma prévia e os avisos antes de qualquer coisa ser salva. Na dúvida entre os dois? Veja <a href="/pt-br/wallos-alternative/">como o Coinio se compara ao Wallos</a>.</p>
               <p>De qualquer outro lugar, adicionar à mão é rápido: 161 serviços populares preenchem logo, categoria e ciclo de cobrança enquanto você digita. Ou conecte o Claude e peça para ele adicionar por você.</p>
             </div>
           </details>
@@ -1357,11 +1491,13 @@ pre .nw { white-space: nowrap; }
         <a href="https://github.com/yakupemreyerli/coinio/blob/main/LICENSE">Licença MIT</a>
         <a href="https://github.com/yakupemreyerli/coinio/issues">Issues</a>
         <a href="/install.sh">install.sh</a>
+        <a href="/pt-br/wallos-alternative/">Alternativa ao Wallos</a>
+        <a href="/pt-br/self-hosted-subscription-trackers/">Comparativo de apps auto-hospedados</a>
       </nav>
       <nav class="footer-langs" aria-label="Idiomas"><a href="/" hreflang="en" lang="en">English</a><a href="/tr/" hreflang="tr" lang="tr">Türkçe</a><a href="/de/" hreflang="de" lang="de">Deutsch</a><a href="/fr/" hreflang="fr" lang="fr">Français</a><a href="/es/" hreflang="es" lang="es">Español</a><a href="/pt-br/" hreflang="pt-BR" lang="pt-BR" aria-current="page">Português (Brasil)</a><a href="/zh/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/" hreflang="ja" lang="ja">日本語</a></nav>
     </div>
   </footer>
 
-  <script src="/main.js?v=851bea57f3" defer></script>
+  <script src="/main.js?v=840217014c" defer></script>
 </body>
 </html>
