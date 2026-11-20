@@ -974,8 +974,143 @@ h2 {
 pre .nw { white-space: nowrap; }
 /* The expanded demo must sit above the sticky nav */
 .is-demo-open main { z-index: 20; }
+
+/* Text for screen readers and search engines only */
+.vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+/* The hero eyebrow sits inside the h1 and keeps its own look */
+h1 .eyebrow { display: block; }
+
+/* Comparison pages (/wallos-alternative/, /self-hosted-subscription-trackers/) */
+.page-hero {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 64px var(--gutter) 0;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+}
+.page-hero h1 { font-size: clamp(36px, 5.6vw, 68px); line-height: 1.05; overflow-wrap: anywhere; }
+.page-lede { max-width: 720px; margin: 24px auto 0; font-size: 19px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+.page-hero .term-solo { margin-top: 36px; }
+.page-cta-note { margin: 14px 0 0; font-size: 14px; color: var(--dim); }
+.page-cta { margin: 22px 0 0; }
+.page-cta .btn svg { margin-right: -4px; }
+.checked { margin: 28px 0 0; font: 400 12.5px/1.6 var(--mono); color: var(--dim); max-width: 640px; }
+.crumbs { margin-bottom: 36px; font: 400 13px/1.4 var(--mono); }
+.crumbs ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 8px; }
+.crumbs li { color: var(--dim); }
+.crumbs li + li::before { content: "/"; margin-right: 8px; color: var(--dot); }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.sub .section { padding-top: 120px; }
+.prose-head { max-width: 760px; margin-bottom: 36px; }
+.prose-head h2 { font-size: clamp(28px, 3.4vw, 42px); }
+.prose-head p { margin: 16px 0 0; font-size: 18px; color: var(--muted); text-wrap: pretty; }
+
+/* Tables scroll inside their own box on narrow screens */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  background: var(--spec-panel);
+  box-shadow: var(--spec-shadow);
+  -webkit-overflow-scrolling: touch;
+}
+.cmp { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.55; }
+.cmp-2 { min-width: 620px; }
+.cmp-5 { min-width: 1040px; font-size: 14.5px; }
+.cmp th, .cmp td { padding: 14px 18px; text-align: left; vertical-align: top; }
+.cmp thead th {
+  font: 600 15px/1.3 var(--head);
+  color: var(--heading);
+  border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.cmp tbody tr + tr > * { border-top: 1px solid var(--row-line); }
+.cmp tbody th { width: 21%; font-weight: 500; color: var(--text); }
+.cmp-2 tbody th { width: 24%; }
+.cmp td { color: var(--muted); }
+.cmp .is-us { background: var(--wash-1); }
+.cmp thead .is-us { color: var(--tint); }
+.table-note { margin: 14px 0 0; font-size: 14px; color: var(--dim); }
+
+/* Cards */
+.cards { display: grid; gap: 20px; }
+.cards-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cards-trackers { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.card {
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  background: var(--spec-panel);
+  box-shadow: var(--spec-shadow);
+  padding: 28px 28px 30px;
+}
+.card-us { border-color: var(--icon-border); }
+.card h3 { font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: var(--heading); }
+.card h3 a { text-decoration: none; }
+.card h3 a:hover { color: var(--tint); }
+.ticks { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 12px; }
+.ticks li { position: relative; padding-left: 22px; font-size: 16px; color: var(--muted); }
+.ticks li::before {
+  content: "";
+  position: absolute; left: 2px; top: 0.62em;
+  width: 7px; height: 7px; border-radius: 2px;
+  background: var(--brand);
+  box-shadow: 0 0 0 3px rgba(79,91,213,0.18);
+}
+.aside-note { margin: 22px 0 0; font-size: 15px; color: var(--dim); max-width: 760px; }
+.tracker dl { margin: 16px 0 0; display: grid; gap: 12px; }
+.tracker dl div { display: grid; gap: 2px; }
+.tracker dt { font: 500 11.5px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); }
+.tracker dd { margin: 0; font-size: 15.5px; color: var(--muted); }
+
+/* Steps and prose */
+.steps { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.steps li {
+  counter-increment: step;
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  padding: 24px 24px 26px;
+  background: var(--wash-1);
+}
+.steps li::before {
+  content: counter(step);
+  display: inline-grid; place-items: center;
+  width: 30px; height: 30px; margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid var(--icon-border);
+  background: var(--icon-bg);
+  font: 600 14px/1 var(--mono);
+  color: var(--tint);
+}
+.steps p { margin: 0; font-size: 16px; color: var(--muted); }
+.steps strong, .prose strong { color: var(--text); font-weight: 600; }
+.prose { max-width: 760px; margin-top: 36px; }
+.prose h3 { font-size: 20px; font-weight: 600; color: var(--heading); }
+.prose p { margin: 12px 0 0; font-size: 16.5px; color: var(--muted); }
+.arrow, .choose a { color: var(--tint); text-decoration: none; font-weight: 500; }
+.arrow::after { content: "\00a0\2192"; }
+.arrow:hover, .choose a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.choose { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.choose li { background: var(--feature-bg); padding: 28px 30px 30px; }
+.choose h3 { font-size: 18px; font-weight: 600; color: var(--heading); letter-spacing: -0.01em; }
+.choose p { margin: 10px 0 0; font-size: 16px; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .cards-2, .steps, .choose { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .page-hero { padding-top: 36px; }
+  .crumbs { margin-bottom: 24px; }
+  .page-lede { font-size: 16.5px; }
+  .sub .section { padding-top: 80px; }
+  .prose-head p { font-size: 16.5px; }
+  .cards-trackers { grid-template-columns: 1fr; }
+  .card { padding: 22px 20px 24px; }
+  .cmp th, .cmp td { padding: 12px 14px; }
+  .choose li { padding: 22px 20px 24px; }
+}
 </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareApplication","name":"Coinio","url":"https://getcoinio.me/tr/","description":"Kendi sunucunda çalışan abonelik ve fatura takibi: yenileme hatırlatmaları, farklı para birimlerinde tek toplam, takvim, Wallos'tan içe aktarma, Claude ve ChatGPT için MCP sunucusu ve iPhone widget'ı.","applicationCategory":"FinanceApplication","applicationSubCategory":"Subscription tracker","operatingSystem":"Docker, Linux","softwareVersion":"0.1.1","isAccessibleForFree":true,"license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/yakupemreyerli/coinio","installUrl":"https://getcoinio.me/install","screenshot":"https://getcoinio.me/assets/dashboard-night.webp","image":"https://getcoinio.me/assets/og.png","inLanguage":["en","tr","de","fr","es","pt-BR","zh-CN","ja"],"sameAs":["https://github.com/yakupemreyerli/coinio"]},{"@type":"FAQPage","inLanguage":"tr","url":"https://getcoinio.me/tr/","mainEntity":[{"@type":"Question","name":"Coinio ücretsiz mi? Lisansı ne?","acceptedAnswer":{"@type":"Answer","text":"Evet. Coinio MIT lisanslı, açık kaynak. Ücretli sürümü yok, bizde hesap açman da gerekmez; sen çalıştırırsın, veri de uygulama da senindir. Kod GitHub 'da."}},{"@type":"Question","name":"Çalıştırmak için ne gerekiyor?","acceptedAnswer":{"@type":"Answer","text":"Docker kurulu bir makine: VPS, ev sunucusu, NAS ya da Raspberry Pi. İmajlar amd64 ve arm64 için derleniyor. Ayrıca veritabanı kurman gerekmez; boştayken 60 MB civarı bellek kullanır."}},{"@type":"Question","name":"Verilerim nerede duruyor, nasıl yedeklerim?","acceptedAnswer":{"@type":"Answer","text":"Her şey kapsayıcının /data klasöründe: tek SQLite dosyası ( coinio.db ) ve seçtiğin logolar. Bu birimi yedeklersen hepsini yedeklemiş olursun. Kurulum betiği ya da docker run ile kurduysan birimin adı coinio-data : docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine \\ tar czf /backup/coinio-backup.tgz -C /data . Compose'da bu, dosyanın yanındaki ./data klasörü. Aboneliklerini ve ödemelerini uygulamadan CSV ya da JSON olarak da indirebilirsin."}},{"@type":"Question","name":"HTTPS'i nasıl açarım, telefondan nasıl girerim?","acceptedAnswer":{"@type":"Answer","text":"Kurulum betiği Cloudflare Tunnel kurmayı önerir: tünel token'ını yapıştırırsın, Coinio hiçbir port açmadan bir https adresine kavuşur. Zaten bir ters vekil sunucu (Caddy, Traefik, Nginx, Dokploy) kullanıyorsan bir alan adını 8080 portuna yönlendirmen yeter. İki durumda da COINIO_PUBLIC_URL değişkenine bu https adresini yaz. claude.ai bağlayıcısı ve güvenli çerezler bunsuz çalışmaz."}},{"@type":"Question","name":"Güncelleme nasıl yapılıyor?","acceptedAnswer":{"@type":"Answer","text":"Yeni imajı çek, kapsayıcıyı yeniden oluştur. Verin birimde kalır, veritabanı değişiklikleri açılışta kendiliğinden uygulanır. Compose'da bu docker compose pull && docker compose up -d komutuyla olur. docker run ile kurduysan imajı çek, eski kapsayıcıyı sil ve aynı komutu yeniden çalıştır."}},{"@type":"Question","name":"Bir yerlere veri gönderiyor mu? Döviz kurları nereden geliyor?","acceptedAnswer":{"@type":"Answer","text":"Telemetri, analitik ve hesap yok. Döviz kurları günde bir kez, Avrupa Merkez Bankası'nın referans kurlarını yayımlayan Frankfurter 'dan gelir; yalnız kullandığın para birimleri için. Dışarıya giden diğer istekleri sen başlatırsın: eklediğin bir sitenin ikonunu çekmek ve kurduysan Telegram hatırlatmaları."}},{"@type":"Question","name":"Ailem de kullanabilir mi?","acceptedAnswer":{"@type":"Answer","text":"Her kurulumda tek hesap var; bütün faturaları tek yerde tutmak için ev halkı bu hesabı ortak kullanabilir. İki kişi verisini ayrı tutmak isterse başka bir portta ikinci bir kapsayıcı çalıştırır; bunun için tek bir komut daha yeter."}},{"@type":"Question","name":"Başka bir takip uygulamasından aktarabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Wallos'tan evet: aboneliklerini orada JSON olarak dışa aktar, dosyayı Ayarlar › İçe aktar'da yükle. Bir şey kaydedilmeden önce önizlemeyi ve uyarıları görürsün. Başka bir yerden geliyorsan elle eklemek de hızlı: yaygın 161 servis, adını yazmaya başlar başlamaz logosu, kategorisi ve ödeme dönemiyle gelir. İstersen Claude'u bağla, eklemeyi ona bırak."}},{"@type":"Question","name":"Hangi dilleri destekliyor?","acceptedAnswer":{"@type":"Answer","text":"Uygulamanın İngilizce, Türkçe, Almanca, Fransızca, İspanyolca, Brezilya Portekizcesi, Basitleştirilmiş Çince ve Japonca arayüzü var. Tarayıcının diliyle açılır, Ayarlar'dan istediğin an değiştirebilirsin. Tarihler, tutarlar ve para birimleri seçtiğin dile göre biçimlenir."}},{"@type":"Question","name":"MCP nedir, Claude ya da ChatGPT nasıl bağlanır?","acceptedAnswer":{"@type":"Answer","text":"MCP (Model Context Protocol), yapay zekâ asistanlarının araç kullanmasını sağlayan açık bir standart. Coinio bunu /mcp adresinde sunar; asistan bu hafta neyin yenileneceğini listeleyebilir, abonelik ekleyebilir ya da bir faturayı ödendi olarak işaretleyebilir. Coinio adresinle claude.ai'da ya da Claude mobil uygulamasında özel bir bağlayıcı ekle ve giriş yap; anahtar gerekmez. Claude Code, Claude Desktop ve Cursor, Ayarlar'dan alınan bir API anahtarıyla bağlanır. ChatGPT'nin özel bağlayıcıları da aynı adresi kabul eder. Bunların hepsi için yukarıdaki https adresi gerekir."}},{"@type":"Question","name":"iPhone uygulaması var mı?","acceptedAnswer":{"@type":"Answer","text":"App Store'da yok. Ana ekran ve kilit ekranı için ücretsiz bir Scriptable widget'ı var: yaklaşan ödemelerini salt okunur bir anahtarla okur, internet yokken son veriyi göstermeye devam eder. Web uygulamasını da ana ekrana ekleyebilirsin; oradan bir uygulama gibi açılır."}},{"@type":"Question","name":"Excel tablosu yetmez mi?","acceptedAnswer":{"@type":"Answer","text":"Tabloya tutarları yazarsın ama tablo ödeme günlerini ileri almaz, kurları her gün çevirmez, cuma yenilenecek bir şeyi salı günü sana haber vermez. Coinio bunları yapar, otomatik çekimleri kendiliğinden kaydeder ve rapor alabileceğin bir geçmiş tutar."}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareApplication","name":"Coinio","url":"https://getcoinio.me/tr/","description":"Kendi sunucunda çalışan abonelik ve fatura takibi: yenileme hatırlatmaları, farklı para birimlerinde tek toplam, takvim, Wallos'tan içe aktarma, Claude ve ChatGPT için MCP sunucusu ve iPhone widget'ı.","applicationCategory":"FinanceApplication","applicationSubCategory":"Subscription tracker","operatingSystem":"Docker, Linux","softwareVersion":"0.1.1","isAccessibleForFree":true,"license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/yakupemreyerli/coinio","installUrl":"https://getcoinio.me/install","screenshot":"https://getcoinio.me/assets/dashboard-night.webp","image":"https://getcoinio.me/assets/og.png","inLanguage":["en","tr","de","fr","es","pt-BR","zh-CN","ja"],"sameAs":["https://github.com/yakupemreyerli/coinio"]},{"@type":"FAQPage","inLanguage":"tr","url":"https://getcoinio.me/tr/","mainEntity":[{"@type":"Question","name":"Coinio ücretsiz mi? Lisansı ne?","acceptedAnswer":{"@type":"Answer","text":"Evet. Coinio MIT lisanslı, açık kaynak. Ücretli sürümü yok, bizde hesap açman da gerekmez; sen çalıştırırsın, veri de uygulama da senindir. Kod GitHub 'da."}},{"@type":"Question","name":"Çalıştırmak için ne gerekiyor?","acceptedAnswer":{"@type":"Answer","text":"Docker kurulu bir makine: VPS, ev sunucusu, NAS ya da Raspberry Pi. İmajlar amd64 ve arm64 için derleniyor. Ayrıca veritabanı kurman gerekmez; boştayken 60 MB civarı bellek kullanır."}},{"@type":"Question","name":"Verilerim nerede duruyor, nasıl yedeklerim?","acceptedAnswer":{"@type":"Answer","text":"Her şey kapsayıcının /data klasöründe: tek SQLite dosyası ( coinio.db ) ve seçtiğin logolar. Bu birimi yedeklersen hepsini yedeklemiş olursun. Kurulum betiği ya da docker run ile kurduysan birimin adı coinio-data : docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine \\ tar czf /backup/coinio-backup.tgz -C /data . Compose'da bu, dosyanın yanındaki ./data klasörü. Aboneliklerini ve ödemelerini uygulamadan CSV ya da JSON olarak da indirebilirsin."}},{"@type":"Question","name":"HTTPS'i nasıl açarım, telefondan nasıl girerim?","acceptedAnswer":{"@type":"Answer","text":"Kurulum betiği Cloudflare Tunnel kurmayı önerir: tünel token'ını yapıştırırsın, Coinio hiçbir port açmadan bir https adresine kavuşur. Zaten bir ters vekil sunucu (Caddy, Traefik, Nginx, Dokploy) kullanıyorsan bir alan adını 8080 portuna yönlendirmen yeter. İki durumda da COINIO_PUBLIC_URL değişkenine bu https adresini yaz. claude.ai bağlayıcısı ve güvenli çerezler bunsuz çalışmaz."}},{"@type":"Question","name":"Güncelleme nasıl yapılıyor?","acceptedAnswer":{"@type":"Answer","text":"Yeni imajı çek, kapsayıcıyı yeniden oluştur. Verin birimde kalır, veritabanı değişiklikleri açılışta kendiliğinden uygulanır. Compose'da bu docker compose pull && docker compose up -d komutuyla olur. docker run ile kurduysan imajı çek, eski kapsayıcıyı sil ve aynı komutu yeniden çalıştır."}},{"@type":"Question","name":"Bir yerlere veri gönderiyor mu? Döviz kurları nereden geliyor?","acceptedAnswer":{"@type":"Answer","text":"Telemetri, analitik ve hesap yok. Döviz kurları günde bir kez, Avrupa Merkez Bankası'nın referans kurlarını yayımlayan Frankfurter 'dan gelir; yalnız kullandığın para birimleri için. Dışarıya giden diğer istekleri sen başlatırsın: eklediğin bir sitenin ikonunu çekmek ve kurduysan Telegram hatırlatmaları."}},{"@type":"Question","name":"Ailem de kullanabilir mi?","acceptedAnswer":{"@type":"Answer","text":"Her kurulumda tek hesap var; bütün faturaları tek yerde tutmak için ev halkı bu hesabı ortak kullanabilir. İki kişi verisini ayrı tutmak isterse başka bir portta ikinci bir kapsayıcı çalıştırır; bunun için tek bir komut daha yeter."}},{"@type":"Question","name":"Başka bir takip uygulamasından aktarabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Wallos'tan evet: aboneliklerini orada JSON olarak dışa aktar, dosyayı Ayarlar › İçe aktar'da yükle. Bir şey kaydedilmeden önce önizlemeyi ve uyarıları görürsün. İkisini tartıyorsan Coinio ile Wallos karşılaştırmasına göz at. Başka bir yerden geliyorsan elle eklemek de hızlı: yaygın 161 servis, adını yazmaya başlar başlamaz logosu, kategorisi ve ödeme dönemiyle gelir. İstersen Claude'u bağla, eklemeyi ona bırak."}},{"@type":"Question","name":"Hangi dilleri destekliyor?","acceptedAnswer":{"@type":"Answer","text":"Uygulamanın İngilizce, Türkçe, Almanca, Fransızca, İspanyolca, Brezilya Portekizcesi, Basitleştirilmiş Çince ve Japonca arayüzü var. Tarayıcının diliyle açılır, Ayarlar'dan istediğin an değiştirebilirsin. Tarihler, tutarlar ve para birimleri seçtiğin dile göre biçimlenir."}},{"@type":"Question","name":"MCP nedir, Claude ya da ChatGPT nasıl bağlanır?","acceptedAnswer":{"@type":"Answer","text":"MCP (Model Context Protocol), yapay zekâ asistanlarının araç kullanmasını sağlayan açık bir standart. Coinio bunu /mcp adresinde sunar; asistan bu hafta neyin yenileneceğini listeleyebilir, abonelik ekleyebilir ya da bir faturayı ödendi olarak işaretleyebilir. Coinio adresinle claude.ai'da ya da Claude mobil uygulamasında özel bir bağlayıcı ekle ve giriş yap; anahtar gerekmez. Claude Code, Claude Desktop ve Cursor, Ayarlar'dan alınan bir API anahtarıyla bağlanır. ChatGPT'nin özel bağlayıcıları da aynı adresi kabul eder. Bunların hepsi için yukarıdaki https adresi gerekir."}},{"@type":"Question","name":"iPhone uygulaması var mı?","acceptedAnswer":{"@type":"Answer","text":"App Store'da yok. Ana ekran ve kilit ekranı için ücretsiz bir Scriptable widget'ı var: yaklaşan ödemelerini salt okunur bir anahtarla okur, internet yokken son veriyi göstermeye devam eder. Web uygulamasını da ana ekrana ekleyebilirsin; oradan bir uygulama gibi açılır."}},{"@type":"Question","name":"Excel tablosu yetmez mi?","acceptedAnswer":{"@type":"Answer","text":"Tabloya tutarları yazarsın ama tablo ödeme günlerini ileri almaz, kurları her gün çevirmez, cuma yenilenecek bir şeyi salı günü sana haber vermez. Coinio bunları yapar, otomatik çekimleri kendiliğinden kaydeder ve rapor alabileceğin bir geçmiş tutar."}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -1051,8 +1186,7 @@ pre .nw { white-space: nowrap; }
         </svg>
       </div>
 
-      <p class="eyebrow">Açık kaynak abonelik takibi</p>
-      <h1>Bütün aboneliklerin<br>tek sakin sayfada<span class="pd">.</span></h1>
+      <h1><span class="eyebrow">Açık kaynak abonelik takibi<span class="vh">: </span></span> Bütün aboneliklerin<br>tek sakin sayfada<span class="pd">.</span></h1>
       <p class="lede">Coinio neye para ödediğini takip eder, bir şey yenilenmeden önce seni uyarır ve kendi sunucunda çalışır. Verin oradan hiç çıkmaz.</p>
 
       <div class="term" id="install" data-tabs>
@@ -1301,7 +1435,7 @@ pre .nw { white-space: nowrap; }
           <details>
             <summary>Başka bir takip uygulamasından aktarabilir miyim?</summary>
             <div class="faq-a">
-              <p>Wallos'tan evet: aboneliklerini orada JSON olarak dışa aktar, dosyayı Ayarlar › İçe aktar'da yükle. Bir şey kaydedilmeden önce önizlemeyi ve uyarıları görürsün.</p>
+              <p>Wallos'tan evet: aboneliklerini orada JSON olarak dışa aktar, dosyayı Ayarlar › İçe aktar'da yükle. Bir şey kaydedilmeden önce önizlemeyi ve uyarıları görürsün. İkisini tartıyorsan <a href="/tr/wallos-alternative/">Coinio ile Wallos karşılaştırmasına</a> göz at.</p>
               <p>Başka bir yerden geliyorsan elle eklemek de hızlı: yaygın 161 servis, adını yazmaya başlar başlamaz logosu, kategorisi ve ödeme dönemiyle gelir. İstersen Claude'u bağla, eklemeyi ona bırak.</p>
             </div>
           </details>
@@ -1357,11 +1491,13 @@ pre .nw { white-space: nowrap; }
         <a href="https://github.com/yakupemreyerli/coinio/blob/main/LICENSE">MIT Lisansı</a>
         <a href="https://github.com/yakupemreyerli/coinio/issues">Sorun bildir</a>
         <a href="/install.sh">install.sh</a>
+        <a href="/tr/wallos-alternative/">Wallos alternatifi</a>
+        <a href="/tr/self-hosted-subscription-trackers/">Abonelik takip uygulamaları karşılaştırması</a>
       </nav>
       <nav class="footer-langs" aria-label="Diller"><a href="/" hreflang="en" lang="en">English</a><a href="/tr/" hreflang="tr" lang="tr" aria-current="page">Türkçe</a><a href="/de/" hreflang="de" lang="de">Deutsch</a><a href="/fr/" hreflang="fr" lang="fr">Français</a><a href="/es/" hreflang="es" lang="es">Español</a><a href="/pt-br/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/" hreflang="ja" lang="ja">日本語</a></nav>
     </div>
   </footer>
 
-  <script src="/main.js?v=851bea57f3" defer></script>
+  <script src="/main.js?v=840217014c" defer></script>
 </body>
 </html>

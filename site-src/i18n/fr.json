@@ -5,6 +5,7 @@
   "og.description": "Gestionnaire d’abonnements et de factures open source, sur votre propre serveur. Une seule image Docker.",
   "app.description": "Gestionnaire d’abonnements et de factures auto-hébergé : rappels avant renouvellement, totaux multidevises, calendrier, import depuis Wallos, serveur MCP pour Claude et ChatGPT, et widget iPhone.",
   "nav.home": "Accueil Coinio",
+  "crumb.home": "Accueil",
   "nav.main": "Principal",
   "nav.demo": "Démo",
   "nav.faq": "FAQ",
@@ -18,6 +19,7 @@
   "lang.suggestGo": "Lire en français",
   "lang.dismiss": "Fermer",
   "hero.eyebrow": "Gestionnaire d’abonnements open source",
+  "hero.sep": " : ",
   "hero.title": "Tous vos abonnements,<br>sur une seule page<span class=\"pd\">.</span>",
   "hero.lede": "Coinio suit ce que vous payez, vous prévient avant chaque renouvellement et tourne sur votre propre serveur. Vos données n’en sortent jamais.",
   "install.tabs": "Méthode d’installation",
@@ -91,7 +93,7 @@
   "faq.family.q": "Ma famille peut-elle l’utiliser ?",
   "faq.family.a": "<p>Chaque installation a un seul compte, qu’un foyer peut partager pour garder toutes ses factures au même endroit. Si deux personnes veulent des données séparées, lancez un second conteneur sur un autre port : une commande de plus suffit.</p>",
   "faq.import.q": "Puis-je importer depuis un autre gestionnaire ?",
-  "faq.import.a": "<p>Depuis Wallos, oui : exportez-y vos abonnements en JSON et chargez le fichier dans Paramètres › Importer. Vous voyez un aperçu et les éventuels avertissements avant tout enregistrement.</p>\n<p>Depuis ailleurs, l’ajout manuel est rapide : 161 services courants remplissent leur logo, leur catégorie et leur fréquence pendant la saisie. Vous pouvez aussi connecter Claude et lui demander de les ajouter pour vous.</p>",
+  "faq.import.a": "<p>Depuis Wallos, oui : exportez-y vos abonnements en JSON et chargez le fichier dans Paramètres › Importer. Vous voyez un aperçu et les éventuels avertissements avant tout enregistrement. Vous hésitez entre les deux ? Voyez <a href=\"{{base}}wallos-alternative/\">comment Coinio se compare à Wallos</a>.</p>\n<p>Depuis ailleurs, l’ajout manuel est rapide : 161 services courants remplissent leur logo, leur catégorie et leur fréquence pendant la saisie. Vous pouvez aussi connecter Claude et lui demander de les ajouter pour vous.</p>",
   "faq.languages.q": "Dans quelles langues est-il disponible ?",
   "faq.languages.a": "<p>L’application existe en anglais, turc, allemand, français, espagnol, portugais du Brésil, chinois simplifié et japonais. Elle démarre dans la langue de votre navigateur et vous pouvez en changer à tout moment dans Paramètres. Dates, montants et devises sont mis en forme selon la langue choisie.</p>",
   "faq.mcp.q": "Qu’est-ce que MCP, et comment Claude ou ChatGPT s’y connectent-ils ?",
@@ -105,5 +107,7 @@
   "footer.label": "Pied de page",
   "footer.license": "Licence MIT",
   "footer.issues": "Issues",
+  "footer.wallos": "Alternative à Wallos",
+  "footer.trackers": "Comparatif des gestionnaires auto-hébergés",
   "footer.languages": "Langues"
 }

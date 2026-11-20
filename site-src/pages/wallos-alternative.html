@@ -1,0 +1,129 @@
+  <main id="top" class="sub">
+    <!-- Intro -->
+    <section class="page-hero">
+      <nav class="crumbs" aria-label="{{@crumb.label}}">
+        <ol>
+          <li><a href="{{base}}">{{crumb.home}}</a></li>
+          <li><span aria-current="page">{{crumb.page}}</span></li>
+        </ol>
+      </nav>
+      <p class="eyebrow">{{page.eyebrow}}</p>
+      <h1>{{page.title}}</h1>
+      <p class="page-lede">{{page.lede}}</p>
+      <div class="term term-solo" id="install">
+        <div class="code-row">
+<pre class="wrap"><code><span class="p">curl -fsSL <span class="nw">https://getcoinio.me/install | sh</span></span></code></pre>
+          <button class="copy" type="button" aria-label="{{@copy.command}}"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>{{copy.label}}</span></button>
+        </div>
+      </div>
+      <p class="page-cta-note">{{cta.note}}</p>
+      <p class="page-cta"><a class="btn" href="{{demoHref}}" data-demo-link>{{cta.demo}}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></a></p>
+      <p class="checked">{{page.checked}}</p>
+    </section>
+
+    <!-- Table -->
+    <section class="section" aria-labelledby="glance-title">
+      <div class="prose-head">
+        <h2 id="glance-title">{{glance.title}}</h2>
+        <p>{{glance.lede}}</p>
+      </div>
+      <div class="table-wrap" role="region" aria-labelledby="glance-title" tabindex="0">
+        <table class="cmp cmp-2">
+          <thead>
+            <tr><th scope="col"><span class="vh">{{table.feature}}</span></th><th scope="col" class="is-us">Coinio</th><th scope="col">Wallos</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">{{row.install}}</th><td class="is-us">{{row.install.coinio}}</td><td>{{row.install.wallos}}</td></tr>
+            <tr><th scope="row">{{row.stack}}</th><td class="is-us">Node.js (Express), React, SQLite</td><td>PHP 8.3, SQLite</td></tr>
+            <tr><th scope="row">{{row.license}}</th><td class="is-us">MIT</td><td>GPL-3.0</td></tr>
+            <tr><th scope="row">{{row.languages}}</th><td class="is-us">{{row.languages.coinio}}</td><td>{{row.languages.wallos}}</td></tr>
+            <tr><th scope="row">{{row.currency}}</th><td class="is-us">{{row.currency.coinio}}</td><td>{{row.currency.wallos}}</td></tr>
+            <tr><th scope="row">{{row.reminders}}</th><td class="is-us">{{row.reminders.coinio}}</td><td>{{row.reminders.wallos}}</td></tr>
+            <tr><th scope="row">{{row.ai}}</th><td class="is-us">{{row.ai.coinio}}</td><td>{{row.ai.wallos}}</td></tr>
+            <tr><th scope="row">{{row.iphone}}</th><td class="is-us">{{row.iphone.coinio}}</td><td>{{row.iphone.wallos}}</td></tr>
+            <tr><th scope="row">{{row.custom}}</th><td class="is-us">{{row.custom.coinio}}</td><td>{{row.custom.wallos}}</td></tr>
+            <tr><th scope="row">{{row.users}}</th><td class="is-us">{{row.users.coinio}}</td><td>{{row.users.wallos}}</td></tr>
+            <tr><th scope="row">{{row.oidc}}</th><td class="is-us">{{row.oidc.coinio}}</td><td>{{row.oidc.wallos}}</td></tr>
+            <tr><th scope="row">{{row.demo}}</th><td class="is-us">{{row.demo.coinio}}</td><td>{{row.demo.wallos}}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Who should pick which -->
+    <section class="section" aria-labelledby="pick-title">
+      <div class="prose-head">
+        <h2 id="pick-title">{{pick.title}}</h2>
+        <p>{{pick.lede}}</p>
+      </div>
+      <div class="cards cards-2">
+        <article class="card">
+          <h3>{{pick.wallos.title}}</h3>
+          <ul class="ticks">
+            <li>{{pick.wallos.1}}</li>
+            <li>{{pick.wallos.2}}</li>
+            <li>{{pick.wallos.3}}</li>
+            <li>{{pick.wallos.4}}</li>
+            <li>{{pick.wallos.5}}</li>
+            <li>{{pick.wallos.6}}</li>
+          </ul>
+        </article>
+        <article class="card card-us">
+          <h3>{{pick.coinio.title}}</h3>
+          <ul class="ticks">
+            <li>{{pick.coinio.1}}</li>
+            <li>{{pick.coinio.2}}</li>
+            <li>{{pick.coinio.3}}</li>
+            <li>{{pick.coinio.4}}</li>
+            <li>{{pick.coinio.5}}</li>
+            <li>{{pick.coinio.6}}</li>
+          </ul>
+        </article>
+      </div>
+      <p class="aside-note">{{pick.note}}</p>
+    </section>
+
+    <!-- Moving from Wallos -->
+    <section class="section" id="move" aria-labelledby="move-title">
+      <div class="prose-head">
+        <h2 id="move-title">{{move.title}}</h2>
+        <p>{{move.lede}}</p>
+      </div>
+      <ol class="steps">
+        <li><p>{{move.step1}}</p></li>
+        <li><p>{{move.step2}}</p></li>
+        <li><p>{{move.step3}}</p></li>
+      </ol>
+      <div class="prose">
+        <h3>{{move.carry.title}}</h3>
+        <p>{{move.carry.body}}</p>
+        <p><a class="arrow" href="https://docs.getcoinio.me/docs/features/import-export">{{move.docs}}</a></p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="faq">
+        <div class="faq-intro">
+          <p class="eyebrow">{{nav.faq}}</p>
+          <h2 id="faq-title">{{pfaq.title}}</h2>
+        </div>
+        <div class="faq-list">
+{{faq}}
+        </div>
+      </div>
+    </section>
+
+    <!-- Final -->
+    <section class="section final" aria-labelledby="final-title">
+      <h2 id="final-title">{{final.title}}</h2>
+      <p class="final-lede">{{final.lede}}</p>
+      <div class="term term-solo">
+        <div class="code-row">
+<pre class="wrap"><code><span class="p">curl -fsSL <span class="nw">https://getcoinio.me/install | sh</span></span></code></pre>
+          <button class="copy" type="button" aria-label="{{@copy.command}}"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>{{copy.label}}</span></button>
+        </div>
+      </div>
+      <p class="final-links"><a href="{{demoHref}}" data-demo-link>{{cta.demo}}</a><span class="dot">·</span><a href="{{base}}self-hosted-subscription-trackers/">{{final.trackers}}</a><span class="dot">·</span><a href="https://docs.getcoinio.me">{{nav.docs}}</a><span class="dot">·</span><a href="{{base}}">{{final.home}}</a></p>
+    </section>
+  </main>

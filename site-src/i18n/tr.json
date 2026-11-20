@@ -5,6 +5,7 @@
   "og.description": "Kendi sunucunda çalıştırdığın açık kaynak abonelik ve fatura takibi. Tek Docker imajı.",
   "app.description": "Kendi sunucunda çalışan abonelik ve fatura takibi: yenileme hatırlatmaları, farklı para birimlerinde tek toplam, takvim, Wallos'tan içe aktarma, Claude ve ChatGPT için MCP sunucusu ve iPhone widget'ı.",
   "nav.home": "Coinio ana sayfa",
+  "crumb.home": "Ana sayfa",
   "nav.main": "Ana menü",
   "nav.demo": "Demo",
   "nav.faq": "SSS",
@@ -18,6 +19,7 @@
   "lang.suggestGo": "Türkçe oku",
   "lang.dismiss": "Kapat",
   "hero.eyebrow": "Açık kaynak abonelik takibi",
+  "hero.sep": ": ",
   "hero.title": "Bütün aboneliklerin<br>tek sakin sayfada<span class=\"pd\">.</span>",
   "hero.lede": "Coinio neye para ödediğini takip eder, bir şey yenilenmeden önce seni uyarır ve kendi sunucunda çalışır. Verin oradan hiç çıkmaz.",
   "install.tabs": "Kurulum yöntemi",
@@ -91,7 +93,7 @@
   "faq.family.q": "Ailem de kullanabilir mi?",
   "faq.family.a": "<p>Her kurulumda tek hesap var; bütün faturaları tek yerde tutmak için ev halkı bu hesabı ortak kullanabilir. İki kişi verisini ayrı tutmak isterse başka bir portta ikinci bir kapsayıcı çalıştırır; bunun için tek bir komut daha yeter.</p>",
   "faq.import.q": "Başka bir takip uygulamasından aktarabilir miyim?",
-  "faq.import.a": "<p>Wallos'tan evet: aboneliklerini orada JSON olarak dışa aktar, dosyayı Ayarlar › İçe aktar'da yükle. Bir şey kaydedilmeden önce önizlemeyi ve uyarıları görürsün.</p>\n<p>Başka bir yerden geliyorsan elle eklemek de hızlı: yaygın 161 servis, adını yazmaya başlar başlamaz logosu, kategorisi ve ödeme dönemiyle gelir. İstersen Claude'u bağla, eklemeyi ona bırak.</p>",
+  "faq.import.a": "<p>Wallos'tan evet: aboneliklerini orada JSON olarak dışa aktar, dosyayı Ayarlar › İçe aktar'da yükle. Bir şey kaydedilmeden önce önizlemeyi ve uyarıları görürsün. İkisini tartıyorsan <a href=\"{{base}}wallos-alternative/\">Coinio ile Wallos karşılaştırmasına</a> göz at.</p>\n<p>Başka bir yerden geliyorsan elle eklemek de hızlı: yaygın 161 servis, adını yazmaya başlar başlamaz logosu, kategorisi ve ödeme dönemiyle gelir. İstersen Claude'u bağla, eklemeyi ona bırak.</p>",
   "faq.languages.q": "Hangi dilleri destekliyor?",
   "faq.languages.a": "<p>Uygulamanın İngilizce, Türkçe, Almanca, Fransızca, İspanyolca, Brezilya Portekizcesi, Basitleştirilmiş Çince ve Japonca arayüzü var. Tarayıcının diliyle açılır, Ayarlar'dan istediğin an değiştirebilirsin. Tarihler, tutarlar ve para birimleri seçtiğin dile göre biçimlenir.</p>",
   "faq.mcp.q": "MCP nedir, Claude ya da ChatGPT nasıl bağlanır?",
@@ -105,5 +107,7 @@
   "footer.label": "Alt bilgi",
   "footer.license": "MIT Lisansı",
   "footer.issues": "Sorun bildir",
+  "footer.wallos": "Wallos alternatifi",
+  "footer.trackers": "Abonelik takip uygulamaları karşılaştırması",
   "footer.languages": "Diller"
 }

@@ -1,0 +1,245 @@
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="mark-wrap" aria-hidden="true">
+        <div class="mark-halo"></div>
+        <svg class="mark" viewBox="0 0 64 64">
+          <g class="slices">
+            <path d="M45.93 16.96A20.5 20.5 0 0 0 35.68 11.83"/>
+            <path d="M33.41 11.55A20.5 20.5 0 0 0 22.21 13.99"/>
+            <path d="M20.27 15.19A20.5 20.5 0 0 0 13.08 24.11"/>
+            <path d="M12.32 26.27A20.5 20.5 0 0 0 12.32 37.73"/>
+            <path d="M13.08 39.89A20.5 20.5 0 0 0 20.27 48.81"/>
+            <path d="M22.21 50.01A20.5 20.5 0 0 0 33.41 52.45"/>
+            <path d="M35.68 52.17A20.5 20.5 0 0 0 45.93 47.04"/>
+          </g>
+          <g class="lit">
+            <path d="M45.93 16.96A20.5 20.5 0 0 0 35.68 11.83"/>
+            <path d="M33.41 11.55A20.5 20.5 0 0 0 22.21 13.99"/>
+            <path d="M20.27 15.19A20.5 20.5 0 0 0 13.08 24.11"/>
+            <path d="M12.32 26.27A20.5 20.5 0 0 0 12.32 37.73"/>
+            <path d="M13.08 39.89A20.5 20.5 0 0 0 20.27 48.81"/>
+            <path d="M22.21 50.01A20.5 20.5 0 0 0 33.41 52.45"/>
+            <path d="M35.68 52.17A20.5 20.5 0 0 0 45.93 47.04"/>
+          </g>
+          <circle class="coin" cx="46.5" cy="32" r="7"/>
+        </svg>
+      </div>
+
+      <h1><span class="eyebrow">{{hero.eyebrow}}<span class="vh">{{hero.sep}}</span></span> {{hero.title}}</h1>
+      <p class="lede">{{hero.lede}}</p>
+
+      <div class="term" id="install" data-tabs>
+        <div class="term-head">
+          <div class="tabs" role="tablist" aria-label="{{@install.tabs}}">
+            <button role="tab" id="t-script" aria-controls="p-script" aria-selected="true">{{install.tabScript}}</button>
+            <button role="tab" id="t-docker" aria-controls="p-docker" aria-selected="false" tabindex="-1">Docker</button>
+            <button role="tab" id="t-compose" aria-controls="p-compose" aria-selected="false" tabindex="-1">Compose</button>
+            <button role="tab" id="t-dokploy" aria-controls="p-dokploy" aria-selected="false" tabindex="-1">Dokploy</button>
+            <button role="tab" id="t-unraid" aria-controls="p-unraid" aria-selected="false" tabindex="-1">Unraid</button>
+          </div>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-script" aria-labelledby="t-script">
+          <div class="code-row">
+<pre class="wrap"><code><span class="p">curl -fsSL <span class="nw">https://getcoinio.me/install | sh</span></span></code></pre>
+            <button class="copy" type="button" aria-label="{{@copy.command}}"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>{{copy.label}}</span></button>
+          </div>
+          <p class="note">{{install.scriptNote}} <a href="/install.sh">{{install.readScript}}</a></p>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-docker" aria-labelledby="t-docker" hidden>
+          <div class="code-row">
+<pre><code><span class="p">docker run -d --name coinio --restart unless-stopped \</span>
+<span class="c">  -p 8080:8080 -v coinio-data:/data \</span>
+<span class="c">  ghcr.io/yakupemreyerli/coinio:latest</span></code></pre>
+            <button class="copy" type="button" aria-label="{{@copy.command}}"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>{{copy.label}}</span></button>
+          </div>
+          <p class="note">{{install.dockerNote}}</p>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-compose" aria-labelledby="t-compose" hidden>
+          <div class="code-row">
+<pre><code><span class="p">mkdir coinio &amp;&amp; cd coinio</span>
+<span class="p">curl -fsSLO https://raw.githubusercontent.com/yakupemreyerli/coinio/main/docker-compose.yml</span>
+<span class="p">docker compose up -d</span></code></pre>
+            <button class="copy" type="button" aria-label="{{@copy.commands}}"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>{{copy.label}}</span></button>
+          </div>
+          <p class="note">{{install.composeNote}}</p>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-dokploy" aria-labelledby="t-dokploy" hidden>
+          <div class="code-row">
+<pre><code><span class="k"># Project › Create Service › Compose › Git</span>
+<span class="kv"><i>Repository</i>   https://github.com/yakupemreyerli/coinio</span>
+<span class="kv"><i>Branch</i>       main</span>
+<span class="kv"><i>Compose path</i> ./docker-compose.yml</span></code></pre>
+            <button class="copy" type="button" aria-label="{{@copy.repo}}" data-copy="https://github.com/yakupemreyerli/coinio"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>{{copy.labelUrl}}</span></button>
+          </div>
+          <p class="note">{{install.dokployNote}}</p>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-unraid" aria-labelledby="t-unraid" hidden>
+          <div class="code-row">
+<pre><code><span class="p">curl -fsSL -o /boot/config/plugins/dockerMan/templates-user/coinio.xml \</span>
+<span class="c">  https://raw.githubusercontent.com/yakupemreyerli/coinio/main/deploy/unraid/coinio.xml</span></code></pre>
+            <button class="copy" type="button" aria-label="{{@copy.command}}"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>{{copy.label}}</span></button>
+          </div>
+          <p class="note">{{install.unraidNote}}</p>
+        </div>
+      </div>
+
+      <p class="also">{{also.label}}
+        <a href="https://github.com/yakupemreyerli/coinio/blob/main/deploy/casaos/docker-compose.yml">CasaOS</a><span class="dot">·</span>
+        <a href="https://github.com/yakupemreyerli/coinio/blob/main/deploy/portainer/template.json">Portainer</a><span class="dot">·</span>
+        <span class="soon">Coolify <em>{{also.soon}}</em></span><span class="dot">·</span>
+        <span class="soon">PikaPods <em>{{also.soon}}</em></span>
+      </p>
+    </section>
+
+    <!-- Live demo -->
+    <section class="demo" id="demo" aria-labelledby="demo-title">
+      <div class="demo-head">
+        <div>
+          <p class="eyebrow">{{demo.eyebrow}}</p>
+          <h2 id="demo-title">{{demo.title}}</h2>
+          <p>{{demo.lede}}</p>
+        </div>
+        <div class="demo-actions">
+          <button class="btn" type="button" data-demo-expand>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
+            {{demo.expand}}
+          </button>
+          <a class="btn" href="{{demoHref}}" target="_blank" rel="noopener" data-demo-link>
+            {{demo.newTab}}
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 3.5h-3v9h9v-3M9.5 2.5h4v4M13.5 2.5 7.5 8.5"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="demo-stage">
+        <div class="demo-glow" aria-hidden="true"></div>
+        <div class="demo-win" role="region" aria-label="{{@demo.window}}">
+          <div class="win-bar">
+            <div class="win-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="win-url"><span class="live" aria-hidden="true"></span>{{demo.url}}</div>
+            <div class="win-tools">
+              <button class="win-tool win-expand" type="button" aria-label="{{@demo.expandLabel}}" title="{{@demo.expand}}" data-demo-expand>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
+              </button>
+              <a class="win-tool" href="{{demoHref}}" target="_blank" rel="noopener" aria-label="{{@demo.newTabLabel}}" title="{{@demo.newTab}}" data-demo-link>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 3.5h-3v9h9v-3M9.5 2.5h4v4M13.5 2.5 7.5 8.5"/></svg>
+              </a>
+              <button class="win-tool win-close" type="button" aria-label="{{@demo.closeLabel}}" title="{{@demo.closeTitle}}" data-demo-close>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="demo-view">
+            <iframe title="{{@demo.window}}" data-src="/demo/" loading="lazy" referrerpolicy="same-origin"></iframe>
+            <div class="demo-poster">
+              <img class="is-on" data-theme="dark" src="/assets/dashboard-night.webp" srcset="/assets/dashboard-night-720.webp 720w, /assets/dashboard-night-960.webp 960w, /assets/dashboard-night-1440.webp 1440w, /assets/dashboard-night.webp 2880w" sizes="(max-width: 1280px) 100vw, 1240px" width="2880" height="1800" alt="{{@demo.posterAlt}}" loading="lazy" decoding="async">
+              <img data-theme="light" src="/assets/dashboard-light.webp" srcset="/assets/dashboard-light-720.webp 720w, /assets/dashboard-light-960.webp 960w, /assets/dashboard-light-1440.webp 1440w, /assets/dashboard-light.webp 2880w" sizes="(max-width: 1280px) 100vw, 1240px" width="2880" height="1800" alt="" loading="lazy" decoding="async">
+              <a class="btn btn-primary demo-open demo-open-m" href="{{demoHref}}" data-demo-link>{{demo.open}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="demo-scrim" data-demo-close aria-hidden="true"></div>
+      </div>
+      <p class="demo-note">{{demo.note}}</p>
+    </section>
+
+    <!-- Features -->
+    <section class="section" aria-labelledby="features-title">
+      <div class="section-head">
+        <p class="eyebrow">{{features.eyebrow}}</p>
+        <h2 id="features-title">{{features.title}}</h2>
+      </div>
+      <div class="features">
+        <article class="feature">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><circle cx="15.5" cy="14.5" r="1.6" class="fill"/></svg>
+          <h3>{{features.remindersTitle}}</h3>
+          <p>{{features.remindersBody}}</p>
+        </article>
+        <article class="feature">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.5"/><path d="M14.2 6.8a5.5 5.5 0 1 1 0 10.4"/><path d="M9 9.5v5"/></svg>
+          <h3>{{features.currencyTitle}}</h3>
+          <p>{{features.currencyBody}}</p>
+        </article>
+        <article class="feature">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="3.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="3.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>
+          <h3>{{features.catalogTitle}}</h3>
+          <p>{{features.catalogBody}}</p>
+        </article>
+        <article class="feature">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4A2.5 2.5 0 0 1 4 13.5z"/><path d="M8.5 10h7"/></svg>
+          <h3>{{features.aiTitle}}</h3>
+          <p>{{features.aiBody}}</p>
+        </article>
+        <article class="feature">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><rect x="8.5" y="6" width="7" height="5" rx="1.2" class="fill-soft"/><path d="M10.5 18.5h3"/></svg>
+          <h3>{{features.widgetTitle}}</h3>
+          <p>{{features.widgetBody}}</p>
+        </article>
+        <article class="feature">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>
+          <h3>{{features.themeTitle}}</h3>
+          <p>{{features.themeBody}}</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Self-hosted -->
+    <section class="section" aria-labelledby="own-title">
+      <div class="own">
+        <div class="own-copy">
+          <p class="eyebrow">{{own.eyebrow}}</p>
+          <h2 id="own-title">{{own.title}}</h2>
+          <p class="own-lede">{{own.lede}}</p>
+          <ul class="own-list">
+            <li>{{own.data}}</li>
+            <li>{{own.mit}}</li>
+            <li>{{own.docker}}</li>
+          </ul>
+        </div>
+        <div class="spec" aria-label="{{@own.spec}}">
+          <div class="spec-head"><span class="spec-dot"></span>coinio</div>
+          <dl>
+            <div><dt>image</dt><dd>ghcr.io/yakupemreyerli/coinio</dd></div>
+            <div><dt>port</dt><dd>8080</dd></div>
+            <div><dt>data</dt><dd>/data &nbsp;<span class="dim">(SQLite + logos)</span></dd></div>
+            <div><dt>arch</dt><dd>amd64 · arm64</dd></div>
+            <div><dt>runs as</dt><dd>non-root</dd></div>
+            <div><dt>health</dt><dd>/api/health</dd></div>
+            <div><dt>license</dt><dd>MIT</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="faq">
+        <div class="faq-intro">
+          <p class="eyebrow">{{faq.eyebrow}}</p>
+          <h2 id="faq-title">{{faq.title}}</h2>
+          <p>{{faq.lede}}</p>
+        </div>
+        <div class="faq-list">
+{{faq}}
+        </div>
+      </div>
+    </section>
+
+    <!-- Final install -->
+    <section class="section final" aria-labelledby="final-title">
+      <h2 id="final-title">{{final.title}}</h2>
+      <p class="final-lede">{{final.lede}}</p>
+      <div class="term term-solo">
+        <div class="code-row">
+<pre class="wrap"><code><span class="p">curl -fsSL <span class="nw">https://getcoinio.me/install | sh</span></span></code></pre>
+          <button class="copy" type="button" aria-label="{{@copy.command}}"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><span>{{copy.label}}</span></button>
+        </div>
+      </div>
+      <p class="final-links"><a href="#install">Docker, Compose, Dokploy, Unraid</a><span class="dot">·</span><a href="/install.sh">{{install.readScript}}</a></p>
+    </section>
+  </main>

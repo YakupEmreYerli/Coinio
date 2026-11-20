@@ -5,6 +5,7 @@
   "og.description": "Open-Source-Verwaltung für Abos und Rechnungen auf Ihrem eigenen Server. Ein Docker-Image.",
   "app.description": "Selbst gehostete Verwaltung für Abos und Rechnungen mit Verlängerungs-Erinnerungen, Summen in mehreren Währungen, Kalender, Wallos-Import, MCP-Server für Claude und ChatGPT und iPhone-Widget.",
   "nav.home": "Coinio-Startseite",
+  "crumb.home": "Startseite",
   "nav.main": "Hauptnavigation",
   "nav.demo": "Demo",
   "nav.faq": "FAQ",
@@ -18,6 +19,7 @@
   "lang.suggestGo": "Auf Deutsch lesen",
   "lang.dismiss": "Schließen",
   "hero.eyebrow": "Open-Source-Abo-Verwaltung",
+  "hero.sep": ": ",
   "hero.title": "Alle Abos,<br>eine ruhige Seite<span class=\"pd\">.</span>",
   "hero.lede": "Coinio behält im Blick, wofür Sie zahlen, warnt Sie vor jeder Verlängerung und läuft auf Ihrem eigenen Server. Ihre Daten verlassen ihn nie.",
   "install.tabs": "Installationsart",
@@ -91,7 +93,7 @@
   "faq.family.q": "Kann meine Familie es nutzen?",
   "faq.family.a": "<p>Jede Installation hat ein Konto, und ein Haushalt kann es gemeinsam nutzen, um alle Rechnungen an einem Ort zu haben. Wenn zwei Personen getrennte Daten möchten, starten Sie einen zweiten Container auf einem anderen Port; das ist ein einziger weiterer Befehl.</p>",
   "faq.import.q": "Kann ich aus einer anderen App importieren?",
-  "faq.import.a": "<p>Aus Wallos ja: Exportieren Sie dort Ihre Abos als JSON und laden Sie die Datei unter Einstellungen › Import. Sie sehen eine Vorschau und eventuelle Warnungen, bevor etwas gespeichert wird.</p>\n<p>Von überall sonst geht das Hinzufügen von Hand schnell: Bei 161 bekannten Diensten werden Logo, Kategorie und Abrechnungszeitraum beim Tippen ausgefüllt. Oder Sie verbinden Claude und lassen die Abos von Claude anlegen.</p>",
+  "faq.import.a": "<p>Aus Wallos ja: Exportieren Sie dort Ihre Abos als JSON und laden Sie die Datei unter Einstellungen › Import. Sie sehen eine Vorschau und eventuelle Warnungen, bevor etwas gespeichert wird. Sie schwanken noch? Hier steht, <a href=\"{{base}}wallos-alternative/\">wie sich Coinio und Wallos unterscheiden</a>.</p>\n<p>Von überall sonst geht das Hinzufügen von Hand schnell: Bei 161 bekannten Diensten werden Logo, Kategorie und Abrechnungszeitraum beim Tippen ausgefüllt. Oder Sie verbinden Claude und lassen die Abos von Claude anlegen.</p>",
   "faq.languages.q": "Welche Sprachen spricht Coinio?",
   "faq.languages.a": "<p>Die App gibt es auf Englisch, Türkisch, Deutsch, Französisch, Spanisch, brasilianischem Portugiesisch, vereinfachtem Chinesisch und Japanisch. Sie startet in der Sprache Ihres Browsers, und Sie können sie jederzeit in den Einstellungen wechseln. Datumsangaben, Beträge und Währungen werden passend zur gewählten Sprache formatiert.</p>",
   "faq.mcp.q": "Was ist MCP, und wie verbinden sich Claude oder ChatGPT?",
@@ -105,5 +107,7 @@
   "footer.label": "Fußzeile",
   "footer.license": "MIT-Lizenz",
   "footer.issues": "Issues",
+  "footer.wallos": "Wallos-Alternative",
+  "footer.trackers": "Selbst gehostete Abo-Tracker im Vergleich",
   "footer.languages": "Sprachen"
 }

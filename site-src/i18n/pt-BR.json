@@ -5,6 +5,7 @@
   "og.description": "Gerenciador de assinaturas e contas de código aberto que roda no seu próprio servidor. Uma imagem Docker.",
   "app.description": "Gerenciador de assinaturas e contas auto-hospedado, com lembretes de renovação, totais em várias moedas, calendário, importação do Wallos, servidor MCP para Claude e ChatGPT e widget para iPhone.",
   "nav.home": "Início do Coinio",
+  "crumb.home": "Início",
   "nav.main": "Principal",
   "nav.demo": "Demo",
   "nav.faq": "Dúvidas",
@@ -18,6 +19,7 @@
   "lang.suggestGo": "Ler em português",
   "lang.dismiss": "Fechar",
   "hero.eyebrow": "Controle de assinaturas de código aberto",
+  "hero.sep": ": ",
   "hero.title": "Todas as assinaturas,<br>numa página tranquila<span class=\"pd\">.</span>",
   "hero.lede": "O Coinio acompanha tudo o que você paga, avisa antes de qualquer renovação e roda no seu próprio servidor. Seus dados nunca saem de lá.",
   "install.tabs": "Forma de instalação",
@@ -91,7 +93,7 @@
   "faq.family.q": "Minha família pode usar?",
   "faq.family.a": "<p>Cada instalação tem uma conta, e a casa toda pode compartilhá-la para manter as contas num só lugar. Se duas pessoas quiserem dados separados, rode um segundo contêiner em outra porta; é só mais um comando.</p>",
   "faq.import.q": "Posso importar de outro app?",
-  "faq.import.a": "<p>Do Wallos, sim: exporte suas assinaturas lá em JSON e carregue o arquivo em Configurações › Importar. Você vê uma prévia e os avisos antes de qualquer coisa ser salva.</p>\n<p>De qualquer outro lugar, adicionar à mão é rápido: 161 serviços populares preenchem logo, categoria e ciclo de cobrança enquanto você digita. Ou conecte o Claude e peça para ele adicionar por você.</p>",
+  "faq.import.a": "<p>Do Wallos, sim: exporte suas assinaturas lá em JSON e carregue o arquivo em Configurações › Importar. Você vê uma prévia e os avisos antes de qualquer coisa ser salva. Na dúvida entre os dois? Veja <a href=\"{{base}}wallos-alternative/\">como o Coinio se compara ao Wallos</a>.</p>\n<p>De qualquer outro lugar, adicionar à mão é rápido: 161 serviços populares preenchem logo, categoria e ciclo de cobrança enquanto você digita. Ou conecte o Claude e peça para ele adicionar por você.</p>",
   "faq.languages.q": "Em quais idiomas ele está?",
   "faq.languages.a": "<p>O app está em inglês, turco, alemão, francês, espanhol, português do Brasil, chinês simplificado e japonês. Ele abre no idioma do seu navegador e você pode trocar quando quiser em Configurações. Datas, valores e moedas seguem o formato do idioma escolhido.</p>",
   "faq.mcp.q": "O que é MCP e como o Claude ou o ChatGPT se conectam?",
@@ -105,5 +107,7 @@
   "footer.label": "Rodapé",
   "footer.license": "Licença MIT",
   "footer.issues": "Issues",
+  "footer.wallos": "Alternativa ao Wallos",
+  "footer.trackers": "Comparativo de apps auto-hospedados",
   "footer.languages": "Idiomas"
 }
