@@ -114,8 +114,8 @@ export function UpcomingCard() {
                   </span>
                   <div className="min-w-0">
                     <b className="block truncate text-[15px] font-medium">{d.name}</b>
-                    <span className="hidden text-[12.5px] text-text-3 md:block">
-                      {d.sub?.category && <span className="mr-1 rounded-[6px] bg-sunk px-1.5 py-px text-xs text-text-2">{d.sub.category}</span>}
+                    <span className="hidden truncate text-[12.5px] text-text-3 md:block">
+                      {d.sub?.category && <span className="mr-1 whitespace-nowrap rounded-[6px] bg-sunk px-1.5 py-px text-xs text-text-2">{d.sub.category}</span>}
                       {d.sub?.paymentMethod}
                     </span>
                   </div>

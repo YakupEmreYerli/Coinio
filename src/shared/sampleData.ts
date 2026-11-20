@@ -1,3 +1,4 @@
+import type { CategoryKey } from './catalog';
 import type { Locale } from './locales';
 
 /** Demo subscriptions for "try with sample data"; next payment is `dueIn` days from today. */
@@ -11,6 +12,23 @@ export const SAMPLE_SUBSCRIPTIONS = [
   { name: 'Gym', domain: null, amountMinor: 3900, currency: 'USD', cycle: 'monthly', category: 'health', paymentMethod: 'Cash', dueIn: 12, autoPay: false },
   { name: 'Domain renewal', domain: 'namecheap.com', amountMinor: 1398, currency: 'USD', cycle: 'yearly', category: 'devtools', paymentMethod: 'Card', dueIn: 120, autoPay: true },
 ] as const;
+
+type SampleSub = { name: string; domain: string | null; amountMinor: number; currency: string; cycle: 'monthly' | 'yearly'; category: CategoryKey; paymentMethod: string; dueIn: number; autoPay: boolean };
+
+/** Turkish visitors see lira prices and services they know; ChatGPT stays in dollars to show conversion. */
+const SAMPLES_TR: readonly SampleSub[] = [
+  { name: 'Netflix', domain: 'netflix.com', amountMinor: 34999, currency: 'TRY', cycle: 'monthly', category: 'streaming', paymentMethod: 'Card', dueIn: 3, autoPay: true },
+  { name: 'Spotify', domain: 'spotify.com', amountMinor: 12999, currency: 'TRY', cycle: 'monthly', category: 'music', paymentMethod: 'Card', dueIn: 9, autoPay: true },
+  { name: 'YouTube Premium', domain: 'youtube.com', amountMinor: 10999, currency: 'TRY', cycle: 'monthly', category: 'streaming', paymentMethod: 'Card', dueIn: 17, autoPay: true },
+  { name: 'iCloud+', domain: 'icloud.com', amountMinor: 5999, currency: 'TRY', cycle: 'monthly', category: 'cloud', paymentMethod: 'Card', dueIn: 14, autoPay: true },
+  { name: 'ChatGPT Plus', domain: 'chatgpt.com', amountMinor: 2000, currency: 'USD', cycle: 'monthly', category: 'ai', paymentMethod: 'Card', dueIn: 5, autoPay: true },
+  { name: 'Home internet', domain: null, amountMinor: 79900, currency: 'TRY', cycle: 'monthly', category: 'telecom', paymentMethod: 'Bank transfer', dueIn: -2, autoPay: false },
+  { name: 'Gym', domain: null, amountMinor: 150000, currency: 'TRY', cycle: 'monthly', category: 'health', paymentMethod: 'Cash', dueIn: 12, autoPay: false },
+  { name: 'Domain renewal', domain: 'namecheap.com', amountMinor: 49900, currency: 'TRY', cycle: 'yearly', category: 'devtools', paymentMethod: 'Card', dueIn: 120, autoPay: true },
+];
+
+/** The demo's main currency per language (no yen: amounts are stored in hundredths). */
+export const SAMPLE_CURRENCY: Record<Locale, string> = { en: 'USD', tr: 'TRY', de: 'EUR', fr: 'EUR', es: 'EUR', 'pt-BR': 'BRL', 'zh-CN': 'CNY', ja: 'USD' };
 
 /** Sample names and payment methods that are words rather than brands, per language. */
 const SAMPLE_WORDS: Record<Locale, Record<string, string>> = {
@@ -36,4 +54,20 @@ export function samplePrice(usdMinor: number, currency: string): { amountMinor: 
   if (!rate) return { amountMinor: usdMinor, currency: 'USD' };
   const whole = Math.max(1, Math.round((usdMinor / 100) * rate));
   return { amountMinor: whole * 100 - 1, currency };
+}
+
+/**
+ * The sample set priced for `baseCurrency`: Turkish prices in lira, elsewhere converted from USD.
+ * `foreignExample` leaves ChatGPT in USD to show conversion; only where rates are known up front (the demo).
+ */
+export function samplesFor(locale: Locale, baseCurrency: string, { foreignExample = false } = {}): SampleSub[] {
+  const usdOk = foreignExample || baseCurrency === 'USD';
+  if (locale === 'tr' && baseCurrency === 'TRY') {
+    return SAMPLES_TR.map((s) => (s.currency === 'USD' && !usdOk ? { ...s, ...samplePrice(s.amountMinor, 'TRY') } : { ...s }));
+  }
+  if (baseCurrency === 'USD') return SAMPLE_SUBSCRIPTIONS.map((s) => ({ ...s }));
+  return SAMPLE_SUBSCRIPTIONS.map((s) => {
+    const keepUsd = usdOk && s.name === 'ChatGPT Plus' && SAMPLE_RATES[baseCurrency] !== undefined;
+    return { ...s, ...(keepUsd ? {} : samplePrice(s.amountMinor, baseCurrency)) };
+  });
 }

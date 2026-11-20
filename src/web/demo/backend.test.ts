@@ -27,6 +27,20 @@ async function rejects(p: Promise<unknown>): Promise<ApiError> {
 }
 
 describe('demo backend', () => {
+  it('speaks Turkish in lira with services Turkish visitors know, ChatGPT left in dollars', async () => {
+    const b = new DemoBackend({ now: () => NOW, storage: memoryStorage(), timezone: 'UTC', base: '/demo/', locale: 'tr', loadLogos: async () => logos });
+    const subs = (await b.handle('GET', '/subscriptions')) as ApiSubscription[];
+    expect(subs.find((s) => s.name === 'YouTube Premium')?.currency).toBe('TRY');
+    expect(subs.find((s) => s.name === 'ChatGPT Plus')?.currency).toBe('USD');
+    expect(((await b.handle('GET', '/summary')) as { base: string }).base).toBe('TRY');
+  });
+
+  it('prices samples in euros for German visitors', async () => {
+    const b = new DemoBackend({ now: () => NOW, storage: memoryStorage(), timezone: 'UTC', base: '/demo/', locale: 'de', loadLogos: async () => logos });
+    const subs = (await b.handle('GET', '/subscriptions')) as ApiSubscription[];
+    expect(subs.find((s) => s.name === 'Netflix')?.currency).toBe('EUR');
+  });
+
   it('starts signed in, onboarded, with the sample set in USD and their logos', async () => {
     const b = make();
     expect(await b.handle('GET', '/auth/state')).toEqual({ setupRequired: false, user: { id: 1, username: 'demo' } });

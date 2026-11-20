@@ -1,6 +1,6 @@
 import { count, eq, inArray } from 'drizzle-orm';
 import { CATEGORY_LABELS } from '../../shared/catalog.js';
-import { SAMPLE_SUBSCRIPTIONS, samplePrice, sampleWord } from '../../shared/sampleData.js';
+import { samplesFor, sampleWord } from '../../shared/sampleData.js';
 import { settings, subscriptions, users } from '../db/schema.js';
 import { todayIn } from '../../shared/schedule.js';
 import type { ServiceCtx } from './context.js';
@@ -42,7 +42,7 @@ export function completeOnboarding(ctx: ServiceCtx): void {
   write(ctx, DONE, '1');
 }
 
-/** Adds the demo set once (no-op while samples exist), priced in USD and dated around today. */
+/** Adds the demo set once (no-op while samples exist), priced for the main currency and dated around today. */
 export function createSamples(ctx: ServiceCtx, userId: number): number[] {
   const existing = sampleIds(ctx);
   if (existing.length) return existing;
@@ -53,12 +53,13 @@ export function createSamples(ctx: ServiceCtx, userId: number): number[] {
     d.setUTCDate(d.getUTCDate() + days);
     return d.toISOString().slice(0, 10);
   };
-  const ids = SAMPLE_SUBSCRIPTIONS.map(
+  const ids = samplesFor(locale, baseCurrency).map(
     (s) =>
       createSubscription(ctx, userId, {
         name: sampleWord(s.name, locale),
         domain: s.domain,
-        ...samplePrice(s.amountMinor, baseCurrency),
+        amountMinor: s.amountMinor,
+        currency: s.currency,
         cycle: s.cycle,
         intervalCount: 1,
         nextDue: at(s.dueIn),

@@ -51,7 +51,7 @@ export function MonthCard() {
   const overdueSum = summary.overdue.reduce((a, d) => a + (d.baseMinor ?? 0), 0);
   const pendingSum = pendingThisMonth.reduce((a, d) => a + (d.baseMinor ?? 0), 0);
   return (
-    <Card className="grid md:grid-cols-[minmax(300px,360px)_1fr]">
+    <Card className="grid md:grid-cols-[minmax(260px,360px)_minmax(0,1fr)]">
       <div className="@container flex min-w-0 flex-col border-line p-6 md:border-r">
         <div className="flex items-center gap-1 text-sm text-text-2">
           {t('month.left')}
@@ -79,7 +79,7 @@ export function MonthCard() {
           ))}
         </div>
       </div>
-      <div className="hidden px-5 pt-4 pb-2 md:block">
+      <div className="hidden min-w-0 px-5 pt-4 pb-2 md:block">
         <MonthChart series={series} byId={byId} month={month} currency={base} />
       </div>
     </Card>

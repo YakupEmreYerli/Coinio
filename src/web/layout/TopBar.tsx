@@ -31,11 +31,11 @@ export function TopBar({ username, onSearch, onLogout, extra }: { username: stri
       <button
         type="button"
         onClick={onSearch}
-        className="hidden h-10 max-w-[460px] flex-1 items-center gap-2.5 rounded-[10px] border border-line-2 bg-card px-3 text-sm text-text-3 md:flex"
+        className="hidden h-10 min-w-0 max-w-[460px] flex-1 items-center gap-2.5 rounded-[10px] border border-line-2 bg-card px-3 text-sm text-text-3 md:flex"
       >
-        <Search className="size-4" />
-        {t('top.search')}
-        <kbd className="ml-auto flex gap-1 text-[11px]">
+        <Search className="size-4 shrink-0" />
+        <span className="truncate">{t('top.search')}</span>
+        <kbd className="ml-auto flex shrink-0 gap-1 text-[11px]">
           <span className="rounded border border-line-2 px-1.5">⌘</span>
           <span className="rounded border border-line-2 px-1.5">K</span>
         </kbd>

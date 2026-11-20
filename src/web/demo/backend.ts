@@ -5,7 +5,7 @@ import { ZodError } from 'zod';
 import { mergeAppearance, Appearance as AppearanceSchema, type Appearance } from '../../shared/appearance';
 import { CATEGORY_LABELS } from '../../shared/catalog';
 import type { Locale } from '../../shared/locales';
-import { SAMPLE_RATES, SAMPLE_SUBSCRIPTIONS, sampleWord } from '../../shared/sampleData';
+import { SAMPLE_CURRENCY, SAMPLE_RATES, samplesFor, sampleWord } from '../../shared/sampleData';
 import { dueDatesThrough, nextDue, todayIn } from '../../shared/schedule';
 import { PaymentPatch, PaymentQuery, PayInput, SettingsPatch, SkipInput, SubscriptionInput, SubscriptionPatch, type Settings } from '../../shared/types';
 import type { Rates } from '../../server/domain/money';
@@ -141,12 +141,13 @@ export class DemoBackend {
     }
   }
 
-  /** The onboarding wizard's sample set in USD, with a year of payment history behind it. */
+  /** The sample set in the visitor's language and currency, with a year of payment history behind it. */
   private seed(): State {
-    const settings: Settings = { baseCurrency: 'USD', timezone: this.timezone, locale: this.opts.locale ?? this.opts.defaultLocale ?? 'en', reminderTime: '09:00', telegramBotToken: null, telegramChatId: null };
+    const locale = this.opts.locale ?? this.opts.defaultLocale ?? 'en';
+    const settings: Settings = { baseCurrency: SAMPLE_CURRENCY[locale], timezone: this.timezone, locale, reminderTime: '09:00', telegramBotToken: null, telegramChatId: null };
     const today = todayIn(settings.timezone, this.now());
     const state: State = { version: 1, nextId: 1, subs: [], payments: [], settings, appearance: mergeAppearance({ theme: this.opts.defaultTheme ?? 'night' }) };
-    for (const s of SAMPLE_SUBSCRIPTIONS) {
+    for (const s of samplesFor(locale, settings.baseCurrency, { foreignExample: true })) {
       const due = addDays(today, s.dueIn);
       const start = addMonths(due, -SAMPLE_HISTORY_MONTHS);
       const id = state.nextId++;
