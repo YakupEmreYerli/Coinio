@@ -51,7 +51,7 @@
   "demo.closeTitle": "閉じる（Esc）",
   "demo.posterAlt": "サンプルデータを表示した Coinio のホーム画面。今月の残り金額、サービスのロゴ付きの今後の支払いグラフ、今後の支払い一覧。",
   "demo.open": "ライブデモを開く",
-  "demo.note": "サンプルデータは米ドルです。変更はこのブラウザタブの中だけに残ります。Telegram、API キー、インポートを使うには自分のサーバーが必要です。",
+  "demo.note": "サンプルデータは米ドル建てです。変更はこのブラウザタブの中だけに残ります。Telegram、API キー、インポートを使うには自分のサーバーが必要です。",
   "features.eyebrow": "できること",
   "features.title": "小さなアプリで<span class=\"pd\">、</span>支払いをまるごと管理<span class=\"pd\">。</span>",
   "features.remindersTitle": "引き落とし前にお知らせ",

@@ -51,7 +51,7 @@
   "demo.closeTitle": "Schließen (Esc)",
   "demo.posterAlt": "Die Coinio-Startseite mit Beispieldaten: noch offener Betrag in diesem Monat, ein Diagramm anstehender Zahlungen mit den Logos der Dienste und die Liste der anstehenden Zahlungen.",
   "demo.open": "Live-Demo öffnen",
-  "demo.note": "Beispieldaten in USD. Änderungen bleiben in diesem Browser-Tab. Telegram, API-Schlüssel und Importe brauchen Ihren eigenen Server.",
+  "demo.note": "Beispieldaten in Euro. Änderungen bleiben in diesem Browser-Tab. Telegram, API-Schlüssel und Importe brauchen Ihren eigenen Server.",
   "features.eyebrow": "Was Coinio kann",
   "features.title": "Kleine App<span class=\"pd\">.</span> Alle Rechnungen im Griff<span class=\"pd\">.</span>",
   "features.remindersTitle": "Erinnerung vor der Abbuchung",

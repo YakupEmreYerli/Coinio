@@ -51,7 +51,7 @@
   "demo.closeTitle": "Kapat (Esc)",
   "demo.posterAlt": "Örnek veriyle Coinio ana sayfası: bu ay ödenecek kalan tutar, servis logolarıyla yaklaşan ödemeler grafiği ve yaklaşan ödemeler listesi.",
   "demo.open": "Canlı demoyu aç",
-  "demo.note": "Örnek veri dolar cinsinden. Değişiklikler bu sekmede kalır. Telegram, API anahtarları ve içe aktarma için kendi sunucun gerekir.",
+  "demo.note": "Örnek veriler Türk lirası cinsinden. Değişiklikler bu sekmede kalır. Telegram, API anahtarları ve içe aktarma için kendi sunucun gerekir.",
   "features.eyebrow": "Neler yapar",
   "features.title": "Uygulama küçük<span class=\"pd\">.</span> Her ödemeyi kapsar<span class=\"pd\">.</span>",
   "features.remindersTitle": "Çekimden önce hatırlatma",

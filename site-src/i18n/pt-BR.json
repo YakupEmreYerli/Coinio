@@ -51,7 +51,7 @@
   "demo.closeTitle": "Fechar (Esc)",
   "demo.posterAlt": "A página inicial do Coinio com dados de exemplo: quanto falta pagar este mês, um gráfico dos próximos pagamentos com os logos dos serviços e a lista do que vem por aí.",
   "demo.open": "Abrir a demo ao vivo",
-  "demo.note": "Dados de exemplo em dólar. As alterações ficam só nesta aba. Telegram, chaves de API e importação precisam do seu próprio servidor.",
+  "demo.note": "Dados de exemplo em reais. As alterações ficam só nesta aba. Telegram, chaves de API e importação precisam do seu próprio servidor.",
   "features.eyebrow": "O que ele faz",
   "features.title": "App pequeno<span class=\"pd\">.</span> Dá conta de todas as contas<span class=\"pd\">.</span>",
   "features.remindersTitle": "Lembretes antes da cobrança",

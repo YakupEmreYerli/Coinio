@@ -51,7 +51,7 @@
   "demo.closeTitle": "关闭（Esc）",
   "demo.posterAlt": "使用示例数据的 Coinio 首页：本月待付金额、带服务图标的即将付款图表，以及即将付款列表。",
   "demo.open": "打开在线演示",
-  "demo.note": "示例数据以美元计。改动只保留在当前浏览器标签页中。Telegram、API 密钥和导入功能需要你自己的服务器。",
+  "demo.note": "示例数据以人民币计。改动只保留在当前浏览器标签页中。Telegram、API 密钥和导入功能需要你自己的服务器。",
   "features.eyebrow": "功能",
   "features.title": "小巧的应用<span class=\"pd\">，</span>管好每一笔账单<span class=\"pd\">。</span>",
   "features.remindersTitle": "扣款前提醒",

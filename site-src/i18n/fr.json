@@ -51,7 +51,7 @@
   "demo.closeTitle": "Fermer (Échap)",
   "demo.posterAlt": "La page d’accueil de Coinio avec des données d’exemple : le reste à payer du mois, un graphique des prochains paiements avec les logos des services, et la liste à venir.",
   "demo.open": "Ouvrir la démo en direct",
-  "demo.note": "Données d’exemple en USD. Les modifications restent dans cet onglet. Telegram, les clés API et les imports nécessitent votre propre serveur.",
+  "demo.note": "Données d’exemple en euros. Les modifications restent dans cet onglet. Telegram, les clés API et les imports nécessitent votre propre serveur.",
   "features.eyebrow": "Ce qu’elle fait",
   "features.title": "Petite application<span class=\"pd\">.</span> Toutes vos factures<span class=\"pd\">.</span>",
   "features.remindersTitle": "Un rappel avant le prélèvement",

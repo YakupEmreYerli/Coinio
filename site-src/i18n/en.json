@@ -51,7 +51,7 @@
   "demo.closeTitle": "Close (Esc)",
   "demo.posterAlt": "The Coinio home page with sample data: money left this month, a chart of upcoming payments with service logos, and the upcoming list.",
   "demo.open": "Open the live demo",
-  "demo.note": "Sample data in USD. Changes stay in this browser tab. Telegram, API keys and imports need your own server.",
+  "demo.note": "Sample data in US dollars. Changes stay in this browser tab. Telegram, API keys and imports need your own server.",
   "features.eyebrow": "What it does",
   "features.title": "Small app<span class=\"pd\">.</span> Covers the whole bill<span class=\"pd\">.</span>",
   "features.remindersTitle": "Reminders before the charge",
