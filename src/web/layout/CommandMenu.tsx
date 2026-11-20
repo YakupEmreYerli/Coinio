@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Logo } from '../components/Logo';
 import { t } from '../i18n';
 import { usePay, useSubscriptions } from '../lib/hooks';
+import { SETTINGS_SECTIONS } from '../routes/settings/sections';
 import { NAV_BOTTOM, NAV_ITEMS } from './nav';
 import { useSubscriptionForm } from './subscriptionForm';
 
@@ -53,6 +54,17 @@ export function CommandMenu({ open, onOpenChange }: { open: boolean; onOpenChang
                     <Command.Item key={item.to} value={t(item.label)} className={itemClass} onSelect={() => run(() => navigate(item.to))}>
                       <Icon />
                       {t(item.label)}
+                    </Command.Item>
+                  );
+                })}
+              </Command.Group>
+              <Command.Group heading={t('nav.settings')} className={groupClass}>
+                {SETTINGS_SECTIONS.map((sec) => {
+                  const Icon = sec.icon;
+                  return (
+                    <Command.Item key={sec.id} value={`${t('nav.settings')} ${t(sec.label)}`} className={itemClass} onSelect={() => run(() => navigate(`/settings/${sec.id}`))}>
+                      <Icon />
+                      {t(sec.label)}
                     </Command.Item>
                   );
                 })}

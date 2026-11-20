@@ -88,3 +88,12 @@ describe('appearance settings', () => {
     expect(document.getElementById('st-custom-css')?.textContent).toBe('.x{color:red}');
   });
 });
+
+describe('type stack sample', () => {
+  it('uses the user currency and locale', async () => {
+    const { sampleAmount } = await import('./Appearance');
+    expect(sampleAmount('USD', 'en')).toEqual(['$2,217', '.99']);
+    expect(sampleAmount('TRY', 'tr')).toEqual(['₺2.217', ',99']);
+    expect(sampleAmount('EUR', 'tr')[0]).toContain('€');
+  });
+});

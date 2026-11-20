@@ -1,9 +1,9 @@
 // coinio widget for Scriptable (iOS). Home Screen (small, medium, large) and Lock Screen (inline, rectangular, circular).
 // Setup: paste this into a new Scriptable script, fill in the two lines below, add a Scriptable
-// widget and pick this script. A read-only API key (Settings › API keys) is enough.
+// widget and pick this script. A read-only API key (Settings › Integrations › API keys) is enough.
 
 const SERVER_URL = 'https://subs.example.com'; // where you open the app, no trailing slash
-const API_KEY = 'coi_read_…'; // Settings › API keys › Read only
+const API_KEY = 'coi_read_…'; // Settings › Integrations › API keys › Read only
 
 const BASE_URL = SERVER_URL.replace(/\/+$/, ''); // a pasted trailing slash would break the request
 const CACHE_FILE = 'coinio-widget.json';

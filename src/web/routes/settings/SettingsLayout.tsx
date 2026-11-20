@@ -5,7 +5,7 @@ import { DEMO } from '../../demo/flag';
 import { t } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { useIsMobile } from '../../lib/useMediaQuery';
-import { SETTINGS_SECTIONS } from './sections';
+import { MOVED_SECTIONS, SETTINGS_SECTIONS } from './sections';
 
 /** Settings pages that work in the browser-only demo; the rest need the real server. */
 const DEMO_READY = new Set(['general', 'appearance']);
@@ -14,6 +14,7 @@ export function SettingsLayout() {
   const { section } = useParams();
   const mobile = useIsMobile();
   const current = SETTINGS_SECTIONS.find((s) => s.id === section);
+  if (section && MOVED_SECTIONS[section]) return <Navigate to={MOVED_SECTIONS[section]} replace />;
   if (section && !current) return <Navigate to="/settings" replace />;
   if (!section && !mobile) return <Navigate to="/settings/general" replace />;
   const page = current && (DEMO && !DEMO_READY.has(current.id) ? <DemoLocked><current.Component /></DemoLocked> : <current.Component />);

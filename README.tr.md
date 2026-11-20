@@ -91,7 +91,7 @@ Ev ağında ya da VPN üzerinden `http://<sunucu-ip>:8080` yeter. Evden uzaktayk
 
 ## Yapay zekâ asistanları (MCP)
 
-MCP sunucusu Coinio adresinin sonuna `/mcp` eklenerek bulunur. claude.ai ve ChatGPT gibi bulut uygulamaları OAuth ile giriş yapar (https'li `COINIO_PUBLIC_URL` gerekir); kendi bilgisayarındaki araçlar **Ayarlar › API anahtarları**'ndan alınan anahtarı kullanır. **Ayarlar › Bağlantılar** hazır kod parçalarını gösterir. Rehber: [docs.getcoinio.me/docs/integrations/mcp](https://docs.getcoinio.me/docs/integrations/mcp).
+MCP sunucusu Coinio adresinin sonuna `/mcp` eklenerek bulunur. claude.ai ve ChatGPT gibi bulut uygulamaları OAuth ile giriş yapar (https'li `COINIO_PUBLIC_URL` gerekir); kendi bilgisayarındaki araçlar **Ayarlar › Entegrasyonlar › API anahtarları**'ndan alınan anahtarı kullanır. **Ayarlar › Entegrasyonlar** hazır kod parçalarını gösterir. Rehber: [docs.getcoinio.me/docs/integrations/mcp](https://docs.getcoinio.me/docs/integrations/mcp).
 
 ## iPhone widget'ı
 

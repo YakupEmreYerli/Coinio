@@ -17,7 +17,7 @@ Install **Scriptable** from the App Store.
 </Step>
 <Step>
 
-In Coinio, open **Settings › API keys** and create a **Read only** key. Copy it; it is shown once.
+In Coinio, open **Settings › Integrations › API keys** and create a **Read only** key. Copy it; it is shown once.
 
 </Step>
 <Step>
@@ -26,7 +26,7 @@ In Scriptable, tap **+** to make a new script and paste the contents of [`widget
 
 ```js
 const SERVER_URL = 'https://coinio.example.com'; // where you open the app, no trailing slash
-const API_KEY = 'coi_read_…'; // Settings › API keys › Read only
+const API_KEY = 'coi_read_…'; // Settings › Integrations › API keys › Read only
 ```
 
 </Step>
@@ -46,4 +46,4 @@ Long-press the Home Screen (or **Lock Screen › Customize**), add a **Scriptabl
 - If the key is wrong or revoked it says *API key rejected* instead of showing old data.
 - Text follows the phone's language (English or Turkish).
 
-The widget reads `GET /api/widget` with the key; see [API](/docs/reference/api#widget). A read-only key cannot change anything, so a lost phone cannot edit your data. Revoke the key in **Settings › API keys** if you lose it.
+The widget reads `GET /api/widget` with the key; see [API](/docs/reference/api#widget). A read-only key cannot change anything, so a lost phone cannot edit your data. Revoke the key in **Settings › Integrations › API keys** if you lose it.

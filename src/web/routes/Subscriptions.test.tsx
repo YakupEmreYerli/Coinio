@@ -80,8 +80,8 @@ describe('Subscriptions page', () => {
     page('/subscriptions/3');
     const user = userEvent.setup();
     const sheet = await screen.findByRole('dialog', { name: /claude max/i });
-    await user.click(await within(sheet).findByRole('button', { name: /gerçek tutar/i }));
-    await user.type(within(sheet).getByRole('textbox', { name: /gerçek tutar/i }), '4338{Enter}');
+    await user.click(await within(sheet).findByRole('button', { name: /çekilen tutar/i }));
+    await user.type(within(sheet).getByRole('textbox', { name: /çekilen tutar/i }), '4338{Enter}');
     await vi.waitFor(() => expect(calls.find((c) => c.method === 'PATCH')?.body).toEqual({ actualBaseMinor: 433800 }));
   });
 

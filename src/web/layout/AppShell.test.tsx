@@ -68,7 +68,7 @@ describe('AppShell', () => {
     );
     const u = userEvent.setup();
     await u.click(screen.getByRole('button', { name: /account menu/i }));
-    await u.click(await screen.findByRole('menuitem', { name: /log out/i }));
+    await u.click(await screen.findByRole('menuitem', { name: /sign out/i }));
     await vi.waitFor(() => expect(calls).toContainEqual(expect.objectContaining({ method: 'POST', url: '/api/auth/logout' })));
     await vi.waitFor(() => expect(onLogout).toHaveBeenCalled());
   });

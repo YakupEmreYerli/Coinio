@@ -91,7 +91,7 @@ Either way, set `COINIO_PUBLIC_URL` to that https address. See [Expose to the in
 
 ## AI assistants (MCP)
 
-The MCP server lives at your Coinio address plus `/mcp`. Cloud apps such as claude.ai and ChatGPT sign in with OAuth (needs `COINIO_PUBLIC_URL` on https); tools on your own machine use an API key from **Settings › API keys**. **Settings › Connections** shows ready-made snippets. Guide: [docs.getcoinio.me/docs/integrations/mcp](https://docs.getcoinio.me/docs/integrations/mcp).
+The MCP server lives at your Coinio address plus `/mcp`. Cloud apps such as claude.ai and ChatGPT sign in with OAuth (needs `COINIO_PUBLIC_URL` on https); tools on your own machine use an API key from **Settings › Integrations › API keys**. **Settings › Integrations** shows ready-made snippets. Guide: [docs.getcoinio.me/docs/integrations/mcp](https://docs.getcoinio.me/docs/integrations/mcp).
 
 ## iPhone widget
 

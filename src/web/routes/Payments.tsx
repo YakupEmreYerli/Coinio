@@ -4,10 +4,9 @@ import { EmptyState } from '../components/EmptyState';
 import { Logo } from '../components/Logo';
 import { Money } from '../components/Money';
 import { Card } from '../components/ui/Card';
-import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { t, useLocale } from '../i18n';
-import { shortDate } from '../lib/dates';
+import { addDays, shortDate, todayIn } from '../lib/dates';
 import { usePayments, useSettings, useSubscriptions, useSummary, useUndoPayment, type PaymentFilter } from '../lib/hooks';
 import { toBaseMinor } from '../lib/money';
 import { cn } from '../lib/cn';
@@ -16,11 +15,33 @@ import { useIsMobile } from '../lib/useMediaQuery';
 
 const ALL = '*';
 
+/** Date presets for the history filter, as [from, to] in the user's calendar (YYYY-MM-DD). */
+export const RANGES: { id: string; dates: (today: string) => [string, string] }[] = [
+  { id: 'month', dates: (d) => [`${d.slice(0, 7)}-01`, d] },
+  { id: 'quarter', dates: (d) => [addMonths(`${d.slice(0, 7)}-01`, -2), d] },
+  { id: 'year', dates: (d) => [`${d.slice(0, 4)}-01-01`, d] },
+  { id: 'twelve', dates: (d) => [addDays(addMonths(d, -12), 1), d] },
+];
+
+function addMonths(iso: string, n: number): string {
+  const [y, m, day] = iso.split('-').map(Number) as [number, number, number];
+  const dt = new Date(Date.UTC(y, m - 1 + n, 1));
+  const last = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth() + 1, 0)).getUTCDate();
+  return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, '0')}-${String(Math.min(day, last)).padStart(2, '0')}`;
+}
+
+export function rangeId(from: string | undefined, to: string | undefined, today: string): string {
+  if (!from && !to) return ALL;
+  return RANGES.find((r) => { const [f, t2] = r.dates(today); return f === from && t2 === to; })?.id ?? 'custom';
+}
+
 export function Payments() {
   const { locale } = useLocale();
   const mobile = useIsMobile(); // the top bar carries Export on wider screens
   const [params, setParams] = useSearchParams();
-  const base = useSettings().data?.baseCurrency ?? 'USD';
+  const settings = useSettings().data;
+  const base = settings?.baseCurrency ?? 'USD';
+  const today = todayIn(settings?.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone);
   const subs = useSubscriptions().data ?? [];
   const byId = new Map(subs.map((s) => [s.id, s]));
   const undo = useUndoPayment();
@@ -53,12 +74,28 @@ export function Payments() {
         {mobile && <ExportMenu compact />}
       </div>
       <div className="flex flex-wrap items-end gap-2">
-        <div className="w-[160px]">
-          <Input label={t('payments.from')} type="date" value={filter.from ?? ''} onChange={(e) => set('from', e.target.value)} />
-        </div>
-        <div className="w-[160px]">
-          <Input label={t('payments.to')} type="date" value={filter.to ?? ''} onChange={(e) => set('to', e.target.value)} />
-        </div>
+        <Select
+          aria-label={t('payments.range')}
+          className="w-auto"
+          value={rangeId(filter.from, filter.to, today)}
+          onChange={(v) => {
+            const n = new URLSearchParams(params);
+            const r = RANGES.find((x) => x.id === v)?.dates(today);
+            if (r) {
+              n.set('from', r[0]);
+              n.set('to', r[1]);
+            } else {
+              n.delete('from');
+              n.delete('to');
+            }
+            setParams(n, { replace: true });
+          }}
+          options={[
+            { value: ALL, label: t('payments.range.all') },
+            ...RANGES.map((r) => ({ value: r.id, label: t(`payments.range.${r.id}`) })),
+            ...(rangeId(filter.from, filter.to, today) === 'custom' ? [{ value: 'custom', label: `${filter.from ? shortDate(filter.from, locale) : '…'} – ${filter.to ? shortDate(filter.to, locale) : '…'}` }] : []),
+          ]}
+        />
         <Select
           aria-label={t('nav.subscriptions')}
           className="w-auto"

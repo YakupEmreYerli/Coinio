@@ -31,9 +31,11 @@ describe('Payments page', () => {
     page();
     const user = userEvent.setup();
     await screen.findByText('Netflix');
-    await user.type(screen.getByLabelText(/başlangıç/i), '2026-11-01');
-    expect(screen.getByTestId('where').textContent).toContain('from=2026-11-01');
-    await vi.waitFor(() => expect(calls.some((c) => c.url.startsWith('/api/payments?') && c.url.includes('from=2026-11-01'))).toBe(true));
+    await user.click(screen.getByRole('combobox', { name: 'Tarih aralığı' }));
+    await user.click(await screen.findByRole('option', { name: 'Bu yıl' }));
+    const year = new Date().getFullYear();
+    expect(screen.getByTestId('where').textContent).toContain(`from=${year}-01-01`);
+    await vi.waitFor(() => expect(calls.some((c) => c.url.startsWith('/api/payments?') && c.url.includes(`from=${year}-01-01`))).toBe(true));
   });
 
   it('undo removes row', async () => {

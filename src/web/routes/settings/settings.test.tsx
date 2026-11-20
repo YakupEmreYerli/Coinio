@@ -29,7 +29,7 @@ describe('settings', () => {
     open('general');
     const user = userEvent.setup();
     await user.click(await screen.findByRole('combobox', { name: /ana para birimi/i }));
-    await user.click(await screen.findByRole('option', { name: 'USD' }));
+    await user.click((await screen.findAllByRole('option', { name: /USD/ }))[0]!);
     await vi.waitFor(() => expect(calls.find((c) => c.method === 'PATCH')?.body).toEqual({ baseCurrency: 'USD' }));
   });
 
@@ -101,5 +101,17 @@ describe('settings', () => {
     await user.type(screen.getByLabelText(/yeni parola/i), 'new-password-123');
     await user.click(screen.getByRole('button', { name: /parolayı değiştir/i }));
     expect(await screen.findByText(/şu anki parola yanlış/i)).toBeInTheDocument();
+  });
+});
+
+describe('integrations', () => {
+  it('old keys/apps/connections links open Integrations, with the key form on Read only', async () => {
+    mockApi({ 'GET /api/settings': settings, 'GET /api/keys': [], 'GET /api/oauth/clients': [] });
+    open('connections');
+    expect(await screen.findByRole('heading', { name: 'Yapay zekâ asistanları (MCP)' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Bağlı uygulamalar' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Yalnız okuma' })).toHaveAttribute('data-state', 'checked');
+    expect(screen.getByRole('radio', { name: 'Tam yetki' })).toHaveAttribute('data-state', 'unchecked');
+    expect(screen.getByRole('link', { name: 'Entegrasyonlar' })).toHaveAttribute('aria-current', 'page');
   });
 });

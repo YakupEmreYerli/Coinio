@@ -1,18 +1,18 @@
 import { Download, RotateCcw, Upload } from 'lucide-react';
 import { RadioGroup as R } from 'radix-ui';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { DEFAULT_APPEARANCE, STACKS, THEMES, mergeAppearance, type Stack, type Theme } from '../../../shared/appearance';
+import { DEFAULT_APPEARANCE, STACKS, THEMES, forImport, mergeAppearance, type Stack, type Theme } from '../../../shared/appearance';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { SegmentedControl } from '../../components/ui/SegmentedControl';
 import { Switch } from '../../components/ui/Switch';
-import { t } from '../../i18n';
+import { t, useLocale } from '../../i18n';
 import { SAFE_MODE, loadStackFonts } from '../../lib/appearance';
 import { useAppearanceEditor } from '../../lib/appearanceEditor';
 import { useCategoryColor } from '../../lib/categoryColor';
 import { cn } from '../../lib/cn';
-import { useSubscriptions } from '../../lib/hooks';
+import { useSettings, useSubscriptions } from '../../lib/hooks';
 import type { Appearance as AppearanceData } from '../../lib/types';
 import { CardLayout } from './appearance/CardLayout';
 import { CssEditor } from './appearance/CssEditor';
@@ -49,7 +49,7 @@ const THEME_SWATCH: Record<Theme, [string, string, string]> = {
   system: ['#f8f8fb', '#0f1117', '#8b8ea3'],
 };
 const STACK_FONTS: Record<Stack, [string, string]> = {
-  rafine: ["'Geist Variable'", "'Geist Mono Variable'"],
+  rafine: ["'Plus Jakarta Sans Variable'", "'Geist Variable'"],
   editorial: ["'Instrument Serif'", "'Inter Variable'"],
   warm: ["'Fraunces Variable'", "'Manrope Variable'"],
   technical: ["'Space Grotesk Variable'", "'IBM Plex Mono'"],
@@ -61,7 +61,17 @@ const ACCENTS = ['#4f5bd5', '#ea6a12', '#18794e', '#b4366b', '#0f766e', '#1d1d27
 const tileClass =
   'flex flex-col gap-2 rounded-[12px] border border-line bg-card p-2.5 text-left outline-none data-[state=checked]:border-accent data-[state=checked]:shadow-[0_0_0_3px_var(--accent-soft)] focus-visible:border-accent';
 
+/** The type preview's amount (2,217.99) in the user's currency and locale, split into whole part and cents. */
+export function sampleAmount(currency: string, locale: string): [string, string] {
+  const parts = new Intl.NumberFormat(locale, { style: 'currency', currency }).formatToParts(2217.99);
+  const frac = parts.findIndex((p) => p.type === 'fraction');
+  const dec = parts.findIndex((p) => p.type === 'decimal');
+  const whole = parts.filter((_, i) => i !== frac && i !== dec).map((p) => p.value).join('').trim();
+  return [whole, dec >= 0 && frac >= 0 ? `${parts[dec]!.value}${parts[frac]!.value}` : ''];
+}
+
 export function Appearance() {
+  const { locale } = useLocale();
   const { appearance: a, update } = useAppearanceEditor();
   const subs = useSubscriptions().data ?? [];
   const colorOf = useCategoryColor();
@@ -75,6 +85,7 @@ export function Appearance() {
     STACKS.forEach((s) => void loadStackFonts(s));
   }, []);
   const d = DEFAULT_APPEARANCE;
+  const sample = sampleAmount(useSettings().data?.baseCurrency ?? 'USD', locale);
 
   const exportTheme = () => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(a, null, 2)], { type: 'application/json' }));
@@ -90,7 +101,7 @@ export function Appearance() {
     try {
       const parsed: unknown = JSON.parse(await file.text());
       if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('not an object');
-      setPendingTheme(mergeAppearance(parsed));
+      setPendingTheme(forImport(mergeAppearance(parsed)));
     } catch {
       setImportError(t('look.importError'));
     }
@@ -144,7 +155,8 @@ export function Appearance() {
             <R.Item key={s} value={s} aria-label={t(`look.stack.${s}`)} className={tileClass}>
               <span className="text-[13px] font-medium">{t(`look.stack.${s}`)}</span>
               <span className="text-[30px] leading-none" style={{ fontFamily: STACK_FONTS[s][0] }}>
-                ₺2.217<sup className="text-[0.5em]">,99</sup>
+                {sample[0]}
+                <sup className="text-[0.5em]">{sample[1]}</sup>
               </span>
               <span className="text-xs text-text-3" style={{ fontFamily: STACK_FONTS[s][1] }}>
                 {t(`look.stackDesc.${s}`)}

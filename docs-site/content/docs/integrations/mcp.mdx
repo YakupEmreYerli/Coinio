@@ -11,7 +11,7 @@ The server address is your Coinio address plus `/mcp`:
 https://coinio.example.com/mcp
 ```
 
-**Settings › Connections** shows it with copy buttons, along with ready-made snippets for each client.
+**Settings › Integrations** shows it with copy buttons, along with ready-made snippets for each client.
 
 <Screenshot name="mcp-connections" alt="Settings, Connections: the MCP server address and setup snippets for Claude and Cursor" />
 
@@ -60,13 +60,13 @@ The consent page lists the scopes the app asked for:
 
 An app that asks for no scope gets both. Access tokens last an hour and are refreshed in the background for up to 90 days of inactivity.
 
-**Settings › Connected apps** lists every app that signed in, with when it was last used. **Disconnect** revokes its access right away.
+**Settings › Integrations › Connected apps** lists every app that signed in, with when it was last used. **Disconnect** revokes its access right away.
 
 ## With an API key
 
 For Claude Code, Cursor, Claude Desktop and other local clients. This also works without `COINIO_PUBLIC_URL`, even on a LAN address.
 
-Create a key in **Settings › API keys**. It is shown once; copy it then. Choose the access:
+Create a key in **Settings › Integrations › API keys**. It is shown once; copy it then. Choose the access:
 
 - **Read only** (`coi_read_...`): the four reading tools below. The write tools are not offered at all, and Coinio tells the assistant the connection is read-only, so it can explain why it cannot mark something paid.
 - **Full access** (`coi_full_...`): every tool.
@@ -95,7 +95,7 @@ Cursor, Claude Desktop and other clients that take an `mcp.json`:
 
 Check that Claude Code connected with `claude mcp list` (it should say *Connected*). Without the `--header` part, Claude Code signs in with OAuth instead (this needs the https `COINIO_PUBLIC_URL` above) and `claude mcp list` shows *Needs authentication* until you sign in from `/mcp` inside Claude Code.
 
-Revoke a key in **Settings › API keys**; apps using it stop working immediately.
+Revoke a key in **Settings › Integrations › API keys**; apps using it stop working immediately.
 
 ## Tools
 

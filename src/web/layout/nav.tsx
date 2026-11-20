@@ -1,4 +1,4 @@
-import { BarChart3, CalendarDays, History, Home, Link2, List, Settings, type LucideIcon } from 'lucide-react';
+import { BarChart3, CalendarDays, History, Home, List, Settings, type LucideIcon } from 'lucide-react';
 
 export type NavItem = { to: string; label: string; icon: LucideIcon; end?: boolean; tab?: boolean };
 
@@ -12,6 +12,5 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const NAV_BOTTOM: NavItem[] = [
-  { to: '/settings/connections', label: 'nav.connections', icon: Link2 },
   { to: '/settings', label: 'nav.settings', icon: Settings, tab: true },
 ];

@@ -122,7 +122,7 @@ function toServiceFields(a: Fields) {
 const READ_ONLY_INSTRUCTIONS =
   'This Coinio connection is read-only: it can read subscriptions and payments but cannot add, change, pay, skip or delete anything. ' +
   'If the user asks for a change, tell them this connection is read-only and that they can do it in the Coinio app, ' +
-  'or reconnect with a Full access API key (Settings › API keys) or an OAuth grant that includes subscriptions:write.';
+  'or reconnect with a Full access API key (Settings › Integrations › API keys) or an OAuth grant that includes subscriptions:write.';
 
 export function buildMcpServer(ctx: McpCtx): McpServer {
   const server = new McpServer(
