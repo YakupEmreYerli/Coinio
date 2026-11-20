@@ -23,6 +23,10 @@ export const LANGS = [
   { code: 'ja', path: '/ja/', og: 'ja_JP', name: '日本語' },
 ];
 
+// Content hashes in the asset URLs, so a phone that cached the old CSS or JS (max-age 4h) fetches the new one.
+const assetHash = (f) => createHash('sha256').update(readFileSync(join(site, f))).digest('hex').slice(0, 10);
+const ASSET_V = { css: assetHash('styles.css'), js: assetHash('main.js') };
+
 const FAQ = ['free', 'needs', 'data', 'https', 'updates', 'privacy', 'family', 'import', 'languages', 'mcp', 'iphone', 'sheet'];
 
 // The one code block inside the FAQ: identical in every language.
@@ -137,7 +141,7 @@ function head(lang, t, fonts) {
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   ${fonts.preloads}
   <style>${fonts.faces}</style>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=${ASSET_V.css}">
   ${jsonLd(graph)}`;
 }
 
@@ -187,7 +191,7 @@ function page(lang, fonts) {
     langFooter: langFooter(lang, t),
     demoHref: `/demo/?lang=${lang.code}`,
   };
-  const html = template.replace(/\{\{(@?)([\w.-]+)\}\}/g, (m, at, key) => {
+  const html = template.replaceAll('src="/main.js"', `src="/main.js?v=${ASSET_V.js}"`).replace(/\{\{(@?)([\w.-]+)\}\}/g, (m, at, key) => {
     const v = key in vars ? vars[key] : t[key];
     if (v === undefined) throw new Error(`${lang.code}: unknown placeholder ${m}`);
     return at ? escAttr(v) : v;

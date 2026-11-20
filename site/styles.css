@@ -118,13 +118,8 @@
   color-scheme: light;
 }
 :root[data-theme="light"] h1 {
-  background: linear-gradient(180deg, #0b0c1d 30%, #2c3170 115%);
-  -webkit-background-clip: text;
-          background-clip: text;
-  color: transparent;
-  /* background-clip only paints inside the box; line-height 1.02 cuts descenders like the g in "page" */
-  padding-bottom: 0.12em;
-  margin-bottom: -0.12em;
+  /* Solid, not a background-clip gradient: WebKit clips the gradient at the line box and cut the g in "page". */
+  color: #12132e;
 }
 :root[data-theme="light"] .pd { color: var(--brand); -webkit-text-fill-color: var(--brand); }
 :root[data-theme="light"] .tabs button[aria-selected="true"] { background: #fff; }
