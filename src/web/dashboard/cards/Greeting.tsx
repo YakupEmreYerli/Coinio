@@ -20,8 +20,7 @@ export function Greeting() {
   return (
     <div className="pt-1">
       <h1 className="font-display text-[26px] leading-tight md:text-[30px]">
-        {t(greetingKey(new Date().getHours()))}
-        {username ? `, ${username}` : ''}
+        {username ? t('greet.named', { greeting: t(greetingKey(new Date().getHours())), name: username }) : t(greetingKey(new Date().getHours()))}
       </h1>
       <p className="mt-0.5 text-text-2">
         {longDate(today, locale)}
@@ -31,7 +30,7 @@ export function Greeting() {
             {left === 0 ? t('greet.nothingLeft') : t('greet.left', { n: left })}
             {late > 0 && (
               <>
-                {', '}
+                {t('greet.and')}
                 <b className="font-medium text-neg">{t('greet.late', { n: late })}</b>
               </>
             )}

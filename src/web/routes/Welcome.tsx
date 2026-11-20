@@ -171,7 +171,7 @@ export function Welcome({ onDone, initialStep = 0 }: { onDone: () => void; initi
           <>
             <StepHeading step={0} title={t('welcome.title')} intro={t('welcome.intro')} />
             <div ref={firstField}>
-              <R.Root aria-label={t('settings.language')} value={locale} onValueChange={(v) => setLocale(v as Locale)} className="grid grid-cols-2 gap-2.5">
+              <R.Root aria-label={t('settings.language')} value={locale} onValueChange={(v) => setLocale(v as Locale)} className="grid auto-rows-fr grid-cols-2 gap-2.5">
                 {LOCALES.map((l) => (
                   <R.Item
                     key={l}

@@ -108,6 +108,8 @@
   "greet.morning": "早上好",
   "greet.afternoon": "下午好",
   "greet.evening": "晚上好",
+  "greet.named": "{greeting}，{name}",
+  "greet.and": "，",
   "greet.left": {
     "other": "本月还有 {n} 笔待付"
   },

@@ -108,6 +108,8 @@
   "greet.morning": "おはようございます",
   "greet.afternoon": "こんにちは",
   "greet.evening": "こんばんは",
+  "greet.named": "{greeting}、{name}さん",
+  "greet.and": "、",
   "greet.left": {
     "other": "今月の残りの支払い {n}件"
   },
@@ -125,7 +127,7 @@
   "month.chartLabel": "今月の支出",
   "stats.monthly": "月平均",
   "stats.active": {
-    "other": "有効なサブスクリプション {n}件"
+    "other": "有効なサブスク {n}件"
   },
   "stats.yearly": "年間合計",
   "stats.foreign": "外貨（月額）",

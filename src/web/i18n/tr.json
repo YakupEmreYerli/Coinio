@@ -110,6 +110,8 @@
   "greet.morning": "Günaydın",
   "greet.afternoon": "İyi günler",
   "greet.evening": "İyi akşamlar",
+  "greet.named": "{greeting}, {name}",
+  "greet.and": ", ",
   "greet.left": {
     "one": "bu ay {n} ödeme kaldı",
     "other": "bu ay {n} ödeme kaldı"

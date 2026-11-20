@@ -110,6 +110,8 @@
   "greet.morning": "Good morning",
   "greet.afternoon": "Good afternoon",
   "greet.evening": "Good evening",
+  "greet.named": "{greeting}, {name}",
+  "greet.and": ", ",
   "greet.left": {
     "one": "{n} payment left this month",
     "other": "{n} payments left this month"
