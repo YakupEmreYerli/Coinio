@@ -2,3 +2,7 @@
 allowBuilds:
   better-sqlite3: true
   esbuild: true
+
+# Old esbuild pulled in by drizzle-kit (dev tooling only); keep it on a patched release.
+overrides:
+  "@esbuild-kit/core-utils>esbuild": ^0.25.0
