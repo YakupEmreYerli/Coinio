@@ -21,3 +21,17 @@ export const isMonth = (v: string | null): v is string => !!v && /^\d{4}-(0[1-9]
 export function fmt(date: string, locale: string, opts: Intl.DateTimeFormatOptions): string {
   return new Intl.DateTimeFormat(locale, { ...opts, timeZone: 'UTC' }).format(utc(date));
 }
+
+export function addDays(date: string, n: number): string {
+  const d = utc(date);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+/** The Monday-first weeks that cover a month, each seven dates long, spilling into the months around it. */
+export function monthWeeks(month: string): string[][] {
+  const first = `${month}-01`;
+  const start = addDays(first, -weekdayIndex(first));
+  const rows = Math.ceil((weekdayIndex(first) + daysIn(month)) / 7);
+  return Array.from({ length: rows }, (_, w) => Array.from({ length: 7 }, (_, d) => addDays(start, w * 7 + d)));
+}
