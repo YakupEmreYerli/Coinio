@@ -1110,7 +1110,7 @@ h1 .eyebrow { display: block; }
   .choose li { padding: 22px 20px 24px; }
 }
 </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://getcoinio.me/ja/"},{"@type":"ListItem","position":2,"name":"Wallos の代替","item":"https://getcoinio.me/ja/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"ja","url":"https://getcoinio.me/ja/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Coinio は Wallos より優れていますか？","acceptedAnswer":{"@type":"Answer","text":"誰にとってもどちらかが優れている、ということはありません。Wallos は通知チャネルが多く、複数ユーザーでの家族利用や OIDC に対応し、実績も長いです。Coinio は為替レートに API キーが不要で、AI アシスタント向けの MCP サーバー、iPhone ウィジェット、より細かな見た目のカスタマイズを備えています。"}},{"@type":"Question","name":"Wallos からデータをインポートできますか？","acceptedAnswer":{"@type":"Answer","text":"はい。Wallos でサブスクリプションを JSON でエクスポートし、そのファイルを Coinio の「設定 › インポート」で読み込みます。Coinio はまず警告付きのプレビューを表示し、確定するまで何も保存しません。各項目の対応は インポートガイド に載っています。"}},{"@type":"Question","name":"Coinio と Wallos を並行して動かせますか？","acceptedAnswer":{"@type":"Answer","text":"はい。それぞれ独立したコンテナで、データも別々です。Wallos の例ではポート 8282 を公開し、Coinio は 8080 を使うので、デフォルトのままでも競合しません。乗り換える前に Coinio を試せます。"}},{"@type":"Question","name":"Coinio はメールや Discord で通知できますか？","acceptedAnswer":{"@type":"Answer","text":"現時点ではできません。Coinio は今後の支払いと期限切れの支払いについて、1日1回 Telegram でメッセージを送ります。メール、Discord、Pushover、Gotify、Webhook が必要なら、Wallos が対応しています。"}},{"@type":"Question","name":"Coinio も Wallos のように無料ですか？","acceptedAnswer":{"@type":"Answer","text":"はい。Coinio は MIT ライセンスで、有料プランも、こちらへのアカウント登録もありません。Wallos も無料で、ライセンスは GPL-3.0 です。"}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://getcoinio.me/ja/"},{"@type":"ListItem","position":2,"name":"Wallos の代替","item":"https://getcoinio.me/ja/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"ja","url":"https://getcoinio.me/ja/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Coinio は Wallos より優れていますか？","acceptedAnswer":{"@type":"Answer","text":"誰にとってもどちらかが優れている、ということはありません。Wallos は複数ユーザーでの家族利用や OIDC に対応し、実績も長いです。Coinio は為替レートに API キーが不要で、メール、Telegram、Discord など多くのチャネルで通知でき、AI アシスタント向けの MCP サーバー、iPhone ウィジェット、より細かな見た目のカスタマイズを備えています。"}},{"@type":"Question","name":"Wallos からデータをインポートできますか？","acceptedAnswer":{"@type":"Answer","text":"はい。Wallos でサブスクリプションを JSON でエクスポートし、そのファイルを Coinio の「設定 › インポート」で読み込みます。Coinio はまず警告付きのプレビューを表示し、確定するまで何も保存しません。各項目の対応は インポートガイド に載っています。"}},{"@type":"Question","name":"Coinio と Wallos を並行して動かせますか？","acceptedAnswer":{"@type":"Answer","text":"はい。それぞれ独立したコンテナで、データも別々です。Wallos の例ではポート 8282 を公開し、Coinio は 8080 を使うので、デフォルトのままでも競合しません。乗り換える前に Coinio を試せます。"}},{"@type":"Question","name":"Coinio はメールや Discord で通知できますか？","acceptedAnswer":{"@type":"Answer","text":"はい、できます。Coinio はメール（SMTP）、Telegram（フォーラムのトピックを含む）、Discord、Slack、ntfy、Gotify、Pushover、汎用 Webhook で通知でき、Apprise 経由で100以上のサービスにも届けられます。サブスクごとに複数のリマインダーを設定でき、期限切れアラートや週次・月次ダイジェストも届きます。メッセージテンプレートはすべて編集できます。"}},{"@type":"Question","name":"Coinio も Wallos のように無料ですか？","acceptedAnswer":{"@type":"Answer","text":"はい。Coinio は MIT ライセンスで、有料プランも、こちらへのアカウント登録もありません。Wallos も無料で、ライセンスは GPL-3.0 です。"}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -1197,8 +1197,8 @@ h1 .eyebrow { display: block; }
             <tr><th scope="row">技術スタック</th><td class="is-us">Node.js (Express), React, SQLite</td><td>PHP 8.3, SQLite</td></tr>
             <tr><th scope="row">ライセンス</th><td class="is-us">MIT</td><td>GPL-3.0</td></tr>
             <tr><th scope="row">表示言語</th><td class="is-us">8言語：英語、トルコ語、ドイツ語、フランス語、スペイン語、ポルトガル語（ブラジル）、簡体字中国語、日本語</td><td>公式サイトによると21言語以上</td></tr>
-            <tr><th scope="row">通貨と為替レート</th><td class="is-us">サブスクごとに通貨を保持します。為替レートは Frankfurter 経由で欧州中央銀行（ECB）の日次レートを取得し、キーは不要です。現時点では小数点以下2桁の通貨のみに対応しているため、日本円（JPY）と韓国ウォン（KRW）にはまだ対応していません。</td><td>複数通貨に対応。換算には Fixer API を使い、無料の API キーが必要です。</td></tr>
-            <tr><th scope="row">リマインダーと通知</th><td class="is-us">期限が近いものと期限切れのものを、1日1回 Telegram でお知らせします。</td><td>メール、Discord、Pushover、Telegram、Gotify、Webhook。</td></tr>
+            <tr><th scope="row">通貨と為替レート</th><td class="is-us">サブスクごとに通貨を保持します。為替レートは Frankfurter 経由で欧州中央銀行（ECB）の日次レートを取得し、キーは不要です。ISO 通貨ならすべて対応し、日本円（JPY）や韓国ウォン（KRW）のような小数点以下のない通貨も使えます。</td><td>複数通貨に対応。換算には Fixer API を使い、無料の API キーが必要です。</td></tr>
+            <tr><th scope="row">リマインダーと通知</th><td class="is-us">メール（SMTP）、Telegram（フォーラムのトピックに対応）、Discord、Slack、ntfy、Gotify、Pushover、汎用 Webhook、Apprise（100以上のサービス）。サブスクごとに複数のリマインダー、期限切れアラート、週次・月次ダイジェスト、無料トライアル終了・月間予算超過・価格変更のアラート、自由に編集できるメッセージテンプレート。</td><td>メール、Discord、Pushover、Telegram、Gotify、Webhook。</td></tr>
             <tr><th scope="row">MCP と AI</th><td class="is-us">OAuth 対応の MCP サーバーを内蔵。Claude、ChatGPT などの MCP クライアントが、サブスクを読み取ったり更新したりできます。</td><td>ChatGPT、Gemini、OpenRouter、Ollama、または OpenAI 互換の任意の API による AI の節約アドバイス。README に MCP サーバーの記載はありません。</td></tr>
             <tr><th scope="row">iPhone</th><td class="is-us">ホーム画面とロック画面に置ける Scriptable ウィジェットと、インストールできるウェブアプリ。</td><td>モバイル向けのレスポンシブレイアウト。README にウィジェットの記載はありません。</td></tr>
             <tr><th scope="row">カスタマイズ</th><td class="is-us">4つのテーマとシステム設定連動、アクセントカラー、6種類のフォントの組み合わせ、カードの並び順、独自の CSS、サンドボックス化された HTML カード。</td><td>テーマ、カスタムカテゴリ、表示オプション。</td></tr>
@@ -1214,7 +1214,7 @@ h1 .eyebrow { display: block; }
     <section class="section" aria-labelledby="pick-title">
       <div class="prose-head">
         <h2 id="pick-title">どちらを選べばいいですか？</h2>
-        <p>複数の人がそれぞれログインする必要がある、またはメール、Discord、Webhook で通知を受け取りたいなら Wallos。主に自分で使い、AI アシスタントや iPhone ウィジェットが欲しくて、設定の手間がほとんどないほうがいいなら Coinio です。</p>
+        <p>複数の人がそれぞれログインする必要がある、または OIDC でサインインしたいなら Wallos。主に自分で使い、AI アシスタントや iPhone ウィジェットが欲しくて、設定の手間がほとんどないほうがいいなら Coinio です。</p>
       </div>
       <div class="cards cards-2">
         <article class="card">
@@ -1222,7 +1222,6 @@ h1 .eyebrow { display: block; }
           <ul class="ticks">
             <li>複数の人が自分のアカウントを必要とするとき、または1つのインストールに家族メンバーを登録したいとき</li>
             <li>ID プロバイダーから OIDC でサインインしたいとき</li>
-            <li>Telegram だけでなく、メール、Discord、Pushover、Gotify、Webhook でリマインダーを受け取りたいとき</li>
             <li>成熟したプロジェクトを選びたいとき（Wallos は2023年から続き、GitHub スターは約 8,900、独自の Discord サーバーもあります）</li>
             <li>Coinio がまだ対応していない表示言語が必要なとき</li>
             <li>Docker を使わず、素の PHP で動かしたいとき</li>
@@ -1272,7 +1271,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>Coinio は Wallos より優れていますか？</summary>
             <div class="faq-a">
-              <p>誰にとってもどちらかが優れている、ということはありません。Wallos は通知チャネルが多く、複数ユーザーでの家族利用や OIDC に対応し、実績も長いです。Coinio は為替レートに API キーが不要で、AI アシスタント向けの MCP サーバー、iPhone ウィジェット、より細かな見た目のカスタマイズを備えています。</p>
+              <p>誰にとってもどちらかが優れている、ということはありません。Wallos は複数ユーザーでの家族利用や OIDC に対応し、実績も長いです。Coinio は為替レートに API キーが不要で、メール、Telegram、Discord など多くのチャネルで通知でき、AI アシスタント向けの MCP サーバー、iPhone ウィジェット、より細かな見た目のカスタマイズを備えています。</p>
             </div>
           </details>
           <details>
@@ -1290,7 +1289,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>Coinio はメールや Discord で通知できますか？</summary>
             <div class="faq-a">
-              <p>現時点ではできません。Coinio は今後の支払いと期限切れの支払いについて、1日1回 Telegram でメッセージを送ります。メール、Discord、Pushover、Gotify、Webhook が必要なら、Wallos が対応しています。</p>
+              <p>はい、できます。Coinio はメール（SMTP）、Telegram（フォーラムのトピックを含む）、Discord、Slack、ntfy、Gotify、Pushover、汎用 Webhook で通知でき、Apprise 経由で100以上のサービスにも届けられます。サブスクごとに複数のリマインダーを設定でき、期限切れアラートや週次・月次ダイジェストも届きます。メッセージテンプレートはすべて編集できます。</p>
             </div>
           </details>
           <details>

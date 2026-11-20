@@ -1110,7 +1110,7 @@ h1 .eyebrow { display: block; }
   .choose li { padding: 22px 20px 24px; }
 }
 </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://getcoinio.me/zh/"},{"@type":"ListItem","position":2,"name":"Wallos 替代方案","item":"https://getcoinio.me/zh/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"zh-CN","url":"https://getcoinio.me/zh/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Coinio 比 Wallos 更好吗？","acceptedAnswer":{"@type":"Answer","text":"没有哪一个对所有人都更好。Wallos 的通知渠道更多，支持多用户家庭和 OIDC，发展时间也更长。Coinio 获取汇率无需 API 密钥，还提供面向 AI 助手的 MCP 服务器、iPhone 小组件和更深入的外观定制。"}},{"@type":"Question","name":"可以从 Wallos 导入数据吗？","acceptedAnswer":{"@type":"Answer","text":"可以。在 Wallos 中将订阅导出为 JSON，然后在 Coinio 的“设置 › 导入”中加载该文件。Coinio 会先显示带警告的预览，在你确认之前不会保存任何内容。 导入指南 列出了每个字段的对应方式。"}},{"@type":"Question","name":"Coinio 和 Wallos 可以同时运行吗？","acceptedAnswer":{"@type":"Answer","text":"可以。它们是各自独立的容器，数据也各自分开。Wallos 的示例发布 8282 端口，Coinio 使用 8080 端口，默认设置不会冲突，你可以先试用 Coinio 再决定是否切换。"}},{"@type":"Question","name":"Coinio 会发送电子邮件或 Discord 通知吗？","acceptedAnswer":{"@type":"Answer","text":"目前不会。Coinio 每天发送一条 Telegram 消息，提醒即将到期和已经逾期的付款。如果你需要电子邮件、Discord、Pushover、Gotify 或 webhook，Wallos 都有。"}},{"@type":"Question","name":"Coinio 和 Wallos 一样免费吗？","acceptedAnswer":{"@type":"Answer","text":"是的。Coinio 采用 MIT 许可证，没有付费版，也无需注册我们的账户。Wallos 同样免费，采用 GPL-3.0 许可证。"}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://getcoinio.me/zh/"},{"@type":"ListItem","position":2,"name":"Wallos 替代方案","item":"https://getcoinio.me/zh/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"zh-CN","url":"https://getcoinio.me/zh/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Coinio 比 Wallos 更好吗？","acceptedAnswer":{"@type":"Answer","text":"没有哪一个对所有人都更好。Wallos 支持多用户家庭和 OIDC，发展时间也更长。Coinio 获取汇率无需 API 密钥，可通过电子邮件、Telegram、Discord 等多种渠道通知，还提供面向 AI 助手的 MCP 服务器、iPhone 小组件和更深入的外观定制。"}},{"@type":"Question","name":"可以从 Wallos 导入数据吗？","acceptedAnswer":{"@type":"Answer","text":"可以。在 Wallos 中将订阅导出为 JSON，然后在 Coinio 的“设置 › 导入”中加载该文件。Coinio 会先显示带警告的预览，在你确认之前不会保存任何内容。 导入指南 列出了每个字段的对应方式。"}},{"@type":"Question","name":"Coinio 和 Wallos 可以同时运行吗？","acceptedAnswer":{"@type":"Answer","text":"可以。它们是各自独立的容器，数据也各自分开。Wallos 的示例发布 8282 端口，Coinio 使用 8080 端口，默认设置不会冲突，你可以先试用 Coinio 再决定是否切换。"}},{"@type":"Question","name":"Coinio 会发送电子邮件或 Discord 通知吗？","acceptedAnswer":{"@type":"Answer","text":"会。Coinio 支持通过电子邮件（SMTP）、Telegram（含论坛话题）、Discord、Slack、ntfy、Gotify、Pushover 和通用 webhook 发送通知，还能经由 Apprise 连接 100 多种服务。每个订阅可以设置多次提醒，另有逾期提醒以及每周、每月汇总，每条消息模板都可以自行编辑。"}},{"@type":"Question","name":"Coinio 和 Wallos 一样免费吗？","acceptedAnswer":{"@type":"Answer","text":"是的。Coinio 采用 MIT 许可证，没有付费版，也无需注册我们的账户。Wallos 同样免费，采用 GPL-3.0 许可证。"}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -1197,8 +1197,8 @@ h1 .eyebrow { display: block; }
             <tr><th scope="row">技术栈</th><td class="is-us">Node.js (Express), React, SQLite</td><td>PHP 8.3, SQLite</td></tr>
             <tr><th scope="row">许可证</th><td class="is-us">MIT</td><td>GPL-3.0</td></tr>
             <tr><th scope="row">界面语言</th><td class="is-us">8 种：英语、土耳其语、德语、法语、西班牙语、巴西葡萄牙语、简体中文、日语</td><td>21 种以上（据其官网）</td></tr>
-            <tr><th scope="row">币种与汇率</th><td class="is-us">每个订阅保留各自的币种。通过 Frankfurter 获取欧洲央行每日汇率，无需密钥。目前仅支持两位小数的币种，因此暂不支持日元（JPY）和韩元（KRW）。</td><td>支持多币种。换算使用 Fixer API，需要申请免费的 API 密钥。</td></tr>
-            <tr><th scope="row">提醒与通知</th><td class="is-us">每天一条 Telegram 消息，告诉你哪些即将到期、哪些已经逾期。</td><td>电子邮件、Discord、Pushover、Telegram、Gotify 和 webhook。</td></tr>
+            <tr><th scope="row">币种与汇率</th><td class="is-us">每个订阅保留各自的币种。通过 Frankfurter 获取欧洲央行每日汇率，无需密钥。支持任何 ISO 币种，包括日元（JPY）、韩元（KRW）等没有小数位的币种。</td><td>支持多币种。换算使用 Fixer API，需要申请免费的 API 密钥。</td></tr>
+            <tr><th scope="row">提醒与通知</th><td class="is-us">电子邮件（SMTP）、Telegram（含论坛话题）、Discord、Slack、ntfy、Gotify、Pushover、通用 webhook 和 Apprise（100 多种服务）。每个订阅可设置多次提醒，另有逾期提醒、每周和每月汇总、免费试用即将结束、超出月度预算和价格变动提醒，消息模板可完全自定义。</td><td>电子邮件、Discord、Pushover、Telegram、Gotify 和 webhook。</td></tr>
             <tr><th scope="row">MCP 与 AI</th><td class="is-us">内置支持 OAuth 的 MCP 服务器：Claude、ChatGPT 和其他 MCP 客户端可以读取和更新你的订阅。</td><td>借助 ChatGPT、Gemini、OpenRouter、Ollama 或任何兼容 OpenAI 的 API 提供 AI 省钱建议。其 README 中未提及 MCP 服务器。</td></tr>
             <tr><th scope="row">iPhone</th><td class="is-us">可放在主屏幕和锁定屏幕上的 Scriptable 小组件，另有可安装的网页应用。</td><td>响应式移动端布局。其 README 中未提及小组件。</td></tr>
             <tr><th scope="row">个性化</th><td class="is-us">四种主题外加跟随系统、强调色、六组字体搭配、卡片顺序、自定义 CSS 和沙盒化的 HTML 卡片。</td><td>主题、自定义分类和显示选项。</td></tr>
@@ -1214,7 +1214,7 @@ h1 .eyebrow { display: block; }
     <section class="section" aria-labelledby="pick-title">
       <div class="prose-head">
         <h2 id="pick-title">该选哪一个？</h2>
-        <p>如果需要多人各自登录，或者想通过电子邮件、Discord 或 webhook 接收提醒，选 Wallos。如果主要是你自己用，并且想要 AI 助手、iPhone 小组件和几乎无需配置的部署，选 Coinio。</p>
+        <p>如果需要多人各自登录，或者需要通过 OIDC 登录，选 Wallos。如果主要是你自己用，并且想要 AI 助手、iPhone 小组件和几乎无需配置的部署，选 Coinio。</p>
       </div>
       <div class="cards cards-2">
         <article class="card">
@@ -1222,7 +1222,6 @@ h1 .eyebrow { display: block; }
           <ul class="ticks">
             <li>需要多人各自拥有账户，或希望在一个安装实例中添加家庭成员；</li>
             <li>你通过身份提供商使用 OIDC 登录；</li>
-            <li>你希望通过电子邮件、Discord、Pushover、Gotify 或 webhook 接收提醒，而不仅仅是 Telegram；</li>
             <li>你偏好成熟的项目：Wallos 始于 2023 年，在 GitHub 上有约 8,900 颗星，还有自己的 Discord 服务器；</li>
             <li>你需要 Coinio 暂不支持的界面语言；</li>
             <li>你想不用 Docker，直接在普通的 PHP 环境中运行。</li>
@@ -1272,7 +1271,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>Coinio 比 Wallos 更好吗？</summary>
             <div class="faq-a">
-              <p>没有哪一个对所有人都更好。Wallos 的通知渠道更多，支持多用户家庭和 OIDC，发展时间也更长。Coinio 获取汇率无需 API 密钥，还提供面向 AI 助手的 MCP 服务器、iPhone 小组件和更深入的外观定制。</p>
+              <p>没有哪一个对所有人都更好。Wallos 支持多用户家庭和 OIDC，发展时间也更长。Coinio 获取汇率无需 API 密钥，可通过电子邮件、Telegram、Discord 等多种渠道通知，还提供面向 AI 助手的 MCP 服务器、iPhone 小组件和更深入的外观定制。</p>
             </div>
           </details>
           <details>
@@ -1290,7 +1289,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>Coinio 会发送电子邮件或 Discord 通知吗？</summary>
             <div class="faq-a">
-              <p>目前不会。Coinio 每天发送一条 Telegram 消息，提醒即将到期和已经逾期的付款。如果你需要电子邮件、Discord、Pushover、Gotify 或 webhook，Wallos 都有。</p>
+              <p>会。Coinio 支持通过电子邮件（SMTP）、Telegram（含论坛话题）、Discord、Slack、ntfy、Gotify、Pushover 和通用 webhook 发送通知，还能经由 Apprise 连接 100 多种服务。每个订阅可以设置多次提醒，另有逾期提醒以及每周、每月汇总，每条消息模板都可以自行编辑。</p>
             </div>
           </details>
           <details>

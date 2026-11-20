@@ -1110,7 +1110,7 @@ h1 .eyebrow { display: block; }
   .choose li { padding: 22px 20px 24px; }
 }
 </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana sayfa","item":"https://getcoinio.me/tr/"},{"@type":"ListItem","position":2,"name":"Wallos alternatifi","item":"https://getcoinio.me/tr/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"tr","url":"https://getcoinio.me/tr/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Coinio, Wallos'tan daha mı iyi?","acceptedAnswer":{"@type":"Answer","text":"Herkes için daha iyi olan yok. Wallos'ta daha çok bildirim kanalı, çok kullanıcılı ev halkı desteği, OIDC ve daha uzun bir geçmiş var. Coinio döviz kurları için API anahtarı istemiyor; üstüne yapay zekâ asistanları için bir MCP sunucusu, iPhone widget'ı ve daha derin görsel kişiselleştirme getiriyor."}},{"@type":"Question","name":"Verilerimi Wallos'tan aktarabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. Aboneliklerini Wallos'tan JSON olarak dışa aktar, dosyayı Coinio'da Ayarlar › İçe aktar'da yükle. Coinio önce uyarılarla birlikte bir önizleme gösterir, sen onaylamadan hiçbir şey kaydetmez. Her alanın nasıl eşlendiği içe aktarma rehberinde yazıyor."}},{"@type":"Question","name":"Coinio ile Wallos'u yan yana çalıştırabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. İkisi de kendi verisini tutan ayrı kapsayıcılar. Wallos'un örnekleri 8282 portunu açıyor, Coinio 8080'i kullanıyor; varsayılanlar çakışmaz, geçmeden önce Coinio'yu deneyebilirsin."}},{"@type":"Question","name":"Coinio e-posta ya da Discord bildirimi gönderiyor mu?","acceptedAnswer":{"@type":"Answer","text":"Şimdilik hayır. Coinio yaklaşan ve geciken ödemeler için günde bir Telegram mesajı gönderir. E-posta, Discord, Pushover, Gotify ya da webhook gerekiyorsa bunlar Wallos'ta var."}},{"@type":"Question","name":"Coinio da Wallos gibi ücretsiz mi?","acceptedAnswer":{"@type":"Answer","text":"Evet. Coinio MIT lisanslı; ücretli sürümü yok, bizde hesap açman da gerekmez. Wallos da GPL-3.0 lisansıyla ücretsiz."}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana sayfa","item":"https://getcoinio.me/tr/"},{"@type":"ListItem","position":2,"name":"Wallos alternatifi","item":"https://getcoinio.me/tr/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"tr","url":"https://getcoinio.me/tr/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Coinio, Wallos'tan daha mı iyi?","acceptedAnswer":{"@type":"Answer","text":"Herkes için daha iyi olan yok. Wallos'ta çok kullanıcılı ev halkı desteği, OIDC ve daha uzun bir geçmiş var. Coinio döviz kurları için API anahtarı istemiyor, bildirimleri e-posta, Telegram, Discord gibi birçok kanaldan gönderiyor; üstüne yapay zekâ asistanları için bir MCP sunucusu, iPhone widget'ı ve daha derin görsel kişiselleştirme getiriyor."}},{"@type":"Question","name":"Verilerimi Wallos'tan aktarabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. Aboneliklerini Wallos'tan JSON olarak dışa aktar, dosyayı Coinio'da Ayarlar › İçe aktar'da yükle. Coinio önce uyarılarla birlikte bir önizleme gösterir, sen onaylamadan hiçbir şey kaydetmez. Her alanın nasıl eşlendiği içe aktarma rehberinde yazıyor."}},{"@type":"Question","name":"Coinio ile Wallos'u yan yana çalıştırabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. İkisi de kendi verisini tutan ayrı kapsayıcılar. Wallos'un örnekleri 8282 portunu açıyor, Coinio 8080'i kullanıyor; varsayılanlar çakışmaz, geçmeden önce Coinio'yu deneyebilirsin."}},{"@type":"Question","name":"Coinio e-posta ya da Discord bildirimi gönderiyor mu?","acceptedAnswer":{"@type":"Answer","text":"Evet. Coinio e-posta (SMTP), Telegram (forum konuları dahil), Discord, Slack, ntfy, Gotify, Pushover ve genel webhook ile bildirim gönderir; Apprise üzerinden 100'den fazla servise de ulaşır. Her abonelik için birden çok hatırlatma kurabilir, gecikme uyarısı ile haftalık ve aylık özetler alabilir, bütün mesaj şablonlarını düzenleyebilirsin."}},{"@type":"Question","name":"Coinio da Wallos gibi ücretsiz mi?","acceptedAnswer":{"@type":"Answer","text":"Evet. Coinio MIT lisanslı; ücretli sürümü yok, bizde hesap açman da gerekmez. Wallos da GPL-3.0 lisansıyla ücretsiz."}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -1197,8 +1197,8 @@ h1 .eyebrow { display: block; }
             <tr><th scope="row">Teknoloji</th><td class="is-us">Node.js (Express), React, SQLite</td><td>PHP 8.3, SQLite</td></tr>
             <tr><th scope="row">Lisans</th><td class="is-us">MIT</td><td>GPL-3.0</td></tr>
             <tr><th scope="row">Arayüz dilleri</th><td class="is-us">8: İngilizce, Türkçe, Almanca, Fransızca, İspanyolca, Brezilya Portekizcesi, Basitleştirilmiş Çince, Japonca</td><td>Sitesine göre 21+</td></tr>
-            <tr><th scope="row">Para birimleri ve döviz kurları</th><td class="is-us">Her abonelik kendi para biriminde kalır. Avrupa Merkez Bankası'nın günlük kurları Frankfurter'dan gelir, anahtar gerekmez. Şimdilik yalnız iki ondalıklı para birimleri destekleniyor, yani JPY ve KRW henüz yok.</td><td>Birden çok para birimi. Kur çevirisi Fixer API ile yapılıyor; bunun için ücretsiz bir API anahtarı gerekiyor.</td></tr>
-            <tr><th scope="row">Hatırlatmalar ve bildirimler</th><td class="is-us">Günde bir Telegram mesajı: ödemesi gelenler ve gecikenler.</td><td>E-posta, Discord, Pushover, Telegram, Gotify ve webhook.</td></tr>
+            <tr><th scope="row">Para birimleri ve döviz kurları</th><td class="is-us">Her abonelik kendi para biriminde kalır. Avrupa Merkez Bankası'nın günlük kurları Frankfurter'dan gelir, anahtar gerekmez. Her ISO para birimi desteklenir; JPY ve KRW gibi ondalıksız olanlar da dahildir.</td><td>Birden çok para birimi. Kur çevirisi Fixer API ile yapılıyor; bunun için ücretsiz bir API anahtarı gerekiyor.</td></tr>
+            <tr><th scope="row">Hatırlatmalar ve bildirimler</th><td class="is-us">E-posta (SMTP), Telegram (forum konuları dahil), Discord, Slack, ntfy, Gotify, Pushover, webhook ve Apprise (100'den fazla servis). Abonelik başına birden çok hatırlatma, gecikme uyarısı, haftalık ve aylık özetler, deneme süresinin bitişi, aylık bütçe aşımı ve fiyat değişikliği uyarıları, tümüyle düzenlenebilir mesaj şablonları.</td><td>E-posta, Discord, Pushover, Telegram, Gotify ve webhook.</td></tr>
             <tr><th scope="row">MCP ve yapay zekâ</th><td class="is-us">OAuth destekli yerleşik MCP sunucusu: Claude, ChatGPT ve diğer MCP istemcileri aboneliklerini okuyup güncelleyebilir.</td><td>ChatGPT, Gemini, OpenRouter, Ollama ya da OpenAI uyumlu herhangi bir API ile yapay zekâdan tasarruf önerileri. README'sinde MCP sunucusu geçmiyor.</td></tr>
             <tr><th scope="row">iPhone</th><td class="is-us">Ana ekran ve kilit ekranı için Scriptable widget'ları, bir de ana ekrana eklenebilen web uygulaması.</td><td>Mobile uyumlu arayüz. README'sinde widget geçmiyor.</td></tr>
             <tr><th scope="row">Kişiselleştirme</th><td class="is-us">Dört tema ve sistem teması, vurgu rengi, altı yazı tipi eşleşmesi, kart sırası, özel CSS ve korumalı alanda çalışan HTML kartları.</td><td>Temalar, özel kategoriler ve görünüm seçenekleri.</td></tr>
@@ -1214,7 +1214,7 @@ h1 .eyebrow { display: block; }
     <section class="section" aria-labelledby="pick-title">
       <div class="prose-head">
         <h2 id="pick-title">Hangisini seçmelisin?</h2>
-        <p>Birkaç kişinin ayrı girişi olacaksa ya da uyarıları e-posta, Discord veya webhook ile almak istiyorsan Wallos'u seç. Çoğunlukla sen kullanacaksan ve yapay zekâ asistanı, iPhone widget'ı, neredeyse hiç ayar istemeyen bir kurulum arıyorsan Coinio'yu seç.</p>
+        <p>Birkaç kişinin ayrı girişi olacaksa ya da OIDC ile giriş yapacaksan Wallos'u seç. Çoğunlukla sen kullanacaksan ve yapay zekâ asistanı, iPhone widget'ı, neredeyse hiç ayar istemeyen bir kurulum arıyorsan Coinio'yu seç.</p>
       </div>
       <div class="cards cards-2">
         <article class="card">
@@ -1222,7 +1222,6 @@ h1 .eyebrow { display: block; }
           <ul class="ticks">
             <li>birkaç kişinin kendi hesabı olacaksa ya da ev halkını tek kurulumda toplamak istiyorsan;</li>
             <li>bir kimlik sağlayıcı üzerinden OIDC ile giriş yapıyorsan;</li>
-            <li>hatırlatmaları Telegram dışında e-posta, Discord, Pushover, Gotify ya da webhook ile de almak istiyorsan;</li>
             <li>olgun bir proje tercih ediyorsan: Wallos 2023'te başladı, GitHub'da yaklaşık 8.900 yıldızı ve kendi Discord sunucusu var;</li>
             <li>Coinio'da henüz olmayan bir arayüz diline ihtiyacın varsa;</li>
             <li>Docker kullanmadan düz PHP üzerinde çalıştırmak istiyorsan.</li>
@@ -1272,7 +1271,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>Coinio, Wallos'tan daha mı iyi?</summary>
             <div class="faq-a">
-              <p>Herkes için daha iyi olan yok. Wallos'ta daha çok bildirim kanalı, çok kullanıcılı ev halkı desteği, OIDC ve daha uzun bir geçmiş var. Coinio döviz kurları için API anahtarı istemiyor; üstüne yapay zekâ asistanları için bir MCP sunucusu, iPhone widget'ı ve daha derin görsel kişiselleştirme getiriyor.</p>
+              <p>Herkes için daha iyi olan yok. Wallos'ta çok kullanıcılı ev halkı desteği, OIDC ve daha uzun bir geçmiş var. Coinio döviz kurları için API anahtarı istemiyor, bildirimleri e-posta, Telegram, Discord gibi birçok kanaldan gönderiyor; üstüne yapay zekâ asistanları için bir MCP sunucusu, iPhone widget'ı ve daha derin görsel kişiselleştirme getiriyor.</p>
             </div>
           </details>
           <details>
@@ -1290,7 +1289,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>Coinio e-posta ya da Discord bildirimi gönderiyor mu?</summary>
             <div class="faq-a">
-              <p>Şimdilik hayır. Coinio yaklaşan ve geciken ödemeler için günde bir Telegram mesajı gönderir. E-posta, Discord, Pushover, Gotify ya da webhook gerekiyorsa bunlar Wallos'ta var.</p>
+              <p>Evet. Coinio e-posta (SMTP), Telegram (forum konuları dahil), Discord, Slack, ntfy, Gotify, Pushover ve genel webhook ile bildirim gönderir; Apprise üzerinden 100'den fazla servise de ulaşır. Her abonelik için birden çok hatırlatma kurabilir, gecikme uyarısı ile haftalık ve aylık özetler alabilir, bütün mesaj şablonlarını düzenleyebilirsin.</p>
             </div>
           </details>
           <details>

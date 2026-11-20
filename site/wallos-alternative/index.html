@@ -1110,7 +1110,7 @@ h1 .eyebrow { display: block; }
   .choose li { padding: 22px 20px 24px; }
 }
 </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://getcoinio.me/"},{"@type":"ListItem","position":2,"name":"Wallos alternative","item":"https://getcoinio.me/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"en","url":"https://getcoinio.me/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Is Coinio better than Wallos?","acceptedAnswer":{"@type":"Answer","text":"Neither is better for everyone. Wallos has more notification channels, multi-user households, OIDC and a longer track record. Coinio needs no API key for exchange rates and adds an MCP server for AI assistants, an iPhone widget and deeper visual customization."}},{"@type":"Question","name":"Can I import my data from Wallos?","acceptedAnswer":{"@type":"Answer","text":"Yes. Export your subscriptions from Wallos as JSON and load the file in Coinio under Settings › Import. Coinio shows a preview with warnings first and saves nothing until you confirm. The import guide lists how each field is mapped."}},{"@type":"Question","name":"Can I run Coinio and Wallos side by side?","acceptedAnswer":{"@type":"Answer","text":"Yes. They are separate containers with their own data. Wallos's examples publish port 8282 and Coinio uses 8080, so the defaults don't clash, and you can try Coinio before you switch."}},{"@type":"Question","name":"Does Coinio send email or Discord notifications?","acceptedAnswer":{"@type":"Answer","text":"Not today. Coinio sends one Telegram message a day about upcoming and overdue payments. If you need email, Discord, Pushover, Gotify or webhooks, Wallos has them."}},{"@type":"Question","name":"Is Coinio free like Wallos?","acceptedAnswer":{"@type":"Answer","text":"Yes. Coinio is MIT-licensed, with no paid tier and no account with us. Wallos is free as well, under GPL-3.0."}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://getcoinio.me/"},{"@type":"ListItem","position":2,"name":"Wallos alternative","item":"https://getcoinio.me/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"en","url":"https://getcoinio.me/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Is Coinio better than Wallos?","acceptedAnswer":{"@type":"Answer","text":"Neither is better for everyone. Wallos has multi-user households, OIDC and a longer track record. Coinio needs no API key for exchange rates, notifies you through many channels such as email, Telegram and Discord, and adds an MCP server for AI assistants, an iPhone widget and deeper visual customization."}},{"@type":"Question","name":"Can I import my data from Wallos?","acceptedAnswer":{"@type":"Answer","text":"Yes. Export your subscriptions from Wallos as JSON and load the file in Coinio under Settings › Import. Coinio shows a preview with warnings first and saves nothing until you confirm. The import guide lists how each field is mapped."}},{"@type":"Question","name":"Can I run Coinio and Wallos side by side?","acceptedAnswer":{"@type":"Answer","text":"Yes. They are separate containers with their own data. Wallos's examples publish port 8282 and Coinio uses 8080, so the defaults don't clash, and you can try Coinio before you switch."}},{"@type":"Question","name":"Does Coinio send email or Discord notifications?","acceptedAnswer":{"@type":"Answer","text":"Yes. Coinio sends email (SMTP), Telegram (including forum topics), Discord, Slack, ntfy, Gotify, Pushover and generic webhook notifications, and reaches 100+ more services through Apprise. You can set several reminders per subscription, get an overdue alert and weekly or monthly digests, and edit every message template."}},{"@type":"Question","name":"Is Coinio free like Wallos?","acceptedAnswer":{"@type":"Answer","text":"Yes. Coinio is MIT-licensed, with no paid tier and no account with us. Wallos is free as well, under GPL-3.0."}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -1197,8 +1197,8 @@ h1 .eyebrow { display: block; }
             <tr><th scope="row">Stack</th><td class="is-us">Node.js (Express), React, SQLite</td><td>PHP 8.3, SQLite</td></tr>
             <tr><th scope="row">License</th><td class="is-us">MIT</td><td>GPL-3.0</td></tr>
             <tr><th scope="row">Interface languages</th><td class="is-us">8: English, Turkish, German, French, Spanish, Brazilian Portuguese, Simplified Chinese, Japanese</td><td>21+, according to its website</td></tr>
-            <tr><th scope="row">Currencies and exchange rates</th><td class="is-us">Each subscription keeps its own currency. Daily ECB rates through Frankfurter, no key needed. Two-decimal currencies only for now, so no JPY or KRW yet.</td><td>Multiple currencies. Conversion uses the Fixer API, which needs a free API key.</td></tr>
-            <tr><th scope="row">Reminders and notifications</th><td class="is-us">One Telegram message a day about what is due and overdue.</td><td>Email, Discord, Pushover, Telegram, Gotify and webhooks.</td></tr>
+            <tr><th scope="row">Currencies and exchange rates</th><td class="is-us">Each subscription keeps its own currency. Daily ECB rates through Frankfurter, no key needed. Any ISO currency, including zero-decimal ones such as JPY and KRW.</td><td>Multiple currencies. Conversion uses the Fixer API, which needs a free API key.</td></tr>
+            <tr><th scope="row">Reminders and notifications</th><td class="is-us">Email (SMTP), Telegram (including forum topics), Discord, Slack, ntfy, Gotify, Pushover, webhook and Apprise (100+ services). Several reminders per subscription, an overdue alert, weekly and monthly digests, alerts for ending free trials, exceeded monthly budgets and price changes, and fully editable message templates.</td><td>Email, Discord, Pushover, Telegram, Gotify and webhooks.</td></tr>
             <tr><th scope="row">MCP and AI</th><td class="is-us">Built-in MCP server with OAuth: Claude, ChatGPT and other MCP clients can read and update your subscriptions.</td><td>AI saving tips from ChatGPT, Gemini, OpenRouter, Ollama or any OpenAI-compatible API. No MCP server in its README.</td></tr>
             <tr><th scope="row">iPhone</th><td class="is-us">Scriptable widgets for the Home Screen and Lock Screen, plus an installable web app.</td><td>Responsive mobile layout. No widget in its README.</td></tr>
             <tr><th scope="row">Customization</th><td class="is-us">Four themes plus system, accent colour, six font pairs, card order, custom CSS and sandboxed HTML cards.</td><td>Themes, custom categories and display options.</td></tr>
@@ -1214,7 +1214,7 @@ h1 .eyebrow { display: block; }
     <section class="section" aria-labelledby="pick-title">
       <div class="prose-head">
         <h2 id="pick-title">Which one should you pick?</h2>
-        <p>Pick Wallos if several people need their own logins or you want alerts by email, Discord or webhook. Pick Coinio if it is mostly you, and you want AI assistants, an iPhone widget and a setup with almost nothing to configure.</p>
+        <p>Pick Wallos if several people need their own logins or you sign in with OIDC. Pick Coinio if it is mostly you, and you want AI assistants, an iPhone widget and a setup with almost nothing to configure.</p>
       </div>
       <div class="cards cards-2">
         <article class="card">
@@ -1222,7 +1222,6 @@ h1 .eyebrow { display: block; }
           <ul class="ticks">
             <li>several people need their own accounts, or you want household members in one install;</li>
             <li>you sign in through an identity provider with OIDC;</li>
-            <li>you want reminders by email, Discord, Pushover, Gotify or webhook, not only Telegram;</li>
             <li>you prefer a mature project: Wallos dates from 2023, has about 8,900 GitHub stars and its own Discord server;</li>
             <li>you need an interface language Coinio does not have yet;</li>
             <li>you want to run it on plain PHP without Docker.</li>
@@ -1272,7 +1271,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>Is Coinio better than Wallos?</summary>
             <div class="faq-a">
-              <p>Neither is better for everyone. Wallos has more notification channels, multi-user households, OIDC and a longer track record. Coinio needs no API key for exchange rates and adds an MCP server for AI assistants, an iPhone widget and deeper visual customization.</p>
+              <p>Neither is better for everyone. Wallos has multi-user households, OIDC and a longer track record. Coinio needs no API key for exchange rates, notifies you through many channels such as email, Telegram and Discord, and adds an MCP server for AI assistants, an iPhone widget and deeper visual customization.</p>
             </div>
           </details>
           <details>
@@ -1290,7 +1289,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>Does Coinio send email or Discord notifications?</summary>
             <div class="faq-a">
-              <p>Not today. Coinio sends one Telegram message a day about upcoming and overdue payments. If you need email, Discord, Pushover, Gotify or webhooks, Wallos has them.</p>
+              <p>Yes. Coinio sends email (SMTP), Telegram (including forum topics), Discord, Slack, ntfy, Gotify, Pushover and generic webhook notifications, and reaches 100+ more services through Apprise. You can set several reminders per subscription, get an overdue alert and weekly or monthly digests, and edit every message template.</p>
             </div>
           </details>
           <details>

@@ -1110,7 +1110,7 @@ h1 .eyebrow { display: block; }
   .choose li { padding: 22px 20px 24px; }
 }
 </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://getcoinio.me/es/"},{"@type":"ListItem","position":2,"name":"Alternativa a Wallos","item":"https://getcoinio.me/es/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"es","url":"https://getcoinio.me/es/wallos-alternative/","mainEntity":[{"@type":"Question","name":"¿Es Coinio mejor que Wallos?","acceptedAnswer":{"@type":"Answer","text":"Ninguno es mejor para todo el mundo. Wallos tiene más canales de notificación, hogares con varios usuarios, OIDC y una trayectoria más larga. Coinio no necesita clave de API para los tipos de cambio y suma un servidor MCP para asistentes de IA, un widget para iPhone y una personalización visual más profunda."}},{"@type":"Question","name":"¿Puedo importar mis datos de Wallos?","acceptedAnswer":{"@type":"Answer","text":"Sí. Exporta tus suscripciones de Wallos en JSON y carga el archivo en Coinio, en Ajustes › Importar. Coinio te muestra primero una vista previa con los avisos y no guarda nada hasta que confirmas. La guía de importación detalla cómo se asigna cada campo."}},{"@type":"Question","name":"¿Puedo usar Coinio y Wallos a la vez?","acceptedAnswer":{"@type":"Answer","text":"Sí. Son contenedores independientes, cada uno con sus propios datos. Los ejemplos de Wallos publican el puerto 8282 y Coinio usa el 8080, así que los valores por defecto no chocan y puedes probar Coinio antes de cambiarte."}},{"@type":"Question","name":"¿Coinio envía notificaciones por correo o Discord?","acceptedAnswer":{"@type":"Answer","text":"Hoy no. Coinio envía un mensaje de Telegram al día con los pagos próximos y atrasados. Si necesitas correo, Discord, Pushover, Gotify o webhooks, Wallos los tiene."}},{"@type":"Question","name":"¿Coinio es gratis como Wallos?","acceptedAnswer":{"@type":"Answer","text":"Sí. Coinio tiene licencia MIT, sin plan de pago y sin cuenta con nosotros. Wallos también es gratis, con licencia GPL-3.0."}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://getcoinio.me/es/"},{"@type":"ListItem","position":2,"name":"Alternativa a Wallos","item":"https://getcoinio.me/es/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"es","url":"https://getcoinio.me/es/wallos-alternative/","mainEntity":[{"@type":"Question","name":"¿Es Coinio mejor que Wallos?","acceptedAnswer":{"@type":"Answer","text":"Ninguno es mejor para todo el mundo. Wallos tiene hogares con varios usuarios, OIDC y una trayectoria más larga. Coinio no necesita clave de API para los tipos de cambio, avisa por muchos canales como correo, Telegram y Discord, y suma un servidor MCP para asistentes de IA, un widget para iPhone y una personalización visual más profunda."}},{"@type":"Question","name":"¿Puedo importar mis datos de Wallos?","acceptedAnswer":{"@type":"Answer","text":"Sí. Exporta tus suscripciones de Wallos en JSON y carga el archivo en Coinio, en Ajustes › Importar. Coinio te muestra primero una vista previa con los avisos y no guarda nada hasta que confirmas. La guía de importación detalla cómo se asigna cada campo."}},{"@type":"Question","name":"¿Puedo usar Coinio y Wallos a la vez?","acceptedAnswer":{"@type":"Answer","text":"Sí. Son contenedores independientes, cada uno con sus propios datos. Los ejemplos de Wallos publican el puerto 8282 y Coinio usa el 8080, así que los valores por defecto no chocan y puedes probar Coinio antes de cambiarte."}},{"@type":"Question","name":"¿Coinio envía notificaciones por correo o Discord?","acceptedAnswer":{"@type":"Answer","text":"Sí. Coinio envía notificaciones por correo (SMTP), Telegram (incluidos los temas de foro), Discord, Slack, ntfy, Gotify, Pushover y webhooks genéricos, y llega a más de 100 servicios más a través de Apprise. Puedes configurar varios recordatorios por suscripción, recibir un aviso de atraso y resúmenes semanales o mensuales, y editar cada plantilla de mensaje."}},{"@type":"Question","name":"¿Coinio es gratis como Wallos?","acceptedAnswer":{"@type":"Answer","text":"Sí. Coinio tiene licencia MIT, sin plan de pago y sin cuenta con nosotros. Wallos también es gratis, con licencia GPL-3.0."}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -1197,8 +1197,8 @@ h1 .eyebrow { display: block; }
             <tr><th scope="row">Tecnología</th><td class="is-us">Node.js (Express), React, SQLite</td><td>PHP 8.3, SQLite</td></tr>
             <tr><th scope="row">Licencia</th><td class="is-us">MIT</td><td>GPL-3.0</td></tr>
             <tr><th scope="row">Idiomas de la interfaz</th><td class="is-us">8: inglés, turco, alemán, francés, español, portugués de Brasil, chino simplificado y japonés</td><td>Más de 21, según su web</td></tr>
-            <tr><th scope="row">Monedas y tipos de cambio</th><td class="is-us">Cada suscripción conserva su propia moneda. Tipos diarios del BCE a través de Frankfurter, sin clave. Por ahora solo monedas con dos decimales, así que todavía no hay JPY ni KRW.</td><td>Varias monedas. La conversión usa la API de Fixer, que pide una clave de API gratuita.</td></tr>
-            <tr><th scope="row">Avisos y notificaciones</th><td class="is-us">Un mensaje de Telegram al día con lo que vence y lo que está atrasado.</td><td>Correo electrónico, Discord, Pushover, Telegram, Gotify y webhooks.</td></tr>
+            <tr><th scope="row">Monedas y tipos de cambio</th><td class="is-us">Cada suscripción conserva su propia moneda. Tipos diarios del BCE a través de Frankfurter, sin clave. Cualquier moneda ISO, incluidas las que no tienen decimales, como JPY y KRW.</td><td>Varias monedas. La conversión usa la API de Fixer, que pide una clave de API gratuita.</td></tr>
+            <tr><th scope="row">Avisos y notificaciones</th><td class="is-us">Correo (SMTP), Telegram (con temas de foro), Discord, Slack, ntfy, Gotify, Pushover, webhook y Apprise (más de 100 servicios). Varios recordatorios por suscripción, aviso de atraso, resúmenes semanales y mensuales, avisos de fin de prueba gratuita, de presupuesto mensual superado y de cambios de precio, y plantillas de mensaje totalmente editables.</td><td>Correo electrónico, Discord, Pushover, Telegram, Gotify y webhooks.</td></tr>
             <tr><th scope="row">MCP e IA</th><td class="is-us">Servidor MCP integrado con OAuth: Claude, ChatGPT y otros clientes MCP pueden consultar y actualizar tus suscripciones.</td><td>Consejos de ahorro con IA de ChatGPT, Gemini, OpenRouter, Ollama o cualquier API compatible con OpenAI. Su README no menciona servidor MCP.</td></tr>
             <tr><th scope="row">iPhone</th><td class="is-us">Widgets de Scriptable para la pantalla de inicio y la pantalla bloqueada, además de una app web instalable.</td><td>Diseño adaptado al móvil. Su README no menciona widget.</td></tr>
             <tr><th scope="row">Personalización</th><td class="is-us">Cuatro temas más el del sistema, color de acento, seis combinaciones de fuentes, orden de las tarjetas, CSS propio y tarjetas HTML en un entorno aislado.</td><td>Temas, categorías personalizadas y opciones de visualización.</td></tr>
@@ -1214,7 +1214,7 @@ h1 .eyebrow { display: block; }
     <section class="section" aria-labelledby="pick-title">
       <div class="prose-head">
         <h2 id="pick-title">¿Cuál deberías elegir?</h2>
-        <p>Elige Wallos si varias personas necesitan su propio acceso o quieres avisos por correo, Discord o webhook. Elige Coinio si lo vas a usar sobre todo tú y quieres asistentes de IA, un widget para iPhone y una instalación sin casi nada que configurar.</p>
+        <p>Elige Wallos si varias personas necesitan su propio acceso o inicias sesión con OIDC. Elige Coinio si lo vas a usar sobre todo tú y quieres asistentes de IA, un widget para iPhone y una instalación sin casi nada que configurar.</p>
       </div>
       <div class="cards cards-2">
         <article class="card">
@@ -1222,7 +1222,6 @@ h1 .eyebrow { display: block; }
           <ul class="ticks">
             <li>varias personas necesitan su propia cuenta, o quieres miembros del hogar en una sola instalación;</li>
             <li>inicias sesión con un proveedor de identidad mediante OIDC;</li>
-            <li>quieres avisos por correo, Discord, Pushover, Gotify o webhook, no solo por Telegram;</li>
             <li>prefieres un proyecto maduro: Wallos existe desde 2023, tiene unas 8.900 estrellas en GitHub y su propio servidor de Discord;</li>
             <li>necesitas un idioma de interfaz que Coinio aún no tiene;</li>
             <li>quieres ejecutarlo con PHP sin más, sin Docker.</li>
@@ -1272,7 +1271,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>¿Es Coinio mejor que Wallos?</summary>
             <div class="faq-a">
-              <p>Ninguno es mejor para todo el mundo. Wallos tiene más canales de notificación, hogares con varios usuarios, OIDC y una trayectoria más larga. Coinio no necesita clave de API para los tipos de cambio y suma un servidor MCP para asistentes de IA, un widget para iPhone y una personalización visual más profunda.</p>
+              <p>Ninguno es mejor para todo el mundo. Wallos tiene hogares con varios usuarios, OIDC y una trayectoria más larga. Coinio no necesita clave de API para los tipos de cambio, avisa por muchos canales como correo, Telegram y Discord, y suma un servidor MCP para asistentes de IA, un widget para iPhone y una personalización visual más profunda.</p>
             </div>
           </details>
           <details>
@@ -1290,7 +1289,7 @@ h1 .eyebrow { display: block; }
           <details>
             <summary>¿Coinio envía notificaciones por correo o Discord?</summary>
             <div class="faq-a">
-              <p>Hoy no. Coinio envía un mensaje de Telegram al día con los pagos próximos y atrasados. Si necesitas correo, Discord, Pushover, Gotify o webhooks, Wallos los tiene.</p>
+              <p>Sí. Coinio envía notificaciones por correo (SMTP), Telegram (incluidos los temas de foro), Discord, Slack, ntfy, Gotify, Pushover y webhooks genéricos, y llega a más de 100 servicios más a través de Apprise. Puedes configurar varios recordatorios por suscripción, recibir un aviso de atraso y resúmenes semanales o mensuales, y editar cada plantilla de mensaje.</p>
             </div>
           </details>
           <details>

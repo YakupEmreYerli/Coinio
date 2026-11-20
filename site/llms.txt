@@ -7,8 +7,8 @@ Coinio keeps every recurring payment on one page: what is due this week, what is
 ## Features
 
 - Real billing cycles: weekly, monthly or yearly, every N cycles, charged automatically or paid by hand; mark paid, skip a period, pause.
-- Calendar of due dates and daily Telegram reminders before anything renews.
-- Any currency per subscription; totals converted with daily European Central Bank reference rates (via Frankfurter).
+- Calendar of due dates and reminders before anything renews, by email, Telegram, Discord, Slack, ntfy, Gotify, Pushover, webhook or Apprise, with several reminders per subscription and editable message templates.
+- Any ISO currency per subscription, including zero-decimal ones such as JPY and KRW; totals converted with daily European Central Bank reference rates (via Frankfurter).
 - 161 built-in services with logos, categories and billing cycles; other sites get their own icon.
 - History and reports by category; export to CSV or JSON; import from Wallos.
 - Built-in MCP server (Model Context Protocol) with OAuth at /mcp, so Claude, ChatGPT and other MCP clients can list, add and update subscriptions.
