@@ -50,6 +50,29 @@ describe('SubscriptionForm', () => {
     await vi.waitFor(() => expect(calls.some((c) => c.method === 'PATCH' && c.url === '/api/subscriptions/1')).toBe(true));
   });
 
+  it('a yen subscription edits and saves whole yen', async () => {
+    const calls = mockApi({
+      'GET /api/settings': { ...settings, baseCurrency: 'JPY' },
+      'GET /api/logos/candidates': { candidates: [] },
+      'GET /api/subscriptions/1': sub({ amountMinor: 1490, currency: 'JPY' }),
+      'PATCH /api/subscriptions/1': sub(),
+    });
+    renderApp(<SubscriptionForm open onOpenChange={() => {}} editId={1} />);
+    const user = userEvent.setup();
+    expect(await screen.findByDisplayValue('1490')).toBeInTheDocument();
+    const amount = screen.getByLabelText(/tutar/i);
+    expect(amount).toHaveAttribute('inputmode', 'numeric');
+    await user.clear(amount);
+    await user.type(amount, '1590,5');
+    await user.click(screen.getByRole('button', { name: /kaydet/i }));
+    expect(await screen.findByText('9999 gibi bir tutar yaz')).toBeInTheDocument();
+    await user.clear(amount);
+    await user.type(amount, '1.590');
+    await user.click(screen.getByRole('button', { name: /kaydet/i }));
+    await vi.waitFor(() => expect(calls.some((c) => c.method === 'PATCH' && c.url === '/api/subscriptions/1')).toBe(true));
+    expect(calls.find((c) => c.method === 'PATCH')!.body).toMatchObject({ amountMinor: 1590, currency: 'JPY' });
+  });
+
   it('choosing a catalog suggestion fills name, website, category and cycle', async () => {
     mockApi({ 'GET /api/settings': settings, 'GET /api/logos/candidates': { candidates: [] } });
     renderApp(<SubscriptionForm open onOpenChange={() => {}} />);

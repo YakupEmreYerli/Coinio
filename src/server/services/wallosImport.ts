@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { SubscriptionInput } from '../../shared/types.js';
 import { todayIn } from '../../shared/schedule.js';
+import { minorDigits } from '../../shared/money.js';
 import type { ServiceCtx } from './context.js';
 import { fetchLogoInBackground } from './logos.js';
 import { getSettings } from './settings.js';
@@ -21,7 +22,7 @@ const ExportShape = z.union([
   z.object({ subscriptions: z.array(z.unknown()) }).transform((o) => o.subscriptions),
 ]);
 
-const SYMBOL_CURRENCY: Record<string, string> = { '₺': 'TRY', '€': 'EUR', '£': 'GBP', '$': 'USD' };
+const SYMBOL_CURRENCY: Record<string, string> = { '₺': 'TRY', '€': 'EUR', '£': 'GBP', '$': 'USD', '¥': 'JPY', '₩': 'KRW' };
 const HOSTNAME = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/;
 
 const text = (v: unknown): string => (typeof v === 'string' ? v.trim() : typeof v === 'number' ? String(v) : '');
@@ -66,6 +67,7 @@ function parsePrice(raw: unknown): Price | { error: string } {
   if (symbol) {
     currency ??= SYMBOL_CURRENCY[symbol];
     if (symbol === '$') notes.push('"$" is ambiguous (USD, CAD, AUD, ...); imported as USD');
+    if (symbol === '¥') notes.push('"¥" is ambiguous (JPY, CNY); imported as JPY');
     s = s.replace(symbol, '');
   }
   s = s.replace(/\s/g, '');
@@ -96,9 +98,12 @@ function parsePrice(raw: unknown): Price | { error: string } {
   } else {
     intPart = s;
   }
-  if (frac.length > 2) return { error: `price "${text(raw)}" has more than 2 decimals` };
+  // Wallos writes PHP floats, so a yen price may come as "1500.00": zeros past the currency's decimals are fine.
+  const digits = minorDigits(currency);
+  if (/[1-9]/.test(frac.slice(digits))) return { error: `price "${text(raw)}" has more than ${digits} decimals for ${currency}` };
+  frac = frac.slice(0, digits);
   if (intPart === '' || /\D/.test(intPart + frac)) return { error: `unrecognized price "${text(raw)}"` };
-  const amountMinor = Number(intPart) * 100 + Number(frac.padEnd(2, '0'));
+  const amountMinor = Number(intPart) * 10 ** digits + Number(frac.padEnd(digits, '0') || '0');
   if (!Number.isSafeInteger(amountMinor)) return { error: `price "${text(raw)}" is too large` };
   return { amountMinor, currency: currency!, notes };
 }

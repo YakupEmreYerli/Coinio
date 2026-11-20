@@ -51,7 +51,7 @@ Pages are MDX in `docs-site/content/docs`; the sidebar order comes from the `met
 - TypeScript everywhere, `strict` and `noUncheckedIndexedAccess` on. No `any` unless there is no other way.
 - Match the style of the file you are in: two-space indent, single quotes, semicolons, short functions with a one-line doc comment when the name does not say it all.
 - Comments explain why, not what.
-- Money is stored and passed around in minor units (cents) as integers; format only at the edge (`formatMoney`).
+- Money is stored and passed around as integers in the currency's minor unit (cents, whole yen); the exponent comes from `minorDigits` in `src/shared/money.ts`. Format only at the edge (`formatMoney`).
 - Dates are `YYYY-MM-DD` strings handled in UTC, so the viewer's time zone never shifts a day. "Today" comes from the time zone in the settings (`todayIn`), not from the server clock.
 - REST routes map rows explicitly (see `src/server/routes/subscriptions.ts`); never send raw Drizzle rows to the client.
 

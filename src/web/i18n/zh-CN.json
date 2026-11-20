@@ -69,7 +69,7 @@
   "form.domain": "网站",
   "form.domainHint": "用于查找图标。",
   "form.amount": "金额",
-  "form.amountInvalid": "请输入金额，例如 99.99",
+  "form.amountInvalid": "请输入金额，例如 {example}",
   "form.currency": "币种",
   "form.cycle": "计费周期",
   "form.every": "每",

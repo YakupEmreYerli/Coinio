@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { LOCALES, type Locale } from './locales';
+import { isSupportedCurrency } from './money';
 
 export const isoDate = z
   .string()
@@ -10,19 +11,8 @@ export const isoDate = z
     return t.getUTCFullYear() === y && t.getUTCMonth() === m - 1 && t.getUTCDate() === d;
   }, 'invalid calendar date');
 
-/** Only 2-decimal currencies are supported in v1 (amounts are stored as integer minor units). */
-const currency = z
-  .string()
-  .regex(/^[A-Z]{3}$/)
-  .refine((code) => {
-    try {
-      // Intl formats any three letters (XXX, ABC) with 2 decimals, so check the known-code list too.
-      if (typeof Intl.supportedValuesOf === 'function' && !Intl.supportedValuesOf('currency').includes(code)) return false;
-      return new Intl.NumberFormat('en', { style: 'currency', currency: code }).resolvedOptions().maximumFractionDigits === 2;
-    } catch {
-      return false;
-    }
-  }, 'unsupported currency (unknown code or not exactly 2 decimals)');
+/** Any ISO 4217 code; amounts are integers in its smallest unit (see `minorDigits`). */
+const currency = z.string().regex(/^[A-Z]{3}$/).refine(isSupportedCurrency, 'unsupported currency (unknown ISO 4217 code)');
 
 const optionalText = (max: number) => z.string().max(max).nullable().optional();
 

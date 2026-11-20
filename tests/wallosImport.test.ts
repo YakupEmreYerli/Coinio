@@ -74,6 +74,18 @@ describe('parseWallosExport', () => {
     expect(parseOne({ Price: '₺10' }).warnings).toEqual([]);
   });
 
+  it('reads yen prices as whole yen, warning that ¥ could be CNY', () => {
+    const r = parseOne({ Price: '¥1500' });
+    expect(r.items[0]).toMatchObject({ currency: 'JPY', amountMinor: 1500 });
+    expect(r.warnings.join('\n')).toMatch(/¥/);
+    expect(parseOne({ Price: '¥1500.00' }).items[0]!.amountMinor).toBe(1500);
+    expect(parseOne({ Price: 'JPY 1,490' }).items[0]).toMatchObject({ currency: 'JPY', amountMinor: 1490 });
+    expect(parseOne({ Price: '₩17000' }).items[0]).toMatchObject({ currency: 'KRW', amountMinor: 17000 });
+    const bad = parseOne({ Price: '¥1500.5' });
+    expect(bad.items).toHaveLength(0);
+    expect(bad.warnings.join('\n')).toMatch(/0 decimals for JPY/);
+  });
+
   it('skips rows with an unknown currency symbol', () => {
     const r = parseOne({ Price: '¤5.00' });
     expect(r.items).toHaveLength(0);

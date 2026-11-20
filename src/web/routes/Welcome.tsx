@@ -13,6 +13,7 @@ import { useSettings } from '../lib/hooks';
 import { cn } from '../lib/cn';
 import { AuthLayout } from '../onboarding/AuthLayout';
 import { FormError } from './AuthForm';
+import { currencyFormat } from '../../shared/money';
 
 export type OnboardingState = { completed: boolean; hasSamples: boolean };
 export const useOnboarding = () => useQuery({ queryKey: ['onboarding'], queryFn: () => api.get<OnboardingState>('/onboarding') });
@@ -153,7 +154,7 @@ export function Welcome({ onDone, initialStep = 0 }: { onDone: () => void; initi
     finish.mutate(then);
   };
 
-  const sample = new Intl.NumberFormat(locale, { style: 'currency', currency: cur }).format(1234.56);
+  const sample = currencyFormat(cur, locale).format(1234.56);
 
   return (
     <AuthLayout

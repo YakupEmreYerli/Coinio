@@ -16,4 +16,8 @@ describe('convertMinor', () => {
   it('rounds the result to whole minor units', () => {
     expect(convertMinor(333, 'USD', { ...r, rates: { USD: 0.5 } })).toBe(167);
   });
+  it('scales between currencies with different decimals', () => {
+    expect(convertMinor(1000, 'JPY', { ...r, base: 'USD', rates: { JPY: 0.0065 } })).toBe(650);
+    expect(convertMinor(2000, 'USD', { ...r, base: 'JPY', rates: { USD: 155 } })).toBe(3100);
+  });
 });

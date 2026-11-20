@@ -12,7 +12,7 @@ import { useSubscriptionForm } from '../../layout/subscriptionForm';
 import { todayIn } from '../../lib/dates';
 import { useSettings } from '../../lib/hooks';
 import type { ApiSubscription, Cycle } from '../../lib/types';
-import { formatAmountInput, parseAmount } from '../../subscription-form/amount';
+import { amountInputMode, formatAmountInput, parseAmount } from '../../subscription-form/amount';
 import { CATEGORY_LABELS, searchCatalog } from '../../../shared/catalog';
 
 const DOMAIN_RE = /^[a-z0-9-]+(\.[a-z0-9-]+)+$/i;
@@ -43,7 +43,8 @@ export function QuickAdd() {
   const brand = candidates.find((c) => c.kind === 'brand')?.label;
   const name = known?.name ?? nameFrom(text, brand);
   const first = candidates[0];
-  const amountMinor = parseAmount(amount, locale);
+  const currency = settings?.baseCurrency ?? 'USD';
+  const amountMinor = parseAmount(amount, locale, currency);
 
   const add = async () => {
     if (!name || amountMinor === null) return;
@@ -54,7 +55,7 @@ export function QuickAdd() {
         domain: isDomain ? text.trim().toLowerCase() : (known?.domain ?? null),
         category: known ? CATEGORY_LABELS[known.category][locale] : null,
         amountMinor,
-        currency: settings?.baseCurrency ?? 'USD',
+        currency,
         cycle,
         intervalCount: 1,
         nextDue: todayIn(settings?.timezone ?? 'UTC'),
@@ -97,7 +98,7 @@ export function QuickAdd() {
           autoComplete="off"
         />
         <div className="grid grid-cols-2 gap-2.5">
-          <Input aria-label={t('form.amount')} inputMode="decimal" placeholder={formatAmountInput(9999, locale)} value={amount} onChange={(e) => setAmount(e.target.value)} />
+          <Input aria-label={t('form.amount')} inputMode={amountInputMode(currency)} placeholder={formatAmountInput(9999, locale, currency)} value={amount} onChange={(e) => setAmount(e.target.value)} />
           <Select
             aria-label={t('form.cycle')}
             value={cycle}

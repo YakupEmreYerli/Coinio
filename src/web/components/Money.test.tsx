@@ -35,6 +35,15 @@ describe('Money', () => {
     expect(render(<Money minor={2000} currency="USD" cents="inline" />).container.textContent).toBe('$20.00');
   });
 
+  it('shows yen in whole yen with no cents part', () => {
+    setLocale('ja');
+    const { container } = render(<Money minor={1500} currency="JPY" />);
+    expect(container.textContent).toBe('￥1,500');
+    expect(container.querySelector('[data-cents]')).toBeNull();
+    setLocale('en');
+    expect(render(<Money minor={1500} currency="JPY" cents="inline" />).container.textContent).toBe('¥1,500');
+  });
+
   it('big sizes scale with their container instead of overflowing', () => {
     const hero = render(<Money minor={123456789} currency="TRY" size="hero" />).container.firstElementChild!;
     const xl = render(<Money minor={123456789} currency="TRY" size="xl" />).container.firstElementChild!;

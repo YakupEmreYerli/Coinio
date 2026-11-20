@@ -1,3 +1,5 @@
+import { convertMinor as convertUnits } from '../../shared/money.js';
+
 export type Rates = {
   base: string;
   date: string;
@@ -11,5 +13,5 @@ export function convertMinor(amountMinor: number, from: string, rates: Rates): n
   if (from === rates.base) return amountMinor;
   const rate = rates.rates[from];
   if (rate === undefined) return null;
-  return Math.round(amountMinor * rate);
+  return convertUnits(amountMinor, from, rates.base, rate);
 }

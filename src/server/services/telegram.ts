@@ -1,6 +1,7 @@
 import { asc } from 'drizzle-orm';
 import { users } from '../db/schema.js';
 import { todayIn } from '../../shared/schedule.js';
+import { formatMinor, minorToDecimal } from '../../shared/money.js';
 import type { DueItem, Summary } from '../domain/summary.js';
 import { toLocale, translate, type Locale } from '../i18n/index.js';
 import type { ServiceCtx } from './context.js';
@@ -12,14 +13,11 @@ export type PaidLike = { name: string; amountMinor: number; currency: string };
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function formatAmount(minor: number, currency: string, locale: Locale): string {
-  const opts = { style: 'currency', currency } as const;
-  let fmt: Intl.NumberFormat;
   try {
-    fmt = new Intl.NumberFormat(locale, opts);
+    return formatMinor(minor, currency, locale);
   } catch {
-    return `${(minor / 100).toFixed(2)} ${currency}`;
+    return `${minorToDecimal(minor, currency)} ${currency}`;
   }
-  return fmt.format(minor / 10 ** (fmt.resolvedOptions().maximumFractionDigits ?? 2));
 }
 
 function formatDate(date: string, locale: Locale): string {

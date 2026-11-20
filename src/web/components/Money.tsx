@@ -1,3 +1,4 @@
+import { currencyFormat, minorDigits } from '../../shared/money';
 import { useLocale } from '../i18n';
 import { useAppearanceValue } from '../lib/appearanceContext';
 import { cn } from '../lib/cn';
@@ -25,7 +26,7 @@ export function Money({
   const { locale } = useLocale();
   const setting = useAppearanceValue().cents;
   const mode = cents ?? setting;
-  const parts = new Intl.NumberFormat(locale, { style: 'currency', currency }).formatToParts(minor / 100);
+  const parts = currencyFormat(currency, locale).formatToParts(minor / 10 ** minorDigits(currency));
   const fracIdx = parts.findIndex((p) => p.type === 'fraction');
   const decIdx = parts.findIndex((p) => p.type === 'decimal');
   const main = parts.filter((_, i) => i !== fracIdx && i !== decIdx).map((p) => p.value).join('');

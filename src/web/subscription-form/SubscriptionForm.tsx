@@ -15,7 +15,7 @@ import { t, useLocale, type Locale } from '../i18n';
 import type { SubscriptionPrefill } from '../layout/subscriptionForm';
 import { useSettings, useSubscription, useSubscriptions } from '../lib/hooks';
 import type { ApiSubscription, Cycle } from '../lib/types';
-import { formatAmountInput, parseAmount } from './amount';
+import { amountInputMode, formatAmountInput, parseAmount } from './amount';
 import { CatalogSuggestions } from './CatalogSuggestions';
 
 type Values = {
@@ -35,7 +35,7 @@ type Values = {
   active: boolean;
 };
 
-const CURRENCIES = ['TRY', 'USD', 'EUR', 'GBP', 'CHF', 'CAD', 'AUD'];
+const CURRENCIES = ['TRY', 'USD', 'EUR', 'GBP', 'CHF', 'CAD', 'AUD', 'JPY'];
 
 function localToday(): string {
   const d = new Date();
@@ -46,7 +46,7 @@ function toValues(s: ApiSubscription | null, prefill: SubscriptionPrefill | unde
   return {
     name: s?.name ?? prefill?.name ?? '',
     domain: s?.domain ?? prefill?.domain ?? '',
-    amount: s ? formatAmountInput(s.amountMinor, locale) : prefill?.amountMinor !== undefined ? formatAmountInput(prefill.amountMinor, locale) : '',
+    amount: s ? formatAmountInput(s.amountMinor, locale, s.currency) : prefill?.amountMinor !== undefined ? formatAmountInput(prefill.amountMinor, locale, base) : '',
     currency: s?.currency ?? base,
     intervalCount: String(s?.intervalCount ?? 1),
     cycle: s?.cycle ?? prefill?.cycle ?? 'monthly',
@@ -101,10 +101,11 @@ export function SubscriptionForm({
   const categories = useMemo(() => [...new Set(all.map((s) => s.category).filter(Boolean))] as string[], [all]);
   const name = watch('name');
   const domain = watch('domain');
+  const currency = watch('currency');
 
   const onSubmit = handleSubmit(async (v) => {
-    const amountMinor = parseAmount(v.amount, locale);
-    if (amountMinor === null) return form.setError('amount', { message: t('form.amountInvalid') });
+    const amountMinor = parseAmount(v.amount, locale, v.currency);
+    if (amountMinor === null) return form.setError('amount', { message: t('form.amountInvalid', { example: formatAmountInput(9999, locale, v.currency) }) });
     const payload = {
       name: v.name.trim(),
       domain: v.domain.trim() || null,
@@ -167,12 +168,12 @@ export function SubscriptionForm({
               <Input label={t('form.domain')} placeholder="netflix.com" {...register('domain')} hint={t('form.domainHint')} autoComplete="off" inputMode="url" />
             </div>
             <div className="grid grid-cols-[1fr_120px] gap-3">
-              <Input label={t('form.amount')} inputMode="decimal" placeholder={formatAmountInput(9999, locale)} {...register('amount', { required: t('form.amountInvalid') })} error={err.amount?.message} />
+              <Input label={t('form.amount')} inputMode={amountInputMode(currency)} placeholder={formatAmountInput(9999, locale, currency)} {...register('amount', { required: t('form.amountInvalid', { example: formatAmountInput(9999, locale, currency) }) })} error={err.amount?.message} />
               <Controller
                 control={control}
                 name="currency"
                 render={({ field }) => (
-                  <Select label={t('form.currency')} value={field.value} onChange={field.onChange} options={[...new Set([base, ...CURRENCIES])].map((c) => ({ value: c, label: c }))} />
+                  <Select label={t('form.currency')} value={field.value} onChange={field.onChange} options={[...new Set([base, field.value, ...CURRENCIES])].map((c) => ({ value: c, label: c }))} />
                 )}
               />
             </div>

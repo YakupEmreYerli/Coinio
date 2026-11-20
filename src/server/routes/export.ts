@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { ExportQuery } from '../../shared/types.js';
+import { minorToDecimal } from '../../shared/money.js';
 import { requireSession } from '../auth/middleware.js';
 import { todayIn } from '../../shared/schedule.js';
 import type { ServiceCtx } from '../services/context.js';
@@ -9,13 +10,8 @@ import { handle, paymentToApi, subscriptionToApi } from './subscriptions.js';
 
 type Cell = string | number | boolean | null;
 
-/** Minor units as a plain decimal ("1234.56"), without float rounding. */
-function decimal(minor: number | null): string {
-  if (minor === null) return '';
-  const sign = minor < 0 ? '-' : '';
-  const abs = Math.abs(minor);
-  return `${sign}${Math.trunc(abs / 100)}.${String(abs % 100).padStart(2, '0')}`;
-}
+/** Minor units as a plain decimal in the currency's exponent ("1234.56", "1500" for JPY). */
+const decimal = (minor: number | null, currency: string): string => (minor === null ? '' : minorToDecimal(minor, currency));
 
 /** RFC 4180: quote fields holding a comma, quote or line break; double inner quotes; CRLF rows. */
 function toCsv(header: string[], rows: Cell[][]): string {
@@ -33,7 +29,8 @@ export function exportRouter(ctx: ServiceCtx): Router {
     const userId = req.userId!;
     const subs = listSubscriptions(ctx, userId, { includeInactive: true });
     const pays = what === 'payments' ? listPayments(ctx, userId) : [];
-    const date = todayIn(getSettings(ctx).timezone, ctx.now());
+    const { timezone, baseCurrency } = getSettings(ctx);
+    const date = todayIn(timezone, ctx.now());
     res.setHeader('Content-Disposition', `attachment; filename="coinio-${what}-${date}.${format}"`);
 
     if (format === 'json') {
@@ -47,7 +44,7 @@ export function exportRouter(ctx: ServiceCtx): Router {
       res.type('text/csv').send(toCsv(
         ['id', 'name', 'domain', 'amount', 'currency', 'variable_amount', 'cycle', 'interval_count', 'next_due', 'auto_pay',
           'payment_method', 'category', 'notes', 'reminder_days', 'active', 'created_at'],
-        subs.map((s) => [s.id, s.name, s.domain, decimal(s.amountMinor), s.currency, s.variableAmount, s.cycle,
+        subs.map((s) => [s.id, s.name, s.domain, decimal(s.amountMinor, s.currency), s.currency, s.variableAmount, s.cycle,
           s.intervalCount, s.nextDue, s.autoPay, s.paymentMethod, s.category, s.notes, s.reminderDays, s.active, s.createdAt]),
       ));
       return;
@@ -58,7 +55,7 @@ export function exportRouter(ctx: ServiceCtx): Router {
       ['id', 'subscription_id', 'subscription_name', 'due_date', 'paid_at', 'amount', 'currency', 'actual_base_amount',
         'source', 'status'],
       pays.map((p) => [p.id, p.subscriptionId, names.get(p.subscriptionId) ?? null, p.dueDate, p.paidAt,
-        decimal(p.amountMinor), p.currency, decimal(p.actualBaseMinor), p.source, p.status]),
+        decimal(p.amountMinor, p.currency), p.currency, decimal(p.actualBaseMinor, baseCurrency), p.source, p.status]),
     ));
   }));
   return router;

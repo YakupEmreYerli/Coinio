@@ -1,3 +1,4 @@
+import { formatMinor } from '../../../shared/money';
 import { useEffect, useRef, useState } from 'react';
 import { Logo } from '../../components/Logo';
 import { t, useLocale } from '../../i18n';
@@ -5,7 +6,7 @@ import type { ApiSubscription } from '../../lib/types';
 import type { MonthSeries } from '../monthSeries';
 
 function compact(minor: number, locale: string, currency: string): string {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency, notation: 'compact', maximumFractionDigits: 1 }).format(minor / 100);
+  return formatMinor(minor, currency, locale, { notation: 'compact', maximumFractionDigits: 1 });
 }
 
 /** Step chart of the month: paid (solid), projected (dashed), logos above payment days. */

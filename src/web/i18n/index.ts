@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { LOCALES, isLocale, pickLocale, type Locale } from '../../shared/locales';
+import { formatMinor } from '../../shared/money';
 import en from './en.json';
 
 export { LOCALES, LOCALE_NAMES, isLocale } from '../../shared/locales';
@@ -84,9 +85,9 @@ export function t(key: string, vars?: Vars): string {
   return vars ? template.replace(/\{(\w+)\}/g, (m, name: string) => (name in vars ? String(vars[name]) : m)) : template;
 }
 
-/** Money is stored as integer minor units (2 decimals). */
+/** Money is stored as integer minor units of its currency (cents, whole yen). */
 export function formatMoney(minor: number, currency: string, locale: Locale): string {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(minor / 100);
+  return formatMinor(minor, currency, locale);
 }
 
 /** Formats a YYYY-MM-DD string; pinned to UTC so the day never shifts with the viewer's timezone. */

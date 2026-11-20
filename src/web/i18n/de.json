@@ -69,7 +69,7 @@
   "form.domain": "Website",
   "form.domainHint": "Wird zum Finden des Logos verwendet.",
   "form.amount": "Betrag",
-  "form.amountInvalid": "Geben Sie einen Betrag wie 99,99 ein",
+  "form.amountInvalid": "Geben Sie einen Betrag wie {example} ein",
   "form.currency": "Währung",
   "form.cycle": "Abrechnungszeitraum",
   "form.every": "Alle",

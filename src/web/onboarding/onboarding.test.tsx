@@ -27,7 +27,8 @@ describe('locale helpers', () => {
     expect(guessCurrency(['de-DE'])).toBe('EUR');
     expect(guessCurrency(['en-GB', 'en'])).toBe('GBP');
     expect(guessCurrency(['en'])).toBe('USD');
-    expect(guessCurrency(['ja-JP'])).toBe('USD'); // yen has no decimals; Coinio stores hundredths
+    expect(guessCurrency(['ja-JP'])).toBe('JPY');
+    expect(guessCurrency(['ko-KR'])).toBe('KRW');
   });
 
   it('formats a zone offset', () => {
