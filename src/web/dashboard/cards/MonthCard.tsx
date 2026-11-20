@@ -1,8 +1,10 @@
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { EmptyState } from '../../components/EmptyState';
 import { Money } from '../../components/Money';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
+import { CardSkeleton } from '../../components/ui/Skeleton';
 import { t, useLocale } from '../../i18n';
 import { useSubscriptionForm } from '../../layout/subscriptionForm';
 import { monthName } from '../../lib/dates';
@@ -14,11 +16,26 @@ export function MonthCard() {
   const { locale } = useLocale();
   const form = useSubscriptionForm();
   const { summary, subs, byId, today, base } = useDashboardData();
-  if (!summary) return <Card className="h-[288px] animate-pulse" />;
+  if (!summary) return <CardSkeleton height={288} />;
   if (subs && subs.length === 0) {
     return (
       <Card>
-        <EmptyState title={t('empty.noSubs')} body={t('empty.noSubsBody')} action={<Button variant="primary" onClick={() => form.openCreate()}>{t('top.add')}</Button>} />
+        <EmptyState
+          brand
+          title={t('empty.firstTitle')}
+          body={t('empty.firstBody')}
+          action={
+            <>
+              <Button variant="primary" onClick={() => form.openCreate()}>
+                <Plus />
+                {t('top.add')}
+              </Button>
+              <Button asChild>
+                <Link to="/settings/import">{t('empty.importWallos')}</Link>
+              </Button>
+            </>
+          }
+        />
       </Card>
     );
   }

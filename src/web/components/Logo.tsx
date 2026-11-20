@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { cn } from '../lib/cn';
 
-const PALETTE = ['#2f5bd3', '#c2410c', '#0f766e', '#7c3aed', '#be185d', '#b45309', '#15803d', '#475569', '#0369a1', '#9f1239'];
+// The category palette's hues at a lower lightness (OKLCH L 0.52), so a white letter keeps at least 5:1 contrast.
+const PALETTE = ['#525dbd', '#007979', '#8d5e00', '#a4435f', '#27709c', '#7e539c', '#397949', '#a54a28', '#676f2d', '#60697b'];
 
 /** Stable badge colour derived from the name. */
 export function monogramColor(name: string): string {

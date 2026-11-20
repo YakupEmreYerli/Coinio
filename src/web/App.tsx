@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { api, type AuthState } from './api';
 import { resolveLocale, setLocale, t, useLocale } from './i18n';
+import { SlicedMark } from './brand/SlicedMark';
 import { AppShell } from './layout/AppShell';
 import { AppearanceRoot } from './lib/AppearanceRoot';
 import { useSettings } from './lib/hooks';
@@ -57,7 +58,12 @@ export function App() {
     void refresh();
   }, [refresh]);
 
-  if (!auth) return <p className="p-6 text-sm text-text-3">{t('common.loading')}</p>;
+  if (!auth)
+    return (
+      <div className="grid min-h-dvh place-items-center bg-bg" role="status" aria-label={t('common.loading')}>
+        <SlicedMark size={44} animated className="opacity-90" />
+      </div>
+    );
 
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || undefined}>

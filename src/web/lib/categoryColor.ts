@@ -2,8 +2,12 @@ import { useMemo } from 'react';
 import { useAppearanceValue } from './appearanceContext';
 import { useSubscriptions } from './hooks';
 
-/** Distinct, readable on light and dark. Used in order, so the first eight categories never share a colour. */
-export const CATEGORY_PALETTE = ['#e8743b', '#4f6bd5', '#2f9b6a', '#c9476b', '#d9a21b', '#7c3aed', '#0891b2', '#64748b', '#be123c', '#65a30d'];
+/**
+ * Brand-derived: one lightness and chroma in OKLCH (L 0.62), hues spread around the Coinio indigo, so no colour
+ * shouts louder than another. Each one keeps at least 3:1 against both the Paper card and the Night card.
+ * Used in order, so the first ten categories never share a colour.
+ */
+export const CATEGORY_PALETTE = ['#5b66d9', '#1d9999', '#b37903', '#c95d7b', '#3e8ec1', '#9e6ec0', '#519962', '#cb6440', '#848d42', '#7d8699'];
 
 function hashIndex(name: string): number {
   let h = 0;

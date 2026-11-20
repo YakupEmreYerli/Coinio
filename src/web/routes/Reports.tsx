@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { api } from '../api';
 import { fmt } from '../calendar/dates';
 import { EmptyState } from '../components/EmptyState';
+import { CardSkeleton } from '../components/ui/Skeleton';
 import { Logo } from '../components/Logo';
 import { Money } from '../components/Money';
 import { Button } from '../components/ui/Button';
@@ -31,7 +32,16 @@ export function Reports() {
   const form = useSubscriptionForm();
   const report = useQuery({ queryKey: ['reports'], queryFn: () => api.get<Report>('/reports') }).data;
 
-  if (!report) return <div className="px-4 pb-12 md:px-9"><Title /></div>;
+  if (!report)
+    return (
+      <div className="px-4 pb-12 md:px-9">
+        <Title />
+        <div className="grid gap-[var(--gap)] md:grid-cols-3">
+          {[0, 1, 2].map((i) => <CardSkeleton key={i} height={96} />)}
+        </div>
+        <CardSkeleton height={300} className="mt-[var(--gap)]" />
+      </div>
+    );
 
   const empty = report.top.length === 0 && report.months.every((m) => m.paidMinor === 0 && m.projectedMinor === 0);
   const past = report.months.slice(0, CURRENT).reduce((s, m) => s + m.paidMinor, 0);

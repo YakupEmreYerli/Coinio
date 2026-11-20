@@ -42,7 +42,7 @@ describe('Dashboard', () => {
   it('renders empty state for every dashboard card', async () => {
     mockApi(routes({ 'GET /api/summary': summary(), 'GET /api/subscriptions': [] }));
     show();
-    expect(await screen.findByText(/henüz abonelik yok/i)).toBeInTheDocument();
+    expect(await screen.findByText('İlk aboneliğini ekle')).toBeInTheDocument();
     expect(screen.getByText(/yaklaşan ödeme yok/i)).toBeInTheDocument();
   });
 

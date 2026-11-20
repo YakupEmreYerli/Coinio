@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { EmptyState } from '../components/EmptyState';
+import { RowsSkeleton } from '../components/ui/Skeleton';
 import { Logo } from '../components/Logo';
 import { Money } from '../components/Money';
 import { Button } from '../components/ui/Button';
@@ -175,8 +176,10 @@ export function Subscriptions() {
       )}
 
       <Card className="overflow-hidden">
-        {subs.data && all.length === 0 ? (
-          <EmptyState title={t('empty.noSubs')} body={t('empty.noSubsBody')} action={<Button variant="primary" onClick={() => form.openCreate()}><Plus />{t('top.add')}</Button>} />
+        {!subs.data ? (
+          <RowsSkeleton rows={6} />
+        ) : all.length === 0 ? (
+          <EmptyState brand title={t('empty.noSubs')} body={t('empty.noSubsBody')} action={<Button variant="primary" onClick={() => form.openCreate()}><Plus />{t('top.add')}</Button>} />
         ) : subs.data && rows.length === 0 ? (
           <EmptyState icon={<Search />} title={t('subs.noMatch')} body={t('empty.noUpcomingFiltered')} />
         ) : (
