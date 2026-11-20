@@ -30,20 +30,10 @@
   "consent.invalidTitle": "無効なリクエスト",
   "consent.invalidBody": "ページを再読み込みして、もう一度お試しください。",
   "consent.openApp": "Coinio を開く",
-  "telegram.title": "支払いのリマインダー",
-  "telegram.overdue": "期限超過",
-  "telegram.upcoming": "まもなく",
-  "telegram.paidToday": "本日引き落とし済み",
-  "telegram.tomorrow": "明日引き落とし",
-  "telegram.today": "本日が期限",
-  "telegram.autoIn": {
-    "other": "{n}日後に引き落とし"
-  },
-  "telegram.manualIn": {
-    "other": "{n}日後が期限"
-  },
-  "telegram.late": {
-    "other": "{n}日超過"
-  },
-  "telegram.test": "Coinio のテストメッセージ：Telegram と連携しました。"
+  "cycleLabel.week": "毎週",
+  "cycleLabel.month": "毎月",
+  "cycleLabel.year": "毎年",
+  "cycleLabel.weekN": "{n}週間ごと",
+  "cycleLabel.monthN": "{n}か月ごと",
+  "cycleLabel.yearN": "{n}年ごと"
 }

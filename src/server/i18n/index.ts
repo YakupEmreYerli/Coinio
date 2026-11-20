@@ -11,7 +11,7 @@ import zhCN from './zh-CN.json';
 export type { Locale };
 type Message = string | Partial<Record<Intl.LDMLPluralRule, string>>;
 
-// Strings end users see from the server: the OAuth sign-in and consent pages and Telegram reminders.
+// Strings end users see from the server: the OAuth sign-in and consent pages and words used in notifications.
 const catalogs: Record<Locale, Record<string, Message>> = { en, tr, de, fr, es, 'pt-BR': ptBR, 'zh-CN': zhCN, ja };
 
 /** A saved setting → a supported locale (English when unset or unknown). */

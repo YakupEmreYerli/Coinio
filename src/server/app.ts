@@ -14,12 +14,14 @@ import { OAUTH_SCOPES, SqliteOAuthProvider } from './oauth/provider.js';
 import { keysRouter, oauthClientsRouter } from './routes/keys.js';
 import { logosRouter } from './routes/logos.js';
 import { mcpRouter } from './routes/mcp.js';
+import { notificationsRouter } from './routes/notifications.js';
 import { reportsRouter } from './routes/reports.js';
 import { appearanceRouter, settingsRouter } from './routes/settings.js';
 import { onboardingRouter } from './routes/onboarding.js';
 import { subscriptionsRouter } from './routes/subscriptions.js';
 import { widgetRouter } from './routes/widget.js';
 import type { LookupFn, ServiceCtx } from './services/context.js';
+import { seedTelegramFromEnv } from './services/notify/channels.js';
 
 export type AppDeps = {
   db: Db;
@@ -37,6 +39,7 @@ export function createApp(deps: AppDeps): express.Express {
 
   const now = deps.now ?? (() => new Date());
   const ctx: ServiceCtx = { db: deps.db, config: deps.config, fetch: deps.fetch ?? fetch, now, lookup: deps.lookup };
+  seedTelegramFromEnv(ctx);
 
   // Wallos exports can exceed the default 100 KB body limit; mounted before the global parser, which would reject them.
   app.use('/api/import', cookieParser(), express.json({ limit: '1mb' }), importRouter(ctx));
@@ -71,6 +74,7 @@ export function createApp(deps: AppDeps): express.Express {
 
   app.use('/api/auth', authRouter({ db: deps.db, config: deps.config, now }));
   app.use('/api/settings', settingsRouter(ctx));
+  app.use('/api/notifications', notificationsRouter(ctx));
   app.use('/api/onboarding', onboardingRouter(ctx));
   app.use('/api/keys', keysRouter(ctx));
   app.use('/api/oauth/clients', oauthClientsRouter(ctx));

@@ -36,7 +36,7 @@ describe('export', () => {
     expect(res.headers['content-type']).toMatch(/^text\/csv/);
     expect(res.headers['content-disposition']).toBe('attachment; filename="coinio-subscriptions-2026-11-18.csv"');
     const lines = res.text.split('\r\n');
-    expect(lines[0]).toBe('id,name,domain,amount,currency,variable_amount,cycle,interval_count,next_due,auto_pay,payment_method,category,notes,reminder_days,active,created_at');
+    expect(lines[0]).toBe('id,name,domain,amount,currency,variable_amount,cycle,interval_count,next_due,auto_pay,payment_method,category,notes,reminder_offsets,trial_ends_at,active,created_at');
     expect(lines[1]).toContain('"Acme, ""Pro"" plan",,1234.56,USD,false,monthly,1,2026-12-05,true,,,"line one\nline two"');
   });
 

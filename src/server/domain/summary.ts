@@ -17,7 +17,6 @@ export type DueItem = {
   baseMinor: number | null;
   autoPay: boolean;
   variableAmount: boolean;
-  reminderDays: number;
 };
 
 export type PaidItem = {
@@ -108,7 +107,6 @@ export function computeSummary(input: {
       baseMinor,
       autoPay: sub.autoPay,
       variableAmount: sub.variableAmount,
-      reminderDays: sub.reminderDays,
     });
 
     for (const due of dueDatesThrough(sub.nextDue, horizon, sub.cycle, sub.intervalCount, sub.anchorDay)) {

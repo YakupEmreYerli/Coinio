@@ -30,20 +30,10 @@
   "consent.invalidTitle": "请求无效",
   "consent.invalidBody": "请重新加载页面后重试。",
   "consent.openApp": "打开 Coinio",
-  "telegram.title": "付款提醒",
-  "telegram.overdue": "已逾期",
-  "telegram.upcoming": "即将到期",
-  "telegram.paidToday": "今日已扣款",
-  "telegram.tomorrow": "明天扣款",
-  "telegram.today": "今天到期",
-  "telegram.autoIn": {
-    "other": "{n} 天后扣款"
-  },
-  "telegram.manualIn": {
-    "other": "{n} 天后到期"
-  },
-  "telegram.late": {
-    "other": "逾期 {n} 天"
-  },
-  "telegram.test": "Coinio 测试消息：Telegram 已连接。"
+  "cycleLabel.week": "每周",
+  "cycleLabel.month": "每月",
+  "cycleLabel.year": "每年",
+  "cycleLabel.weekN": "每 {n} 周",
+  "cycleLabel.monthN": "每 {n} 个月",
+  "cycleLabel.yearN": "每 {n} 年"
 }

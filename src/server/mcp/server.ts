@@ -38,7 +38,8 @@ const subscriptionOut = (s: SubscriptionRow) => ({
   category: s.category,
   domain: s.domain,
   notes: s.notes,
-  reminder_days: s.reminderDays,
+  reminder_offsets: s.reminderOffsets,
+  trial_ends_at: s.trialEndsAt,
   active: s.active,
 });
 
@@ -91,7 +92,11 @@ const writableFields = {
   next_due: isoDate.describe('Next due date, YYYY-MM-DD'),
   auto_pay: z.boolean().describe('True if the charge happens automatically (card on file); false if paid by hand'),
   variable_amount: z.boolean().describe('True if the charge differs each period (e.g. usage bills)'),
-  reminder_days: z.number().int().describe('Days before the due date to send a reminder'),
+  reminder_offsets: z
+    .array(z.number().int())
+    .nullable()
+    .describe('Days before each due date to send a reminder, e.g. [7, 1]; 0 means on the due day. null uses the default for the billing cycle (set in Settings › Notifications)'),
+  trial_ends_at: isoDate.nullable().describe('Last day of a free trial, YYYY-MM-DD; Coinio alerts before it ends. null if not on a trial'),
   domain: z.string().nullable().describe('Website domain, e.g. netflix.com'),
   payment_method: z.string().nullable(),
   category: z.string().nullable(),
@@ -110,7 +115,8 @@ function toServiceFields(a: Fields) {
     nextDue: a.next_due,
     autoPay: a.auto_pay,
     variableAmount: a.variable_amount,
-    reminderDays: a.reminder_days,
+    reminderOffsets: a.reminder_offsets,
+    trialEndsAt: a.trial_ends_at,
     domain: a.domain,
     paymentMethod: a.payment_method,
     category: a.category,
@@ -230,7 +236,8 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
         interval_count: writableFields.interval_count.optional(),
         auto_pay: writableFields.auto_pay.optional(),
         variable_amount: writableFields.variable_amount.optional(),
-        reminder_days: writableFields.reminder_days.optional(),
+        reminder_offsets: writableFields.reminder_offsets.optional(),
+        trial_ends_at: writableFields.trial_ends_at.optional(),
         domain: writableFields.domain.optional(),
         payment_method: writableFields.payment_method.optional(),
         category: writableFields.category.optional(),

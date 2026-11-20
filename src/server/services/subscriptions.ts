@@ -6,13 +6,11 @@ import { computeSummary, type PaymentRow, type Summary, type SubscriptionRow } f
 import type { ServiceCtx } from './context.js';
 import { getRates } from './fx.js';
 import { fetchLogoInBackground } from './logos.js';
+import { NotFoundError } from './errors.js';
+import { notifyPriceChange } from './notify/index.js';
 import { getSettings } from './settings.js';
 
-export class NotFoundError extends Error {
-  constructor(what: string) {
-    super(`${what} not found`);
-  }
-}
+export { NotFoundError } from './errors.js';
 
 const dayOf = (date: string) => Number(date.slice(8, 10));
 
@@ -58,7 +56,8 @@ export function insertSubscription(ctx: ServiceCtx, userId: number, input: unkno
       paymentMethod: v.paymentMethod ?? null,
       category: v.category ?? null,
       notes: v.notes ?? null,
-      reminderDays: v.reminderDays,
+      reminderOffsets: v.reminderOffsets,
+      trialEndsAt: v.trialEndsAt,
       createdAt: stamp,
       updatedAt: stamp,
     })
@@ -91,7 +90,8 @@ export function updateSubscription(ctx: ServiceCtx, userId: number, id: number, 
   if (v.paymentMethod !== undefined) set.paymentMethod = v.paymentMethod;
   if (v.category !== undefined) set.category = v.category;
   if (v.notes !== undefined) set.notes = v.notes;
-  if (v.reminderDays !== undefined) set.reminderDays = v.reminderDays;
+  if (v.reminderOffsets !== undefined) set.reminderOffsets = v.reminderOffsets;
+  if (v.trialEndsAt !== undefined) set.trialEndsAt = v.trialEndsAt;
   if (v.active !== undefined) set.active = v.active;
   // Resuming never brings back the periods missed while paused.
   // The edit form sends the unchanged nextDue back, so an unchanged value counts as "not given".
@@ -107,6 +107,7 @@ export function updateSubscription(ctx: ServiceCtx, userId: number, id: number, 
   }
   const row = ctx.db.update(subscriptions).set(set).where(eq(subscriptions.id, id)).returning().get();
   if (row.domain && row.domain !== before.domain) fetchLogoInBackground(ctx, row.id, row.domain);
+  if (row.amountMinor !== before.amountMinor) notifyPriceChange(ctx, row, before.amountMinor, row.amountMinor, null);
   return row;
 }
 
@@ -164,7 +165,8 @@ export function markPaid(
   id: number,
   opts: { dueDate?: string; actualBaseMinor?: number; amountMinor?: number; now: Date },
 ): PaymentRow {
-  return ctx.db.transaction((tx) => {
+  const changed: { sub?: SubscriptionRow; dueDate?: string } = {};
+  const result = ctx.db.transaction((tx) => {
     const sub = getSubscription({ ...ctx, db: tx as typeof ctx.db }, userId, id);
     const dueDate = opts.dueDate ?? sub.nextDue;
     const existing = tx
@@ -192,8 +194,12 @@ export function markPaid(
         .where(eq(subscriptions.id, id))
         .run();
     }
+    // Variable bills differ every time by design; only a fixed amount that changed is news.
+    if (!sub.variableAmount && payment.amountMinor !== sub.amountMinor) Object.assign(changed, { sub, dueDate });
     return payment;
   });
+  if (changed.sub) notifyPriceChange(ctx, changed.sub, changed.sub.amountMinor, result.amountMinor, changed.dueDate ?? null);
+  return result;
 }
 
 /** Records the due date as skipped (counts as nothing) and advances next_due like a payment would. */
