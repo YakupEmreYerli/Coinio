@@ -1,6 +1,6 @@
 import { count, eq, inArray } from 'drizzle-orm';
 import { CATEGORY_LABELS } from '../../shared/catalog.js';
-import { SAMPLE_SUBSCRIPTIONS, samplePrice } from '../../shared/sampleData.js';
+import { SAMPLE_SUBSCRIPTIONS, samplePrice, sampleWord } from '../../shared/sampleData.js';
 import { settings, subscriptions, users } from '../db/schema.js';
 import { todayIn } from '../../shared/schedule.js';
 import type { ServiceCtx } from './context.js';
@@ -56,7 +56,7 @@ export function createSamples(ctx: ServiceCtx, userId: number): number[] {
   const ids = SAMPLE_SUBSCRIPTIONS.map(
     (s) =>
       createSubscription(ctx, userId, {
-        name: s.name,
+        name: sampleWord(s.name, locale),
         domain: s.domain,
         ...samplePrice(s.amountMinor, baseCurrency),
         cycle: s.cycle,
@@ -64,7 +64,7 @@ export function createSamples(ctx: ServiceCtx, userId: number): number[] {
         nextDue: at(s.dueIn),
         autoPay: s.autoPay,
         category: CATEGORY_LABELS[s.category][locale],
-        paymentMethod: s.paymentMethod,
+        paymentMethod: sampleWord(s.paymentMethod, locale),
       }).id,
   );
   write(ctx, SAMPLES, JSON.stringify(ids));

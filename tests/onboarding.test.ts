@@ -67,4 +67,15 @@ describe('onboarding', () => {
     expect(new Set(subs.map((s) => s.currency))).toEqual(new Set(['TRY']));
     expect((await agent.get('/api/summary')).body.unconvertible).toEqual([]);
   });
+
+  it('samples speak the saved language: words are translated, brands are not', async () => {
+    const { agent } = await login();
+    await agent.patch('/api/settings').send({ locale: 'de' }).expect(200);
+    await agent.post('/api/onboarding/samples');
+    const subs = (await agent.get('/api/subscriptions')).body as { name: string; paymentMethod: string; category: string }[];
+    const names = subs.map((s) => s.name);
+    expect(names).toContain('Fitnessstudio');
+    expect(names).toContain('Netflix');
+    expect(subs.find((s) => s.name === 'Netflix')).toMatchObject({ paymentMethod: 'Karte', category: 'Streaming' });
+  });
 });

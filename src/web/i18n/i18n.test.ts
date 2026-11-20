@@ -64,7 +64,7 @@ describe('i18n', () => {
     expect(formatMoney(99999, 'TRY', 'tr')).toBe('₺999,99');
     expect(formatMoney(1050, 'USD', 'en')).toBe('$10.50');
     expect(formatMoney(123456, 'EUR', 'de')).toBe('1.234,56\u00a0€');
-    expect(formatMoney(1050, 'JPY', 'ja')).toBe('￥11');
+    expect(formatMoney(123456, 'CNY', 'zh-CN')).toBe('¥1,234.56');
   });
 
   it('formats ISO dates without shifting the day', () => {

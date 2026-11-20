@@ -5,7 +5,7 @@ import { ZodError } from 'zod';
 import { mergeAppearance, Appearance as AppearanceSchema, type Appearance } from '../../shared/appearance';
 import { CATEGORY_LABELS } from '../../shared/catalog';
 import type { Locale } from '../../shared/locales';
-import { SAMPLE_RATES, SAMPLE_SUBSCRIPTIONS } from '../../shared/sampleData';
+import { SAMPLE_RATES, SAMPLE_SUBSCRIPTIONS, sampleWord } from '../../shared/sampleData';
 import { dueDatesThrough, nextDue, todayIn } from '../../shared/schedule';
 import { PaymentPatch, PaymentQuery, PayInput, SettingsPatch, SkipInput, SubscriptionInput, SubscriptionPatch, type Settings } from '../../shared/types';
 import type { Rates } from '../../server/domain/money';
@@ -151,9 +151,9 @@ export class DemoBackend {
       const start = addMonths(due, -SAMPLE_HISTORY_MONTHS);
       const id = state.nextId++;
       state.subs.push({
-        id, userId: USER.id, name: s.name, domain: s.domain, logoPath: this.logoFor(s.domain), amountMinor: s.amountMinor, currency: s.currency,
+        id, userId: USER.id, name: sampleWord(s.name, settings.locale), domain: s.domain, logoPath: this.logoFor(s.domain), amountMinor: s.amountMinor, currency: s.currency,
         variableAmount: false, cycle: s.cycle, intervalCount: 1, anchorDay: dayOf(due), nextDue: due, autoPay: s.autoPay,
-        paymentMethod: s.paymentMethod, category: CATEGORY_LABELS[s.category][settings.locale], notes: null, reminderDays: 1, active: true,
+        paymentMethod: sampleWord(s.paymentMethod, settings.locale), category: CATEGORY_LABELS[s.category][settings.locale], notes: null, reminderDays: 1, active: true,
         createdAt: `${start}T09:00:00.000Z`, updatedAt: `${start}T09:00:00.000Z`,
       });
       for (const d of dueDatesThrough(start, addDays(due, -1), s.cycle, 1, dayOf(due))) {
