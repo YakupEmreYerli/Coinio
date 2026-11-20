@@ -5,7 +5,7 @@ import { projectMonth } from './projection';
 const sub = (over: Partial<ApiSubscription> = {}): ApiSubscription => ({
   id: 1, name: 'Netflix', domain: null, logoPath: null, amountMinor: 19999, currency: 'TRY', variableAmount: false,
   cycle: 'monthly', intervalCount: 1, anchorDay: 22, nextDue: '2026-11-22', autoPay: true, paymentMethod: null,
-  category: null, notes: null, reminderDays: 1, active: true, createdAt: '', updatedAt: '', ...over,
+  category: null, notes: null, reminderOffsets: null, trialEndsAt: null, active: true, createdAt: '', updatedAt: '', ...over,
 });
 const pay = (over: Partial<ApiPayment> & Pick<ApiPayment, 'dueDate'>): ApiPayment => ({
   id: 9, subscriptionId: 1, paidAt: `${over.dueDate}T08:00:00Z`, amountMinor: 19999, currency: 'TRY',

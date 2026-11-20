@@ -35,7 +35,9 @@ export const subscriptions = sqliteTable('subscriptions', {
   paymentMethod: text('payment_method'),
   category: text('category'),
   notes: text('notes'),
-  reminderDays: integer('reminder_days').notNull().default(1),
+  /** Days before each due date to remind, 0 = the due day; null uses the defaults for the billing cycle. */
+  reminderOffsets: text('reminder_offsets', { mode: 'json' }).$type<number[]>(),
+  trialEndsAt: text('trial_ends_at'),
   active: integer('active', { mode: 'boolean' }).notNull().default(true),
   createdAt: text('created_at').notNull(),
   updatedAt: text('updated_at').notNull(),
@@ -112,3 +114,33 @@ export const fxRates = sqliteTable(
   (t) => [primaryKey({ columns: [t.base, t.quote] })],
 );
 
+
+export const notificationChannels = sqliteTable('notification_channels', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  type: text('type').notNull(),
+  name: text('name').notNull(),
+  enabled: integer('enabled', { mode: 'boolean' }).notNull().default(true),
+  config: text('config', { mode: 'json' }).$type<Record<string, string | number>>().notNull(),
+  /** Never sent to the client. */
+  secrets: text('secrets', { mode: 'json' }).$type<Record<string, string>>().notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+
+/** One row per message and channel; `dedup_key` keeps anything from being sent twice. */
+export const notificationLog = sqliteTable('notification_log', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  dedupKey: text('dedup_key').notNull().unique(),
+  type: text('type').notNull(),
+  channelId: integer('channel_id').references(() => notificationChannels.id, { onDelete: 'set null' }),
+  subscriptionId: integer('subscription_id').references(() => subscriptions.id, { onDelete: 'set null' }),
+  title: text('title').notNull(),
+  /** The message already rendered for this channel, so a retry sends exactly the same thing. */
+  payload: text('payload', { mode: 'json' }).$type<Record<string, unknown>>().notNull(),
+  status: text('status', { enum: ['queued', 'sending', 'sent', 'failed'] }).notNull(),
+  attempts: integer('attempts').notNull().default(0),
+  error: text('error'),
+  nextAttemptAt: text('next_attempt_at'),
+  createdAt: text('created_at').notNull(),
+  sentAt: text('sent_at'),
+});

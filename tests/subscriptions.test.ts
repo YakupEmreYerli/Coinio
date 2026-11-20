@@ -24,7 +24,7 @@ describe('subscriptions REST', () => {
     const { agent } = await login();
     const res = await agent.post('/api/subscriptions').send(netflix);
     expect(res.status).toBe(201);
-    expect(res.body).toMatchObject({ anchorDay: 31, nextDue: '2026-12-31', autoPay: true, variableAmount: false, reminderDays: 1, active: true });
+    expect(res.body).toMatchObject({ anchorDay: 31, nextDue: '2026-12-31', autoPay: true, variableAmount: false, reminderOffsets: null, trialEndsAt: null, active: true });
     expect((await agent.get('/api/subscriptions')).body).toHaveLength(1);
   });
 
@@ -186,29 +186,16 @@ describe('subscriptions REST', () => {
 });
 
 describe('settings REST', () => {
-  it('returns defaults, patches, masks the telegram token, lets env win', async () => {
+  it('returns defaults, patches, and ignores the old Telegram fields (now notification channels)', async () => {
     const { agent } = await login(makeTestApp(), null);
     expect((await agent.get('/api/settings')).body).toEqual({
-      baseCurrency: 'USD', timezone: 'UTC', locale: 'en', reminderTime: '09:00', telegramBotToken: null, telegramChatId: null,
+      baseCurrency: 'USD', timezone: 'UTC', locale: 'en', reminderTime: '09:00',
     });
     const res = await agent.patch('/api/settings').send({ locale: 'tr', telegramBotToken: '123456:ABCDEFwxyz', telegramChatId: '42' });
-    expect(res.body).toMatchObject({ locale: 'tr', telegramBotToken: '****wxyz', telegramChatId: '42' });
-    const echoed = await agent.patch('/api/settings').send({ telegramBotToken: '****wxyz', locale: 'en' });
-    expect(echoed.body).toMatchObject({ locale: 'en', telegramBotToken: '****wxyz' });
-    await agent.patch('/api/settings').send({ telegramBotToken: 'short' });
-    expect((await agent.get('/api/settings')).body.telegramBotToken).toBe('****');
-    await agent.patch('/api/settings').send({ telegramBotToken: '123456:ABCDEFwxyz' });
-    expect((await agent.get('/api/settings')).body.telegramBotToken).toBe('****wxyz');
-    expect((await agent.patch('/api/settings').send({ telegramBotToken: null })).body.telegramBotToken).toBeNull();
+    expect(res.body).toEqual({ baseCurrency: 'USD', timezone: 'UTC', locale: 'tr', reminderTime: '09:00' });
     for (const bad of [{ timezone: 'Mars/Base' }, { reminderTime: '25:00' }, { baseCurrency: 'ABC' }, { locale: 'ko' }]) {
       expect((await agent.patch('/api/settings').send(bad)).status).toBe(400);
     }
-  });
-
-  it('config env telegram values override stored ones', async () => {
-    const { agent } = await login(makeTestApp({ config: { telegramBotToken: 'envtoken9999', telegramChatId: '7' } }));
-    await agent.patch('/api/settings').send({ telegramChatId: '42' });
-    expect((await agent.get('/api/settings')).body).toMatchObject({ telegramBotToken: '****9999', telegramChatId: '7' });
   });
 });
 

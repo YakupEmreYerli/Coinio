@@ -5,8 +5,23 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { setLocale } from '../../i18n';
 import { mockApi, renderApp, setViewport } from '../../test/render';
 import { SettingsLayout } from './SettingsLayout';
+import { defaultTemplates } from '../../../shared/notify/defaults';
+import { DEFAULT_NOTIFY_SETTINGS, NOTIFY_TYPES } from '../../../shared/notify/types';
 
-const settings = { baseCurrency: 'TRY', timezone: 'Europe/Istanbul', locale: 'tr', reminderTime: '09:00', telegramBotToken: null, telegramChatId: null };
+const telegramChannel = { id: 1, type: 'telegram', name: 'Bot', enabled: true, config: { chatId: '42' }, secrets: { botToken: true }, createdAt: '2026-11-19T00:00:00Z' };
+
+function notificationsPage(channels: unknown[] = []) {
+  const defaults = defaultTemplates('tr');
+  return {
+    settings: DEFAULT_NOTIFY_SETTINGS,
+    channels,
+    templates: Object.fromEntries(NOTIFY_TYPES.map((t) => [t, { ...defaults[t], custom: false }])),
+    defaults,
+    appUrl: null,
+  };
+}
+
+const settings = { baseCurrency: 'TRY', timezone: 'Europe/Istanbul', locale: 'tr', reminderTime: '09:00' };
 
 function open(section: string) {
   return renderApp(
@@ -33,11 +48,61 @@ describe('settings', () => {
     await vi.waitFor(() => expect(calls.find((c) => c.method === 'PATCH')?.body).toEqual({ baseCurrency: 'USD' }));
   });
 
-  it('telegram test shows result toast', async () => {
-    mockApi({ 'GET /api/settings': { ...settings, telegramBotToken: '****9999', telegramChatId: '42' }, 'POST /api/settings/telegram/test': { ok: true } });
+  it('adds a Telegram channel with a topic ID and shows the exact error of a failed test', async () => {
+    const page = notificationsPage();
+    const calls = mockApi({
+      'GET /api/settings': settings,
+      'GET /api/notifications': page,
+      'POST /api/notifications/channels/test': () => new Response(JSON.stringify({ error: 'delivery_failed', message: 'HTTP 400: Bad Request: chat not found' }), { status: 502 }),
+      'POST /api/notifications/channels': { id: 1 },
+    });
     open('notifications');
-    await userEvent.setup().click(await screen.findByRole('button', { name: /test mesajı gönder/i }));
-    expect(await screen.findByText(/test mesajı gönderildi/i)).toBeInTheDocument();
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole('button', { name: /^kanal ekle$/i }));
+    await user.click(screen.getByRole('button', { name: /telegram/i }));
+    await user.type(screen.getByLabelText(/bot token/i), '123:ABC');
+    await user.type(screen.getByLabelText(/sohbet kimliği/i), '-100');
+    await user.type(screen.getByLabelText(/konu kimliği/i), '7');
+    await user.click(screen.getByRole('button', { name: /test gönder/i }));
+    expect(await screen.findByText(/chat not found/)).toBeInTheDocument();
+    expect(calls.find((c) => c.url === '/api/notifications/channels/test')?.body).toMatchObject({
+      type: 'telegram', config: { chatId: '-100', threadId: '7' }, secrets: { botToken: '123:ABC' },
+    });
+    await user.click(screen.getByRole('button', { name: /^kaydet$/i }));
+    await vi.waitFor(() => expect(calls.find((c) => c.method === 'POST' && c.url === '/api/notifications/channels')).toBeTruthy());
+  });
+
+  it('never shows a saved secret, only that it is saved', async () => {
+    mockApi({ 'GET /api/settings': settings, 'GET /api/notifications': notificationsPage([telegramChannel]) });
+    open('notifications');
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole('button', { name: /bot kanalını düzenle/i }));
+    const token = screen.getByLabelText(/bot token/i) as HTMLInputElement;
+    expect(token.value).toBe('');
+    expect(token.placeholder).toMatch(/kayıtlı/i);
+  });
+
+  it('edits default reminder days and saves them', async () => {
+    const calls = mockApi({ 'GET /api/settings': settings, 'GET /api/notifications': notificationsPage(), 'PUT /api/notifications/settings': (i: RequestInit) => JSON.parse(i.body as string) });
+    open('notifications');
+    const user = userEvent.setup();
+    const monthly = await screen.findByRole('group', { name: /^aylık$/i });
+    await user.click(within(monthly).getByRole('button', { name: /kaldır: 3 gün önce/i }));
+    await user.type(within(monthly).getByRole('spinbutton'), '0{Enter}');
+    await user.click(screen.getAllByRole('button', { name: /^kaydet$/i })[0]!);
+    await vi.waitFor(() => expect((calls.find((c) => c.method === 'PUT')?.body as { offsets: object }).offsets).toEqual({ weekly: [3, 1], monthly: [1, 0], yearly: [30, 7, 1] }));
+  });
+
+  it('previews a template with sample data and inserts variables', async () => {
+    mockApi({ 'GET /api/settings': settings, 'GET /api/notifications': notificationsPage() });
+    open('notifications');
+    const user = userEvent.setup();
+    const title = await screen.findByLabelText(/başlık ya da konu/i);
+    await user.clear(title);
+    await user.type(title, 'Öde: ');
+    await user.click(screen.getByRole('button', { name: /\{\{name\}\}/ }));
+    expect((title as HTMLInputElement).value).toBe('Öde: {{name}}');
+    expect(await screen.findByText('Öde: Netflix')).toBeInTheDocument();
   });
 
   it('new api key shown once then only prefix', async () => {

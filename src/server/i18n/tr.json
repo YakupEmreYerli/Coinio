@@ -30,23 +30,10 @@
   "consent.invalidTitle": "Geçersiz istek",
   "consent.invalidBody": "Sayfayı yenile ve yeniden dene.",
   "consent.openApp": "Coinio’yu aç",
-  "telegram.title": "Ödeme hatırlatması",
-  "telegram.overdue": "Geciken",
-  "telegram.upcoming": "Yaklaşan",
-  "telegram.paidToday": "Bugün çekildi",
-  "telegram.tomorrow": "yarın çekilecek",
-  "telegram.today": "bugün",
-  "telegram.autoIn": {
-    "one": "{n} gün sonra çekilecek",
-    "other": "{n} gün sonra çekilecek"
-  },
-  "telegram.manualIn": {
-    "one": "{n} gün sonra",
-    "other": "{n} gün sonra"
-  },
-  "telegram.late": {
-    "one": "{n} gün gecikti",
-    "other": "{n} gün gecikti"
-  },
-  "telegram.test": "Coinio test mesajı: Telegram bağlı."
+  "cycleLabel.week": "Her hafta",
+  "cycleLabel.month": "Her ay",
+  "cycleLabel.year": "Her yıl",
+  "cycleLabel.weekN": "{n} haftada bir",
+  "cycleLabel.monthN": "{n} ayda bir",
+  "cycleLabel.yearN": "{n} yılda bir"
 }

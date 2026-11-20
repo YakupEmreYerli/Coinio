@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { api } from '../api';
 import { LogoPicker, type LogoChoice } from '../components/logo-picker/LogoPicker';
+import { OffsetChips, offsetLabel } from '../components/OffsetChips';
 import { Button } from '../components/ui/Button';
 import { Dialog, DialogBody, DialogContent, DialogFooter } from '../components/ui/Dialog';
 import { Input } from '../components/ui/Input';
@@ -13,7 +14,7 @@ import { Textarea } from '../components/ui/Textarea';
 import { toast } from '../components/ui/Toaster';
 import { t, useLocale, type Locale } from '../i18n';
 import type { SubscriptionPrefill } from '../layout/subscriptionForm';
-import { useSettings, useSubscription, useSubscriptions } from '../lib/hooks';
+import { useNotifications, useSettings, useSubscription, useSubscriptions } from '../lib/hooks';
 import type { ApiSubscription, Cycle } from '../lib/types';
 import { amountInputMode, formatAmountInput, parseAmount } from './amount';
 import { CatalogSuggestions } from './CatalogSuggestions';
@@ -30,7 +31,9 @@ type Values = {
   variableAmount: boolean;
   paymentMethod: string;
   category: string;
-  reminderDays: string;
+  ownReminders: boolean;
+  reminderOffsets: number[];
+  trialEndsAt: string;
   notes: string;
   active: boolean;
 };
@@ -55,7 +58,9 @@ function toValues(s: ApiSubscription | null, prefill: SubscriptionPrefill | unde
     variableAmount: s?.variableAmount ?? false,
     paymentMethod: s?.paymentMethod ?? '',
     category: s?.category ?? prefill?.category ?? '',
-    reminderDays: String(s?.reminderDays ?? 1),
+    ownReminders: !!s?.reminderOffsets,
+    reminderOffsets: s?.reminderOffsets ?? [],
+    trialEndsAt: s?.trialEndsAt ?? '',
     notes: s?.notes ?? '',
     active: s?.active ?? true,
   };
@@ -82,6 +87,7 @@ export function SubscriptionForm({
   const editing = editId !== undefined;
   const sub = editing ? (existing.data ?? null) : null;
   const all = useSubscriptions().data ?? [];
+  const notifyDefaults = useNotifications().data?.settings?.offsets;
   const [logo, setLogo] = useState<LogoChoice>({ kind: 'keep' });
   const [saving, setSaving] = useState(false);
   const [picked, setPicked] = useState(false);
@@ -102,6 +108,9 @@ export function SubscriptionForm({
   const name = watch('name');
   const domain = watch('domain');
   const currency = watch('currency');
+  const ownReminders = watch('ownReminders');
+  const cycle = watch('cycle');
+  const defaultOffsets = notifyDefaults?.[cycle];
 
   const onSubmit = handleSubmit(async (v) => {
     const amountMinor = parseAmount(v.amount, locale, v.currency);
@@ -119,7 +128,8 @@ export function SubscriptionForm({
       paymentMethod: v.paymentMethod.trim() || null,
       category: v.category.trim() || null,
       notes: v.notes.trim() || null,
-      reminderDays: Math.max(0, Math.min(30, Number(v.reminderDays) || 0)),
+      reminderOffsets: v.ownReminders ? v.reminderOffsets : null,
+      trialEndsAt: v.trialEndsAt || null,
       ...(editing ? { active: v.active } : {}),
     };
     setSaving(true);
@@ -214,12 +224,32 @@ export function SubscriptionForm({
               <Controller control={control} name="variableAmount" render={({ field }) => <Switch checked={field.value} onChange={field.onChange} label={t('form.variable')} description={t('form.variableHint')} />} />
               {editing && <Controller control={control} name="active" render={({ field }) => <Switch checked={field.value} onChange={field.onChange} label={t('form.active')} description={t('form.activeHint')} />} />}
             </div>
-            <div className="grid gap-4 sm:grid-cols-[160px_1fr]">
-              <Input label={t('form.reminder')} type="number" min={0} max={30} {...register('reminderDays')} hint={t('form.reminderHint')} />
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="st-notes">{t('form.notes')}</Label>
-                <Textarea id="st-notes" rows={2} maxLength={2000} {...register('notes')} />
-              </div>
+            <div className="flex flex-col gap-4 rounded-ctl border border-line p-4">
+              <Controller
+                control={control}
+                name="ownReminders"
+                render={({ field }) => (
+                  <Switch
+                    checked={!field.value}
+                    onChange={(useDefault) => {
+                      field.onChange(!useDefault);
+                      if (!useDefault && form.getValues('reminderOffsets').length === 0) form.setValue('reminderOffsets', defaultOffsets ?? [1]);
+                    }}
+                    label={t('form.reminderDefault')}
+                    description={
+                      defaultOffsets ? (defaultOffsets.length ? defaultOffsets.map(offsetLabel).join(', ') : t('notify.noOffsets')) : t('form.reminderHint')
+                    }
+                  />
+                )}
+              />
+              {ownReminders && (
+                <Controller control={control} name="reminderOffsets" render={({ field }) => <OffsetChips label={t('form.reminder')} value={field.value} onChange={field.onChange} />} />
+              )}
+              <Input label={t('form.trialEnds')} type="date" {...register('trialEndsAt')} hint={t('form.trialEndsHint')} className="sm:w-52" />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="st-notes">{t('form.notes')}</Label>
+              <Textarea id="st-notes" rows={2} maxLength={2000} {...register('notes')} />
             </div>
           </DialogBody>
           <DialogFooter>

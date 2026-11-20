@@ -11,4 +11,6 @@ export const keys = {
   payments: (filter: object = {}) => ['payments', filter] as const,
   settings: ['settings'] as const,
   appearance: ['appearance'] as const,
+  notifications: ['notifications'] as const,
+  notificationLog: ['notifications', 'log'] as const,
 };

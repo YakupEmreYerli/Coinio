@@ -1,0 +1,34 @@
+{
+  "reminder": {
+    "title": "{{name}} {{when}}到期",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}}（≈ {{amountMain}}）{{/amountMain}}\n到期日：{{dueDate}}（{{when}}）\n{{#autoPay}}届时将{{#paymentMethod}}通过 {{paymentMethod}} {{/paymentMethod}}自动扣款。{{/autoPay}}{{^autoPay}}记得{{#paymentMethod}}用 {{paymentMethod}} {{/paymentMethod}}按时付款。{{/autoPay}}\n{{#link}}[在 Coinio 中打开]({{link}}){{/link}}"
+  },
+  "dueToday": {
+    "title": "{{name}} 今天到期",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}}（≈ {{amountMain}}）{{/amountMain}}\n{{#autoPay}}今天将自动扣款。{{/autoPay}}{{^autoPay}}今天是付款截止日。{{/autoPay}}\n{{#link}}[在 Coinio 中打开]({{link}}){{/link}}"
+  },
+  "overdue": {
+    "title": "{{name}} 已逾期",
+    "body": "**{{name}}** · {{amount}}\n这笔款项已于 {{dueDate}} 到期，尚未标记为已付。\n{{#link}}[在 Coinio 中标记为已付]({{link}}){{/link}}"
+  },
+  "digest": {
+    "title": "付款概览：{{period}}",
+    "body": "**即将到期** · {{total}}\n{{#items}}- {{dueDate}} · {{name}} · {{amount}}{{#autoPay}}（自动扣款）{{/autoPay}}\n{{/items}}{{^items}}此期间没有待付款项。\n{{/items}}{{#hasOverdue}}\n**已逾期** · {{overdueTotal}}\n{{/hasOverdue}}{{#overdue}}- {{dueDate}} · {{name}} · {{amount}}\n{{/overdue}}{{#appUrl}}\n[打开 Coinio]({{appUrl}}){{/appUrl}}"
+  },
+  "trialEnding": {
+    "title": "{{name}} 试用期将于{{when}}结束",
+    "body": "**{{name}}** 的免费试用将于 {{trialEnd}}（{{when}}）结束。\n之后费用为 {{amount}}（{{cycle}}）。如不打算继续使用，请在此之前取消。\n{{#link}}[在 Coinio 中打开]({{link}}){{/link}}"
+  },
+  "budgetExceeded": {
+    "title": "{{month}} 预算超支",
+    "body": "每月预算为 {{budget}}。目前已支付 {{spent}}，预计本月总额将达 {{projected}}，超出预算 {{over}}。\n{{#appUrl}}[打开 Coinio]({{appUrl}}){{/appUrl}}"
+  },
+  "priceChange": {
+    "title": "{{name}} 价格变动",
+    "body": "**{{name}}** 从 {{oldAmount}} 调整为 {{newAmount}}{{#change}}（{{change}}）{{/change}}。\n{{#paidDate}}这是 {{paidDate}} 那笔付款的金额。\n{{/paidDate}}{{#link}}[在 Coinio 中打开]({{link}}){{/link}}"
+  },
+  "test": {
+    "title": "Coinio 测试",
+    "body": "这是来自 Coinio 的测试消息。**{{channel}}** 已设置完成，运行正常。"
+  }
+}

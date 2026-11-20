@@ -43,9 +43,9 @@ export function exportRouter(ctx: ServiceCtx): Router {
     if (what === 'subscriptions') {
       res.type('text/csv').send(toCsv(
         ['id', 'name', 'domain', 'amount', 'currency', 'variable_amount', 'cycle', 'interval_count', 'next_due', 'auto_pay',
-          'payment_method', 'category', 'notes', 'reminder_days', 'active', 'created_at'],
+          'payment_method', 'category', 'notes', 'reminder_offsets', 'trial_ends_at', 'active', 'created_at'],
         subs.map((s) => [s.id, s.name, s.domain, decimal(s.amountMinor, s.currency), s.currency, s.variableAmount, s.cycle,
-          s.intervalCount, s.nextDue, s.autoPay, s.paymentMethod, s.category, s.notes, s.reminderDays, s.active, s.createdAt]),
+          s.intervalCount, s.nextDue, s.autoPay, s.paymentMethod, s.category, s.notes, s.reminderOffsets?.join(';') ?? '', s.trialEndsAt ?? '', s.active, s.createdAt]),
       ));
       return;
     }

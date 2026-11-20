@@ -30,23 +30,10 @@
   "consent.invalidTitle": "Solicitação inválida",
   "consent.invalidBody": "Recarregue a página e tente de novo.",
   "consent.openApp": "Abrir o Coinio",
-  "telegram.title": "Lembretes de pagamento",
-  "telegram.overdue": "Em atraso",
-  "telegram.upcoming": "Próximos",
-  "telegram.paidToday": "Cobrado hoje",
-  "telegram.tomorrow": "cobrança amanhã",
-  "telegram.today": "vence hoje",
-  "telegram.autoIn": {
-    "one": "cobrança em {n} dia",
-    "other": "cobrança em {n} dias"
-  },
-  "telegram.manualIn": {
-    "one": "vence em {n} dia",
-    "other": "vence em {n} dias"
-  },
-  "telegram.late": {
-    "one": "{n} dia de atraso",
-    "other": "{n} dias de atraso"
-  },
-  "telegram.test": "Mensagem de teste do Coinio: o Telegram está conectado."
+  "cycleLabel.week": "Toda semana",
+  "cycleLabel.month": "Todo mês",
+  "cycleLabel.year": "Todo ano",
+  "cycleLabel.weekN": "A cada {n} semanas",
+  "cycleLabel.monthN": "A cada {n} meses",
+  "cycleLabel.yearN": "A cada {n} anos"
 }

@@ -6,6 +6,7 @@ export type Config = {
   publicUrl: string | null;
   telegramBotToken: string | null;
   telegramChatId: string | null;
+  telegramThreadId: string | null;
   migrationsDir: string;
   /** Built web UI; served only when it contains index.html. */
   webDir: string;
@@ -30,6 +31,7 @@ export function loadConfig(env: Env = process.env): Config {
     publicUrl: orNull(env.COINIO_PUBLIC_URL),
     telegramBotToken: orNull(env.COINIO_TELEGRAM_BOT_TOKEN),
     telegramChatId: orNull(env.COINIO_TELEGRAM_CHAT_ID),
+    telegramThreadId: orNull(env.COINIO_TELEGRAM_THREAD_ID),
     migrationsDir: fileURLToPath(new URL('./db/migrations', import.meta.url)),
     webDir: orNull(env.COINIO_WEB_DIR) ?? fileURLToPath(new URL('../web', import.meta.url)),
   };

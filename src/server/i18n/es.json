@@ -30,23 +30,10 @@
   "consent.invalidTitle": "Solicitud no válida",
   "consent.invalidBody": "Recarga la página e inténtalo de nuevo.",
   "consent.openApp": "Abrir Coinio",
-  "telegram.title": "Recordatorios de pago",
-  "telegram.overdue": "Vencidos",
-  "telegram.upcoming": "Próximos",
-  "telegram.paidToday": "Cobrados hoy",
-  "telegram.tomorrow": "se cobra mañana",
-  "telegram.today": "vence hoy",
-  "telegram.autoIn": {
-    "one": "se cobra en {n} día",
-    "other": "se cobra en {n} días"
-  },
-  "telegram.manualIn": {
-    "one": "vence en {n} día",
-    "other": "vence en {n} días"
-  },
-  "telegram.late": {
-    "one": "vencido hace {n} día",
-    "other": "vencido hace {n} días"
-  },
-  "telegram.test": "Mensaje de prueba de Coinio: Telegram está conectado."
+  "cycleLabel.week": "Cada semana",
+  "cycleLabel.month": "Cada mes",
+  "cycleLabel.year": "Cada año",
+  "cycleLabel.weekN": "Cada {n} semanas",
+  "cycleLabel.monthN": "Cada {n} meses",
+  "cycleLabel.yearN": "Cada {n} años"
 }

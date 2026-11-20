@@ -30,23 +30,10 @@
   "consent.invalidTitle": "Ungültige Anfrage",
   "consent.invalidBody": "Laden Sie die Seite neu und versuchen Sie es erneut.",
   "consent.openApp": "Coinio öffnen",
-  "telegram.title": "Zahlungserinnerungen",
-  "telegram.overdue": "Überfällig",
-  "telegram.upcoming": "Demnächst",
-  "telegram.paidToday": "Heute abgebucht",
-  "telegram.tomorrow": "wird morgen abgebucht",
-  "telegram.today": "heute fällig",
-  "telegram.autoIn": {
-    "one": "wird in {n} Tag abgebucht",
-    "other": "wird in {n} Tagen abgebucht"
-  },
-  "telegram.manualIn": {
-    "one": "fällig in {n} Tag",
-    "other": "fällig in {n} Tagen"
-  },
-  "telegram.late": {
-    "one": "{n} Tag überfällig",
-    "other": "{n} Tage überfällig"
-  },
-  "telegram.test": "Coinio-Testnachricht: Telegram ist verbunden."
+  "cycleLabel.week": "Jede Woche",
+  "cycleLabel.month": "Jeden Monat",
+  "cycleLabel.year": "Jedes Jahr",
+  "cycleLabel.weekN": "Alle {n} Wochen",
+  "cycleLabel.monthN": "Alle {n} Monate",
+  "cycleLabel.yearN": "Alle {n} Jahre"
 }

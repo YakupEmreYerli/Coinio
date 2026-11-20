@@ -4,7 +4,7 @@ import { todayIn } from '../shared/schedule.js';
 import { runAutoPay } from './services/autopay.js';
 import { getRates, refreshRates, type FetchFn } from './services/fx.js';
 import { getInternalValue, getSettings, setInternalValue } from './services/settings.js';
-import { sendDueReminders } from './services/telegram.js';
+import { runNotifications } from './services/notify/index.js';
 import type { ServiceCtx } from './services/context.js';
 
 // Currencies already tried today outside the daily refresh, so an offline API is not hit every minute.
@@ -58,7 +58,7 @@ export function startScheduler(
     try {
       await step('autopay', () => runAutoPay(ctx));
       await step('fx refresh', () => refreshRatesDaily(ctx));
-      await step('telegram reminders', () => sendDueReminders(ctx));
+      await step('notifications', () => runNotifications(ctx));
       await step('onTick', async () => opts.onTick?.());
     } finally {
       running = false;

@@ -52,6 +52,6 @@ export function setViewport(width: number) {
 export const sub = (over: Record<string, unknown> = {}) => ({
   id: 1, name: 'Netflix', domain: 'netflix.com', logoPath: null, amountMinor: 19999, currency: 'TRY', variableAmount: false,
   cycle: 'monthly', intervalCount: 1, anchorDay: 22, nextDue: '2026-11-22', autoPay: true, paymentMethod: 'Kart',
-  category: 'Eğlence', notes: null, reminderDays: 1, active: true, createdAt: '2026-11-01T00:00:00Z', updatedAt: '2026-11-01T00:00:00Z',
+  category: 'Eğlence', notes: null, reminderOffsets: null, trialEndsAt: null, active: true, createdAt: '2026-11-01T00:00:00Z', updatedAt: '2026-11-01T00:00:00Z',
   ...over,
 });

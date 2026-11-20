@@ -1,0 +1,34 @@
+{
+  "reminder": {
+    "title": "{{name}} : échéance {{when}}",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\nÉchéance le {{dueDate}}, {{when}}.\n{{#autoPay}}Le montant sera prélevé automatiquement{{#paymentMethod}} sur {{paymentMethod}}{{/paymentMethod}}.{{/autoPay}}{{^autoPay}}Pensez à effectuer le paiement{{#paymentMethod}} avec {{paymentMethod}}{{/paymentMethod}}.{{/autoPay}}\n{{#link}}[Ouvrir dans Coinio]({{link}}){{/link}}"
+  },
+  "dueToday": {
+    "title": "{{name}} : échéance aujourd'hui",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\n{{#autoPay}}Le montant sera prélevé automatiquement aujourd'hui.{{/autoPay}}{{^autoPay}}Le paiement est à effectuer aujourd'hui.{{/autoPay}}\n{{#link}}[Ouvrir dans Coinio]({{link}}){{/link}}"
+  },
+  "overdue": {
+    "title": "{{name}} : paiement en retard",
+    "body": "**{{name}}** · {{amount}}\nLe paiement était dû le {{dueDate}} et n'est pas encore marqué comme payé.\n{{#link}}[Marquer comme payé dans Coinio]({{link}}){{/link}}"
+  },
+  "digest": {
+    "title": "Vos paiements, {{period}}",
+    "body": "**À venir** · {{total}}\n{{#items}}- {{dueDate}} · {{name}} · {{amount}}{{#autoPay}} (automatique){{/autoPay}}\n{{/items}}{{^items}}Aucun paiement prévu sur cette période.\n{{/items}}{{#hasOverdue}}\n**En retard** · {{overdueTotal}}\n{{/hasOverdue}}{{#overdue}}- {{dueDate}} · {{name}} · {{amount}}\n{{/overdue}}{{#appUrl}}\n[Ouvrir Coinio]({{appUrl}}){{/appUrl}}"
+  },
+  "trialEnding": {
+    "title": "{{name}} : l'essai se termine {{when}}",
+    "body": "Votre essai gratuit **{{name}}** se termine le {{trialEnd}}, {{when}}.\nEnsuite, l'abonnement coûtera {{amount}} ({{cycle}}). Résiliez avant cette date si vous ne souhaitez pas le garder.\n{{#link}}[Ouvrir dans Coinio]({{link}}){{/link}}"
+  },
+  "budgetExceeded": {
+    "title": "Budget dépassé : {{month}}",
+    "body": "Votre budget mensuel est de {{budget}}. Vous avez déjà payé {{spent}} et le mois devrait atteindre {{projected}}, soit {{over}} au-dessus du budget.\n{{#appUrl}}[Ouvrir Coinio]({{appUrl}}){{/appUrl}}"
+  },
+  "priceChange": {
+    "title": "{{name}} : changement de prix",
+    "body": "**{{name}}** passe de {{oldAmount}} à {{newAmount}}{{#change}} ({{change}}){{/change}}.\n{{#paidDate}}C'est le montant payé pour l'échéance du {{paidDate}}.\n{{/paidDate}}{{#link}}[Ouvrir dans Coinio]({{link}}){{/link}}"
+  },
+  "test": {
+    "title": "Test Coinio",
+    "body": "Ceci est un message de test de Coinio. **{{channel}}** est configuré et fonctionne."
+  }
+}

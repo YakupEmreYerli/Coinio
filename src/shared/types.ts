@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { LOCALES, type Locale } from './locales';
 import { isSupportedCurrency } from './money';
+import { ReminderOffsets } from './notify/types';
 
 export const isoDate = z
   .string()
@@ -44,21 +45,35 @@ const fields = {
   notes: optionalText(2000),
 };
 
-export const SubscriptionInput = z.object({
+/** Older clients send one `reminderDays` number; it becomes a one-item offsets list. */
+const legacyReminderDays = (v: unknown) => {
+  if (typeof v !== 'object' || v === null || !('reminderDays' in v)) return v;
+  const { reminderDays, ...rest } = v as Record<string, unknown>;
+  return 'reminderOffsets' in rest || typeof reminderDays !== 'number' ? rest : { ...rest, reminderOffsets: [reminderDays] };
+};
+
+const reminderFields = {
+  /** Days before each due date (0 = the due day); null follows the defaults for the billing cycle. */
+  reminderOffsets: ReminderOffsets.nullable(),
+  trialEndsAt: isoDate.nullable(),
+};
+
+export const SubscriptionInput = z.preprocess(legacyReminderDays, z.object({
   ...fields,
   autoPay: z.boolean().default(true),
   variableAmount: z.boolean().default(false),
-  reminderDays: z.number().int().min(0).max(30).default(1),
-});
+  reminderOffsets: reminderFields.reminderOffsets.default(null),
+  trialEndsAt: reminderFields.trialEndsAt.default(null),
+}));
 export type SubscriptionInput = z.infer<typeof SubscriptionInput>;
 
-export const SubscriptionPatch = z.object({
+export const SubscriptionPatch = z.preprocess(legacyReminderDays, z.object({
   ...fields,
   autoPay: z.boolean(),
   variableAmount: z.boolean(),
-  reminderDays: z.number().int().min(0).max(30),
+  ...reminderFields,
   active: z.boolean(),
-}).partial();
+}).partial());
 export type SubscriptionPatch = z.infer<typeof SubscriptionPatch>;
 
 export const PaymentPatch = z
@@ -107,8 +122,6 @@ export const SettingsPatch = z
     }, 'unknown timezone'),
     locale: z.enum(LOCALES),
     reminderTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
-    telegramBotToken: z.string().min(1).max(200).nullable(),
-    telegramChatId: z.string().min(1).max(100).nullable(),
   })
   .partial();
 export type SettingsPatch = z.infer<typeof SettingsPatch>;
@@ -118,6 +131,4 @@ export type Settings = {
   timezone: string;
   locale: Locale;
   reminderTime: string;
-  telegramBotToken: string | null;
-  telegramChatId: string | null;
 };

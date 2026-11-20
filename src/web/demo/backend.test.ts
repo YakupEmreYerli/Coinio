@@ -144,11 +144,32 @@ describe('demo backend', () => {
   it('answers server-only features with demo_unavailable instead of failing', async () => {
     const b = make();
     for (const [method, path] of [
-      ['POST', '/keys'], ['POST', '/import/wallos'], ['POST', '/auth/password'], ['POST', '/settings/telegram/test'], ['POST', '/subscriptions/1/logo'],
+      ['POST', '/keys'], ['POST', '/import/wallos'], ['POST', '/auth/password'], ['POST', '/subscriptions/1/logo'],
+      ['POST', '/notifications/channels'], ['POST', '/notifications/channels/test'], ['POST', '/notifications/templates/reminder/test'],
     ] as const) {
       expect(await rejects(b.handle(method, path, {}))).toMatchObject({ status: 403, code: 'demo_unavailable' });
     }
     expect(await b.handle('GET', '/keys')).toEqual([]);
     expect((await rejects(b.handle('GET', '/nope'))).status).toBe(404);
+  });
+
+  it('keeps notification settings and templates in memory, without channels', async () => {
+    const b = make();
+    const page = (await b.handle('GET', '/notifications')) as { settings: { overdue: boolean }; channels: unknown[]; templates: Record<string, { custom: boolean; title: string }> };
+    expect(page.channels).toEqual([]);
+    await b.handle('PUT', '/notifications/settings', { ...page.settings, overdue: false });
+    await b.handle('PUT', '/notifications/templates/reminder', { title: 'Hey {{name}}', body: 'x' });
+    const after = (await b.handle('GET', '/notifications')) as typeof page;
+    expect(after.settings.overdue).toBe(false);
+    expect(after.templates.reminder).toMatchObject({ title: 'Hey {{name}}', custom: true });
+    await b.handle('DELETE', '/notifications/templates/reminder');
+    expect(((await b.handle('GET', '/notifications')) as typeof page).templates.reminder!.custom).toBe(false);
+    expect(await b.handle('GET', '/notifications/log')).toEqual([]);
+  });
+
+  it('stores reminder offsets and a trial end on subscriptions', async () => {
+    const b = make();
+    const s = (await b.handle('POST', '/subscriptions', { name: 'Trial', amountMinor: 100, currency: 'USD', cycle: 'monthly', intervalCount: 1, nextDue: '2026-12-01', reminderOffsets: [2], trialEndsAt: '2026-11-30' })) as ApiSubscription;
+    expect(s).toMatchObject({ reminderOffsets: [2], trialEndsAt: '2026-11-30' });
   });
 });

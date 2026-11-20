@@ -1,5 +1,6 @@
 import { Pause, Pencil, Play, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { offsetLabel } from '../components/OffsetChips';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { Logo } from '../components/Logo';
 import { Money } from '../components/Money';
@@ -60,7 +61,8 @@ export function SubscriptionDetail({ sub, base, onClose }: { sub: ApiSubscriptio
           {sub.paymentMethod && <Field label={t('form.method')}>{sub.paymentMethod}</Field>}
           {sub.category && <Field label={t('form.category')}>{sub.category}</Field>}
           {sub.domain && <Field label={t('form.domain')}>{sub.domain}</Field>}
-          <Field label={t('form.reminder')}>{t('subs.daysBefore', { n: sub.reminderDays })}</Field>
+          <Field label={t('form.reminder')}>{sub.reminderOffsets ? (sub.reminderOffsets.length ? sub.reminderOffsets.map(offsetLabel).join(', ') : t('notify.noOffsets')) : t('form.reminderDefaultShort')}</Field>
+          {sub.trialEndsAt && <Field label={t('form.trialEnds')}>{shortDate(sub.trialEndsAt, locale)}</Field>}
           {sub.notes && <p className="border-t border-line px-5 py-3 text-sm whitespace-pre-wrap text-text-2">{sub.notes}</p>}
           <h4 className="border-t border-line bg-sunk px-5 py-2.5 text-[13px] font-medium text-text-2">{t('history.title')}</h4>
           <PaymentHistory subscriptionId={sub.id} base={base} />

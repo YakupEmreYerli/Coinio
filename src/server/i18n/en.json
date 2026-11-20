@@ -30,23 +30,10 @@
   "consent.invalidTitle": "Invalid request",
   "consent.invalidBody": "Reload the page and try again.",
   "consent.openApp": "Open Coinio",
-  "telegram.title": "Payment reminders",
-  "telegram.overdue": "Overdue",
-  "telegram.upcoming": "Coming up",
-  "telegram.paidToday": "Charged today",
-  "telegram.tomorrow": "will be charged tomorrow",
-  "telegram.today": "due today",
-  "telegram.autoIn": {
-    "one": "will be charged in {n} day",
-    "other": "will be charged in {n} days"
-  },
-  "telegram.manualIn": {
-    "one": "due in {n} day",
-    "other": "due in {n} days"
-  },
-  "telegram.late": {
-    "one": "{n} day overdue",
-    "other": "{n} days overdue"
-  },
-  "telegram.test": "Coinio test message: Telegram is connected."
+  "cycleLabel.week": "Every week",
+  "cycleLabel.month": "Every month",
+  "cycleLabel.year": "Every year",
+  "cycleLabel.weekN": "Every {n} weeks",
+  "cycleLabel.monthN": "Every {n} months",
+  "cycleLabel.yearN": "Every {n} years"
 }

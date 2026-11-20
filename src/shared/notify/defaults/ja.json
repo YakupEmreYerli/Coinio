@@ -1,0 +1,34 @@
+{
+  "reminder": {
+    "title": "{{name}}のお支払いは{{when}}です",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}}（≈ {{amountMain}}）{{/amountMain}}\nお支払い期限：{{dueDate}}（{{when}}）\n{{#autoPay}}{{#paymentMethod}}{{paymentMethod}}から{{/paymentMethod}}自動で引き落とされます。{{/autoPay}}{{^autoPay}}{{#paymentMethod}}{{paymentMethod}}での{{/paymentMethod}}お支払いをお忘れなく。{{/autoPay}}\n{{#link}}[Coinioで開く]({{link}}){{/link}}"
+  },
+  "dueToday": {
+    "title": "{{name}}のお支払いは本日です",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}}（≈ {{amountMain}}）{{/amountMain}}\n{{#autoPay}}本日、自動で引き落とされます。{{/autoPay}}{{^autoPay}}本日がお支払い期限です。{{/autoPay}}\n{{#link}}[Coinioで開く]({{link}}){{/link}}"
+  },
+  "overdue": {
+    "title": "{{name}}のお支払いが遅れています",
+    "body": "**{{name}}** · {{amount}}\nお支払い期限は{{dueDate}}でしたが、まだ支払い済みになっていません。\n{{#link}}[Coinioで支払い済みにする]({{link}}){{/link}}"
+  },
+  "digest": {
+    "title": "お支払い予定（{{period}}）",
+    "body": "**今後のお支払い** · {{total}}\n{{#items}}- {{dueDate}} · {{name}} · {{amount}}{{#autoPay}}（自動）{{/autoPay}}\n{{/items}}{{^items}}この期間のお支払いはありません。\n{{/items}}{{#hasOverdue}}\n**期限切れ** · {{overdueTotal}}\n{{/hasOverdue}}{{#overdue}}- {{dueDate}} · {{name}} · {{amount}}\n{{/overdue}}{{#appUrl}}\n[Coinioを開く]({{appUrl}}){{/appUrl}}"
+  },
+  "trialEnding": {
+    "title": "{{name}}の無料体験が終了します（{{when}}）",
+    "body": "**{{name}}**の無料体験は{{trialEnd}}（{{when}}）に終了します。\nその後は{{amount}}（{{cycle}}）かかります。継続しない場合は、それまでに解約してください。\n{{#link}}[Coinioで開く]({{link}}){{/link}}"
+  },
+  "budgetExceeded": {
+    "title": "{{month}}の予算を超えています",
+    "body": "月の予算は{{budget}}です。これまでに{{spent}}を支払っており、今月は{{projected}}になる見込みです。予算を{{over}}超えています。\n{{#appUrl}}[Coinioを開く]({{appUrl}}){{/appUrl}}"
+  },
+  "priceChange": {
+    "title": "{{name}}の料金が変わりました",
+    "body": "**{{name}}**の料金が{{oldAmount}}から{{newAmount}}になりました{{#change}}（{{change}}）{{/change}}。\n{{#paidDate}}{{paidDate}}のお支払い分の金額です。\n{{/paidDate}}{{#link}}[Coinioで開く]({{link}}){{/link}}"
+  },
+  "test": {
+    "title": "Coinioテスト",
+    "body": "Coinioからのテストメッセージです。**{{channel}}**は正しく設定され、動作しています。"
+  }
+}
