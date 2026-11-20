@@ -122,6 +122,9 @@
   -webkit-background-clip: text;
           background-clip: text;
   color: transparent;
+  /* background-clip only paints inside the box; line-height 1.02 cuts descenders like the g in "page" */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
 }
 :root[data-theme="light"] .pd { color: var(--brand); -webkit-text-fill-color: var(--brand); }
 :root[data-theme="light"] .tabs button[aria-selected="true"] { background: #fff; }

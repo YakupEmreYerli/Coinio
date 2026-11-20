@@ -91,7 +91,7 @@ window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e
 const frame = document.querySelector('.demo-view iframe');
 const win = document.querySelector('.demo-win');
 const appTheme = () => (currentTheme() === 'light' ? 'paper' : 'night');
-const demoUrl = () => `/demo/?theme=${currentTheme()}${LANG === 'en' ? '' : `&lang=${LANG}`}`;
+const demoUrl = () => `/demo/?theme=${currentTheme()}&lang=${LANG}`;
 
 function syncDemoTheme() {
   for (const a of document.querySelectorAll('[data-demo-link]')) a.href = demoUrl();

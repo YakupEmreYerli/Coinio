@@ -185,7 +185,7 @@ function page(lang, fonts) {
     faq: faqList(t),
     langPicker: langPicker(lang, t),
     langFooter: langFooter(lang, t),
-    demoHref: lang.code === 'en' ? '/demo/' : `/demo/?lang=${lang.code}`,
+    demoHref: `/demo/?lang=${lang.code}`,
   };
   const html = template.replace(/\{\{(@?)([\w.-]+)\}\}/g, (m, at, key) => {
     const v = key in vars ? vars[key] : t[key];
