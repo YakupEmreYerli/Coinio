@@ -33,9 +33,11 @@
   --gap: 24px;
   --logo: 40px;
 
-  --font-text: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  /* CJK has no glyphs in the bundled fonts: use the system's, picked per language (no CJK web fonts shipped). */
+  --cjk: system-ui;
+  --font-text: 'Geist Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-text);
-  --font-num: 'Geist Mono Variable', ui-monospace, monospace;
+  --font-num: 'Geist Mono Variable', var(--cjk), ui-monospace, monospace;
   --display-weight: 500;
   --display-tracking: -0.03em;
 }
@@ -90,37 +92,44 @@
   --shadow: 0 0 0 1px #222225, 0 16px 40px rgb(0 0 0 / 0.6);
 }
 
+:root:lang(ja) {
+  --cjk: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', Meiryo, 'Noto Sans JP', 'Noto Sans CJK JP', system-ui;
+}
+:root:lang(zh-CN) {
+  --cjk: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei UI', 'Microsoft YaHei', 'Noto Sans SC', 'Noto Sans CJK SC', system-ui;
+}
+
 /* Type stacks: display = headings and big amounts, num = other amounts. */
 :root[data-stack='editorial'] {
-  --font-text: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-num: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-text: 'Inter Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Instrument Serif', var(--cjk), Georgia, serif;
+  --font-num: 'Inter Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
   --display-weight: 400;
   --display-tracking: -0.01em;
 }
 :root[data-stack='warm'] {
-  --font-text: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Fraunces Variable', Georgia, serif;
-  --font-num: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-text: 'Manrope Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', var(--cjk), Georgia, serif;
+  --font-num: 'Manrope Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
   --display-weight: 400;
   --display-tracking: -0.02em;
 }
 :root[data-stack='technical'] {
-  --font-text: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-num: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-text: 'Space Grotesk Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
+  --font-num: 'IBM Plex Mono', var(--cjk), ui-monospace, monospace;
   --display-weight: 500;
   --display-tracking: -0.04em;
 }
 :root[data-stack='bold'] {
-  --font-text: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-num: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-text: 'Inter Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
+  --font-num: 'Bricolage Grotesque Variable', var(--cjk), ui-sans-serif, system-ui, sans-serif;
   --display-weight: 700;
   --display-tracking: -0.045em;
 }
 :root[data-stack='system'] {
-  --font-text: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-text: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', var(--cjk), sans-serif;
   --font-display: var(--font-text);
   --font-num: var(--font-text);
   --display-weight: 600;
