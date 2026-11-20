@@ -77,6 +77,15 @@ describe('mcp tools', () => {
     expect(db.select().from(subscriptions).get()?.amountMinor).toBe(22999);
   });
 
+  it('sets reminder offsets and a trial end date, and clears them back to the defaults', async () => {
+    const { connect, text } = await setup();
+    const c = await connect('full');
+    const sub = text(await c.callTool({ name: 'add_subscription', arguments: { ...netflix, reminder_offsets: [7, 1], trial_ends_at: '2026-11-30' } })).subscription;
+    expect(sub).toMatchObject({ reminder_offsets: [7, 1], trial_ends_at: '2026-11-30' });
+    const cleared = text(await c.callTool({ name: 'update_subscription', arguments: { id: sub.id, reminder_offsets: null, trial_ends_at: null } })).subscription;
+    expect(cleared).toMatchObject({ reminder_offsets: null, trial_ends_at: null });
+  });
+
   it('returns tool errors for invalid input and unknown ids', async () => {
     const { connect } = await setup();
     const c = await connect('full');

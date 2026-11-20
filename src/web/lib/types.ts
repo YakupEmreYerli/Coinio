@@ -1,4 +1,16 @@
 import type { Settings } from '../../shared/types';
+import type { ApiChannel, NotifySettings, NotifyType, TemplateSet, TemplateText } from '../../shared/notify/types';
+
+export type { ApiChannel, ApiNotificationLog, NotifySettings, NotifyType } from '../../shared/notify/types';
+
+/** GET /api/notifications */
+export type NotificationsPage = {
+  settings: NotifySettings;
+  channels: ApiChannel[];
+  templates: Record<NotifyType, TemplateText & { custom: boolean }>;
+  defaults: TemplateSet;
+  appUrl: string | null;
+};
 
 export type { Appearance, CardId } from '../../shared/appearance';
 export type { Settings };
@@ -21,7 +33,8 @@ export type ApiSubscription = {
   paymentMethod: string | null;
   category: string | null;
   notes: string | null;
-  reminderDays: number;
+  reminderOffsets: number[] | null;
+  trialEndsAt: string | null;
   active: boolean;
   createdAt: string;
   updatedAt: string;
@@ -50,7 +63,6 @@ export type DueItem = {
   baseMinor: number | null;
   autoPay: boolean;
   variableAmount: boolean;
-  reminderDays: number;
 };
 
 export type PaidItem = {

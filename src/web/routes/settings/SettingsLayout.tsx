@@ -8,7 +8,7 @@ import { useIsMobile } from '../../lib/useMediaQuery';
 import { MOVED_SECTIONS, SETTINGS_SECTIONS } from './sections';
 
 /** Settings pages that work in the browser-only demo; the rest need the real server. */
-const DEMO_READY = new Set(['general', 'appearance']);
+const DEMO_READY = new Set(['general', 'appearance', 'notifications']);
 
 export function SettingsLayout() {
   const { section } = useParams();

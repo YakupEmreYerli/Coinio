@@ -14,7 +14,7 @@ const summary = (over: Record<string, unknown> = {}) => ({
   base: 'TRY', leftThisMonthMinor: 0, monthlyAverageMinor: 0, yearlyTotalMinor: 0, upcoming: [], overdue: [], paidThisMonth: [], unconvertible: [], ratesStale: false, rates: { USD: 43.4 }, ...over,
 });
 const due = (over: Record<string, unknown>) => ({
-  subscriptionId: 1, name: 'Netflix', logoPath: null, dueDate: '2026-11-22', daysLeft: 3, amountMinor: 19999, currency: 'TRY', baseMinor: 19999, autoPay: true, variableAmount: false, reminderDays: 1, ...over,
+  subscriptionId: 1, name: 'Netflix', logoPath: null, dueDate: '2026-11-22', daysLeft: 3, amountMinor: 19999, currency: 'TRY', baseMinor: 19999, autoPay: true, variableAmount: false, ...over,
 });
 
 beforeEach(() => {

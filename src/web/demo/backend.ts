@@ -5,6 +5,8 @@ import { ZodError } from 'zod';
 import { mergeAppearance, Appearance as AppearanceSchema, type Appearance } from '../../shared/appearance';
 import { CATEGORY_LABELS } from '../../shared/catalog';
 import type { Locale } from '../../shared/locales';
+import { defaultTemplates } from '../../shared/notify/defaults';
+import { DEFAULT_NOTIFY_SETTINGS, mergeNotifySettings, NOTIFY_TYPES, NotifySettings, TemplateText, type NotifyType } from '../../shared/notify/types';
 import { SAMPLE_CURRENCY, SAMPLE_RATES, samplesFor, sampleWord } from '../../shared/sampleData';
 import { dueDatesThrough, nextDue, todayIn } from '../../shared/schedule';
 import { PaymentPatch, PaymentQuery, PayInput, SettingsPatch, SkipInput, SubscriptionInput, SubscriptionPatch, type Settings } from '../../shared/types';
@@ -23,6 +25,9 @@ type State = {
   payments: PaymentRow[];
   settings: Settings;
   appearance: Appearance;
+  /** Notification settings and edited templates, kept like the rest; channels and sending need a server. */
+  notify?: NotifySettings;
+  notifyTemplates?: Partial<Record<NotifyType, TemplateText>>;
 };
 
 type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
@@ -144,7 +149,7 @@ export class DemoBackend {
   /** The sample set in the visitor's language and currency, with a year of payment history behind it. */
   private seed(): State {
     const locale = this.opts.locale ?? this.opts.defaultLocale ?? 'en';
-    const settings: Settings = { baseCurrency: SAMPLE_CURRENCY[locale], timezone: this.timezone, locale, reminderTime: '09:00', telegramBotToken: null, telegramChatId: null };
+    const settings: Settings = { baseCurrency: SAMPLE_CURRENCY[locale], timezone: this.timezone, locale, reminderTime: '09:00' };
     const today = todayIn(settings.timezone, this.now());
     const state: State = { version: 1, nextId: 1, subs: [], payments: [], settings, appearance: mergeAppearance({ theme: this.opts.defaultTheme ?? 'night' }) };
     for (const s of samplesFor(locale, settings.baseCurrency, { foreignExample: true })) {
@@ -154,7 +159,7 @@ export class DemoBackend {
       state.subs.push({
         id, userId: USER.id, name: sampleWord(s.name, settings.locale), domain: s.domain, logoPath: this.logoFor(s.domain), amountMinor: s.amountMinor, currency: s.currency,
         variableAmount: false, cycle: s.cycle, intervalCount: 1, anchorDay: dayOf(due), nextDue: due, autoPay: s.autoPay,
-        paymentMethod: sampleWord(s.paymentMethod, settings.locale), category: CATEGORY_LABELS[s.category][settings.locale], notes: null, reminderDays: 1, active: true,
+        paymentMethod: sampleWord(s.paymentMethod, settings.locale), category: CATEGORY_LABELS[s.category][settings.locale], notes: null, reminderOffsets: null, trialEndsAt: null, active: true,
         createdAt: `${start}T09:00:00.000Z`, updatedAt: `${start}T09:00:00.000Z`,
       });
       for (const d of dueDatesThrough(start, addDays(due, -1), s.cycle, 1, dayOf(due))) {
@@ -244,11 +249,34 @@ export class DemoBackend {
         return this.maskedSettings();
       case 'PATCH /settings': {
         const v = SettingsPatch.parse(body ?? {});
-        const { telegramBotToken: _t, telegramChatId: _c, ...rest } = v;
-        st.settings = { ...st.settings, ...Object.fromEntries(Object.entries(rest).filter(([, x]) => x !== undefined)) };
+        st.settings = { ...st.settings, ...Object.fromEntries(Object.entries(v).filter(([, x]) => x !== undefined)) };
         return this.maskedSettings();
       }
       case 'POST /settings':
+        throw unavailable();
+      case 'GET /notifications':
+        if (b === 'log') return [];
+        return this.notifications();
+      case 'PUT /notifications':
+        if (b === 'settings') {
+          st.notify = NotifySettings.parse(body);
+          return st.notify;
+        }
+        if (b === 'templates' && c && (NOTIFY_TYPES as readonly string[]).includes(c)) {
+          const tpl = TemplateText.parse(body);
+          st.notifyTemplates = { ...st.notifyTemplates, [c]: tpl };
+          return tpl;
+        }
+        break;
+      case 'DELETE /notifications':
+        if (b === 'templates' && c) {
+          const { [c as NotifyType]: _drop, ...rest } = st.notifyTemplates ?? {};
+          st.notifyTemplates = rest;
+          return undefined;
+        }
+        throw unavailable();
+      case 'POST /notifications':
+      case 'PATCH /notifications':
         throw unavailable();
       case 'GET /appearance':
         return st.appearance;
@@ -308,7 +336,21 @@ export class DemoBackend {
   }
 
   private maskedSettings(): Settings {
-    return { ...this.load().settings, telegramBotToken: null, telegramChatId: null };
+    return { ...this.load().settings };
+  }
+
+  /** Same shape as GET /api/notifications; the demo has no channels. */
+  private notifications() {
+    const st = this.load();
+    const defaults = defaultTemplates(st.settings.locale);
+    const custom = st.notifyTemplates ?? {};
+    return {
+      settings: st.notify ? mergeNotifySettings(st.notify) : DEFAULT_NOTIFY_SETTINGS,
+      channels: [],
+      templates: Object.fromEntries(NOTIFY_TYPES.map((t) => [t, { ...(custom[t] ?? defaults[t]), custom: t in custom }])),
+      defaults,
+      appUrl: null,
+    };
   }
 
   private create(input: unknown): SubscriptionRow {
@@ -319,7 +361,7 @@ export class DemoBackend {
       id: st.nextId++, userId: USER.id, name: v.name, domain: v.domain ?? null, logoPath: this.logoFor(v.domain ?? null),
       amountMinor: v.amountMinor, currency: v.currency, variableAmount: v.variableAmount, cycle: v.cycle, intervalCount: v.intervalCount,
       anchorDay: dayOf(v.nextDue), nextDue: v.nextDue, autoPay: v.autoPay, paymentMethod: v.paymentMethod ?? null, category: v.category ?? null,
-      notes: v.notes ?? null, reminderDays: v.reminderDays, active: true, createdAt: stamp, updatedAt: stamp,
+      notes: v.notes ?? null, reminderOffsets: v.reminderOffsets, trialEndsAt: v.trialEndsAt, active: true, createdAt: stamp, updatedAt: stamp,
     };
     st.subs.push(row);
     return row;

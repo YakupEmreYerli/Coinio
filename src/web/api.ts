@@ -2,6 +2,8 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     public code: string,
+    /** The server's own explanation, when it sends one (e.g. why a test notification failed). */
+    public detail?: string,
   ) {
     super(code);
   }
@@ -27,8 +29,8 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
     throw new ApiError(401, 'unauthorized');
   }
   if (!res.ok) {
-    const data = (await res.json().catch(() => null)) as { error?: string } | null;
-    throw new ApiError(res.status, data?.error ?? 'unknown');
+    const data = (await res.json().catch(() => null)) as { error?: string; message?: string } | null;
+    throw new ApiError(res.status, data?.error ?? 'unknown', data?.message);
   }
   if (res.status === 204) return undefined as T;
   return (await res.json()) as T;

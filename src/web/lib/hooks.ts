@@ -3,7 +3,7 @@ import { api } from '../api';
 import { toast } from '../components/ui/Toaster';
 import { t } from '../i18n';
 import { keys } from './query';
-import type { ApiPayment, ApiSubscription, Appearance, Settings, Summary } from './types';
+import type { ApiPayment, ApiSubscription, Appearance, NotificationsPage, Settings, Summary } from './types';
 
 export type PaymentFilter = { subscriptionId?: number; from?: string; to?: string; source?: 'manual' | 'auto'; status?: string };
 
@@ -29,6 +29,7 @@ export const useSummary = () => useQuery({ queryKey: keys.summary, queryFn: () =
 export const usePayments = (filter: PaymentFilter = {}) =>
   useQuery({ queryKey: keys.payments(filter), queryFn: () => api.get<ApiPayment[]>(`/payments${qs(filter)}`) });
 export const useSettings = () => useQuery({ queryKey: keys.settings, queryFn: () => api.get<Settings>('/settings') });
+export const useNotifications = () => useQuery({ queryKey: keys.notifications, queryFn: () => api.get<NotificationsPage>('/notifications') });
 export const useAppearance = () => useQuery({ queryKey: keys.appearance, queryFn: () => api.get<Appearance>('/appearance') });
 
 function useDataMutation<V, R>(fn: (v: V) => Promise<R>, onSuccess?: (r: R, v: V) => void) {
