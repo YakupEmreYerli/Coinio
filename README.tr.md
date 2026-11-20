@@ -25,7 +25,7 @@ Coinio düzenli ödediğin her şeyi tek sayfada toplar: dizi platformu, bulut d
 - **Yapay zekâ asistanları (MCP).** OAuth destekli yerleşik MCP sunucusu sayesinde Claude, ChatGPT ve başka MCP istemcileri aboneliklerini okuyup güncelleyebilir.
 - **iPhone widget'ı.** Scriptable ile ana ekran ve kilit ekranı widget'ları; App Store uygulaması gerekmez.
 - **Kendi görünüşün.** Tema, vurgu rengi, yazı tipi, sıklık, ana sayfa kartları, özel CSS ve korumalı alanda çalışan HTML kartları.
-- **Türkçe ve İngilizce** arayüz; web uygulaması olarak ana ekrana eklenebilir.
+- **Sekiz dil:** Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, Brezilya Portekizcesi, Basitleştirilmiş Çince ve Japonca. Web uygulaması olarak ana ekrana eklenebilir.
 
 ## Kurulum
 

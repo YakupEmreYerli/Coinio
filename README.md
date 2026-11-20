@@ -25,7 +25,7 @@ Coinio keeps every recurring payment on one page: streaming, cloud storage, the 
 - **AI assistants (MCP).** A built-in MCP server with OAuth, so Claude, ChatGPT and other MCP clients can read and update your subscriptions.
 - **iPhone widget.** Home Screen and Lock Screen widgets through Scriptable, no App Store app needed.
 - **Your own look.** Themes, accent colour, fonts, density, dashboard cards, custom CSS and sandboxed HTML cards.
-- **English and Turkish** interface, installable as a web app.
+- **Eight languages:** English, Turkish, German, French, Spanish, Brazilian Portuguese, Simplified Chinese and Japanese. Installable as a web app.
 
 ## Install
 
