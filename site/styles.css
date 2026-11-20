@@ -681,7 +681,8 @@ h2 {
 /* Japanese and Chinese: the bundled fonts have no CJK glyphs, so use the system's (no CJK web fonts). */
 :root:lang(ja) { --cjk: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", "Noto Sans CJK JP", system-ui; }
 :root:lang(zh-CN) { --cjk: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", system-ui; }
-:root:lang(ja) h1, :root:lang(zh-CN) h1, :root:lang(ja) h2, :root:lang(zh-CN) h2 { letter-spacing: 0; word-break: keep-all; line-break: strict; }
+:root:lang(ja) h1, :root:lang(zh-CN) h1, :root:lang(ja) h2, :root:lang(zh-CN) h2 { letter-spacing: 0; line-break: strict; }
+:root:lang(ja) h1, :root:lang(ja) h2, :root:lang(ja) h3 { word-break: auto-phrase; }
 :root:lang(ja) body, :root:lang(zh-CN) body { line-break: strict; }
 
 /* Language menu in the nav */
