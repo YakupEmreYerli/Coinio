@@ -1,3 +1,4 @@
+import { matchLocale, pickLocale } from '../../shared/locales';
 import { DemoBackend, type LogoIndex } from './backend';
 
 const base = import.meta.env.BASE_URL;
@@ -12,6 +13,8 @@ export function themeFromUrl(): 'night' | 'paper' | null {
 export const demo = new DemoBackend({
   base,
   theme: themeFromUrl(),
+  locale: matchLocale(new URLSearchParams(location.search).get('lang') ?? ''),
+  defaultLocale: pickLocale(navigator.languages),
   defaultTheme: window.matchMedia('(prefers-color-scheme: light)').matches ? 'paper' : 'night',
   storage: (() => {
     try {

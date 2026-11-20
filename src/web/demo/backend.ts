@@ -4,6 +4,7 @@
 import { ZodError } from 'zod';
 import { mergeAppearance, Appearance as AppearanceSchema, type Appearance } from '../../shared/appearance';
 import { CATEGORY_LABELS } from '../../shared/catalog';
+import type { Locale } from '../../shared/locales';
 import { SAMPLE_RATES, SAMPLE_SUBSCRIPTIONS } from '../../shared/sampleData';
 import { dueDatesThrough, nextDue, todayIn } from '../../shared/schedule';
 import { PaymentPatch, PaymentQuery, PayInput, SettingsPatch, SkipInput, SubscriptionInput, SubscriptionPatch, type Settings } from '../../shared/types';
@@ -36,6 +37,10 @@ export type DemoOptions = {
   timezone?: string;
   /** Theme to show on the first load, overriding a stored one (the landing page passes its own). */
   theme?: 'night' | 'paper' | null;
+  /** Language asked for by the landing page (`?lang=`); wins over a stored one. */
+  locale?: Locale | null;
+  /** Language of a fresh demo when none is asked for. */
+  defaultLocale?: Locale;
   /** Theme of a fresh demo when none is asked for. */
   defaultTheme?: 'night' | 'paper';
 };
@@ -122,6 +127,7 @@ export class DemoBackend {
       }
       this.state = stored ?? this.seed();
       if (this.opts.theme) this.state.appearance = { ...this.state.appearance, theme: this.opts.theme };
+      if (this.opts.locale) this.state.settings = { ...this.state.settings, locale: this.opts.locale };
       this.runAutoPay();
     }
     return this.state;
@@ -137,7 +143,7 @@ export class DemoBackend {
 
   /** The onboarding wizard's sample set in USD, with a year of payment history behind it. */
   private seed(): State {
-    const settings: Settings = { baseCurrency: 'USD', timezone: this.timezone, locale: 'en', reminderTime: '09:00', telegramBotToken: null, telegramChatId: null };
+    const settings: Settings = { baseCurrency: 'USD', timezone: this.timezone, locale: this.opts.locale ?? this.opts.defaultLocale ?? 'en', reminderTime: '09:00', telegramBotToken: null, telegramChatId: null };
     const today = todayIn(settings.timezone, this.now());
     const state: State = { version: 1, nextId: 1, subs: [], payments: [], settings, appearance: mergeAppearance({ theme: this.opts.defaultTheme ?? 'night' }) };
     for (const s of SAMPLE_SUBSCRIPTIONS) {
@@ -147,7 +153,7 @@ export class DemoBackend {
       state.subs.push({
         id, userId: USER.id, name: s.name, domain: s.domain, logoPath: this.logoFor(s.domain), amountMinor: s.amountMinor, currency: s.currency,
         variableAmount: false, cycle: s.cycle, intervalCount: 1, anchorDay: dayOf(due), nextDue: due, autoPay: s.autoPay,
-        paymentMethod: s.paymentMethod, category: CATEGORY_LABELS[s.category].en, notes: null, reminderDays: 1, active: true,
+        paymentMethod: s.paymentMethod, category: CATEGORY_LABELS[s.category][settings.locale], notes: null, reminderDays: 1, active: true,
         createdAt: `${start}T09:00:00.000Z`, updatedAt: `${start}T09:00:00.000Z`,
       });
       for (const d of dueDatesThrough(start, addDays(due, -1), s.cycle, 1, dayOf(due))) {
