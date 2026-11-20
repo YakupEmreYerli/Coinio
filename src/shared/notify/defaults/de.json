@@ -1,0 +1,34 @@
+{
+  "reminder": {
+    "title": "{{name}} ist {{when}} fällig",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\nFällig am {{dueDate}}, {{when}}.\n{{#autoPay}}Der Betrag wird automatisch abgebucht{{#paymentMethod}} ({{paymentMethod}}){{/paymentMethod}}.{{/autoPay}}{{^autoPay}}Denken Sie an die Zahlung{{#paymentMethod}} per {{paymentMethod}}{{/paymentMethod}}.{{/autoPay}}\n{{#link}}[In Coinio öffnen]({{link}}){{/link}}"
+  },
+  "dueToday": {
+    "title": "{{name}} ist heute fällig",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\n{{#autoPay}}Der Betrag wird heute automatisch abgebucht.{{/autoPay}}{{^autoPay}}Die Zahlung ist heute fällig.{{/autoPay}}\n{{#link}}[In Coinio öffnen]({{link}}){{/link}}"
+  },
+  "overdue": {
+    "title": "{{name}} ist überfällig",
+    "body": "**{{name}}** · {{amount}}\nDie Zahlung war am {{dueDate}} fällig und ist noch nicht als bezahlt markiert.\n{{#link}}[In Coinio als bezahlt markieren]({{link}}){{/link}}"
+  },
+  "digest": {
+    "title": "Ihre Zahlungen, {{period}}",
+    "body": "**Demnächst fällig** · {{total}}\n{{#items}}- {{dueDate}} · {{name}} · {{amount}}{{#autoPay}} (automatisch){{/autoPay}}\n{{/items}}{{^items}}In diesem Zeitraum ist nichts fällig.\n{{/items}}{{#hasOverdue}}\n**Überfällig** · {{overdueTotal}}\n{{/hasOverdue}}{{#overdue}}- {{dueDate}} · {{name}} · {{amount}}\n{{/overdue}}{{#appUrl}}\n[Coinio öffnen]({{appUrl}}){{/appUrl}}"
+  },
+  "trialEnding": {
+    "title": "Testphase von {{name}} endet {{when}}",
+    "body": "Die kostenlose Testphase von **{{name}}** endet am {{trialEnd}}, {{when}}.\nDanach kostet das Abo {{amount}} ({{cycle}}). Kündigen Sie vorher, wenn Sie es nicht behalten möchten.\n{{#link}}[In Coinio öffnen]({{link}}){{/link}}"
+  },
+  "budgetExceeded": {
+    "title": "Budget im {{month}} überschritten",
+    "body": "Ihr Monatsbudget beträgt {{budget}}. Bisher haben Sie {{spent}} bezahlt, bis Monatsende werden es voraussichtlich {{projected}}. Das sind {{over}} über dem Budget.\n{{#appUrl}}[Coinio öffnen]({{appUrl}}){{/appUrl}}"
+  },
+  "priceChange": {
+    "title": "{{name}}: Preis geändert",
+    "body": "**{{name}}** kostet jetzt {{newAmount}} statt {{oldAmount}}{{#change}} ({{change}}){{/change}}.\n{{#paidDate}}Das ist der Betrag für die Zahlung vom {{paidDate}}.\n{{/paidDate}}{{#link}}[In Coinio öffnen]({{link}}){{/link}}"
+  },
+  "test": {
+    "title": "Coinio-Test",
+    "body": "Dies ist eine Testnachricht von Coinio. **{{channel}}** ist eingerichtet und funktioniert."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "reminder": {
+    "title": "{{name}} is due {{when}}",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\nDue {{dueDate}}, {{when}}.\n{{#autoPay}}It will be charged automatically{{#paymentMethod}} to {{paymentMethod}}{{/paymentMethod}}.{{/autoPay}}{{^autoPay}}Remember to pay it{{#paymentMethod}} with {{paymentMethod}}{{/paymentMethod}}.{{/autoPay}}\n{{#link}}[Open in Coinio]({{link}}){{/link}}"
+  },
+  "dueToday": {
+    "title": "{{name}} is due today",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\n{{#autoPay}}It will be charged automatically today.{{/autoPay}}{{^autoPay}}The payment is due today.{{/autoPay}}\n{{#link}}[Open in Coinio]({{link}}){{/link}}"
+  },
+  "overdue": {
+    "title": "{{name}} is overdue",
+    "body": "**{{name}}** · {{amount}}\nThe payment was due {{dueDate}} and isn't marked as paid yet.\n{{#link}}[Mark it paid in Coinio]({{link}}){{/link}}"
+  },
+  "digest": {
+    "title": "Your payments, {{period}}",
+    "body": "**Coming up** · {{total}}\n{{#items}}- {{dueDate}} · {{name}} · {{amount}}{{#autoPay}} (automatic){{/autoPay}}\n{{/items}}{{^items}}Nothing due in this period.\n{{/items}}{{#hasOverdue}}\n**Overdue** · {{overdueTotal}}\n{{/hasOverdue}}{{#overdue}}- {{dueDate}} · {{name}} · {{amount}}\n{{/overdue}}{{#appUrl}}\n[Open Coinio]({{appUrl}}){{/appUrl}}"
+  },
+  "trialEnding": {
+    "title": "{{name}} trial ends {{when}}",
+    "body": "The free trial of **{{name}}** ends {{trialEnd}}, {{when}}.\nAfter that it costs {{amount}} ({{cycle}}). Cancel before then if you don't want to keep it.\n{{#link}}[Open in Coinio]({{link}}){{/link}}"
+  },
+  "budgetExceeded": {
+    "title": "Over budget in {{month}}",
+    "body": "Your monthly budget is {{budget}}. So far you've paid {{spent}}, and the month is heading for {{projected}}: {{over}} over budget.\n{{#appUrl}}[Open Coinio]({{appUrl}}){{/appUrl}}"
+  },
+  "priceChange": {
+    "title": "{{name}}: price changed",
+    "body": "**{{name}}** went from {{oldAmount}} to {{newAmount}}{{#change}} ({{change}}){{/change}}.\n{{#paidDate}}That's the amount paid for {{paidDate}}.\n{{/paidDate}}{{#link}}[Open in Coinio]({{link}}){{/link}}"
+  },
+  "test": {
+    "title": "Coinio test",
+    "body": "This is a test message from Coinio. **{{channel}}** is set up and working."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "reminder": {
+    "title": "{{name}} vence {{when}}",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\nVence el {{dueDate}}, {{when}}.\n{{#autoPay}}Se cobrará automáticamente{{#paymentMethod}} en {{paymentMethod}}{{/paymentMethod}}.{{/autoPay}}{{^autoPay}}No olvides pagarlo{{#paymentMethod}} con {{paymentMethod}}{{/paymentMethod}}.{{/autoPay}}\n{{#link}}[Abrir en Coinio]({{link}}){{/link}}"
+  },
+  "dueToday": {
+    "title": "{{name}} vence hoy",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\n{{#autoPay}}Se cobrará automáticamente hoy.{{/autoPay}}{{^autoPay}}El pago vence hoy.{{/autoPay}}\n{{#link}}[Abrir en Coinio]({{link}}){{/link}}"
+  },
+  "overdue": {
+    "title": "{{name}}: pago atrasado",
+    "body": "**{{name}}** · {{amount}}\nEl pago vencía el {{dueDate}} y todavía no está marcado como pagado.\n{{#link}}[Marcar como pagado en Coinio]({{link}}){{/link}}"
+  },
+  "digest": {
+    "title": "Tus pagos, {{period}}",
+    "body": "**Próximos pagos** · {{total}}\n{{#items}}- {{dueDate}} · {{name}} · {{amount}}{{#autoPay}} (automático){{/autoPay}}\n{{/items}}{{^items}}No hay pagos en este periodo.\n{{/items}}{{#hasOverdue}}\n**Atrasados** · {{overdueTotal}}\n{{/hasOverdue}}{{#overdue}}- {{dueDate}} · {{name}} · {{amount}}\n{{/overdue}}{{#appUrl}}\n[Abrir Coinio]({{appUrl}}){{/appUrl}}"
+  },
+  "trialEnding": {
+    "title": "La prueba de {{name}} termina {{when}}",
+    "body": "La prueba gratuita de **{{name}}** termina el {{trialEnd}}, {{when}}.\nDespués costará {{amount}} ({{cycle}}). Cancela antes si no quieres quedártelo.\n{{#link}}[Abrir en Coinio]({{link}}){{/link}}"
+  },
+  "budgetExceeded": {
+    "title": "Presupuesto superado en {{month}}",
+    "body": "Tu presupuesto mensual es de {{budget}}. Llevas pagado {{spent}} y el mes va camino de {{projected}}: {{over}} por encima del presupuesto.\n{{#appUrl}}[Abrir Coinio]({{appUrl}}){{/appUrl}}"
+  },
+  "priceChange": {
+    "title": "{{name}}: cambio de precio",
+    "body": "**{{name}}** pasó de {{oldAmount}} a {{newAmount}}{{#change}} ({{change}}){{/change}}.\n{{#paidDate}}Es el importe correspondiente al pago del {{paidDate}}.\n{{/paidDate}}{{#link}}[Abrir en Coinio]({{link}}){{/link}}"
+  },
+  "test": {
+    "title": "Prueba de Coinio",
+    "body": "Este es un mensaje de prueba de Coinio. **{{channel}}** está configurado y funciona."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "reminder": {
+    "title": "{{name}} ödemesi {{when}}",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\nSon gün {{dueDate}}, {{when}}.\n{{#autoPay}}Tutar{{#paymentMethod}} {{paymentMethod}} üzerinden{{/paymentMethod}} otomatik çekilecek.{{/autoPay}}{{^autoPay}}Ödemeyi unutma{{#paymentMethod}} ({{paymentMethod}}){{/paymentMethod}}.{{/autoPay}}\n{{#link}}[Coinio'da aç]({{link}}){{/link}}"
+  },
+  "dueToday": {
+    "title": "{{name}} ödemesi bugün",
+    "body": "**{{name}}** · {{amount}}{{#amountMain}} (≈ {{amountMain}}){{/amountMain}}\n{{#autoPay}}Tutar bugün otomatik çekilecek.{{/autoPay}}{{^autoPay}}Son ödeme günü bugün.{{/autoPay}}\n{{#link}}[Coinio'da aç]({{link}}){{/link}}"
+  },
+  "overdue": {
+    "title": "{{name}} ödemesi gecikti",
+    "body": "**{{name}}** · {{amount}}\nSon ödeme günü {{dueDate}} idi, henüz ödendi olarak işaretlenmedi.\n{{#link}}[Coinio'da ödendi olarak işaretle]({{link}}){{/link}}"
+  },
+  "digest": {
+    "title": "Ödemelerin, {{period}}",
+    "body": "**Yaklaşan ödemeler** · {{total}}\n{{#items}}- {{dueDate}} · {{name}} · {{amount}}{{#autoPay}} (otomatik){{/autoPay}}\n{{/items}}{{^items}}Bu dönemde ödeme yok.\n{{/items}}{{#hasOverdue}}\n**Gecikenler** · {{overdueTotal}}\n{{/hasOverdue}}{{#overdue}}- {{dueDate}} · {{name}} · {{amount}}\n{{/overdue}}{{#appUrl}}\n[Coinio'yu aç]({{appUrl}}){{/appUrl}}"
+  },
+  "trialEnding": {
+    "title": "{{name}} deneme süresi {{when}} bitiyor",
+    "body": "**{{name}}** ücretsiz deneme süresi {{trialEnd}} tarihinde, {{when}} bitiyor.\nSonrasında ücreti {{amount}} ({{cycle}}). Devam etmeyeceksen o güne kadar iptal et.\n{{#link}}[Coinio'da aç]({{link}}){{/link}}"
+  },
+  "budgetExceeded": {
+    "title": "{{month}} bütçesi aşıldı",
+    "body": "Aylık bütçen {{budget}}. Bu ay şimdiye kadar {{spent}} ödedin, ay sonunda toplam {{projected}} olacak. Bütçeyi {{over}} aşıyorsun.\n{{#appUrl}}[Coinio'yu aç]({{appUrl}}){{/appUrl}}"
+  },
+  "priceChange": {
+    "title": "{{name}} fiyatı değişti",
+    "body": "**{{name}}**: {{oldAmount}} → {{newAmount}}{{#change}} ({{change}}){{/change}}\n{{#paidDate}}Bu, {{paidDate}} ödemesinde ödenen tutar.\n{{/paidDate}}{{#link}}[Coinio'da aç]({{link}}){{/link}}"
+  },
+  "test": {
+    "title": "Coinio testi",
+    "body": "Bu, Coinio'dan bir test mesajı. **{{channel}}** kuruldu ve çalışıyor."
+  }
+}
