@@ -27,7 +27,7 @@ describe('HTML card data bridge', () => {
     const [message, origin] = post.mock.calls[0]!;
     expect(origin).toBe('*');
     expect(message).toMatchObject({ type: 'coinio:data', version: 1, data: { base: 'TRY', leftThisMonthMinor: 12345, items: [{ name: 'Netflix' }] } });
-    expect(Object.keys((message as { data: object }).data).sort()).toEqual(['base', 'generatedAt', 'items', 'leftThisMonthMinor', 'monthlyAverageMinor', 'ratesStale']);
+    expect(Object.keys((message as { data: object }).data).sort()).toEqual(['base', 'digits', 'generatedAt', 'items', 'leftThisMonthMinor', 'monthlyAverageMinor', 'ratesStale']);
     expect(calls.some((c) => c.url === '/api/summary')).toBe(true);
   });
 

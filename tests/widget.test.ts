@@ -34,6 +34,14 @@ describe('widget', () => {
     expect(res.body.items[1].name).toBe('s0');
   });
 
+  it('tells the decimal places of each currency in the payload', async () => {
+    const { app, agent, key } = await setup();
+    await agent.post('/api/subscriptions').send({ name: 'Netflix JP', amountMinor: 1590, currency: 'JPY', cycle: 'monthly', intervalCount: 1, nextDue: '2026-11-20' });
+    const res = await request(app).get('/api/widget').set('Authorization', `Bearer ${await key('read')}`);
+    expect(res.body.items[0]).toMatchObject({ amountMinor: 1590, currency: 'JPY' });
+    expect(res.body.digits).toEqual({ TRY: 2, JPY: 0 });
+  });
+
   it('rejects missing and malformed Authorization with 401', async () => {
     const { app } = await setup();
     expect((await request(app).get('/api/widget')).status).toBe(401);

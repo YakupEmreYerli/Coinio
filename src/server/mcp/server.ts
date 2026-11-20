@@ -8,6 +8,7 @@ import {
   NotFoundError,
   createSubscription,
   deleteSubscription,
+  getSubscription,
   getSummary,
   listPayments,
   listSubscriptions,
@@ -18,16 +19,25 @@ import {
 } from '../services/subscriptions.js';
 import { VERSION } from '../../shared/brand.js';
 import { isoDate as validIsoDate } from '../../shared/types.js';
+import { decimalToMinor, minorDigits, minorToDecimal } from '../../shared/money.js';
+import { getSettings } from '../services/settings.js';
 
 export type McpCtx = ServiceCtx & { userId: number; scope: Scope };
 
-const toMinor = (amount: number) => Math.round(amount * 100);
-const toDecimal = (minor: number) => (minor / 100).toFixed(2);
+/** A bad argument the schema cannot catch, such as decimals on a yen amount. */
+class InputError extends Error {}
+
+function toMinor(amount: number, currency: string, field: string): number {
+  const minor = decimalToMinor(amount, currency);
+  if (minor === null) throw new InputError(`Invalid input: ${field}: ${currency} amounts have at most ${minorDigits(currency)} decimals`);
+  return minor;
+}
+const toDecimal = minorToDecimal;
 
 const subscriptionOut = (s: SubscriptionRow) => ({
   id: s.id,
   name: s.name,
-  amount: toDecimal(s.amountMinor),
+  amount: toDecimal(s.amountMinor, s.currency),
   currency: s.currency,
   variable_amount: s.variableAmount,
   cycle: s.cycle,
@@ -42,14 +52,14 @@ const subscriptionOut = (s: SubscriptionRow) => ({
   active: s.active,
 });
 
-const paymentOut = (p: PaymentRow) => ({
+const paymentOut = (p: PaymentRow, base: string) => ({
   id: p.id,
   subscription_id: p.subscriptionId,
   due_date: p.dueDate,
   paid_at: p.paidAt,
-  amount: toDecimal(p.amountMinor),
+  amount: toDecimal(p.amountMinor, p.currency),
   currency: p.currency,
-  actual_base_amount: p.actualBaseMinor === null ? null : toDecimal(p.actualBaseMinor),
+  actual_base_amount: p.actualBaseMinor === null ? null : toDecimal(p.actualBaseMinor, base),
   status: p.status,
   source: p.source,
 });
@@ -68,7 +78,7 @@ function tool<A>(fn: (args: A) => object): (args: A) => CallToolResult {
     try {
       return ok(fn(args));
     } catch (err) {
-      if (err instanceof NotFoundError) return fail(err.message);
+      if (err instanceof NotFoundError || err instanceof InputError) return fail(err.message);
       if (err instanceof ZodError) {
         return fail(`Invalid input: ${err.issues.map((i) => `${i.path.join('.') || 'value'}: ${i.message}`).join('; ')}`);
       }
@@ -78,14 +88,14 @@ function tool<A>(fn: (args: A) => object): (args: A) => CallToolResult {
   };
 }
 
-const money = z.number().min(0).describe('Decimal amount, e.g. 229.99');
+const money = z.number().min(0).describe('Decimal amount, e.g. 229.99; whole numbers for currencies without decimals such as JPY and KRW');
 const isoDate = validIsoDate.describe('Date as YYYY-MM-DD');
 const id = z.number().int().positive();
 
 const writableFields = {
   name: z.string().describe('Subscription name, e.g. "Netflix"'),
-  amount: money.describe("Amount per billing cycle in the subscription's own currency, e.g. 229.99"),
-  currency: z.string().describe('ISO 4217 code with 2 decimals, e.g. TRY, USD, EUR'),
+  amount: money.describe("Amount per billing cycle in the subscription's own currency, e.g. 229.99 (USD) or 1490 (JPY)"),
+  currency: z.string().describe('ISO 4217 code, e.g. TRY, USD, EUR, JPY'),
   cycle: z.enum(['weekly', 'monthly', 'yearly']),
   interval_count: z.number().int().describe('Bill every N cycles (default 1)'),
   next_due: isoDate.describe('Next due date, YYYY-MM-DD'),
@@ -100,10 +110,11 @@ const writableFields = {
 
 type Fields = { [K in keyof typeof writableFields]?: z.infer<(typeof writableFields)[K]> };
 
-function toServiceFields(a: Fields) {
+/** `currency` is what the amount is in: the new currency if one is passed, else the subscription's. */
+function toServiceFields(a: Fields, currency: () => string) {
   return {
     name: a.name,
-    amountMinor: a.amount === undefined ? undefined : toMinor(a.amount),
+    amountMinor: a.amount === undefined ? undefined : toMinor(a.amount, currency(), 'amount'),
     currency: a.currency,
     cycle: a.cycle,
     intervalCount: a.interval_count,
@@ -157,9 +168,9 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
         due_date: i.dueDate,
         days_left: i.daysLeft,
         overdue: i.daysLeft < 0,
-        amount: toDecimal(i.amountMinor),
+        amount: toDecimal(i.amountMinor, i.currency),
         currency: i.currency,
-        base_amount: i.baseMinor === null ? null : toDecimal(i.baseMinor),
+        base_amount: i.baseMinor === null ? null : toDecimal(i.baseMinor, s.base),
         auto_pay: i.autoPay,
         variable_amount: i.variableAmount,
       });
@@ -181,9 +192,9 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
       const s = getSummary(ctx, userId, ctx.now());
       return {
         base_currency: s.base,
-        left_this_month: toDecimal(s.leftThisMonthMinor),
-        monthly_average: toDecimal(s.monthlyAverageMinor),
-        yearly_total: toDecimal(s.yearlyTotalMinor),
+        left_this_month: toDecimal(s.leftThisMonthMinor, s.base),
+        monthly_average: toDecimal(s.monthlyAverageMinor, s.base),
+        yearly_total: toDecimal(s.yearlyTotalMinor, s.base),
         rates_stale: s.ratesStale,
         unconvertible_subscription_ids: s.unconvertible,
         paid_this_month: s.paidThisMonth.map((p) => ({
@@ -192,7 +203,7 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
           name: p.name,
           due_date: p.dueDate,
           paid_at: p.paidAt,
-          amount: toDecimal(p.amountMinor),
+          amount: toDecimal(p.amountMinor, p.currency),
           currency: p.currency,
           source: p.source,
         })),
@@ -211,7 +222,7 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
       annotations: readOnly,
     },
     tool(({ subscription_id, limit }: { subscription_id?: number; limit: number }) => ({
-      payments: listPayments(ctx, userId, { subscriptionId: subscription_id }).slice(0, limit).map(paymentOut),
+      payments: listPayments(ctx, userId, { subscriptionId: subscription_id }).slice(0, limit).map((p) => paymentOut(p, getSettings(ctx).baseCurrency)),
     })),
   );
 
@@ -220,7 +231,7 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
   server.registerTool(
     'add_subscription',
     {
-      description: 'Create a new subscription. Amounts are decimal numbers in the subscription currency.',
+      description: 'Create a new subscription. Amounts are decimal numbers in the subscription currency (whole numbers for JPY, KRW and other currencies without decimals).',
       inputSchema: {
         name: writableFields.name,
         amount: writableFields.amount,
@@ -238,7 +249,7 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
       },
     },
     tool((a: Fields) => {
-      const f = toServiceFields(a);
+      const f = toServiceFields(a, () => a.currency ?? '');
       const input = Object.fromEntries(Object.entries(f).filter(([, v]) => v !== undefined));
       return { subscription: subscriptionOut(createSubscription(ctx, userId, { intervalCount: 1, ...input })) };
     }),
@@ -255,7 +266,7 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
       } as { id: typeof id } & { [K in keyof typeof writableFields]: z.ZodOptional<(typeof writableFields)[K]> } & { active: z.ZodOptional<z.ZodBoolean> },
     },
     tool((a: Fields & { id: number; active?: boolean }) => {
-      const f = toServiceFields(a);
+      const f = toServiceFields(a, () => a.currency ?? getSubscription(ctx, userId, a.id).currency);
       const patch = Object.fromEntries(Object.entries({ ...f, active: a.active }).filter(([, v]) => v !== undefined));
       return { subscription: subscriptionOut(updateSubscription(ctx, userId, a.id, patch)) };
     }),
@@ -273,16 +284,20 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
         actual_base_amount: money.optional().describe('Amount actually charged in the base currency'),
       },
     },
-    tool((a: { id: number; due_date?: string; amount?: number; actual_base_amount?: number }) => ({
-      payment: paymentOut(
-        markPaid(ctx, userId, a.id, {
-          dueDate: a.due_date,
-          amountMinor: a.amount === undefined ? undefined : toMinor(a.amount),
-          actualBaseMinor: a.actual_base_amount === undefined ? undefined : toMinor(a.actual_base_amount),
-          now: ctx.now(),
-        }),
-      ),
-    })),
+    tool((a: { id: number; due_date?: string; amount?: number; actual_base_amount?: number }) => {
+      const base = getSettings(ctx).baseCurrency;
+      return {
+        payment: paymentOut(
+          markPaid(ctx, userId, a.id, {
+            dueDate: a.due_date,
+            amountMinor: a.amount === undefined ? undefined : toMinor(a.amount, getSubscription(ctx, userId, a.id).currency, 'amount'),
+            actualBaseMinor: a.actual_base_amount === undefined ? undefined : toMinor(a.actual_base_amount, base, 'actual_base_amount'),
+            now: ctx.now(),
+          }),
+          base,
+        ),
+      };
+    }),
   );
 
   server.registerTool(
@@ -295,7 +310,7 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
       },
     },
     tool((a: { id: number; due_date?: string }) => ({
-      payment: paymentOut(skipPayment(ctx, userId, a.id, { dueDate: a.due_date, now: ctx.now() })),
+      payment: paymentOut(skipPayment(ctx, userId, a.id, { dueDate: a.due_date, now: ctx.now() }), getSettings(ctx).baseCurrency),
     })),
   );
 

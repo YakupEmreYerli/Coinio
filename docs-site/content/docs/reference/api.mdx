@@ -69,6 +69,7 @@ No authentication. The Docker image's health check calls it.
       "reminderDays": 1
     }
   ],
+  "digits": { "USD": 2 },
   "generatedAt": "2026-11-19T22:33:10.000Z"
 }
 ```
@@ -82,9 +83,10 @@ No authentication. The Docker image's health check calls it.
 | `items[].daysLeft` | Days until the due date; negative means overdue. |
 | `items[].amountMinor`, `currency` | Amount in the subscription's own currency. |
 | `items[].baseMinor` | The same in the main currency, or `null` when there is no exchange rate. |
+| `digits` | Decimal places of each currency in the response, for example `{ "USD": 2, "JPY": 0 }`. |
 | `generatedAt` | When the response was made (ISO 8601, UTC). |
 
-Amounts ending in `Minor` are integers in cents: `9196` is 91.96.
+Amounts ending in `Minor` are integers in the currency's smallest unit: `9196` is 91.96 in USD, ¥9,196 in JPY.
 
 ## MCP
 

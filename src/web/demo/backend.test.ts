@@ -41,6 +41,15 @@ describe('demo backend', () => {
     expect(subs.find((s) => s.name === 'Netflix')?.currency).toBe('EUR');
   });
 
+  it('shows Japanese visitors yen, ChatGPT in dollars converted to whole yen', async () => {
+    const b = new DemoBackend({ now: () => NOW, storage: memoryStorage(), timezone: 'UTC', base: '/demo/', locale: 'ja', loadLogos: async () => logos });
+    const subs = (await b.handle('GET', '/subscriptions')) as ApiSubscription[];
+    expect(subs.find((s) => s.name === 'Netflix')).toMatchObject({ currency: 'JPY', amountMinor: 2390 });
+    const summary = (await b.handle('GET', '/summary')) as { base: string; rates: Record<string, number>; upcoming: { name: string; baseMinor: number }[] };
+    expect(summary.base).toBe('JPY');
+    expect(summary.upcoming.find((i) => i.name === 'ChatGPT Plus')?.baseMinor).toBe(3100);
+  });
+
   it('starts signed in, onboarded, with the sample set in USD and their logos', async () => {
     const b = make();
     expect(await b.handle('GET', '/auth/state')).toEqual({ setupRequired: false, user: { id: 1, username: 'demo' } });

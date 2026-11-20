@@ -5,7 +5,7 @@ import { t, useLocale } from '../i18n';
 import { shortDate } from '../lib/dates';
 import { usePayments, useUndoPayment, useUpdatePayment } from '../lib/hooks';
 import type { ApiPayment } from '../lib/types';
-import { parseAmount } from '../subscription-form/amount';
+import { amountInputMode, parseAmount } from '../subscription-form/amount';
 
 function ActualCell({ p, base }: { p: ApiPayment; base: string }) {
   const { locale } = useLocale();
@@ -21,7 +21,7 @@ function ActualCell({ p, base }: { p: ApiPayment; base: string }) {
     );
   }
   const save = () => {
-    const v = text.trim() ? parseAmount(text, locale) : null;
+    const v = text.trim() ? parseAmount(text, locale, base) : null;
     if (text.trim() && v === null) return;
     update.mutate({ id: p.id, patch: { actualBaseMinor: v } });
     setEditing(false);
@@ -30,7 +30,7 @@ function ActualCell({ p, base }: { p: ApiPayment; base: string }) {
     <input
       aria-label={t('history.actual')}
       autoFocus
-      inputMode="decimal"
+      inputMode={amountInputMode(base)}
       className="h-7 w-24 rounded-[6px] border border-line-2 bg-card px-2 text-xs outline-none focus:border-accent"
       value={text}
       onChange={(e) => setText(e.target.value)}

@@ -53,6 +53,18 @@ describe('export', () => {
     expect(lines[1]).toBe(`1,${sub.id},"Acme, ""Pro"" plan",2026-11-05,2026-11-05T08:00:00Z,0.05,USD,212.50,manual,paid`);
   });
 
+  it('csv writes yen amounts without decimals, in the base currency for actual amounts', async () => {
+    const { agent, db } = await login();
+    await agent.patch('/api/settings').send({ baseCurrency: 'JPY' });
+    const sub = (await agent.post('/api/subscriptions').send({ ...tricky, name: 'Netflix', amountMinor: 1590, currency: 'JPY' })).body;
+    expect((await agent.get('/api/export?format=csv&what=subscriptions')).text).toContain('Netflix,,1590,JPY,');
+    db.insert(payments).values({
+      subscriptionId: sub.id, dueDate: '2026-11-05', paidAt: '2026-11-05T08:00:00Z', amountMinor: 2000, currency: 'USD',
+      actualBaseMinor: 3100, source: 'manual',
+    }).run();
+    expect((await agent.get('/api/export?format=csv&what=payments')).text).toContain(',20.00,USD,3100,manual,paid');
+  });
+
   it('json export lists subscriptions', async () => {
     const { agent } = await login();
     await agent.post('/api/subscriptions').send(tricky);

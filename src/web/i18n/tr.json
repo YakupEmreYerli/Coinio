@@ -69,7 +69,7 @@
   "form.domain": "Site adresi",
   "form.domainHint": "Logoyu bulmak için kullanılır.",
   "form.amount": "Tutar",
-  "form.amountInvalid": "99,99 gibi bir tutar yaz",
+  "form.amountInvalid": "{example} gibi bir tutar yaz",
   "form.currency": "Para birimi",
   "form.cycle": "Ödeme sıklığı",
   "form.every": "Her",

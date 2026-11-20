@@ -1,3 +1,4 @@
+import { convertMinor } from '../../shared/money';
 import { dueDatesThrough } from '../../shared/schedule';
 import type { ApiPayment, ApiSubscription } from '../lib/types';
 
@@ -8,7 +9,7 @@ export type RateTable = { base: string; rates: Record<string, number> };
 export function toBase(amountMinor: number, currency: string, rates: RateTable): number | null {
   if (currency === rates.base) return amountMinor;
   const rate = rates.rates[currency];
-  return rate === undefined ? null : Math.round(amountMinor * rate);
+  return rate === undefined ? null : convertMinor(amountMinor, currency, rates.base, rate);
 }
 
 /**

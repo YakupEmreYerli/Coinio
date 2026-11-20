@@ -1,10 +1,11 @@
+import { convertMinor } from '../../shared/money';
 import type { ApiSubscription } from './types';
 
 /** Converts with the summary's rates (base units per 1 unit of the currency); null if no rate. */
 export function toBaseMinor(amountMinor: number, currency: string, base: string, rates: Record<string, number> | undefined): number | null {
   if (currency === base) return amountMinor;
   const r = rates?.[currency];
-  return r ? Math.round(amountMinor * r) : null;
+  return r ? convertMinor(amountMinor, currency, base, r) : null;
 }
 
 const perYear = (s: ApiSubscription) => (s.cycle === 'weekly' ? 52 : s.cycle === 'monthly' ? 12 : 1) / s.intervalCount;

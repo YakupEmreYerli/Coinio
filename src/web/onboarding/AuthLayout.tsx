@@ -1,3 +1,4 @@
+import { formatMinor } from '../../shared/money';
 import { siIcloud, siNetflix, siSpotify } from 'simple-icons';
 import type { ReactNode } from 'react';
 import { SlicedMark } from '../brand/SlicedMark';
@@ -12,6 +13,7 @@ const PREVIEW_PRICES: Record<string, [number, number, number]> = {
   USD: [1549, 1199, 299],
   EUR: [1399, 1099, 299],
   GBP: [1299, 1199, 299],
+  JPY: [1590, 1080, 150],
 };
 
 function BrandIcon({ path, hex }: { path: string; hex: string }) {
@@ -30,7 +32,7 @@ function PreviewCard() {
   const currency = guessCurrency();
   const prices = PREVIEW_PRICES[currency] ?? PREVIEW_PRICES.USD!;
   const cur = PREVIEW_PRICES[currency] ? currency : 'USD';
-  const money = (minor: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: cur }).format(minor / 100);
+  const money = (minor: number) => formatMinor(minor, cur, locale);
   const rows = [
     { icon: siNetflix, name: 'Netflix', due: t('auth.preview.in', { n: 3 }), amount: prices[0] },
     { icon: siSpotify, name: 'Spotify', due: t('auth.preview.in', { n: 9 }), amount: prices[1] },

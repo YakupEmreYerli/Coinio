@@ -69,10 +69,11 @@ When it is on, Coinio posts a read-only summary into the card with `postMessage`
 `data` has the same shape as the [widget endpoint](/docs/integrations/iphone-widget) (`GET /api/widget`):
 
 - `base`: your main currency code, for example `"EUR"`.
-- `leftThisMonthMinor`: what is still due this month, in hundredths of `base` (12999 means 129.99).
-- `monthlyAverageMinor`: the monthly average of all active subscriptions, in hundredths.
+- `leftThisMonthMinor`: what is still due this month, in the smallest unit of `base` (12999 means 129.99 in USD, but ¥12,999 in JPY).
+- `monthlyAverageMinor`: the monthly average of all active subscriptions, in the same unit.
 - `ratesStale`: `true` when exchange rates are out of date and converted amounts are approximate.
 - `items`: up to six due payments, overdue first. Each has `subscriptionId`, `name`, `dueDate` (`YYYY-MM-DD`), `amountMinor` and `currency` in the subscription's own currency, `baseMinor` (converted, or `null` without a rate), `daysLeft` (negative when overdue), `autoPay`, `variableAmount`, `reminderDays` and `logoPath`.
+- `digits`: decimal places of each currency above, for example `{ "USD": 2, "JPY": 0 }`. Divide a `…Minor` amount by `10 ** digits[currency]`.
 - `generatedAt`: when the summary was made (ISO 8601).
 
 A small card that shows the next payment:
@@ -80,10 +81,12 @@ A small card that shows the next payment:
 ```html
 <p id="next" style="margin:16px;font:500 15px system-ui">Loading…</p>
 <script>
+  let digits = {};
   const money = (minor, currency) =>
-    new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(minor / 100);
+    new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(minor / 10 ** digits[currency]);
   addEventListener('message', (e) => {
     if (e.data?.type !== 'coinio:data') return;
+    digits = e.data.data.digits;
     const next = e.data.data.items[0];
     document.getElementById('next').textContent = next
       ? `${next.name}: ${money(next.amountMinor, next.currency)} on ${next.dueDate}`

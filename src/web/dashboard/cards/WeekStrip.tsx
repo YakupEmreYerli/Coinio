@@ -1,3 +1,4 @@
+import { formatMinor } from '../../../shared/money';
 import { Logo } from '../../components/Logo';
 import { Card, CardHeader } from '../../components/ui/Card';
 import { t, useLocale } from '../../i18n';
@@ -6,7 +7,7 @@ import { useDashboardData } from '../useDueItems';
 import { Link } from 'react-router-dom';
 
 function compactMoney(minor: number, currency: string, locale: string) {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(minor / 100);
+  return formatMinor(minor, currency, locale, { maximumFractionDigits: 0 });
 }
 
 /** Monday–Sunday of the current week with the logos due each day. */

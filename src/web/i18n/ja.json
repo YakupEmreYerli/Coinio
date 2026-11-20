@@ -69,7 +69,7 @@
   "form.domain": "ウェブサイト",
   "form.domainHint": "ロゴの検索に使います。",
   "form.amount": "金額",
-  "form.amountInvalid": "99.99 のような形式で金額を入力してください",
+  "form.amountInvalid": "{example} のような形式で金額を入力してください",
   "form.currency": "通貨",
   "form.cycle": "請求サイクル",
   "form.every": "間隔",

@@ -126,6 +126,20 @@ describe('Scriptable widget script', () => {
     expect(s.texts).toContain('22 Kas · ₺868');
   });
 
+  it('shows yen without decimals using the digits the server sends', async () => {
+    const yen = {
+      ...data,
+      base: 'JPY',
+      leftThisMonthMinor: 4980,
+      digits: { JPY: 0, USD: 2 },
+      items: [{ subscriptionId: 2, name: 'Netflix', dueDate: '2026-11-22', daysLeft: 3, amountMinor: 1590, currency: 'JPY', baseMinor: 1590 }],
+    };
+    const s = sandbox('medium', yen, { language: 'en' });
+    await s.done;
+    expect(s.texts).toContain('¥4,980');
+    expect(s.texts).toContain('Nov 22 · ¥1,590');
+  });
+
   it('circular lock screen widget shows days to the next payment', async () => {
     const s = sandbox('accessoryCircular', { ...data, items: data.items.slice(1) });
     await s.done;

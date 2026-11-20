@@ -1,3 +1,4 @@
+import { minorDigits } from './money';
 import type { CategoryKey } from './catalog';
 import type { Locale } from './locales';
 
@@ -27,8 +28,8 @@ const SAMPLES_TR: readonly SampleSub[] = [
   { name: 'Domain renewal', domain: 'namecheap.com', amountMinor: 49900, currency: 'TRY', cycle: 'yearly', category: 'devtools', paymentMethod: 'Card', dueIn: 120, autoPay: true },
 ];
 
-/** The demo's main currency per language (no yen: amounts are stored in hundredths). */
-export const SAMPLE_CURRENCY: Record<Locale, string> = { en: 'USD', tr: 'TRY', de: 'EUR', fr: 'EUR', es: 'EUR', 'pt-BR': 'BRL', 'zh-CN': 'CNY', ja: 'USD' };
+/** The demo's main currency per language. */
+export const SAMPLE_CURRENCY: Record<Locale, string> = { en: 'USD', tr: 'TRY', de: 'EUR', fr: 'EUR', es: 'EUR', 'pt-BR': 'BRL', 'zh-CN': 'CNY', ja: 'JPY' };
 
 /** Sample names and payment methods that are words rather than brands, per language. */
 const SAMPLE_WORDS: Record<Locale, Record<string, string>> = {
@@ -46,14 +47,22 @@ const SAMPLE_WORDS: Record<Locale, Record<string, string>> = {
 export const sampleWord = (word: string, locale: Locale): string => SAMPLE_WORDS[locale][word] ?? word;
 
 /** Rough USD rates, only to price the samples in the user's own currency (rounded to a "real" price). */
-export const SAMPLE_RATES: Record<string, number> = { USD: 1, EUR: 0.93, GBP: 0.79, CHF: 0.88, CAD: 1.38, AUD: 1.52, TRY: 43, BRL: 5.6, MXN: 18, CNY: 7.2, SEK: 10.5, NOK: 10.8, DKK: 6.9, PLN: 4, CZK: 23 };
+export const SAMPLE_RATES: Record<string, number> = { USD: 1, EUR: 0.93, GBP: 0.79, CHF: 0.88, CAD: 1.38, AUD: 1.52, TRY: 43, BRL: 5.6, MXN: 18, CNY: 7.2, SEK: 10.5, NOK: 10.8, DKK: 6.9, PLN: 4, CZK: 23, JPY: 155, KRW: 1400 };
 
-/** Converts a sample USD price to `currency`, ending in .99 like a shop price; unknown currencies stay in USD. */
+/**
+ * Converts a sample USD price to `currency` as a shop price: ending in .99, or for currencies without
+ * decimals in 90 (¥1,490) or, from ten thousand up, 900 (₩21,900). Unknown currencies stay in USD.
+ */
 export function samplePrice(usdMinor: number, currency: string): { amountMinor: number; currency: string } {
   const rate = SAMPLE_RATES[currency];
   if (!rate) return { amountMinor: usdMinor, currency: 'USD' };
-  const whole = Math.max(1, Math.round((usdMinor / 100) * rate));
-  return { amountMinor: whole * 100 - 1, currency };
+  const value = (usdMinor / 100) * rate;
+  const digits = minorDigits(currency);
+  if (digits === 0) {
+    const step = value >= 10_000 ? 1000 : 100;
+    return { amountMinor: Math.max(1, Math.round(value / step)) * step - step / 10, currency };
+  }
+  return { amountMinor: Math.max(1, Math.round(value)) * 10 ** digits - 1, currency };
 }
 
 /**

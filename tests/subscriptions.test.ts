@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { eq } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
-import { payments, subscriptions, users } from '../src/server/db/schema.js';
+import { fxRates, payments, subscriptions, users } from '../src/server/db/schema.js';
 import { makeTestApp } from './helpers.js';
 
 async function login(t = makeTestApp(), base: string | null = 'TRY') {
@@ -44,7 +44,7 @@ describe('subscriptions REST', () => {
     const { agent } = await login();
     for (const bad of [
       { ...netflix, amountMinor: -1 },
-      { ...netflix, currency: 'JPY' },
+      { ...netflix, currency: 'ABC' },
       { ...netflix, currency: 'try' },
       { ...netflix, currency: 'XXX' },
       { ...netflix, nextDue: '2026-02-30' },
@@ -56,6 +56,20 @@ describe('subscriptions REST', () => {
       expect(res.body.error).toBe('validation');
       expect(res.body.issues.length).toBeGreaterThan(0);
     }
+  });
+
+  it('round-trips a yen subscription in whole yen and converts it into the base currency', async () => {
+    const t = makeTestApp();
+    const { agent } = await login(t, 'USD');
+    const created = await agent.post('/api/subscriptions').send({ ...netflix, name: 'Netflix JP', amountMinor: 1590, currency: 'JPY' });
+    expect(created.status).toBe(201);
+    expect(created.body).toMatchObject({ amountMinor: 1590, currency: 'JPY' });
+    expect((await agent.get(`/api/subscriptions/${created.body.id}`)).body).toMatchObject({ amountMinor: 1590, currency: 'JPY' });
+    expect((await agent.patch('/api/settings').send({ baseCurrency: 'KRW' })).status).toBe(200);
+    expect((await agent.patch('/api/settings').send({ baseCurrency: 'USD' })).status).toBe(200);
+    // 1 JPY = 0.0065 USD: ¥1,590 a month is $10.34.
+    t.db.insert(fxRates).values({ base: 'USD', quote: 'JPY', rate: 0.0065, date: '2026-11-18', fetchedAt: '2026-11-18' }).run();
+    expect((await agent.get('/api/summary')).body.monthlyAverageMinor).toBe(1034);
   });
 
   it('pay advances nextDue, is idempotent per due date, undo rolls back', async () => {
@@ -186,7 +200,7 @@ describe('settings REST', () => {
     await agent.patch('/api/settings').send({ telegramBotToken: '123456:ABCDEFwxyz' });
     expect((await agent.get('/api/settings')).body.telegramBotToken).toBe('****wxyz');
     expect((await agent.patch('/api/settings').send({ telegramBotToken: null })).body.telegramBotToken).toBeNull();
-    for (const bad of [{ timezone: 'Mars/Base' }, { reminderTime: '25:00' }, { baseCurrency: 'JPY' }, { locale: 'ko' }]) {
+    for (const bad of [{ timezone: 'Mars/Base' }, { reminderTime: '25:00' }, { baseCurrency: 'ABC' }, { locale: 'ko' }]) {
       expect((await agent.patch('/api/settings').send(bad)).status).toBe(400);
     }
   });

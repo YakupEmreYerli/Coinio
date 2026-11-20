@@ -17,6 +17,7 @@ import type { Appearance as AppearanceData } from '../../lib/types';
 import { CardLayout } from './appearance/CardLayout';
 import { CssEditor } from './appearance/CssEditor';
 import { HtmlCards } from './appearance/HtmlCards';
+import { currencyFormat } from '../../../shared/money';
 
 /** A titled settings block with its own "back to default" button. */
 function Block({ title, description, onReset, children }: { title: string; description?: string; onReset?: () => void; children: ReactNode }) {
@@ -63,7 +64,7 @@ const tileClass =
 
 /** The type preview's amount (2,217.99) in the user's currency and locale, split into whole part and cents. */
 export function sampleAmount(currency: string, locale: string): [string, string] {
-  const parts = new Intl.NumberFormat(locale, { style: 'currency', currency }).formatToParts(2217.99);
+  const parts = currencyFormat(currency, locale).formatToParts(2217.99);
   const frac = parts.findIndex((p) => p.type === 'fraction');
   const dec = parts.findIndex((p) => p.type === 'decimal');
   const whole = parts.filter((_, i) => i !== frac && i !== dec).map((p) => p.value).join('').trim();

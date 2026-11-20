@@ -124,4 +124,21 @@ describe('computeSummary', () => {
     const s = run([a], [pay({ subscriptionId: a.id, dueDate: '2026-11-09', paidAt: '2026-10-31T22:30:00Z' })]);
     expect(s.paidThisMonth.map((p) => p.dueDate)).toEqual(['2026-11-09']);
   });
+
+  it('totals a yen subscription in a dollar base', () => {
+    const usd: Rates = { base: 'USD', date: today, stale: false, rates: { JPY: 0.0065 } };
+    const s = computeSummary({ subs: [sub({ amountMinor: 1590, currency: 'JPY' }), sub({ amountMinor: 999, currency: 'USD' })], payments: [], today, rates: usd });
+    // ¥1,590 × 0.0065 = $10.335 → 1034 cents.
+    expect(s.upcoming[0]!.baseMinor).toBe(1034);
+    expect(s.monthlyAverageMinor).toBe(1034 + 999);
+    expect(s.leftThisMonthMinor).toBe(1034 + 999);
+  });
+
+  it('totals a dollar subscription in a yen base in whole yen', () => {
+    const jpy: Rates = { base: 'JPY', date: today, stale: false, rates: { USD: 155 } };
+    const s = computeSummary({ subs: [sub({ amountMinor: 2000, currency: 'USD' }), sub({ amountMinor: 1590, currency: 'JPY' })], payments: [], today, rates: jpy });
+    expect(s.upcoming[0]!.baseMinor).toBe(3100);
+    expect(s.monthlyAverageMinor).toBe(3100 + 1590);
+    expect(s.yearlyTotalMinor).toBe((3100 + 1590) * 12);
+  });
 });

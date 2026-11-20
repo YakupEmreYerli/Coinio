@@ -45,12 +45,15 @@ async function load() {
   }
 }
 
+// Decimal places per currency, sent by the server (JPY 0, USD 2); older servers only had 2-decimal currencies.
+let DIGITS = {};
 const money = (minor, currency) => {
+  const scale = 10 ** (DIGITS[currency] ?? 2);
   try {
-    const digits = minor % 100 === 0 ? 0 : 2;
-    return new Intl.NumberFormat(LOCALE, { style: 'currency', currency, minimumFractionDigits: digits, maximumFractionDigits: digits }).format(minor / 100);
+    const digits = minor % scale === 0 ? 0 : (DIGITS[currency] ?? 2);
+    return new Intl.NumberFormat(LOCALE, { style: 'currency', currency, minimumFractionDigits: digits, maximumFractionDigits: digits }).format(minor / scale);
   } catch {
-    return `${(minor / 100).toFixed(2)} ${currency}`;
+    return `${(minor / scale).toFixed(DIGITS[currency] ?? 2)} ${currency}`;
   }
 };
 const clock = (iso) => new Intl.DateTimeFormat(LOCALE, { hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
@@ -87,6 +90,7 @@ async function build() {
     return w;
   }
   const { data, offline, error } = await load();
+  DIGITS = (data && data.digits) || {};
   if (!data) {
     w.addText(error).font = Font.systemFont(12);
     return w;

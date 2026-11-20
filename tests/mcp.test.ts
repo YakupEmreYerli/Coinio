@@ -77,6 +77,24 @@ describe('mcp tools', () => {
     expect(db.select().from(subscriptions).get()?.amountMinor).toBe(22999);
   });
 
+  it('takes and returns whole yen for JPY, refusing decimals', async () => {
+    const { connect, db, text } = await setup();
+    const c = await connect('full');
+    const res = await c.callTool({ name: 'add_subscription', arguments: { ...netflix, amount: 1590, currency: 'JPY', auto_pay: false } });
+    expect(text(res).subscription).toMatchObject({ amount: '1590', currency: 'JPY' });
+    expect(db.select().from(subscriptions).get()?.amountMinor).toBe(1590);
+    const id = text(res).subscription.id;
+    expect(text(await c.callTool({ name: 'update_subscription', arguments: { id, amount: 1790 } })).subscription.amount).toBe('1790');
+    const fractional = await c.callTool({ name: 'update_subscription', arguments: { id, amount: 1790.5 } });
+    expect(fractional.isError).toBe(true);
+    expect(JSON.stringify(fractional.content)).toContain('JPY amounts have at most 0 decimals');
+    expect((await c.callTool({ name: 'add_subscription', arguments: { ...netflix, amount: 1.5, currency: 'JPY' } })).isError).toBe(true);
+    expect(text(await c.callTool({ name: 'update_subscription', arguments: { id, amount: 12.99, currency: 'USD' } })).subscription).toMatchObject({ amount: '12.99', currency: 'USD' });
+    await c.callTool({ name: 'update_subscription', arguments: { id, amount: 1590, currency: 'JPY' } });
+    const paid = text(await c.callTool({ name: 'mark_paid', arguments: { id, amount: 1600, actual_base_amount: 10.5 } }));
+    expect(paid.payment).toMatchObject({ amount: '1600', currency: 'JPY', actual_base_amount: '10.50' });
+  });
+
   it('returns tool errors for invalid input and unknown ids', async () => {
     const { connect } = await setup();
     const c = await connect('full');

@@ -69,7 +69,7 @@
   "form.domain": "Sitio web",
   "form.domainHint": "Se usa para buscar el logo.",
   "form.amount": "Importe",
-  "form.amountInvalid": "Escribe un importe como 99.99",
+  "form.amountInvalid": "Escribe un importe como {example}",
   "form.currency": "Moneda",
   "form.cycle": "Periodicidad",
   "form.every": "Cada",

@@ -69,7 +69,7 @@
   "form.domain": "Site",
   "form.domainHint": "Usado para encontrar o logo.",
   "form.amount": "Valor",
-  "form.amountInvalid": "Informe um valor como 99,99",
+  "form.amountInvalid": "Informe um valor como {example}",
   "form.currency": "Moeda",
   "form.cycle": "Ciclo de cobrança",
   "form.every": "A cada",
