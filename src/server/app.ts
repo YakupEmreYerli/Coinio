@@ -22,6 +22,8 @@ import { subscriptionsRouter } from './routes/subscriptions.js';
 import { widgetRouter } from './routes/widget.js';
 import type { LookupFn, ServiceCtx } from './services/context.js';
 import { seedTelegramFromEnv } from './services/notify/channels.js';
+import { accountGuard } from './auth/accountGuard.js';
+import type { CoinioPlugin } from './plugins.js';
 
 export type AppDeps = {
   db: Db;
@@ -29,6 +31,7 @@ export type AppDeps = {
   now?: () => Date;
   lookup?: LookupFn;
   fetch?: typeof fetch;
+  plugins?: CoinioPlugin[];
 };
 
 const SERVER_PATHS = /^\/(api|oauth|mcp|logos|\.well-known|authorize|token|register|revoke)(\/|$)/;
@@ -38,7 +41,8 @@ export function createApp(deps: AppDeps): express.Express {
   app.set('trust proxy', 1);
 
   const now = deps.now ?? (() => new Date());
-  const ctx: ServiceCtx = { db: deps.db, config: deps.config, fetch: deps.fetch ?? fetch, now, lookup: deps.lookup };
+  const plugins = deps.plugins ?? [];
+  const ctx: ServiceCtx = { db: deps.db, config: deps.config, fetch: deps.fetch ?? fetch, now, lookup: deps.lookup, plugins };
   seedTelegramFromEnv(ctx);
 
   // Wallos exports can exceed the default 100 KB body limit; mounted before the global parser, which would reject them.
@@ -53,6 +57,9 @@ export function createApp(deps: AppDeps): express.Express {
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true, version: VERSION });
   });
+
+  for (const plugin of plugins) plugin.early?.(app, ctx);
+  if (plugins.some((p) => p.allowUser)) app.use(accountGuard(ctx));
 
   const publicUrl = oauthUrlOf(deps.config.publicUrl);
   if (publicUrl) {
@@ -84,6 +91,7 @@ export function createApp(deps: AppDeps): express.Express {
   app.use(logosRouter(ctx));
   app.use('/api', subscriptionsRouter(ctx));
   app.use('/mcp', mcpRouter(ctx));
+  for (const plugin of plugins) plugin.routes?.(app, ctx);
 
   const indexHtml = join(deps.config.webDir, 'index.html');
   if (existsSync(indexHtml)) {

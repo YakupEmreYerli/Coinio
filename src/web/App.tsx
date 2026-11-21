@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { ext } from '@coinio/ext';
 import { api, type AuthState } from './api';
-import { resolveLocale, setLocale, t, useLocale } from './i18n';
+import { addMessages, resolveLocale, setLocale, t, useLocale } from './i18n';
 import { SlicedMark } from './brand/SlicedMark';
 import { AppShell } from './layout/AppShell';
 import { AppearanceRoot } from './lib/AppearanceRoot';
@@ -15,6 +16,8 @@ import { Setup } from './routes/Setup';
 import { Subscriptions } from './routes/Subscriptions';
 import { SettingsLayout } from './routes/settings/SettingsLayout';
 import { Welcome, useOnboarding } from './routes/Welcome';
+
+if (ext.messages) addMessages(ext.messages);
 
 /** Signed-in part: keeps language and appearance in sync with the server. */
 function SignedIn({ user }: { user: { id: number; username: string } }) {
@@ -39,6 +42,7 @@ function SignedIn({ user }: { user: { id: number; username: string } }) {
           <Route path="/settings/:section?" element={<SettingsLayout />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/reports" element={<Reports />} />
+          {ext.routes?.map((r) => <Route key={r.path} path={r.path} element={<r.Component />} />)}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
@@ -71,7 +75,11 @@ export function App() {
         <SignedIn user={auth.user} />
       ) : (
         <Routes>
-          <Route path="/setup" element={auth.setupRequired ? <Setup onDone={() => location.assign('/')} /> : <Navigate to="/login" replace />} />
+          <Route
+            path="/setup"
+            element={auth.setupRequired ? ext.SetupScreen ? <ext.SetupScreen /> : <Setup onDone={() => location.assign('/')} /> : <Navigate to="/login" replace />}
+          />
+          {ext.publicRoutes?.map((r) => <Route key={r.path} path={r.path} element={<r.Component />} />)}
           <Route path="/login" element={auth.setupRequired ? <Navigate to="/setup" replace /> : <Login />} />
           <Route path="*" element={<Navigate to={auth.setupRequired ? '/setup' : '/login'} replace />} />
         </Routes>

@@ -27,6 +27,8 @@ export function AuthForm(props: {
   onSubmit: (username: string, password: string) => Promise<void>;
   errorMessage: (e: ApiError) => string;
   belowPassword?: ReactNode;
+  /** Rendered under the form (extra sign-in options). */
+  after?: ReactNode;
 }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -101,6 +103,7 @@ export function AuthForm(props: {
           {busy ? (props.busyLabel ?? props.submitLabel) : props.submitLabel}
         </Button>
       </form>
+      {props.after}
     </AuthLayout>
   );
 }

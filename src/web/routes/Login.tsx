@@ -1,5 +1,6 @@
 import { api } from '../api';
 import { t } from '../i18n';
+import { ext } from '@coinio/ext';
 import { AuthForm } from './AuthForm';
 
 const RESET_DOCS = 'https://docs.getcoinio.me/docs/reference/troubleshooting#i-forgot-my-password';
@@ -21,6 +22,7 @@ export function Login() {
           {t('login.forgot')}
         </a>
       }
+      after={ext.SignInExtras && <ext.SignInExtras />}
       onSubmit={async (username, password) => {
         await api.post('/auth/login', { username, password });
         // Full load: the target may be a server-rendered page (/oauth/consent) and auth state must refresh.

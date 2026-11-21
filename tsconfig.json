@@ -11,7 +11,8 @@
     "jsx": "react-jsx",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "types": ["node"],
-    "noEmit": true
+    "noEmit": true,
+    "paths": { "@coinio/ext": ["./src/web/ext.ts"] }
   },
   "include": ["src", "tests", "*.ts"]
 }

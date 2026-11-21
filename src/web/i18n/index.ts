@@ -13,6 +13,12 @@ export type Catalog = Record<string, Message>;
 // English ships in the main bundle; the other languages load on first use.
 const loaders = import.meta.glob<{ default: Catalog }>(['./*.json', '!./en.json']);
 const catalogs: Partial<Record<Locale, Catalog>> & { en: Catalog } = { en };
+/** Messages added by a build extension (see ext.ts); they win over the built-in ones. */
+const extra: Partial<Record<Locale, Catalog>> = {};
+
+export function addMessages(messages: Partial<Record<Locale, Catalog>>): void {
+  for (const [locale, catalog] of Object.entries(messages) as [Locale, Catalog][]) extra[locale] = { ...extra[locale], ...catalog };
+}
 
 export async function loadLocale(locale: Locale): Promise<void> {
   if (catalogs[locale]) return;
@@ -81,7 +87,12 @@ function pick(message: Message | undefined, locale: Locale, n: unknown): string 
 
 /** Looks up a key; plural messages choose their form from `vars.n`. */
 export function t(key: string, vars?: Vars): string {
-  const template = pick(catalogs[current]?.[key], current, vars?.n) ?? pick(catalogs.en[key], 'en', vars?.n) ?? key;
+  const template =
+    pick(extra[current]?.[key], current, vars?.n) ??
+    pick(catalogs[current]?.[key], current, vars?.n) ??
+    pick(extra.en?.[key], 'en', vars?.n) ??
+    pick(catalogs.en[key], 'en', vars?.n) ??
+    key;
   return vars ? template.replace(/\{(\w+)\}/g, (m, name: string) => (name in vars ? String(vars[name]) : m)) : template;
 }
 

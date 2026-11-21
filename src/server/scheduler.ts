@@ -6,6 +6,7 @@ import { getRates, refreshRates, type FetchFn } from './services/fx.js';
 import { getInstanceValue, getSettings, setInstanceValue } from './services/settings.js';
 import { runNotifications } from './services/notify/index.js';
 import type { ServiceCtx } from './services/context.js';
+import type { CoinioPlugin } from './plugins.js';
 
 // Currencies already tried today outside the daily refresh, so an offline API is not hit every minute.
 const triedToday = new Set<string>();
@@ -44,8 +45,9 @@ async function refreshRatesDaily(ctx: ServiceCtx): Promise<void> {
  */
 export function startScheduler(
   ctx: ServiceCtx,
-  opts: { intervalMs?: number; onTick?: () => Promise<void> } = {},
+  opts: { intervalMs?: number; onTick?: () => Promise<void>; plugins?: CoinioPlugin[] } = {},
 ): () => void {
+  const withPlugins: ServiceCtx = opts.plugins ? { ...ctx, plugins: opts.plugins } : ctx;
   let running = false;
   const tick = async () => {
     if (running) return;
@@ -63,6 +65,9 @@ export function startScheduler(
       await step('fx refresh', () => refreshRatesDaily(ctx));
       await step('notifications', () => runNotifications(ctx));
       await step('onTick', async () => opts.onTick?.());
+      for (const plugin of opts.plugins ?? ctx.plugins ?? []) {
+        if (plugin.onTick) await step(`${plugin.name} onTick`, () => plugin.onTick!(withPlugins));
+      }
     } finally {
       running = false;
     }

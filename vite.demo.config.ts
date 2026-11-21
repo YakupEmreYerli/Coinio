@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
 
 // Browser-only demo of the web app for the landing page: no server, data in sessionStorage.
@@ -16,6 +17,7 @@ const themeFromQuery: Plugin = {
 };
 
 export default defineConfig({
+  resolve: { alias: { '@coinio/ext': fileURLToPath(new URL('./src/web/ext.ts', import.meta.url)) } },
   base: '/demo/',
   plugins: [react(), tailwindcss(), themeFromQuery],
   define: { 'import.meta.env.VITE_DEMO': JSON.stringify('1') },
