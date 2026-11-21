@@ -1111,6 +1111,19 @@ h1 .eyebrow { display: block; }
   .cmp th, .cmp td { padding: 12px 14px; }
   .choose li { padding: 22px 20px 24px; }
 }
+
+/* Privacy policy and terms */
+.legal-hero .page-lede { max-width: 680px; }
+.legal { padding-top: 64px; }
+.legal-body { margin: 0 auto; }
+.legal-body h2 { margin: 44px 0 0; font-size: 22px; line-height: 1.3; color: var(--heading); }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: var(--muted); text-wrap: pretty; }
+.legal-body p { margin: 12px 0 0; }
+.legal-body ul { margin: 14px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.legal-body li::marker { color: var(--dim); }
+.legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://getcoinio.me/ja/"},{"@type":"ListItem","position":2,"name":"Wallos の代替","item":"https://getcoinio.me/ja/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"ja","url":"https://getcoinio.me/ja/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Coinio は Wallos より優れていますか？","acceptedAnswer":{"@type":"Answer","text":"誰にとってもどちらかが優れている、ということはありません。Wallos は複数ユーザーでの家族利用や OIDC に対応し、実績も長いです。Coinio は為替レートに API キーが不要で、メール、Telegram、Discord など多くのチャネルで通知でき、AI アシスタント向けの MCP サーバー、iPhone ウィジェット、より細かな見た目のカスタマイズを備えています。"}},{"@type":"Question","name":"Wallos からデータをインポートできますか？","acceptedAnswer":{"@type":"Answer","text":"はい。Wallos でサブスクリプションを JSON でエクスポートし、そのファイルを Coinio の「設定 › インポート」で読み込みます。Coinio はまず警告付きのプレビューを表示し、確定するまで何も保存しません。各項目の対応は インポートガイド に載っています。"}},{"@type":"Question","name":"Coinio と Wallos を並行して動かせますか？","acceptedAnswer":{"@type":"Answer","text":"はい。それぞれ独立したコンテナで、データも別々です。Wallos の例ではポート 8282 を公開し、Coinio は 8080 を使うので、デフォルトのままでも競合しません。乗り換える前に Coinio を試せます。"}},{"@type":"Question","name":"Coinio はメールや Discord で通知できますか？","acceptedAnswer":{"@type":"Answer","text":"はい、できます。Coinio はメール（SMTP）、Telegram（フォーラムのトピックを含む）、Discord、Slack、ntfy、Gotify、Pushover、汎用 Webhook で通知でき、Apprise 経由で100以上のサービスにも届けられます。サブスクごとに複数のリマインダーを設定でき、期限切れアラートや週次・月次ダイジェストも届きます。メッセージテンプレートはすべて編集できます。"}},{"@type":"Question","name":"Coinio も Wallos のように無料ですか？","acceptedAnswer":{"@type":"Answer","text":"はい。Coinio は MIT ライセンスで、有料プランも、こちらへのアカウント登録もありません。Wallos も無料で、ライセンスは GPL-3.0 です。"}}]}]}</script>
   <script>
@@ -1329,6 +1342,8 @@ h1 .eyebrow { display: block; }
         <a href="/install.sh">install.sh</a>
         <a href="/ja/wallos-alternative/">Wallos の代替</a>
         <a href="/ja/self-hosted-subscription-trackers/">セルフホスト型サブスク管理の比較</a>
+        <a href="/ja/privacy/">プライバシー</a>
+        <a href="/ja/terms/">利用規約</a>
       </nav>
       <nav class="footer-langs" aria-label="言語"><a href="/wallos-alternative/" hreflang="en" lang="en">English</a><a href="/tr/wallos-alternative/" hreflang="tr" lang="tr">Türkçe</a><a href="/de/wallos-alternative/" hreflang="de" lang="de">Deutsch</a><a href="/fr/wallos-alternative/" hreflang="fr" lang="fr">Français</a><a href="/es/wallos-alternative/" hreflang="es" lang="es">Español</a><a href="/pt-br/wallos-alternative/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/wallos-alternative/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/wallos-alternative/" hreflang="ja" lang="ja" aria-current="page">日本語</a></nav>
     </div>

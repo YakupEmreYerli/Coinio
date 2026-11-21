@@ -53,6 +53,9 @@ const PAGES = [
       { name: 'Coinio', url: REPO },
     ],
   },
+  // Privacy policy and terms of the hosted app (app.getcoinio.me): no FAQ, one shared layout.
+  { slug: 'privacy', file: 'legal.html', faq: [], faqPrefix: 'pfaq' },
+  { slug: 'terms', file: 'legal.html', faq: [], faqPrefix: 'pfaq' },
 ];
 const pagePath = (lang, pg) => lang.path + (pg.slug ? `${pg.slug}/` : '');
 
@@ -166,8 +169,8 @@ function subPageGraph(lang, pg, t, url, faqPage) {
         { '@type': 'ListItem', position: 2, name: plain(t['crumb.page']), item: url },
       ],
     },
-    faqPage,
   ];
+  if (pg.faq.length) graph.push(faqPage);
   if (pg.items) {
     graph.push({
       '@type': 'ItemList',

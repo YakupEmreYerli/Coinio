@@ -1111,6 +1111,19 @@ h1 .eyebrow { display: block; }
   .cmp th, .cmp td { padding: 12px 14px; }
   .choose li { padding: 22px 20px 24px; }
 }
+
+/* Privacy policy and terms */
+.legal-hero .page-lede { max-width: 680px; }
+.legal { padding-top: 64px; }
+.legal-body { margin: 0 auto; }
+.legal-body h2 { margin: 44px 0 0; font-size: 22px; line-height: 1.3; color: var(--heading); }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: var(--muted); text-wrap: pretty; }
+.legal-body p { margin: 12px 0 0; }
+.legal-body ul { margin: 14px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.legal-body li::marker { color: var(--dim); }
+.legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://getcoinio.me/"},{"@type":"ListItem","position":2,"name":"Wallos alternative","item":"https://getcoinio.me/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"en","url":"https://getcoinio.me/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Is Coinio better than Wallos?","acceptedAnswer":{"@type":"Answer","text":"Neither is better for everyone. Wallos has multi-user households, OIDC and a longer track record. Coinio needs no API key for exchange rates, notifies you through many channels such as email, Telegram and Discord, and adds an MCP server for AI assistants, an iPhone widget and deeper visual customization."}},{"@type":"Question","name":"Can I import my data from Wallos?","acceptedAnswer":{"@type":"Answer","text":"Yes. Export your subscriptions from Wallos as JSON and load the file in Coinio under Settings › Import. Coinio shows a preview with warnings first and saves nothing until you confirm. The import guide lists how each field is mapped."}},{"@type":"Question","name":"Can I run Coinio and Wallos side by side?","acceptedAnswer":{"@type":"Answer","text":"Yes. They are separate containers with their own data. Wallos's examples publish port 8282 and Coinio uses 8080, so the defaults don't clash, and you can try Coinio before you switch."}},{"@type":"Question","name":"Does Coinio send email or Discord notifications?","acceptedAnswer":{"@type":"Answer","text":"Yes. Coinio sends email (SMTP), Telegram (including forum topics), Discord, Slack, ntfy, Gotify, Pushover and generic webhook notifications, and reaches 100+ more services through Apprise. You can set several reminders per subscription, get an overdue alert and weekly or monthly digests, and edit every message template."}},{"@type":"Question","name":"Is Coinio free like Wallos?","acceptedAnswer":{"@type":"Answer","text":"Yes. Coinio is MIT-licensed, with no paid tier and no account with us. Wallos is free as well, under GPL-3.0."}}]}]}</script>
   <script>
@@ -1329,6 +1342,8 @@ h1 .eyebrow { display: block; }
         <a href="/install.sh">install.sh</a>
         <a href="/wallos-alternative/">Wallos alternative</a>
         <a href="/self-hosted-subscription-trackers/">Self-hosted trackers compared</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
       </nav>
       <nav class="footer-langs" aria-label="Languages"><a href="/wallos-alternative/" hreflang="en" lang="en" aria-current="page">English</a><a href="/tr/wallos-alternative/" hreflang="tr" lang="tr">Türkçe</a><a href="/de/wallos-alternative/" hreflang="de" lang="de">Deutsch</a><a href="/fr/wallos-alternative/" hreflang="fr" lang="fr">Français</a><a href="/es/wallos-alternative/" hreflang="es" lang="es">Español</a><a href="/pt-br/wallos-alternative/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/wallos-alternative/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/wallos-alternative/" hreflang="ja" lang="ja">日本語</a></nav>
     </div>

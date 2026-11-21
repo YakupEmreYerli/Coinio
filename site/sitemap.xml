@@ -288,4 +288,196 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/self-hosted-subscription-trackers/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/self-hosted-subscription-trackers/"/>
   </url>
+  <url>
+    <loc>https://getcoinio.me/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/privacy/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/tr/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/privacy/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/de/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/privacy/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/fr/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/privacy/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/es/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/privacy/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/pt-br/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/privacy/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/zh/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/privacy/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/ja/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/privacy/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/terms/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/terms/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/tr/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/terms/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/terms/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/de/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/terms/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/terms/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/fr/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/terms/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/terms/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/es/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/terms/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/terms/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/pt-br/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/terms/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/terms/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/zh/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/terms/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/terms/"/>
+  </url>
+  <url>
+    <loc>https://getcoinio.me/ja/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getcoinio.me/terms/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://getcoinio.me/tr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://getcoinio.me/de/terms/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://getcoinio.me/fr/terms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://getcoinio.me/es/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://getcoinio.me/pt-br/terms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://getcoinio.me/zh/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getcoinio.me/ja/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://getcoinio.me/terms/"/>
+  </url>
 </urlset>

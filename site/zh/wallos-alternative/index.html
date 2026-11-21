@@ -1111,6 +1111,19 @@ h1 .eyebrow { display: block; }
   .cmp th, .cmp td { padding: 12px 14px; }
   .choose li { padding: 22px 20px 24px; }
 }
+
+/* Privacy policy and terms */
+.legal-hero .page-lede { max-width: 680px; }
+.legal { padding-top: 64px; }
+.legal-body { margin: 0 auto; }
+.legal-body h2 { margin: 44px 0 0; font-size: 22px; line-height: 1.3; color: var(--heading); }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: var(--muted); text-wrap: pretty; }
+.legal-body p { margin: 12px 0 0; }
+.legal-body ul { margin: 14px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.legal-body li::marker { color: var(--dim); }
+.legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://getcoinio.me/zh/"},{"@type":"ListItem","position":2,"name":"Wallos 替代方案","item":"https://getcoinio.me/zh/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"zh-CN","url":"https://getcoinio.me/zh/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Coinio 比 Wallos 更好吗？","acceptedAnswer":{"@type":"Answer","text":"没有哪一个对所有人都更好。Wallos 支持多用户家庭和 OIDC，发展时间也更长。Coinio 获取汇率无需 API 密钥，可通过电子邮件、Telegram、Discord 等多种渠道通知，还提供面向 AI 助手的 MCP 服务器、iPhone 小组件和更深入的外观定制。"}},{"@type":"Question","name":"可以从 Wallos 导入数据吗？","acceptedAnswer":{"@type":"Answer","text":"可以。在 Wallos 中将订阅导出为 JSON，然后在 Coinio 的“设置 › 导入”中加载该文件。Coinio 会先显示带警告的预览，在你确认之前不会保存任何内容。 导入指南 列出了每个字段的对应方式。"}},{"@type":"Question","name":"Coinio 和 Wallos 可以同时运行吗？","acceptedAnswer":{"@type":"Answer","text":"可以。它们是各自独立的容器，数据也各自分开。Wallos 的示例发布 8282 端口，Coinio 使用 8080 端口，默认设置不会冲突，你可以先试用 Coinio 再决定是否切换。"}},{"@type":"Question","name":"Coinio 会发送电子邮件或 Discord 通知吗？","acceptedAnswer":{"@type":"Answer","text":"会。Coinio 支持通过电子邮件（SMTP）、Telegram（含论坛话题）、Discord、Slack、ntfy、Gotify、Pushover 和通用 webhook 发送通知，还能经由 Apprise 连接 100 多种服务。每个订阅可以设置多次提醒，另有逾期提醒以及每周、每月汇总，每条消息模板都可以自行编辑。"}},{"@type":"Question","name":"Coinio 和 Wallos 一样免费吗？","acceptedAnswer":{"@type":"Answer","text":"是的。Coinio 采用 MIT 许可证，没有付费版，也无需注册我们的账户。Wallos 同样免费，采用 GPL-3.0 许可证。"}}]}]}</script>
   <script>
@@ -1329,6 +1342,8 @@ h1 .eyebrow { display: block; }
         <a href="/install.sh">install.sh</a>
         <a href="/zh/wallos-alternative/">Wallos 替代方案</a>
         <a href="/zh/self-hosted-subscription-trackers/">自托管订阅管理工具对比</a>
+        <a href="/zh/privacy/">隐私</a>
+        <a href="/zh/terms/">条款</a>
       </nav>
       <nav class="footer-langs" aria-label="语言"><a href="/wallos-alternative/" hreflang="en" lang="en">English</a><a href="/tr/wallos-alternative/" hreflang="tr" lang="tr">Türkçe</a><a href="/de/wallos-alternative/" hreflang="de" lang="de">Deutsch</a><a href="/fr/wallos-alternative/" hreflang="fr" lang="fr">Français</a><a href="/es/wallos-alternative/" hreflang="es" lang="es">Español</a><a href="/pt-br/wallos-alternative/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/wallos-alternative/" hreflang="zh-CN" lang="zh-CN" aria-current="page">简体中文</a><a href="/ja/wallos-alternative/" hreflang="ja" lang="ja">日本語</a></nav>
     </div>

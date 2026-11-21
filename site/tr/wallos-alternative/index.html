@@ -1111,6 +1111,19 @@ h1 .eyebrow { display: block; }
   .cmp th, .cmp td { padding: 12px 14px; }
   .choose li { padding: 22px 20px 24px; }
 }
+
+/* Privacy policy and terms */
+.legal-hero .page-lede { max-width: 680px; }
+.legal { padding-top: 64px; }
+.legal-body { margin: 0 auto; }
+.legal-body h2 { margin: 44px 0 0; font-size: 22px; line-height: 1.3; color: var(--heading); }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: var(--muted); text-wrap: pretty; }
+.legal-body p { margin: 12px 0 0; }
+.legal-body ul { margin: 14px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.legal-body li::marker { color: var(--dim); }
+.legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana sayfa","item":"https://getcoinio.me/tr/"},{"@type":"ListItem","position":2,"name":"Wallos alternatifi","item":"https://getcoinio.me/tr/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"tr","url":"https://getcoinio.me/tr/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Coinio, Wallos'tan daha mı iyi?","acceptedAnswer":{"@type":"Answer","text":"Herkes için daha iyi olan yok. Wallos'ta çok kullanıcılı ev halkı desteği, OIDC ve daha uzun bir geçmiş var. Coinio döviz kurları için API anahtarı istemiyor, bildirimleri e-posta, Telegram, Discord gibi birçok kanaldan gönderiyor; üstüne yapay zekâ asistanları için bir MCP sunucusu, iPhone widget'ı ve daha derin görsel kişiselleştirme getiriyor."}},{"@type":"Question","name":"Verilerimi Wallos'tan aktarabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. Aboneliklerini Wallos'tan JSON olarak dışa aktar, dosyayı Coinio'da Ayarlar › İçe aktar'da yükle. Coinio önce uyarılarla birlikte bir önizleme gösterir, sen onaylamadan hiçbir şey kaydetmez. Her alanın nasıl eşlendiği içe aktarma rehberinde yazıyor."}},{"@type":"Question","name":"Coinio ile Wallos'u yan yana çalıştırabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. İkisi de kendi verisini tutan ayrı kapsayıcılar. Wallos'un örnekleri 8282 portunu açıyor, Coinio 8080'i kullanıyor; varsayılanlar çakışmaz, geçmeden önce Coinio'yu deneyebilirsin."}},{"@type":"Question","name":"Coinio e-posta ya da Discord bildirimi gönderiyor mu?","acceptedAnswer":{"@type":"Answer","text":"Evet. Coinio e-posta (SMTP), Telegram (forum konuları dahil), Discord, Slack, ntfy, Gotify, Pushover ve genel webhook ile bildirim gönderir; Apprise üzerinden 100'den fazla servise de ulaşır. Her abonelik için birden çok hatırlatma kurabilir, gecikme uyarısı ile haftalık ve aylık özetler alabilir, bütün mesaj şablonlarını düzenleyebilirsin."}},{"@type":"Question","name":"Coinio da Wallos gibi ücretsiz mi?","acceptedAnswer":{"@type":"Answer","text":"Evet. Coinio MIT lisanslı; ücretli sürümü yok, bizde hesap açman da gerekmez. Wallos da GPL-3.0 lisansıyla ücretsiz."}}]}]}</script>
   <script>
@@ -1329,6 +1342,8 @@ h1 .eyebrow { display: block; }
         <a href="/install.sh">install.sh</a>
         <a href="/tr/wallos-alternative/">Wallos alternatifi</a>
         <a href="/tr/self-hosted-subscription-trackers/">Abonelik takip uygulamaları karşılaştırması</a>
+        <a href="/tr/privacy/">Gizlilik</a>
+        <a href="/tr/terms/">Şartlar</a>
       </nav>
       <nav class="footer-langs" aria-label="Diller"><a href="/wallos-alternative/" hreflang="en" lang="en">English</a><a href="/tr/wallos-alternative/" hreflang="tr" lang="tr" aria-current="page">Türkçe</a><a href="/de/wallos-alternative/" hreflang="de" lang="de">Deutsch</a><a href="/fr/wallos-alternative/" hreflang="fr" lang="fr">Français</a><a href="/es/wallos-alternative/" hreflang="es" lang="es">Español</a><a href="/pt-br/wallos-alternative/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/wallos-alternative/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/wallos-alternative/" hreflang="ja" lang="ja">日本語</a></nav>
     </div>

@@ -1111,6 +1111,19 @@ h1 .eyebrow { display: block; }
   .cmp th, .cmp td { padding: 12px 14px; }
   .choose li { padding: 22px 20px 24px; }
 }
+
+/* Privacy policy and terms */
+.legal-hero .page-lede { max-width: 680px; }
+.legal { padding-top: 64px; }
+.legal-body { margin: 0 auto; }
+.legal-body h2 { margin: 44px 0 0; font-size: 22px; line-height: 1.3; color: var(--heading); }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: var(--muted); text-wrap: pretty; }
+.legal-body p { margin: 12px 0 0; }
+.legal-body ul { margin: 14px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.legal-body li::marker { color: var(--dim); }
+.legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://getcoinio.me/ja/"},{"@type":"ListItem","position":2,"name":"セルフホスト型サブスク管理アプリ","item":"https://getcoinio.me/ja/self-hosted-subscription-trackers/"}]},{"@type":"FAQPage","inLanguage":"ja","url":"https://getcoinio.me/ja/self-hosted-subscription-trackers/","mainEntity":[{"@type":"Question","name":"いちばんおすすめのセルフホスト型サブスク管理アプリは？","acceptedAnswer":{"@type":"Answer","text":"誰にとっても一番、というものはありません。Wallos は最も実績があり、家族での利用に最適です。Renewlet は10種類の通知チャネルを備え、SubTrackr はカレンダー中心のリマインダーに向き、Zublo は AI チャットに力を入れています。Coinio は、AI アシスタントや iPhone ウィジェットを使いたい個人や、アカウントを共有する家族に向いています。"}},{"@type":"Question","name":"これらのアプリは無料ですか？","acceptedAnswer":{"@type":"Answer","text":"はい。5つともオープンソースで、無料でセルフホストできます。ライセンスはそれぞれ異なり、MIT（Renewlet、Coinio）、Apache-2.0（Zublo）、GPL-3.0（Wallos）、AGPL-3.0（SubTrackr）です。"}},{"@type":"Question","name":"別途データベースサーバーは必要ですか？","acceptedAnswer":{"@type":"Answer","text":"いいえ。5つともデータを SQLite に保存するので、コンテナ1つとデータフォルダがあれば十分です。Renewlet は代わりに Cloudflare Workers と D1 で動かすこともできます。"}},{"@type":"Question","name":"Claude や ChatGPT と連携できるのはどれですか？","acceptedAnswer":{"@type":"Answer","text":"Coinio と SubTrackr は MCP サーバーを備えています。Coinio のサーバーは https と OAuth で提供されるので、claude.ai や ChatGPT からリモートで接続できます。SubTrackr のサーバーは、ローカルの MCP クライアントが起動するバイナリとして動きます（例： docker exec 経由）。"}},{"@type":"Question","name":"これらの情報はどのように確認しましたか？","acceptedAnswer":{"@type":"Answer","text":"2026年11月20日に各プロジェクトの README と公式サイトを読み、同じ日に GitHub からスター数を取得しました。どのプロジェクトも開発が活発なので、決める前にリンク先のリポジトリを確認してください。間違いを見つけたら、 Issue を作成 してください。"}}]},{"@type":"ItemList","name":"オープンソースのセルフホスト型サブスク管理アプリ","numberOfItems":5,"itemListElement":[{"@type":"ListItem","position":1,"name":"Wallos","url":"https://github.com/ellite/Wallos"},{"@type":"ListItem","position":2,"name":"SubTrackr","url":"https://github.com/bscott/subtrackr"},{"@type":"ListItem","position":3,"name":"Renewlet","url":"https://github.com/zhiyingzzhou/renewlet"},{"@type":"ListItem","position":4,"name":"Zublo","url":"https://github.com/danielalves96/zublo"},{"@type":"ListItem","position":5,"name":"Coinio","url":"https://github.com/yakupemreyerli/coinio"}]}]}</script>
   <script>
@@ -1347,6 +1360,8 @@ h1 .eyebrow { display: block; }
         <a href="/install.sh">install.sh</a>
         <a href="/ja/wallos-alternative/">Wallos の代替</a>
         <a href="/ja/self-hosted-subscription-trackers/">セルフホスト型サブスク管理の比較</a>
+        <a href="/ja/privacy/">プライバシー</a>
+        <a href="/ja/terms/">利用規約</a>
       </nav>
       <nav class="footer-langs" aria-label="言語"><a href="/self-hosted-subscription-trackers/" hreflang="en" lang="en">English</a><a href="/tr/self-hosted-subscription-trackers/" hreflang="tr" lang="tr">Türkçe</a><a href="/de/self-hosted-subscription-trackers/" hreflang="de" lang="de">Deutsch</a><a href="/fr/self-hosted-subscription-trackers/" hreflang="fr" lang="fr">Français</a><a href="/es/self-hosted-subscription-trackers/" hreflang="es" lang="es">Español</a><a href="/pt-br/self-hosted-subscription-trackers/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/self-hosted-subscription-trackers/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/self-hosted-subscription-trackers/" hreflang="ja" lang="ja" aria-current="page">日本語</a></nav>
     </div>

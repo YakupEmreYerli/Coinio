@@ -1111,6 +1111,19 @@ h1 .eyebrow { display: block; }
   .cmp th, .cmp td { padding: 12px 14px; }
   .choose li { padding: 22px 20px 24px; }
 }
+
+/* Privacy policy and terms */
+.legal-hero .page-lede { max-width: 680px; }
+.legal { padding-top: 64px; }
+.legal-body { margin: 0 auto; }
+.legal-body h2 { margin: 44px 0 0; font-size: 22px; line-height: 1.3; color: var(--heading); }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: var(--muted); text-wrap: pretty; }
+.legal-body p { margin: 12px 0 0; }
+.legal-body ul { margin: 14px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.legal-body li::marker { color: var(--dim); }
+.legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://getcoinio.me/es/"},{"@type":"ListItem","position":2,"name":"Gestores de suscripciones autoalojados","item":"https://getcoinio.me/es/self-hosted-subscription-trackers/"}]},{"@type":"FAQPage","inLanguage":"es","url":"https://getcoinio.me/es/self-hosted-subscription-trackers/","mainEntity":[{"@type":"Question","name":"¿Cuál es el mejor gestor de suscripciones autoalojado?","acceptedAnswer":{"@type":"Answer","text":"No hay uno mejor para todo. Wallos es el más consolidado y el que mejor encaja en un hogar. Renewlet trae diez canales de notificación, SubTrackr va bien si te guías por el calendario, Zublo apuesta por el chat con IA, y Coinio le conviene a una persona o a un hogar que comparte cuenta y quiere asistentes de IA y un widget para iPhone."}},{"@type":"Question","name":"¿Estos gestores son gratis?","acceptedAnswer":{"@type":"Answer","text":"Sí. Los cinco son de código abierto y gratuitos para autoalojar. Sus licencias cambian: MIT (Renewlet, Coinio), Apache-2.0 (Zublo), GPL-3.0 (Wallos) y AGPL-3.0 (SubTrackr)."}},{"@type":"Question","name":"¿Necesito un servidor de base de datos aparte?","acceptedAnswer":{"@type":"Answer","text":"No. Los cinco guardan sus datos en SQLite, así que basta con un contenedor y una carpeta de datos. Renewlet también puede funcionar en Cloudflare Workers con D1."}},{"@type":"Question","name":"¿Cuáles funcionan con Claude o ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"Coinio y SubTrackr incluyen servidores MCP. El de Coinio se sirve por https con OAuth, así que claude.ai y ChatGPT pueden conectarse a él en remoto. El de SubTrackr es un binario que arrancan los clientes MCP locales, por ejemplo mediante docker exec ."}},{"@type":"Question","name":"¿Cómo se comprobaron estos datos?","acceptedAnswer":{"@type":"Answer","text":"Leímos el README y la web de cada proyecto el 20 de noviembre de 2026 y tomamos las estrellas de GitHub ese mismo día. Estos proyectos cambian rápido, así que revisa los repositorios enlazados antes de decidir. ¿Has visto un error? Abre un issue ."}}]},{"@type":"ItemList","name":"Gestores de suscripciones autoalojados de código abierto","numberOfItems":5,"itemListElement":[{"@type":"ListItem","position":1,"name":"Wallos","url":"https://github.com/ellite/Wallos"},{"@type":"ListItem","position":2,"name":"SubTrackr","url":"https://github.com/bscott/subtrackr"},{"@type":"ListItem","position":3,"name":"Renewlet","url":"https://github.com/zhiyingzzhou/renewlet"},{"@type":"ListItem","position":4,"name":"Zublo","url":"https://github.com/danielalves96/zublo"},{"@type":"ListItem","position":5,"name":"Coinio","url":"https://github.com/yakupemreyerli/coinio"}]}]}</script>
   <script>
@@ -1347,6 +1360,8 @@ h1 .eyebrow { display: block; }
         <a href="/install.sh">install.sh</a>
         <a href="/es/wallos-alternative/">Alternativa a Wallos</a>
         <a href="/es/self-hosted-subscription-trackers/">Comparativa de gestores autoalojados</a>
+        <a href="/es/privacy/">Privacidad</a>
+        <a href="/es/terms/">Términos</a>
       </nav>
       <nav class="footer-langs" aria-label="Idiomas"><a href="/self-hosted-subscription-trackers/" hreflang="en" lang="en">English</a><a href="/tr/self-hosted-subscription-trackers/" hreflang="tr" lang="tr">Türkçe</a><a href="/de/self-hosted-subscription-trackers/" hreflang="de" lang="de">Deutsch</a><a href="/fr/self-hosted-subscription-trackers/" hreflang="fr" lang="fr">Français</a><a href="/es/self-hosted-subscription-trackers/" hreflang="es" lang="es" aria-current="page">Español</a><a href="/pt-br/self-hosted-subscription-trackers/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/self-hosted-subscription-trackers/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/self-hosted-subscription-trackers/" hreflang="ja" lang="ja">日本語</a></nav>
     </div>

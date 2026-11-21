@@ -1111,6 +1111,19 @@ h1 .eyebrow { display: block; }
   .cmp th, .cmp td { padding: 12px 14px; }
   .choose li { padding: 22px 20px 24px; }
 }
+
+/* Privacy policy and terms */
+.legal-hero .page-lede { max-width: 680px; }
+.legal { padding-top: 64px; }
+.legal-body { margin: 0 auto; }
+.legal-body h2 { margin: 44px 0 0; font-size: 22px; line-height: 1.3; color: var(--heading); }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: var(--muted); text-wrap: pretty; }
+.legal-body p { margin: 12px 0 0; }
+.legal-body ul { margin: 14px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.legal-body li::marker { color: var(--dim); }
+.legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Startseite","item":"https://getcoinio.me/de/"},{"@type":"ListItem","position":2,"name":"Wallos-Alternative","item":"https://getcoinio.me/de/wallos-alternative/"}]},{"@type":"FAQPage","inLanguage":"de","url":"https://getcoinio.me/de/wallos-alternative/","mainEntity":[{"@type":"Question","name":"Ist Coinio besser als Wallos?","acceptedAnswer":{"@type":"Answer","text":"Keines ist für alle besser. Wallos hat Haushalte mit mehreren Nutzern und OIDC und ist länger erprobt. Coinio braucht keinen API-Schlüssel für Wechselkurse, benachrichtigt über viele Kanäle wie E-Mail, Telegram und Discord und bietet zusätzlich einen MCP-Server für KI-Assistenten, ein iPhone-Widget und weitergehende optische Anpassung."}},{"@type":"Question","name":"Kann ich meine Daten aus Wallos importieren?","acceptedAnswer":{"@type":"Answer","text":"Ja. Exportieren Sie Ihre Abos aus Wallos als JSON und laden Sie die Datei in Coinio unter Einstellungen › Import. Coinio zeigt zuerst eine Vorschau mit Warnungen und speichert nichts, bevor Sie bestätigen. Die Import-Anleitung listet auf, wie jedes Feld zugeordnet wird."}},{"@type":"Question","name":"Kann ich Coinio und Wallos parallel betreiben?","acceptedAnswer":{"@type":"Answer","text":"Ja. Es sind getrennte Container mit eigenen Daten. Die Beispiele von Wallos veröffentlichen Port 8282, Coinio nutzt 8080, die Standardwerte kommen sich also nicht in die Quere, und Sie können Coinio ausprobieren, bevor Sie wechseln."}},{"@type":"Question","name":"Verschickt Coinio Benachrichtigungen per E-Mail oder Discord?","acceptedAnswer":{"@type":"Answer","text":"Ja. Coinio verschickt Benachrichtigungen per E-Mail (SMTP), Telegram (auch in Forenthemen), Discord, Slack, ntfy, Gotify, Pushover und allgemeinen Webhooks und erreicht über Apprise mehr als 100 weitere Dienste. Sie können pro Abo mehrere Erinnerungen festlegen, bekommen eine Überfälligkeitswarnung sowie wöchentliche und monatliche Übersichten und können jede Nachrichtenvorlage bearbeiten."}},{"@type":"Question","name":"Ist Coinio kostenlos wie Wallos?","acceptedAnswer":{"@type":"Answer","text":"Ja. Coinio steht unter der MIT-Lizenz, ohne kostenpflichtige Stufe und ohne Konto bei uns. Wallos ist ebenfalls kostenlos, unter GPL-3.0."}}]}]}</script>
   <script>
@@ -1329,6 +1342,8 @@ h1 .eyebrow { display: block; }
         <a href="/install.sh">install.sh</a>
         <a href="/de/wallos-alternative/">Wallos-Alternative</a>
         <a href="/de/self-hosted-subscription-trackers/">Selbst gehostete Abo-Tracker im Vergleich</a>
+        <a href="/de/privacy/">Datenschutz</a>
+        <a href="/de/terms/">Nutzungsbedingungen</a>
       </nav>
       <nav class="footer-langs" aria-label="Sprachen"><a href="/wallos-alternative/" hreflang="en" lang="en">English</a><a href="/tr/wallos-alternative/" hreflang="tr" lang="tr">Türkçe</a><a href="/de/wallos-alternative/" hreflang="de" lang="de" aria-current="page">Deutsch</a><a href="/fr/wallos-alternative/" hreflang="fr" lang="fr">Français</a><a href="/es/wallos-alternative/" hreflang="es" lang="es">Español</a><a href="/pt-br/wallos-alternative/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/wallos-alternative/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/wallos-alternative/" hreflang="ja" lang="ja">日本語</a></nav>
     </div>

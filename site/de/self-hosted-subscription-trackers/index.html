@@ -1111,6 +1111,19 @@ h1 .eyebrow { display: block; }
   .cmp th, .cmp td { padding: 12px 14px; }
   .choose li { padding: 22px 20px 24px; }
 }
+
+/* Privacy policy and terms */
+.legal-hero .page-lede { max-width: 680px; }
+.legal { padding-top: 64px; }
+.legal-body { margin: 0 auto; }
+.legal-body h2 { margin: 44px 0 0; font-size: 22px; line-height: 1.3; color: var(--heading); }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: var(--muted); text-wrap: pretty; }
+.legal-body p { margin: 12px 0 0; }
+.legal-body ul { margin: 14px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.legal-body li::marker { color: var(--dim); }
+.legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Startseite","item":"https://getcoinio.me/de/"},{"@type":"ListItem","position":2,"name":"Selbst gehostete Abo-Verwaltungen","item":"https://getcoinio.me/de/self-hosted-subscription-trackers/"}]},{"@type":"FAQPage","inLanguage":"de","url":"https://getcoinio.me/de/self-hosted-subscription-trackers/","mainEntity":[{"@type":"Question","name":"Was ist die beste selbst gehostete Abo-Verwaltung?","acceptedAnswer":{"@type":"Answer","text":"Die eine beste gibt es nicht. Wallos ist am etabliertesten und passt am besten zu Haushalten. Renewlet bringt zehn Benachrichtigungskanäle mit, SubTrackr eignet sich für Erinnerungen über den Kalender, Zublo setzt auf KI-Chat, und Coinio passt zu einer Person oder einem gemeinsamen Haushalt, die KI-Assistenten und ein iPhone-Widget möchten."}},{"@type":"Question","name":"Sind diese Abo-Verwaltungen kostenlos?","acceptedAnswer":{"@type":"Answer","text":"Ja. Alle fünf sind Open Source und kostenlos selbst zu hosten. Ihre Lizenzen unterscheiden sich: MIT (Renewlet, Coinio), Apache-2.0 (Zublo), GPL-3.0 (Wallos) und AGPL-3.0 (SubTrackr)."}},{"@type":"Question","name":"Brauche ich einen separaten Datenbankserver?","acceptedAnswer":{"@type":"Answer","text":"Nein. Alle fünf speichern ihre Daten in SQLite, ein Container und ein Datenordner genügen also. Renewlet kann stattdessen auch auf Cloudflare Workers mit D1 laufen."}},{"@type":"Question","name":"Welche funktionieren mit Claude oder ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"Coinio und SubTrackr enthalten MCP-Server. Der von Coinio wird über https mit OAuth bereitgestellt, sodass claude.ai und ChatGPT sich aus der Ferne verbinden können. Der von SubTrackr läuft als Binary, das lokale MCP-Clients starten, zum Beispiel über docker exec ."}},{"@type":"Question","name":"Wie wurden diese Angaben geprüft?","acceptedAnswer":{"@type":"Answer","text":"Wir haben am 20. November 2026 das README und die Website jedes Projekts gelesen und am selben Tag die Sternezahlen von GitHub übernommen. Diese Projekte entwickeln sich schnell, prüfen Sie also die verlinkten Repositories, bevor Sie sich entscheiden. Einen Fehler entdeckt? Eröffnen Sie ein Issue ."}}]},{"@type":"ItemList","name":"Selbst gehostete Open-Source-Abo-Verwaltungen","numberOfItems":5,"itemListElement":[{"@type":"ListItem","position":1,"name":"Wallos","url":"https://github.com/ellite/Wallos"},{"@type":"ListItem","position":2,"name":"SubTrackr","url":"https://github.com/bscott/subtrackr"},{"@type":"ListItem","position":3,"name":"Renewlet","url":"https://github.com/zhiyingzzhou/renewlet"},{"@type":"ListItem","position":4,"name":"Zublo","url":"https://github.com/danielalves96/zublo"},{"@type":"ListItem","position":5,"name":"Coinio","url":"https://github.com/yakupemreyerli/coinio"}]}]}</script>
   <script>
@@ -1347,6 +1360,8 @@ h1 .eyebrow { display: block; }
         <a href="/install.sh">install.sh</a>
         <a href="/de/wallos-alternative/">Wallos-Alternative</a>
         <a href="/de/self-hosted-subscription-trackers/">Selbst gehostete Abo-Tracker im Vergleich</a>
+        <a href="/de/privacy/">Datenschutz</a>
+        <a href="/de/terms/">Nutzungsbedingungen</a>
       </nav>
       <nav class="footer-langs" aria-label="Sprachen"><a href="/self-hosted-subscription-trackers/" hreflang="en" lang="en">English</a><a href="/tr/self-hosted-subscription-trackers/" hreflang="tr" lang="tr">Türkçe</a><a href="/de/self-hosted-subscription-trackers/" hreflang="de" lang="de" aria-current="page">Deutsch</a><a href="/fr/self-hosted-subscription-trackers/" hreflang="fr" lang="fr">Français</a><a href="/es/self-hosted-subscription-trackers/" hreflang="es" lang="es">Español</a><a href="/pt-br/self-hosted-subscription-trackers/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="/zh/self-hosted-subscription-trackers/" hreflang="zh-CN" lang="zh-CN">简体中文</a><a href="/ja/self-hosted-subscription-trackers/" hreflang="ja" lang="ja">日本語</a></nav>
     </div>
