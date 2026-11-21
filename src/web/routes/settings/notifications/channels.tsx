@@ -11,6 +11,7 @@ import { Textarea } from '../../../components/ui/Textarea';
 import { toast } from '../../../components/ui/Toaster';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { t } from '../../../i18n';
+import { failureText } from '../../../lib/failure';
 import { cn } from '../../../lib/cn';
 import { keys } from '../../../lib/query';
 import type { ApiChannel } from '../../../lib/types';
@@ -27,6 +28,7 @@ export const channelLabel = (type: ChannelType) => t(`notify.type.${type}`);
 export function errorText(e: unknown): string {
   if (e instanceof ApiError) {
     if (e.code === 'demo_unavailable') return t('demo.locked');
+    if (e.code === 'limit_reached') return failureText(e);
     if (e.detail) return e.detail;
     if (e.code === 'validation') return t('notify.invalid');
   }

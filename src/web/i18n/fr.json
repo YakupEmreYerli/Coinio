@@ -18,6 +18,7 @@
   "login.busy": "Connexion…",
   "login.forgot": "Mot de passe oublié ?",
   "error.generic": "Une erreur s’est produite. Réessayez.",
+  "error.limitReached": "Tu as atteint la limite de {limit} de ce serveur.",
   "error.cardTitle": "Impossible de charger cette carte",
   "error.retry": "Réessayer",
   "error.reload": "Recharger la page",

@@ -12,6 +12,7 @@ import { Select } from '../components/ui/Select';
 import { Switch } from '../components/ui/Switch';
 import { Textarea } from '../components/ui/Textarea';
 import { toast } from '../components/ui/Toaster';
+import { failureText } from '../lib/failure';
 import { t, useLocale, type Locale } from '../i18n';
 import type { SubscriptionPrefill } from '../layout/subscriptionForm';
 import { useNotifications, useSettings, useSubscription, useSubscriptions } from '../lib/hooks';
@@ -146,8 +147,8 @@ export function SubscriptionForm({
       await qc.invalidateQueries();
       toast.success(editing ? t('form.saved') : t('form.created', { name: saved.name }));
       onOpenChange(false);
-    } catch {
-      toast.error(t('error.generic'));
+    } catch (e) {
+      toast.error(failureText(e));
     } finally {
       setSaving(false);
     }

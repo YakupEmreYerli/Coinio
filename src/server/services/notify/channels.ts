@@ -4,7 +4,7 @@ import { notificationChannels, users } from '../../db/schema.js';
 import { CHANNEL_FIELDS, CHANNEL_TYPES, parseChannelValues, type ApiChannel, type ChannelType } from '../../../shared/notify/types.js';
 import type { ServiceCtx } from '../context.js';
 import { getInstanceValue, setInstanceValue } from '../settings.js';
-import { NotFoundError } from '../errors.js';
+import { NotFoundError, checkLimit } from '../errors.js';
 
 export type ChannelRow = typeof notificationChannels.$inferSelect;
 
@@ -85,6 +85,7 @@ export function draftChannel(ctx: ServiceCtx, userId: number, input: unknown, id
 
 export function createChannel(ctx: ServiceCtx, userId: number, input: unknown): ChannelRow {
   const d = draftChannel(ctx, userId, input);
+  checkLimit('channels', ctx.config.limits.maxChannels, listChannels(ctx, userId).length);
   return ctx.db
     .insert(notificationChannels)
     .values({ userId, type: d.type, name: d.name, enabled: d.enabled, config: d.config, secrets: d.secrets, createdAt: d.createdAt, updatedAt: d.updatedAt })

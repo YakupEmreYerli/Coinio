@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tansta
 import { api } from '../api';
 import { toast } from '../components/ui/Toaster';
 import { t } from '../i18n';
+import { failureText } from './failure';
 import { keys } from './query';
 import type { ApiPayment, ApiSubscription, Appearance, NotificationsPage, Settings, Summary } from './types';
 
@@ -40,7 +41,7 @@ function useDataMutation<V, R>(fn: (v: V) => Promise<R>, onSuccess?: (r: R, v: V
       invalidateData(qc);
       onSuccess?.(r, v);
     },
-    onError: () => toast.error(t('error.generic')),
+    onError: (e: unknown) => toast.error(failureText(e)),
   });
 }
 
@@ -80,7 +81,7 @@ export function useUpdateSettings() {
       qc.setQueryData(keys.settings, s);
       invalidateData(qc);
     },
-    onError: () => toast.error(t('error.generic')),
+    onError: (e: unknown) => toast.error(failureText(e)),
   });
 }
 
@@ -90,7 +91,7 @@ export function useSaveAppearance() {
     mutationFn: (a: Appearance) => api.put<Appearance>('/appearance', a),
     // Local state is the truth: apply at once, and never let a late server echo undo a newer edit.
     onMutate: (a) => qc.setQueryData(keys.appearance, a),
-    onError: () => toast.error(t('error.generic')),
+    onError: (e: unknown) => toast.error(failureText(e)),
   });
 }
 

@@ -18,6 +18,7 @@
   "login.busy": "サインインしています…",
   "login.forgot": "パスワードをお忘れですか？",
   "error.generic": "問題が発生しました。もう一度お試しください。",
+  "error.limitReached": "このサーバーの上限（{limit}）に達しました。",
   "error.cardTitle": "このカードを読み込めませんでした",
   "error.retry": "再試行",
   "error.reload": "ページを再読み込み",

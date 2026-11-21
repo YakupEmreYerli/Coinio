@@ -11,6 +11,8 @@ import { t, useLocale } from '../../i18n';
 import { dateTimeIn, whenIn } from '../../lib/dates';
 import { useSettings } from '../../lib/hooks';
 import { Section } from './Section';
+import { toast } from '../../components/ui/Toaster';
+import { failureText } from '../../lib/failure';
 
 type Scope = 'read' | 'full';
 type Key = { id: number; name: string; prefix: string; scope: Scope; createdAt: string; lastUsedAt: string | null };
@@ -61,6 +63,7 @@ export function ApiKeys() {
       setScope('read');
       void qc.invalidateQueries({ queryKey: ['keys'] });
     },
+    onError: (e) => toast.error(failureText(e)),
   });
   const del = useMutation({ mutationFn: (id: number) => api.del(`/keys/${id}`), onSuccess: () => qc.invalidateQueries({ queryKey: ['keys'] }) });
   const list = keys.data ?? [];

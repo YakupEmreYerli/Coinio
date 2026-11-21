@@ -1,7 +1,7 @@
 import { Router, type RequestHandler } from 'express';
 import { z, ZodError } from 'zod';
 import { requireSession } from '../auth/middleware.js';
-import { NotFoundError } from '../services/errors.js';
+import { LimitError, NotFoundError } from '../services/errors.js';
 import type { ServiceCtx } from '../services/context.js';
 import { channelToApi, createChannel, deleteChannel, draftChannel, getChannel, listChannels, updateChannel } from '../services/notify/channels.js';
 import { sendChannelTest, sendTemplateTest } from '../services/notify/index.js';
@@ -23,6 +23,7 @@ function route(fn: (req: Parameters<RequestHandler>[0], res: Parameters<RequestH
     } catch (err) {
       if (err instanceof ZodError) res.status(400).json({ error: 'validation', issues: err.issues });
       else if (err instanceof NotFoundError) res.status(404).json({ error: 'not_found' });
+      else if (err instanceof LimitError) res.status(409).json({ error: 'limit_reached', resource: err.resource, limit: err.limit });
       else next(err);
     }
   };

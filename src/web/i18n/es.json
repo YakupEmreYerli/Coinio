@@ -18,6 +18,7 @@
   "login.busy": "Iniciando sesión…",
   "login.forgot": "¿Olvidaste tu contraseña?",
   "error.generic": "Algo salió mal. Inténtalo de nuevo.",
+  "error.limitReached": "Llegaste al límite de {limit} de este servidor.",
   "error.cardTitle": "No se pudo cargar esta tarjeta",
   "error.retry": "Reintentar",
   "error.reload": "Recargar página",

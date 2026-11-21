@@ -7,6 +7,7 @@ import { Card, CardHeader } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
 import { toast } from '../../components/ui/Toaster';
+import { failureText } from '../../lib/failure';
 import { t, useLocale } from '../../i18n';
 import { useSubscriptionForm } from '../../layout/subscriptionForm';
 import { todayIn } from '../../lib/dates';
@@ -72,8 +73,8 @@ export function QuickAdd() {
       toast.success(t('form.created', { name }));
       setText('');
       setAmount('');
-    } catch {
-      toast.error(t('error.generic'));
+    } catch (e) {
+      toast.error(failureText(e));
     } finally {
       setBusy(false);
     }

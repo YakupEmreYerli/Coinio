@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, inArray, lte } from 'drizzle-orm';
+import { and, count, desc, eq, gte, inArray, lte } from 'drizzle-orm';
 import { PaymentPatch, type PaymentQuery, SubscriptionInput, SubscriptionPatch } from '../../shared/types.js';
 import { payments, subscriptions } from '../db/schema.js';
 import { dueDatesThrough, nextDue, todayIn } from '../../shared/schedule.js';
@@ -6,7 +6,7 @@ import { computeSummary, type PaymentRow, type Summary, type SubscriptionRow } f
 import type { ServiceCtx } from './context.js';
 import { getRates } from './fx.js';
 import { fetchLogoInBackground } from './logos.js';
-import { NotFoundError } from './errors.js';
+import { NotFoundError, checkLimit } from './errors.js';
 import { notifyPriceChange } from './notify/index.js';
 import { getSettings } from './settings.js';
 
@@ -38,6 +38,8 @@ export function getSubscription(ctx: ServiceCtx, userId: number, id: number): Su
 /** Validates and inserts without starting the background logo fetch (for callers inside a transaction). */
 export function insertSubscription(ctx: ServiceCtx, userId: number, input: unknown): SubscriptionRow {
   const v = SubscriptionInput.parse(input);
+  const owned = ctx.db.select({ n: count() }).from(subscriptions).where(eq(subscriptions.userId, userId)).get()?.n ?? 0;
+  checkLimit('subscriptions', ctx.config.limits.maxSubscriptions, owned);
   const stamp = ctx.now().toISOString();
   return ctx.db
     .insert(subscriptions)

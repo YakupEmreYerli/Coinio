@@ -12,11 +12,17 @@ export type Config = {
   webDir: string;
   /** Refuse requests to private networks from notification channels (COINIO_BLOCK_PRIVATE_NETWORKS). */
   blockPrivateNetworks: boolean;
+  /** Per-user caps; null means no limit (COINIO_MAX_SUBSCRIPTIONS, COINIO_MAX_CHANNELS, COINIO_MAX_API_KEYS). */
+  limits: { maxSubscriptions: number | null; maxChannels: number | null; maxApiKeys: number | null };
 };
 
 type Env = Record<string, string | undefined>;
 
 const orNull = (v: string | undefined) => (v && v.length > 0 ? v : null);
+const limitOf = (v: string | undefined) => {
+  const n = Number(orNull(v) ?? NaN);
+  return Number.isInteger(n) && n >= 0 ? n : null;
+};
 
 /** OAuth issuers must be https (localhost is allowed for testing); any other public URL leaves OAuth off. */
 export function oauthUrlOf(publicUrl: string | null): string | null {
@@ -37,5 +43,10 @@ export function loadConfig(env: Env = process.env): Config {
     migrationsDir: fileURLToPath(new URL('./db/migrations', import.meta.url)),
     webDir: orNull(env.COINIO_WEB_DIR) ?? fileURLToPath(new URL('../web', import.meta.url)),
     blockPrivateNetworks: ['1', 'true', 'yes'].includes((env.COINIO_BLOCK_PRIVATE_NETWORKS ?? '').toLowerCase()),
+    limits: {
+      maxSubscriptions: limitOf(env.COINIO_MAX_SUBSCRIPTIONS),
+      maxChannels: limitOf(env.COINIO_MAX_CHANNELS),
+      maxApiKeys: limitOf(env.COINIO_MAX_API_KEYS),
+    },
   };
 }

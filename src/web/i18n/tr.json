@@ -18,6 +18,7 @@
   "login.busy": "Giriş yapılıyor…",
   "login.forgot": "Parolanı mı unuttun?",
   "error.generic": "Bir sorun çıktı. Tekrar dene.",
+  "error.limitReached": "Bu sunucudaki {limit} sınırına ulaştın.",
   "error.cardTitle": "Bu kart yüklenemedi",
   "error.retry": "Tekrar dene",
   "error.reload": "Sayfayı yenile",

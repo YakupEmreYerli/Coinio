@@ -18,6 +18,7 @@
   "login.busy": "正在登录…",
   "login.forgot": "忘记密码？",
   "error.generic": "出了点问题，请重试。",
+  "error.limitReached": "已达到此服务器的上限（{limit}）。",
   "error.cardTitle": "此卡片加载失败",
   "error.retry": "重试",
   "error.reload": "重新加载页面",

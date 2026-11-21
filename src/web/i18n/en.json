@@ -18,6 +18,7 @@
   "login.busy": "Signing in…",
   "login.forgot": "Forgot your password?",
   "error.generic": "Something went wrong. Try again.",
+  "error.limitReached": "You've reached this server's limit of {limit}.",
   "error.cardTitle": "This card couldn't load",
   "error.retry": "Try again",
   "error.reload": "Reload page",

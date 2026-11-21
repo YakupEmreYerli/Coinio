@@ -4,6 +4,8 @@ export class ApiError extends Error {
     public code: string,
     /** The server's own explanation, when it sends one (e.g. why a test notification failed). */
     public detail?: string,
+    /** The cap that was hit, for `limit_reached`. */
+    public limit?: number,
   ) {
     super(code);
   }
@@ -29,8 +31,8 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
     throw new ApiError(401, 'unauthorized');
   }
   if (!res.ok) {
-    const data = (await res.json().catch(() => null)) as { error?: string; message?: string } | null;
-    throw new ApiError(res.status, data?.error ?? 'unknown', data?.message);
+    const data = (await res.json().catch(() => null)) as { error?: string; message?: string; limit?: number } | null;
+    throw new ApiError(res.status, data?.error ?? 'unknown', data?.message, data?.limit);
   }
   if (res.status === 204) return undefined as T;
   return (await res.json()) as T;

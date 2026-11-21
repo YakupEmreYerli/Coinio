@@ -1,5 +1,6 @@
 import { Router, type RequestHandler, type Response } from 'express';
 import { z, ZodError } from 'zod';
+import { LimitError } from '../services/errors.js';
 import { PayInput, PaymentQuery, SkipInput } from '../../shared/types.js';
 import { requireSession } from '../auth/middleware.js';
 import type { PaymentRow, SubscriptionRow } from '../domain/summary.js';
@@ -66,6 +67,7 @@ export function handle(fn: (req: Parameters<RequestHandler>[0], res: Response) =
     } catch (err) {
       if (err instanceof ZodError) res.status(400).json({ error: 'validation', issues: err.issues });
       else if (err instanceof NotFoundError) res.status(404).json({ error: 'not_found' });
+      else if (err instanceof LimitError) res.status(409).json({ error: 'limit_reached', resource: err.resource, limit: err.limit });
       else next(err);
     }
   };

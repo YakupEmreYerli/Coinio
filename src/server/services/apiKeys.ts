@@ -3,12 +3,14 @@ import { and, eq, isNull } from 'drizzle-orm';
 import { apiKeys } from '../db/schema.js';
 import type { ServiceCtx } from './context.js';
 import { NotFoundError } from './subscriptions.js';
+import { checkLimit } from './errors.js';
 
 export type KeyScope = 'read' | 'full';
 
 const hashKey = (raw: string) => createHash('sha256').update(raw).digest('hex');
 
 export function createApiKey(ctx: ServiceCtx, userId: number, name: string, scope: KeyScope): { key: string; id: number } {
+  checkLimit('apiKeys', ctx.config.limits.maxApiKeys, listApiKeys(ctx, userId).length);
   const key = `coi_${scope}_${randomBytes(32).toString('base64url')}`;
   const row = ctx.db
     .insert(apiKeys)

@@ -18,6 +18,7 @@
   "login.busy": "Anmeldung läuft …",
   "login.forgot": "Passwort vergessen?",
   "error.generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+  "error.limitReached": "Du hast das Limit dieses Servers von {limit} erreicht.",
   "error.cardTitle": "Diese Karte konnte nicht geladen werden",
   "error.retry": "Erneut versuchen",
   "error.reload": "Seite neu laden",

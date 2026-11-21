@@ -6,6 +6,7 @@ import type { ServiceCtx } from './context.js';
 import { fetchLogoInBackground } from './logos.js';
 import { getSettings } from './settings.js';
 import { insertSubscription, updateSubscription } from './subscriptions.js';
+import { LimitError } from './errors.js';
 
 /** A parsed Wallos row: the regular input plus the `active` flag, which creation does not take. */
 export type WallosItem = SubscriptionInput & { active: boolean };
@@ -183,10 +184,19 @@ export function importWallos(
 
   const rows = ctx.db.transaction((tx) => {
     const txCtx = { ...ctx, db: tx as typeof ctx.db };
-    return items.map((item) => {
-      const row = insertSubscription(txCtx, userId, item);
-      return item.active ? row : updateSubscription(txCtx, userId, row.id, { active: false });
-    });
+    const out = [];
+    for (const item of items) {
+      let row;
+      try {
+        row = insertSubscription(txCtx, userId, item);
+      } catch (err) {
+        if (!(err instanceof LimitError)) throw err;
+        warnings.push('limit_reached');
+        break;
+      }
+      out.push(item.active ? row : updateSubscription(txCtx, userId, row.id, { active: false }));
+    }
+    return out;
   });
   // Logo fetches run after commit: they outlive the transaction handle.
   for (const row of rows) if (row.domain) fetchLogoInBackground(ctx, row.id, row.domain);
