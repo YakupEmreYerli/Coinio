@@ -6,13 +6,43 @@ A self-hosted subscription and bill tracker: one Docker container, one data fold
 [![License: MIT](https://img.shields.io/badge/license-MIT-4f5bd5.svg)](LICENSE)
 [![Docker image](https://img.shields.io/badge/image-ghcr.io%2Fyakupemreyerli%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/yakupemreyerli/coinio/pkgs/container/coinio)
 
-[Türkçe](README.tr.md) · [Website](https://getcoinio.me) · [Documentation](https://docs.getcoinio.me) · [Live demo](https://getcoinio.me/demo/)
+**English** · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
+
+[Website](https://getcoinio.me) · [Documentation](https://docs.getcoinio.me) · [Live demo](https://getcoinio.me/demo/)
 
 ![Coinio: every subscription, one calm page](docs/banner.en.png)
 
 Coinio keeps every recurring payment on one page: streaming, cloud storage, the gym, rent, the domain you renew once a year. You see what is due this week, what is left to pay this month and what the whole year costs, converted to your main currency. There is no account on someone else's server, no telemetry and no paid tier.
 
 **Try it first:** the [live demo](https://getcoinio.me/demo/) is the real web app running in your browser with sample data. Nothing is sent anywhere, and it resets whenever you like.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/dashboard.en.webp" alt="Home: what is left to pay this month and what is due next"><br><sub>Home: what is left to pay this month and what is due next</sub></td>
+    <td width="50%"><img src="docs/screenshots/calendar.en.webp" alt="Calendar: payment days and weekly totals"><br><sub>Calendar: payment days and weekly totals</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/reports.en.webp" alt="Reports: 12 months back, 12 months ahead"><br><sub>Reports: 12 months back, 12 months ahead</sub></td>
+    <td width="50%"><img src="docs/screenshots/add.en.webp" alt="Type “spot” and Spotify fills in"><br><sub>Type “spot” and Spotify fills in</sub></td>
+  </tr>
+</table>
+
+<details>
+<summary>More screenshots</summary>
+<br>
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/subscriptions.en.webp" alt="Every subscription at a glance"><br><sub>Every subscription at a glance</sub></td>
+    <td width="50%"><img src="docs/screenshots/appearance.en.webp" alt="Themes, accent colour and fonts"><br><sub>Themes, accent colour and fonts</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/dashboard-dark.en.webp" alt="Night theme"><br><sub>Night theme</sub></td>
+    <td width="50%"><img src="docs/screenshots/mobile.en.webp" alt="On the phone, installable as a web app"><br><sub>On the phone, installable as a web app</sub></td>
+  </tr>
+</table>
+</details>
 
 ## Features
 

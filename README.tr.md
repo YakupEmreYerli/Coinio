@@ -6,13 +6,43 @@ Kendi sunucunda çalışan abonelik ve fatura takibi: tek Docker kapsayıcısı,
 [![Lisans: MIT](https://img.shields.io/badge/lisans-MIT-4f5bd5.svg)](LICENSE)
 [![Docker imajı](https://img.shields.io/badge/imaj-ghcr.io%2Fyakupemreyerli%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/yakupemreyerli/coinio/pkgs/container/coinio)
 
-[English](README.md) · [Site](https://getcoinio.me) · [Belgeler](https://docs.getcoinio.me) · [Canlı demo](https://getcoinio.me/demo/)
+[English](README.md) · **Türkçe** · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
+
+[Site](https://getcoinio.me) · [Belgeler](https://docs.getcoinio.me) · [Canlı demo](https://getcoinio.me/demo/)
 
 ![Coinio: bütün aboneliklerin tek sakin sayfada](docs/banner.tr.png)
 
 Coinio düzenli ödediğin her şeyi tek sayfada toplar: dizi platformu, bulut depolama, spor salonu, kira, yılda bir yenilediğin alan adı. Bu hafta neyin çekileceğini, bu ay ne kadar ödemen kaldığını ve bütün yılın sana kaça patladığını kendi para biriminde görürsün. Başkasının sunucusunda hesap açmazsın; telemetri ve ücretli sürüm de yok.
 
 **Önce dene:** [canlı demo](https://getcoinio.me/demo/) gerçek web uygulamasının tarayıcında örnek veriyle çalışan hâli. Hiçbir yere veri gitmez, istediğin an sıfırlarsın.
+
+## Ekran görüntüleri
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/dashboard.tr.webp" alt="Ana sayfa: bu ay kalan ve sıradaki ödemeler"><br><sub>Ana sayfa: bu ay kalan ve sıradaki ödemeler</sub></td>
+    <td width="50%"><img src="docs/screenshots/calendar.tr.webp" alt="Takvim: ödeme günleri ve haftalık toplamlar"><br><sub>Takvim: ödeme günleri ve haftalık toplamlar</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/reports.tr.webp" alt="Raporlar: 12 ay geri, 12 ay ileri"><br><sub>Raporlar: 12 ay geri, 12 ay ileri</sub></td>
+    <td width="50%"><img src="docs/screenshots/add.tr.webp" alt="“spot” yaz, Spotify kendiliğinden dolsun"><br><sub>“spot” yaz, Spotify kendiliğinden dolsun</sub></td>
+  </tr>
+</table>
+
+<details>
+<summary>Daha fazla ekran görüntüsü</summary>
+<br>
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/subscriptions.tr.webp" alt="Bütün abonelikler tek bakışta"><br><sub>Bütün abonelikler tek bakışta</sub></td>
+    <td width="50%"><img src="docs/screenshots/appearance.tr.webp" alt="Tema, vurgu rengi ve yazı tipleri"><br><sub>Tema, vurgu rengi ve yazı tipleri</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/dashboard-dark.tr.webp" alt="Gece teması"><br><sub>Gece teması</sub></td>
+    <td width="50%"><img src="docs/screenshots/mobile.tr.webp" alt="Telefonda; web uygulaması olarak kurulabilir"><br><sub>Telefonda; web uygulaması olarak kurulabilir</sub></td>
+  </tr>
+</table>
+</details>
 
 ## Özellikler
 

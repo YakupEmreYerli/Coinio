@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  Source of docs/banner.en.png and docs/banner.tr.png (1280×640, README header and GitHub social preview).
-  Open banner.html?lang=en or ?lang=tr at a 1280×640 viewport and take a screenshot.
+  Source of docs/banner.<lang>.png (en, tr, de, fr, es, pt-BR, zh-CN, ja) (1280×640, README header and GitHub social preview).
+  Open banner.html?lang=<lang> at a 1280×640 viewport and take a screenshot.
 -->
 <html lang="en">
 <head>
@@ -79,7 +79,7 @@
   <div class="grid"></div>
   <div class="glow"></div>
 
-  <div class="shot"><img src="../../site/assets/dashboard-night.webp" alt=""></div>
+  <div class="shot"><img data-t="shot" src="../screenshots/dashboard-dark.en.webp" alt=""></div>
 
   <div class="copy">
     <img class="logo" src="../brand/export/coinio-logo-on-dark.svg" alt="Coinio">
@@ -100,10 +100,42 @@
       lede: 'Kendi sunucunda çalışan abonelik ve fatura takibi. Her ödemeden önce hatırlatır, toplamı kendi para biriminde gösterir.',
       chips: ['Açık kaynak · MIT', 'Tek Docker kapsayıcısı', 'Claude ve ChatGPT için MCP'],
     },
+    de: {
+      headline: 'Alle Abos,<br>eine ruhige Seite<span class="pd">.</span>',
+      lede: 'Abos und Rechnungen auf dem eigenen Server. Erinnerungen vor jeder Abbuchung, Summen in Ihrer Währung.',
+      chips: ['Open Source · MIT', 'Ein Docker-Container', 'MCP für Claude &amp; ChatGPT'],
+    },
+    fr: {
+      headline: 'Tous vos abonnements,<br>sur une seule page<span class="pd">.</span>',
+      lede: 'Le suivi de vos abonnements et factures, sur votre serveur. Un rappel avant chaque prélèvement, les totaux dans votre devise.',
+      chips: ['Open source · MIT', 'Un seul conteneur Docker', 'MCP pour Claude et ChatGPT'],
+    },
+    es: {
+      headline: 'Todas tus suscripciones,<br>en una página tranquila<span class="pd">.</span>',
+      lede: 'Suscripciones y facturas en tu propio servidor. Avisos antes de cada cobro y totales en tu moneda.',
+      chips: ['Código abierto · MIT', 'Un solo contenedor Docker', 'MCP para Claude y ChatGPT'],
+    },
+    'pt-BR': {
+      headline: 'Todas as assinaturas,<br>numa página tranquila<span class="pd">.</span>',
+      lede: 'Assinaturas e contas no seu próprio servidor. Lembretes antes de cada cobrança, totais na sua moeda.',
+      chips: ['Código aberto · MIT', 'Um contêiner Docker', 'MCP para Claude e ChatGPT'],
+    },
+    'zh-CN': {
+      headline: '所有订阅，<br>一页看清<span class="pd">。</span>',
+      lede: '部署在自己服务器上的订阅与账单管理。每次扣费前提醒，按你的货币汇总。',
+      chips: ['开源 · MIT', '一个 Docker 容器', '支持 Claude 和 ChatGPT 的 MCP'],
+    },
+    ja: {
+      headline: 'すべてのサブスクを、<br>1ページに<span class="pd">。</span>',
+      lede: '自分のサーバーで動くサブスク・請求管理。引き落としの前にお知らせし、合計を自分の通貨で表示します。',
+      chips: ['オープンソース · MIT', 'Docker コンテナ1つ', 'Claude・ChatGPT 向け MCP'],
+    },
   };
-  const lang = new URLSearchParams(location.search).get('lang') === 'tr' ? 'tr' : 'en';
+  const q = new URLSearchParams(location.search).get('lang');
+  const lang = q in TEXT ? q : 'en';
   const t = TEXT[lang];
   document.documentElement.lang = lang;
+  document.querySelector('[data-t="shot"]').src = `../screenshots/dashboard-dark.${lang}.webp`;
   document.querySelector('[data-t="headline"]').innerHTML = t.headline;
   document.querySelector('[data-t="lede"]').textContent = t.lede;
   document.querySelector('[data-t="chips"]').innerHTML = t.chips.map((c) => `<span class="chip">${c}</span>`).join('');
