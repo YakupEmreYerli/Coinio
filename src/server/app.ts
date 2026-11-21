@@ -45,6 +45,9 @@ export function createApp(deps: AppDeps): express.Express {
   const ctx: ServiceCtx = { db: deps.db, config: deps.config, fetch: deps.fetch ?? fetch, now, lookup: deps.lookup, plugins };
   seedTelegramFromEnv(ctx);
 
+  // Before every route that answers (including the two below with their own body parsers).
+  if (plugins.some((p) => p.allowUser)) app.use(cookieParser(), accountGuard(ctx));
+
   // Wallos exports can exceed the default 100 KB body limit; mounted before the global parser, which would reject them.
   app.use('/api/import', cookieParser(), express.json({ limit: '1mb' }), importRouter(ctx));
 
@@ -59,7 +62,6 @@ export function createApp(deps: AppDeps): express.Express {
   });
 
   for (const plugin of plugins) plugin.early?.(app, ctx);
-  if (plugins.some((p) => p.allowUser)) app.use(accountGuard(ctx));
 
   const publicUrl = oauthUrlOf(deps.config.publicUrl);
   if (publicUrl) {
@@ -79,7 +81,7 @@ export function createApp(deps: AppDeps): express.Express {
     console.warn('COINIO_PUBLIC_URL is not set: OAuth for remote MCP clients is disabled, API keys still work.');
   }
 
-  app.use('/api/auth', authRouter({ db: deps.db, config: deps.config, now }));
+  app.use('/api/auth', authRouter({ db: deps.db, config: deps.config, now, plugins }));
   app.use('/api/settings', settingsRouter(ctx));
   app.use('/api/notifications', notificationsRouter(ctx));
   app.use('/api/onboarding', onboardingRouter(ctx));

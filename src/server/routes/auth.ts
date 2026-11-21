@@ -9,14 +9,16 @@ import type { Config } from '../config.js';
 import type { Db } from '../db/client.js';
 import { users } from '../db/schema.js';
 import { seedTelegramFromEnv } from '../services/notify/channels.js';
+import { userAllowed, type CoinioPlugin } from '../plugins.js';
 
 const credentials = z.object({
   username: z.string().trim().min(1).max(100),
   password: z.string().min(10).max(1000),
 });
 
-export function authRouter(deps: { db: Db; config: Config; now: () => Date }): Router {
+export function authRouter(deps: { db: Db; config: Config; now: () => Date; plugins?: CoinioPlugin[] }): Router {
   const { db, config, now } = deps;
+  const ctx = { db, config, now, fetch, plugins: deps.plugins };
   const router = Router();
 
   const cookieOptions: CookieOptions = {
@@ -44,7 +46,9 @@ export function authRouter(deps: { db: Db; config: Config; now: () => Date }): R
   router.get('/state', (req, res) => {
     const sid = req.cookies?.[SESSION_COOKIE];
     const userId = typeof sid === 'string' ? findSessionUserId(db, sid, now()) : null;
-    const user = userId === null ? undefined : db.select().from(users).where(eq(users.id, userId)).get();
+    // A user a plugin rejects counts as signed out here, or the app would bounce between screens.
+    const allowed = userId !== null && userAllowed(ctx, userId);
+    const user = allowed ? db.select().from(users).where(eq(users.id, userId)).get() : undefined;
     res.json({
       setupRequired: userCount() === 0,
       user: user ? { id: user.id, username: user.username } : null,

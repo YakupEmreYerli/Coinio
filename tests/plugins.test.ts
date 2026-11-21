@@ -41,6 +41,19 @@ describe('plugins', () => {
     await b.agent.get('/api/auth/state').expect(200);
   });
 
+  it('also guards the routes with their own body parsers', async () => {
+    const t = appWith([{ name: 'test', allowUser: () => false }]);
+    const a = addUser(t, 'a');
+    expect((await a.agent.put('/api/appearance').send({}).expect(401)).body).toEqual({ error: 'account_unavailable' });
+    expect((await a.agent.post('/api/import/wallos').send({ data: {}, dryRun: true }).expect(401)).body).toEqual({ error: 'account_unavailable' });
+  });
+
+  it('reports a rejected user as signed out, so the app does not loop between screens', async () => {
+    const t = appWith([{ name: 'test', allowUser: () => false }]);
+    const a = addUser(t, 'a');
+    expect((await a.agent.get('/api/auth/state').expect(200)).body.user).toBeNull();
+  });
+
   it('runs onTick once per tick and keeps going when it throws', async () => {
     vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
     const t = makeTestApp();
