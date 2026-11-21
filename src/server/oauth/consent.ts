@@ -1,5 +1,5 @@
 import express, { Router, type Request, type Response } from 'express';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { SESSION_COOKIE, findSessionUserId } from '../auth/sessions.js';
 import { settings, users } from '../db/schema.js';
 import type { ServiceCtx } from '../services/context.js';
@@ -43,7 +43,7 @@ export function consentRouter(ctx: ServiceCtx, provider: SqliteOAuthProvider): R
   // A signed-in user's saved language wins; otherwise the browser's.
   const localeOf = (req: Request, userId = sessionUserId(req)): ConsentLocale => {
     if (userId !== null) {
-      const saved = ctx.db.select().from(settings).where(eq(settings.key, 'locale')).get()?.value;
+      const saved = ctx.db.select().from(settings).where(and(eq(settings.userId, userId), eq(settings.key, 'locale'))).get()?.value;
       if (isLocale(saved)) return saved;
     }
     return localeFromAcceptLanguage(req.get('accept-language'));

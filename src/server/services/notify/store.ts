@@ -2,10 +2,10 @@ import { DEFAULT_NOTIFY_SETTINGS, mergeNotifySettings, NotifySettings, TemplateT
 import { defaultTemplates } from '../../../shared/notify/defaults.js';
 import type { Locale } from '../../../shared/locales.js';
 import type { ServiceCtx } from '../context.js';
-import { getInternalValue, setInternalValue } from '../settings.js';
+import { getUserValue, setUserValue } from '../settings.js';
 
-function readJson(ctx: ServiceCtx, key: 'notify' | 'notifyTemplates'): unknown {
-  const raw = getInternalValue(ctx, key);
+function readJson(ctx: ServiceCtx, userId: number, key: 'notify' | 'notifyTemplates'): unknown {
+  const raw = getUserValue(ctx, userId, key);
   if (!raw) return null;
   try {
     return JSON.parse(raw);
@@ -14,20 +14,20 @@ function readJson(ctx: ServiceCtx, key: 'notify' | 'notifyTemplates'): unknown {
   }
 }
 
-export function getNotifySettings(ctx: ServiceCtx): NotifySettings {
-  const stored = readJson(ctx, 'notify');
+export function getNotifySettings(ctx: ServiceCtx, userId: number): NotifySettings {
+  const stored = readJson(ctx, userId, 'notify');
   return stored ? mergeNotifySettings(stored) : DEFAULT_NOTIFY_SETTINGS;
 }
 
-export function saveNotifySettings(ctx: ServiceCtx, input: unknown): NotifySettings {
+export function saveNotifySettings(ctx: ServiceCtx, userId: number, input: unknown): NotifySettings {
   const parsed = NotifySettings.parse(input);
-  setInternalValue(ctx, 'notify', JSON.stringify(parsed));
+  setUserValue(ctx, userId, 'notify', JSON.stringify(parsed));
   return parsed;
 }
 
 /** Only the templates the user changed; the rest follow the defaults of the current language. */
-export function getTemplateOverrides(ctx: ServiceCtx): Partial<TemplateSet> {
-  const stored = readJson(ctx, 'notifyTemplates');
+export function getTemplateOverrides(ctx: ServiceCtx, userId: number): Partial<TemplateSet> {
+  const stored = readJson(ctx, userId, 'notifyTemplates');
   const out: Partial<TemplateSet> = {};
   if (stored && typeof stored === 'object') {
     for (const [type, value] of Object.entries(stored)) {
@@ -38,17 +38,17 @@ export function getTemplateOverrides(ctx: ServiceCtx): Partial<TemplateSet> {
   return out;
 }
 
-export function effectiveTemplates(ctx: ServiceCtx, locale: Locale): TemplateSet {
-  return { ...defaultTemplates(locale), ...getTemplateOverrides(ctx) };
+export function effectiveTemplates(ctx: ServiceCtx, userId: number, locale: Locale): TemplateSet {
+  return { ...defaultTemplates(locale), ...getTemplateOverrides(ctx, userId) };
 }
 
-export function saveTemplate(ctx: ServiceCtx, type: NotifyType, input: unknown): TemplateText {
+export function saveTemplate(ctx: ServiceCtx, userId: number, type: NotifyType, input: unknown): TemplateText {
   const parsed = TemplateText.parse(input);
-  setInternalValue(ctx, 'notifyTemplates', JSON.stringify({ ...getTemplateOverrides(ctx), [type]: parsed }));
+  setUserValue(ctx, userId, 'notifyTemplates', JSON.stringify({ ...getTemplateOverrides(ctx, userId), [type]: parsed }));
   return parsed;
 }
 
-export function resetTemplate(ctx: ServiceCtx, type: NotifyType): void {
-  const { [type]: _dropped, ...rest } = getTemplateOverrides(ctx);
-  setInternalValue(ctx, 'notifyTemplates', JSON.stringify(rest));
+export function resetTemplate(ctx: ServiceCtx, userId: number, type: NotifyType): void {
+  const { [type]: _dropped, ...rest } = getTemplateOverrides(ctx, userId);
+  setUserValue(ctx, userId, 'notifyTemplates', JSON.stringify(rest));
 }

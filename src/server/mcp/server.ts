@@ -228,7 +228,7 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
       annotations: readOnly,
     },
     tool(({ subscription_id, limit }: { subscription_id?: number; limit: number }) => ({
-      payments: listPayments(ctx, userId, { subscriptionId: subscription_id }).slice(0, limit).map((p) => paymentOut(p, getSettings(ctx).baseCurrency)),
+      payments: listPayments(ctx, userId, { subscriptionId: subscription_id }).slice(0, limit).map((p) => paymentOut(p, getSettings(ctx, userId).baseCurrency)),
     })),
   );
 
@@ -292,7 +292,7 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
       },
     },
     tool((a: { id: number; due_date?: string; amount?: number; actual_base_amount?: number }) => {
-      const base = getSettings(ctx).baseCurrency;
+      const base = getSettings(ctx, userId).baseCurrency;
       return {
         payment: paymentOut(
           markPaid(ctx, userId, a.id, {
@@ -317,7 +317,7 @@ export function buildMcpServer(ctx: McpCtx): McpServer {
       },
     },
     tool((a: { id: number; due_date?: string }) => ({
-      payment: paymentOut(skipPayment(ctx, userId, a.id, { dueDate: a.due_date, now: ctx.now() }), getSettings(ctx).baseCurrency),
+      payment: paymentOut(skipPayment(ctx, userId, a.id, { dueDate: a.due_date, now: ctx.now() }), getSettings(ctx, userId).baseCurrency),
     })),
   );
 

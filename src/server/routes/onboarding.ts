@@ -10,8 +10,8 @@ export function onboardingRouter(ctx: ServiceCtx): Router {
   router.get('/', handle((req, res) => {
     res.json(getOnboarding(ctx, req.userId!));
   }));
-  router.post('/complete', handle((_req, res) => {
-    completeOnboarding(ctx);
+  router.post('/complete', handle((req, res) => {
+    completeOnboarding(ctx, req.userId!);
     res.status(204).end();
   }));
   router.post('/samples', handle((req, res) => {

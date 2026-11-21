@@ -29,7 +29,7 @@ export function exportRouter(ctx: ServiceCtx): Router {
     const userId = req.userId!;
     const subs = listSubscriptions(ctx, userId, { includeInactive: true });
     const pays = what === 'payments' ? listPayments(ctx, userId) : [];
-    const { timezone, baseCurrency } = getSettings(ctx);
+    const { timezone, baseCurrency } = getSettings(ctx, userId);
     const date = todayIn(timezone, ctx.now());
     res.setHeader('Content-Disposition', `attachment; filename="coinio-${what}-${date}.${format}"`);
 

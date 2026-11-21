@@ -13,7 +13,19 @@ export const sessions = sqliteTable('sessions', {
   expiresAt: text('expires_at').notNull(),
 });
 
-export const settings = sqliteTable('settings', {
+/** Per-user preferences and bookkeeping (key/value). */
+export const settings = sqliteTable(
+  'settings',
+  {
+    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    key: text('key').notNull(),
+    value: text('value').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.key] })],
+);
+
+/** Values that belong to the whole server, not to one user. */
+export const instanceSettings = sqliteTable('instance_settings', {
   key: text('key').primaryKey(),
   value: text('value').notNull(),
 });
@@ -117,6 +129,7 @@ export const fxRates = sqliteTable(
 
 export const notificationChannels = sqliteTable('notification_channels', {
   id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   type: text('type').notNull(),
   name: text('name').notNull(),
   enabled: integer('enabled', { mode: 'boolean' }).notNull().default(true),
@@ -131,6 +144,7 @@ export const notificationChannels = sqliteTable('notification_channels', {
 export const notificationLog = sqliteTable('notification_log', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   dedupKey: text('dedup_key').notNull().unique(),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }),
   type: text('type').notNull(),
   channelId: integer('channel_id').references(() => notificationChannels.id, { onDelete: 'set null' }),
   subscriptionId: integer('subscription_id').references(() => subscriptions.id, { onDelete: 'set null' }),

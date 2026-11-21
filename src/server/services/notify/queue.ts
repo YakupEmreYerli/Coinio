@@ -45,6 +45,7 @@ export function enqueue(
     .insert(notificationLog)
     .values({
       dedupKey: `${e.key}:ch${e.channel.id}`,
+      userId: e.channel.userId,
       type: e.type,
       channelId: e.channel.id,
       subscriptionId: e.subscriptionId ?? null,
@@ -59,10 +60,11 @@ export function enqueue(
 }
 
 /** Records a send that already happened (a test), so it shows in the recent list. */
-export function recordDirect(ctx: ServiceCtx, channel: ChannelRow, msg: OutMessage, error: string | null): void {
+export function recordDirect(ctx: ServiceCtx, userId: number, channel: ChannelRow, msg: OutMessage, error: string | null): void {
   const stamp = ctx.now().toISOString();
   ctx.db.insert(notificationLog).values({
     dedupKey: `test:${channel.id}:${stamp}:${Math.random().toString(36).slice(2)}`,
+    userId,
     type: msg.type,
     channelId: channel.id || null,
     title: msg.title,
@@ -122,11 +124,12 @@ export async function deliverQueued(ctx: ServiceCtx): Promise<number> {
   return sent;
 }
 
-export function listLog(ctx: ServiceCtx, limit = 20): ApiNotificationLog[] {
+export function listLog(ctx: ServiceCtx, userId: number, limit = 20): ApiNotificationLog[] {
   return ctx.db
     .select({ log: notificationLog, channelName: notificationChannels.name })
     .from(notificationLog)
     .leftJoin(notificationChannels, eq(notificationLog.channelId, notificationChannels.id))
+    .where(eq(notificationLog.userId, userId))
     .orderBy(desc(notificationLog.id))
     .limit(limit)
     .all()

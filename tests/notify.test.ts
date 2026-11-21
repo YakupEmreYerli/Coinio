@@ -19,13 +19,13 @@ function setup(opts: { now?: string; status?: number; tz?: string; locale?: stri
   const ctx: ServiceCtx = { db: t.db, config: t.config, fetch: fetchMock as unknown as typeof fetch, now: () => t.clock.now };
   const user = t.db.insert(users).values({ username: 'y', passwordHash: 'x', createdAt: NOW }).returning().get();
   t.db.insert(settings).values([
-    { key: 'locale', value: opts.locale ?? 'en' },
-    { key: 'timezone', value: opts.tz ?? 'Europe/Istanbul' },
-    { key: 'baseCurrency', value: 'TRY' },
+    { userId: user.id, key: 'locale', value: opts.locale ?? 'en' },
+    { userId: user.id, key: 'timezone', value: opts.tz ?? 'Europe/Istanbul' },
+    { userId: user.id, key: 'baseCurrency', value: 'TRY' },
   ]).run();
   const channel = (over: Partial<typeof notificationChannels.$inferInsert> = {}) =>
     t.db.insert(notificationChannels).values({
-      type: 'slack', name: 'Slack', enabled: true, config: {}, secrets: { webhookUrl: 'https://slack.test/hook' }, createdAt: NOW, updatedAt: NOW, ...over,
+      userId: user.id, type: 'slack', name: 'Slack', enabled: true, config: {}, secrets: { webhookUrl: 'https://slack.test/hook' }, createdAt: NOW, updatedAt: NOW, ...over,
     }).returning().get();
   const add = (over: Partial<typeof subscriptions.$inferInsert>) =>
     t.db.insert(subscriptions).values({
@@ -206,7 +206,7 @@ describe('planToday and delivery', () => {
     const e = setup({ now: '2026-11-28T09:00:00Z' });
     e.add({ name: 'Netflix', nextDue: '2026-12-01' });
     e.channel();
-    saveTemplate(e.ctx, 'reminder', { title: 'Pay {{name}}', body: '{{amount}} on {{dueDate}}' });
+    saveTemplate(e.ctx, e.user.id, 'reminder', { title: 'Pay {{name}}', body: '{{amount}} on {{dueDate}}' });
     await runNotifications(e.ctx);
     expect(e.sentTexts()[0]).toMatch(/^\*Pay Netflix\*\n(TRY|₺)\s?99\.99 on December 1, 2026$/);
   });
@@ -245,9 +245,33 @@ describe('price change alerts', () => {
     markPaid(s.ctx, s.user.id, variable.id, { amountMinor: 13000, now: s.clock.now });
     const same = s.add({ name: 'Same', amountMinor: 10000 });
     markPaid(s.ctx, s.user.id, same.id, { now: s.clock.now });
-    saveNotifySettings(s.ctx, { ...DEFAULT_NOTIFY_SETTINGS, priceChange: false });
+    saveNotifySettings(s.ctx, s.user.id, { ...DEFAULT_NOTIFY_SETTINGS, priceChange: false });
     const off = s.add({ name: 'Off', amountMinor: 10000 });
     notifyPriceChange(s.ctx, off, 10000, 20000, null);
     expect(s.log()).toEqual([]);
+  });
+});
+
+describe('planning per user', () => {
+  it('plans each user at their own local reminder time', async () => {
+    const s = setup({ now: '2026-11-18T05:00:00Z', tz: 'Europe/Istanbul' });
+    s.channel();
+    s.add({ name: 'A-sub', nextDue: '2026-11-19', anchorDay: 19 });
+    const other = s.db.insert(users).values({ username: 'b', passwordHash: 'x', createdAt: NOW }).returning().get();
+    s.db.insert(settings).values([
+      { userId: other.id, key: 'timezone', value: 'America/New_York' },
+      { userId: other.id, key: 'baseCurrency', value: 'TRY' },
+    ]).run();
+    s.channel({ userId: other.id, secrets: { webhookUrl: 'https://slack.test/other' } });
+    s.add({ userId: other.id, name: 'B-sub', nextDue: '2026-11-19', anchorDay: 19 });
+    const queuedFor = () => s.log().map((l) => l.userId);
+
+    expect(planToday(s.ctx)).toBe(0); // 08:00 Istanbul, 00:00 New York
+    s.clock.set('2026-11-18T06:00:00Z'); // 09:00 Istanbul
+    planToday(s.ctx);
+    expect(queuedFor()).toEqual([s.user.id]);
+    s.clock.set('2026-11-18T14:00:00Z'); // 09:00 New York
+    planToday(s.ctx);
+    expect(queuedFor()).toEqual([s.user.id, other.id]);
   });
 });

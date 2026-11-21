@@ -1,6 +1,6 @@
 // The notification jobs: the daily plan, event alerts (price changes) and test sends.
 import { and, asc, eq } from 'drizzle-orm';
-import { payments, users } from '../../db/schema.js';
+import { payments, subscriptions, users } from '../../db/schema.js';
 import type { SubscriptionRow } from '../../domain/summary.js';
 import { todayIn } from '../../../shared/schedule.js';
 import type { TemplateVars } from '../../../shared/notify/template.js';
@@ -20,10 +20,10 @@ function localTime(tz: string, now: Date): string {
   return new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(now);
 }
 
-function context(ctx: ServiceCtx) {
-  const s = getSettings(ctx);
+function context(ctx: ServiceCtx, userId: number) {
+  const s = getSettings(ctx, userId);
   const locale = toLocale(s.locale);
-  return { s, locale, f: varFormat(locale), today: todayIn(s.timezone, ctx.now()), appUrl: ctx.config.publicUrl, templates: effectiveTemplates(ctx, locale) };
+  return { s, locale, f: varFormat(locale), today: todayIn(s.timezone, ctx.now()), appUrl: ctx.config.publicUrl, templates: effectiveTemplates(ctx, userId, locale) };
 }
 
 function eventVars(e: PlannedEvent, c: ReturnType<typeof context>): TemplateVars {
@@ -51,28 +51,35 @@ function fanOut(ctx: ServiceCtx, channels: ChannelRow[], e: { key: string; type:
   return added;
 }
 
-/** Queues today's notifications (after the reminder time) for every enabled channel. Returns how many were queued. */
-export function planToday(ctx: ServiceCtx): number {
-  const channels = listChannels(ctx).filter((c) => c.enabled);
+/** Queues a user's notifications for today (after their reminder time) on their enabled channels. Returns how many were queued. */
+export function planForUser(ctx: ServiceCtx, userId: number): number {
+  const channels = listChannels(ctx, userId).filter((c) => c.enabled);
   if (channels.length === 0) return 0;
-  const c = context(ctx);
+  const c = context(ctx, userId);
   if (localTime(c.s.timezone, ctx.now()) < c.s.reminderTime) return 0;
-  const user = ctx.db.select().from(users).orderBy(asc(users.id)).get();
-  if (!user) return 0;
 
-  const subs = listSubscriptions(ctx, user.id, { includeInactive: true });
+  const subs = listSubscriptions(ctx, userId, { includeInactive: true });
   const autoPaidToday = ctx.db
-    .select()
+    .select({ payment: payments })
     .from(payments)
-    .where(and(eq(payments.dueDate, c.today), eq(payments.source, 'auto'), eq(payments.status, 'paid')))
-    .all();
-  const events = planNotifications({ today: c.today, settings: getNotifySettings(ctx), subs, summary: getSummary(ctx, user.id, ctx.now()), autoPaidToday });
+    .innerJoin(subscriptions, eq(payments.subscriptionId, subscriptions.id))
+    .where(and(eq(subscriptions.userId, userId), eq(payments.dueDate, c.today), eq(payments.source, 'auto'), eq(payments.status, 'paid')))
+    .all()
+    .map((r) => r.payment);
+  const events = planNotifications({ today: c.today, settings: getNotifySettings(ctx, userId), subs, summary: getSummary(ctx, userId, ctx.now()), autoPaidToday });
 
   let added = 0;
   for (const e of events) {
     const subscriptionId = 'sub' in e ? e.sub.id : undefined;
     added += fanOut(ctx, channels, { key: e.key, type: e.type, subscriptionId }, c.templates[e.type], eventVars(e, c));
   }
+  return added;
+}
+
+/** Every user's notifications for today. Returns how many were queued. */
+export function planToday(ctx: ServiceCtx): number {
+  let added = 0;
+  for (const { id } of ctx.db.select({ id: users.id }).from(users).orderBy(asc(users.id)).all()) added += planForUser(ctx, id);
   return added;
 }
 
@@ -87,29 +94,29 @@ export async function runNotifications(ctx: ServiceCtx): Promise<void> {
  * Queued at once; the scheduler sends it within a minute.
  */
 export function notifyPriceChange(ctx: ServiceCtx, sub: SubscriptionRow, oldMinor: number, newMinor: number, paidDate: string | null): void {
-  if (oldMinor === newMinor || !getNotifySettings(ctx).priceChange) return;
-  const channels = listChannels(ctx).filter((ch) => ch.enabled);
+  if (oldMinor === newMinor || !getNotifySettings(ctx, sub.userId).priceChange) return;
+  const channels = listChannels(ctx, sub.userId).filter((ch) => ch.enabled);
   if (channels.length === 0) return;
-  const c = context(ctx);
+  const c = context(ctx, sub.userId);
   const key = `priceChange:${sub.id}:${paidDate ?? ctx.now().toISOString()}:${oldMinor}>${newMinor}`;
   fanOut(ctx, channels, { key, type: 'priceChange', subscriptionId: sub.id }, c.templates.priceChange, priceChangeVars(sub, { oldMinor, newMinor, paidDate, appUrl: c.appUrl }, c.f));
 }
 
 /** "Send test" on a channel: the test template, sent now. Null on success, otherwise the service's error. */
-export async function sendChannelTest(ctx: ServiceCtx, channel: ChannelRow): Promise<string | null> {
-  const c = context(ctx);
+export async function sendChannelTest(ctx: ServiceCtx, userId: number, channel: ChannelRow): Promise<string | null> {
+  const c = context(ctx, userId);
   const msg = renderMessage(channel.type as ChannelType, 'test', c.templates.test, testVars(channel.name, c.appUrl));
   const error = await sendDirect(ctx, channel, msg);
-  if (channel.id) recordDirect(ctx, channel, msg, error);
+  if (channel.id) recordDirect(ctx, userId, channel, msg, error);
   return error;
 }
 
 /** "Send test to …" in the template editor: the given (possibly unsaved) template with sample data. */
-export async function sendTemplateTest(ctx: ServiceCtx, channel: ChannelRow, type: NotifyType, tpl: TemplateText): Promise<string | null> {
-  const c = context(ctx);
+export async function sendTemplateTest(ctx: ServiceCtx, userId: number, channel: ChannelRow, type: NotifyType, tpl: TemplateText): Promise<string | null> {
+  const c = context(ctx, userId);
   const vars = sampleVars(type, { today: c.today, base: c.s.baseCurrency, appUrl: c.appUrl, channel: channel.name }, c.f);
   const msg = renderMessage(channel.type as ChannelType, type, tpl, vars);
   const error = await sendDirect(ctx, channel, msg);
-  recordDirect(ctx, channel, msg, error);
+  recordDirect(ctx, userId, channel, msg, error);
   return error;
 }

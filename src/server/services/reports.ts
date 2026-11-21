@@ -10,7 +10,7 @@ import { listSubscriptions } from './subscriptions.js';
 export type { Report };
 
 export function getReport(ctx: ServiceCtx, userId: number, now: Date): Report {
-  const settings = getSettings(ctx);
+  const settings = getSettings(ctx, userId);
   const today = todayIn(settings.timezone, now);
   const subs = listSubscriptions(ctx, userId, { includeInactive: true });
   const ids = subs.map((s) => s.id);

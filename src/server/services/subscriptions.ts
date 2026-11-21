@@ -96,7 +96,7 @@ export function updateSubscription(ctx: ServiceCtx, userId: number, id: number, 
   // Resuming never brings back the periods missed while paused.
   // The edit form sends the unchanged nextDue back, so an unchanged value counts as "not given".
   if (v.active === true && !before.active && (v.nextDue === undefined || v.nextDue === before.nextDue)) {
-    const today = todayIn(getSettings(ctx).timezone, ctx.now());
+    const today = todayIn(getSettings(ctx, userId).timezone, ctx.now());
     if (before.nextDue < today) {
       const cycle = set.cycle ?? before.cycle;
       const count = set.intervalCount ?? before.intervalCount;
@@ -268,7 +268,7 @@ export function updatePayment(ctx: ServiceCtx, userId: number, paymentId: number
 }
 
 export function getSummary(ctx: ServiceCtx, userId: number, now: Date): Summary {
-  const s = getSettings(ctx);
+  const s = getSettings(ctx, userId);
   const today = todayIn(s.timezone, now);
   const subs = listSubscriptions(ctx, userId, { includeInactive: true });
   const ids = subs.map((x) => x.id);

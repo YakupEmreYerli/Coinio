@@ -173,7 +173,7 @@ export function importWallos(
   dryRun: boolean,
 ): { created: number; items: WallosItem[]; warnings: string[] } {
   const { items, warnings } = parseWallosExport(data);
-  const today = todayIn(getSettings(ctx).timezone, ctx.now());
+  const today = todayIn(getSettings(ctx, userId).timezone, ctx.now());
   for (const item of items) {
     if (item.active && !item.autoPay && item.nextDue < today) {
       warnings.push(`"${item.name}": manual subscription whose next payment (${item.nextDue}) is in the past; it will show as overdue`);

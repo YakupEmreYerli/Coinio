@@ -1,9 +1,9 @@
-import { asc, eq } from 'drizzle-orm';
+import { and, asc, eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { notificationChannels } from '../../db/schema.js';
+import { notificationChannels, users } from '../../db/schema.js';
 import { CHANNEL_FIELDS, CHANNEL_TYPES, parseChannelValues, type ApiChannel, type ChannelType } from '../../../shared/notify/types.js';
 import type { ServiceCtx } from '../context.js';
-import { getInternalValue, setInternalValue } from '../settings.js';
+import { getInstanceValue, setInstanceValue } from '../settings.js';
 import { NotFoundError } from '../errors.js';
 
 export type ChannelRow = typeof notificationChannels.$inferSelect;
@@ -39,12 +39,17 @@ export function channelToApi(row: ChannelRow): ApiChannel {
   };
 }
 
-export function listChannels(ctx: ServiceCtx): ChannelRow[] {
-  return ctx.db.select().from(notificationChannels).orderBy(asc(notificationChannels.id)).all();
+export function listChannels(ctx: ServiceCtx, userId: number): ChannelRow[] {
+  return ctx.db.select().from(notificationChannels).where(eq(notificationChannels.userId, userId)).orderBy(asc(notificationChannels.id)).all();
 }
 
-export function getChannel(ctx: ServiceCtx, id: number): ChannelRow {
-  const row = ctx.db.select().from(notificationChannels).where(eq(notificationChannels.id, id)).get();
+/** Someone else's channel counts as missing. */
+export function getChannel(ctx: ServiceCtx, userId: number, id: number): ChannelRow {
+  const row = ctx.db
+    .select()
+    .from(notificationChannels)
+    .where(and(eq(notificationChannels.id, id), eq(notificationChannels.userId, userId)))
+    .get();
   if (!row) throw new NotFoundError('channel');
   return row;
 }
@@ -59,14 +64,15 @@ const mergeSecrets = (old: Record<string, string>, next: Record<string, string |
 };
 
 /** A channel built from the form without saving it (for "Send test" before saving); an id fills in saved secrets. */
-export function draftChannel(ctx: ServiceCtx, input: unknown, id?: number): ChannelRow {
+export function draftChannel(ctx: ServiceCtx, userId: number, input: unknown, id?: number): ChannelRow {
   const v = ChannelInput.parse(input);
-  const saved = id === undefined ? null : getChannel(ctx, id);
+  const saved = id === undefined ? null : getChannel(ctx, userId, id);
   const keep = saved && saved.type === v.type ? Object.keys(saved.secrets) : [];
   const parsed = parseChannelValues(v.type, v.config, v.secrets, keep);
   const stamp = ctx.now().toISOString();
   return {
     id: saved?.id ?? 0,
+    userId,
     type: v.type,
     name: v.name,
     enabled: v.enabled,
@@ -77,18 +83,18 @@ export function draftChannel(ctx: ServiceCtx, input: unknown, id?: number): Chan
   };
 }
 
-export function createChannel(ctx: ServiceCtx, input: unknown): ChannelRow {
-  const d = draftChannel(ctx, input);
+export function createChannel(ctx: ServiceCtx, userId: number, input: unknown): ChannelRow {
+  const d = draftChannel(ctx, userId, input);
   return ctx.db
     .insert(notificationChannels)
-    .values({ type: d.type, name: d.name, enabled: d.enabled, config: d.config, secrets: d.secrets, createdAt: d.createdAt, updatedAt: d.updatedAt })
+    .values({ userId, type: d.type, name: d.name, enabled: d.enabled, config: d.config, secrets: d.secrets, createdAt: d.createdAt, updatedAt: d.updatedAt })
     .returning()
     .get();
 }
 
-export function updateChannel(ctx: ServiceCtx, id: number, patch: unknown): ChannelRow {
+export function updateChannel(ctx: ServiceCtx, userId: number, id: number, patch: unknown): ChannelRow {
   const v = ChannelPatch.parse(patch);
-  const row = getChannel(ctx, id);
+  const row = getChannel(ctx, userId, id);
   const set: Partial<ChannelRow> = { updatedAt: ctx.now().toISOString() };
   if (v.name !== undefined) set.name = v.name;
   if (v.enabled !== undefined) set.enabled = v.enabled;
@@ -101,26 +107,29 @@ export function updateChannel(ctx: ServiceCtx, id: number, patch: unknown): Chan
   return ctx.db.update(notificationChannels).set(set).where(eq(notificationChannels.id, id)).returning().get();
 }
 
-export function deleteChannel(ctx: ServiceCtx, id: number): void {
-  getChannel(ctx, id);
+export function deleteChannel(ctx: ServiceCtx, userId: number, id: number): void {
+  getChannel(ctx, userId, id);
   ctx.db.delete(notificationChannels).where(eq(notificationChannels.id, id)).run();
 }
 
 /**
- * COINIO_TELEGRAM_BOT_TOKEN / _CHAT_ID become a Telegram channel once, on the first start that sees them;
- * from then on the channel is managed in the app (deleting it does not bring it back).
+ * COINIO_TELEGRAM_BOT_TOKEN / _CHAT_ID become a Telegram channel of the first user once, on the first start
+ * (or first account) that sees them; from then on the channel is managed in the app (deleting it does not
+ * bring it back). Without a user yet nothing happens, and the next call tries again.
  */
 export function seedTelegramFromEnv(ctx: ServiceCtx): void {
   const { telegramBotToken: token, telegramChatId: chatId, telegramThreadId } = ctx.config;
-  if (!token || !chatId || getInternalValue(ctx, 'notifyEnvTelegramSeeded')) return;
+  if (!token || !chatId || getInstanceValue(ctx, 'notifyEnvTelegramSeeded')) return;
+  const owner = ctx.db.select({ id: users.id }).from(users).orderBy(asc(users.id)).get();
+  if (!owner) return;
   const threadId = Number(telegramThreadId);
   const config = { chatId, ...(Number.isInteger(threadId) && threadId > 0 ? { threadId } : {}) };
   const stamp = ctx.now().toISOString();
-  const exists = listChannels(ctx).some((c) => c.type === 'telegram' && c.secrets.botToken === token && c.config.chatId === chatId);
+  const exists = listChannels(ctx, owner.id).some((c) => c.type === 'telegram' && c.secrets.botToken === token && c.config.chatId === chatId);
   if (!exists) {
     ctx.db.insert(notificationChannels).values({
-      type: 'telegram', name: 'Telegram', enabled: true, config, secrets: { botToken: token }, createdAt: stamp, updatedAt: stamp,
+      userId: owner.id, type: 'telegram', name: 'Telegram', enabled: true, config, secrets: { botToken: token }, createdAt: stamp, updatedAt: stamp,
     }).run();
   }
-  setInternalValue(ctx, 'notifyEnvTelegramSeeded', stamp);
+  setInstanceValue(ctx, 'notifyEnvTelegramSeeded', stamp);
 }

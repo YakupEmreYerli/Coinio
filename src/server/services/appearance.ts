@@ -1,12 +1,9 @@
-import { eq } from 'drizzle-orm';
 import { Appearance, mergeAppearance } from '../../shared/appearance.js';
-import { settings } from '../db/schema.js';
 import type { ServiceCtx } from './context.js';
+import { getUserValue, setUserValue } from './settings.js';
 
-const KEY = 'appearance';
-
-export function getAppearance(ctx: ServiceCtx): Appearance {
-  const raw = ctx.db.select().from(settings).where(eq(settings.key, KEY)).get()?.value;
+export function getAppearance(ctx: ServiceCtx, userId: number): Appearance {
+  const raw = getUserValue(ctx, userId, 'appearance');
   let stored: unknown = null;
   try {
     stored = raw ? JSON.parse(raw) : null;
@@ -17,9 +14,8 @@ export function getAppearance(ctx: ServiceCtx): Appearance {
 }
 
 /** Strict on write (invalid input is a 400), then normalized so the card list is complete. */
-export function setAppearance(ctx: ServiceCtx, input: unknown): Appearance {
+export function setAppearance(ctx: ServiceCtx, userId: number, input: unknown): Appearance {
   const value = mergeAppearance(Appearance.parse(input));
-  const json = JSON.stringify(value);
-  ctx.db.insert(settings).values({ key: KEY, value: json }).onConflictDoUpdate({ target: settings.key, set: { value: json } }).run();
+  setUserValue(ctx, userId, 'appearance', JSON.stringify(value));
   return value;
 }

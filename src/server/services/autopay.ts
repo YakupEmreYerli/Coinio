@@ -11,15 +11,24 @@ import type { ServiceCtx } from './context.js';
  */
 export function runAutoPay(ctx: ServiceCtx): number {
   const now = ctx.now();
-  const today = todayIn(getSettings(ctx).timezone, now);
+  // "Today" is the owner's local day; the latest local day anywhere bounds the query.
+  const todayOf = new Map<number, string>();
+  const ownerToday = (userId: number) => {
+    let d = todayOf.get(userId);
+    if (d === undefined) todayOf.set(userId, (d = todayIn(getSettings(ctx, userId).timezone, now)));
+    return d;
+  };
+  const latest = todayIn('Pacific/Kiritimati', now);
   const due = ctx.db
     .select()
     .from(subscriptions)
-    .where(and(eq(subscriptions.autoPay, true), eq(subscriptions.active, true), lte(subscriptions.nextDue, today)))
+    .where(and(eq(subscriptions.autoPay, true), eq(subscriptions.active, true), lte(subscriptions.nextDue, latest)))
     .all();
 
   let created = 0;
   for (const sub of due) {
+    const today = ownerToday(sub.userId);
+    if (sub.nextDue > today) continue;
     ctx.db.transaction((tx) => {
       for (const dueDate of dueDatesThrough(sub.nextDue, today, sub.cycle, sub.intervalCount, sub.anchorDay)) {
         const res = tx

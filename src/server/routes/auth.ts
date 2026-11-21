@@ -8,6 +8,7 @@ import { SESSION_COOKIE, SESSION_TTL_MS, createSession, deleteOtherSessions, del
 import type { Config } from '../config.js';
 import type { Db } from '../db/client.js';
 import { users } from '../db/schema.js';
+import { seedTelegramFromEnv } from '../services/notify/channels.js';
 
 const credentials = z.object({
   username: z.string().trim().min(1).max(100),
@@ -71,6 +72,7 @@ export function authRouter(deps: { db: Db; config: Config; now: () => Date }): R
       .values({ username: parsed.data.username, passwordHash, createdAt: now().toISOString() })
       .returning()
       .get();
+    seedTelegramFromEnv({ db, config, now, fetch });
     res.cookie(SESSION_COOKIE, createSession(db, user.id, now()), cookieOptions);
     res.status(201).json({ id: user.id, username: user.username });
   });

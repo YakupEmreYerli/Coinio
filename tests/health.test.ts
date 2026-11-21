@@ -23,7 +23,7 @@ describe('openDb', () => {
     const names = rows.map((r) => r.name).sort();
     expect(names).toEqual(
       [
-        'api_keys', 'fx_rates', 'notification_channels', 'notification_log', 'oauth_clients', 'oauth_codes', 'oauth_tokens',
+        'api_keys', 'fx_rates', 'instance_settings', 'notification_channels', 'notification_log', 'oauth_clients', 'oauth_codes', 'oauth_tokens',
         'payments', 'sessions', 'settings', 'subscriptions', 'users',
       ].sort(),
     );

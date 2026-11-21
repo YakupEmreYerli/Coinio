@@ -8,11 +8,11 @@ import { handle } from './subscriptions.js';
 export function settingsRouter(ctx: ServiceCtx): Router {
   const router = Router();
   router.use(requireSession(ctx.db, ctx.now));
-  router.get('/', handle((_req, res) => {
-    res.json(getSettings(ctx));
+  router.get('/', handle((req, res) => {
+    res.json(getSettings(ctx, req.userId!));
   }));
   router.patch('/', handle((req, res) => {
-    res.json(updateSettings(ctx, req.body));
+    res.json(updateSettings(ctx, req.userId!, req.body));
   }));
   return router;
 }
@@ -20,11 +20,11 @@ export function settingsRouter(ctx: ServiceCtx): Router {
 export function appearanceRouter(ctx: ServiceCtx): Router {
   const router = Router();
   router.use(requireSession(ctx.db, ctx.now));
-  router.get('/', handle((_req, res) => {
-    res.json(getAppearance(ctx));
+  router.get('/', handle((req, res) => {
+    res.json(getAppearance(ctx, req.userId!));
   }));
   router.put('/', handle((req, res) => {
-    res.json(setAppearance(ctx, req.body));
+    res.json(setAppearance(ctx, req.userId!, req.body));
   }));
   return router;
 }

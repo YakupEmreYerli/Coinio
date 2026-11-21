@@ -6,18 +6,18 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { openDb } from '../src/server/db/client.js';
-import { notificationChannels, payments, settings, subscriptions } from '../src/server/db/schema.js';
+import { instanceSettings, notificationChannels, notificationLog, payments, settings, subscriptions } from '../src/server/db/schema.js';
 
 const SRC = join(process.cwd(), 'src/server/db/migrations');
 
-/** A database file migrated only up to v0.1 (migration 0000), as an existing install has it. */
-function v01Database(): string {
+/** A database file migrated only through the first `count` migrations, as an older install has it. */
+function databaseUpTo(count: number): string {
   const dir = mkdtempSync(join(tmpdir(), 'coinio-mig-'));
   const old = join(dir, 'migrations');
   cpSync(SRC, old, { recursive: true });
   const journalPath = join(old, 'meta/_journal.json');
   const journal = JSON.parse(readFileSync(journalPath, 'utf8')) as { entries: unknown[] };
-  journal.entries = journal.entries.slice(0, 1);
+  journal.entries = journal.entries.slice(0, count);
   writeFileSync(journalPath, JSON.stringify(journal));
   const file = join(dir, 'coinio.db');
   const sqlite = new Database(file);
@@ -25,6 +25,9 @@ function v01Database(): string {
   sqlite.close();
   return file;
 }
+
+/** v0.1 (migration 0000 only). */
+const v01Database = () => databaseUpTo(1);
 
 describe('notifications migration', () => {
   it('moves reminder_days into reminder_offsets and the Telegram settings into a channel, keeping payments', () => {
@@ -58,5 +61,50 @@ describe('notifications migration', () => {
   it('creates no channel when Telegram was never set up', () => {
     const db = openDb(v01Database());
     expect(db.select().from(notificationChannels).all()).toEqual([]);
+  });
+});
+
+describe('per-user migration', () => {
+  it('assigns settings, channels and the log to the first user and moves server values to instance_settings', () => {
+    const file = databaseUpTo(3);
+    const raw = new Database(file);
+    raw.exec(`
+      INSERT INTO users (id, username, password_hash, created_at) VALUES (3, 'y', 'x', '2026-01-01'), (5, 'z', 'x', '2026-01-02');
+      INSERT INTO settings (key, value) VALUES ('baseCurrency', 'TRY'), ('appearance', '{"theme":"dark"}'), ('notify', '{}'),
+        ('lastFxDate', '2026-11-20'), ('notifyEnvTelegramSeeded', 'x'), ('onboarded', '1');
+      INSERT INTO notification_channels (id, type, name, enabled, config, secrets, created_at, updated_at)
+        VALUES (7, 'telegram', 'Telegram', 1, '{"chatId":"42"}', '{"botToken":"T"}', 'x', 'x');
+      INSERT INTO notification_log (dedup_key, type, channel_id, title, payload, status, attempts, created_at)
+        VALUES ('k', 'reminder', 7, 't', '{}', 'sent', 1, 'x');
+    `);
+    raw.close();
+
+    const db = openDb(file);
+    const rows = db.select().from(settings).all();
+    expect(rows.map((r) => [r.userId, r.key, r.value]).sort()).toEqual(
+      [
+        [3, 'appearance', '{"theme":"dark"}'],
+        [3, 'baseCurrency', 'TRY'],
+        [3, 'notify', '{}'],
+        [3, 'onboarded', '1'],
+      ].sort(),
+    );
+    expect(db.select().from(instanceSettings).all().map((r) => [r.key, r.value]).sort()).toEqual([
+      ['lastFxDate', '2026-11-20'],
+      ['notifyEnvTelegramSeeded', 'x'],
+    ]);
+    expect(db.select().from(notificationChannels).all()).toEqual([expect.objectContaining({ id: 7, userId: 3 })]);
+    expect(db.select().from(notificationLog).all()).toEqual([expect.objectContaining({ channelId: 7, userId: 3 })]);
+  });
+
+  it('migrates a database that has no user yet', () => {
+    const file = databaseUpTo(3);
+    const raw = new Database(file);
+    raw.exec(`INSERT INTO settings (key, value) VALUES ('lastFxDate', '2026-11-20'), ('baseCurrency', 'EUR');`);
+    raw.close();
+
+    const db = openDb(file);
+    expect(db.select().from(settings).all()).toEqual([]);
+    expect(db.select().from(instanceSettings).all()).toEqual([{ key: 'lastFxDate', value: '2026-11-20' }]);
   });
 });

@@ -2,7 +2,7 @@ import request from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
 import { notificationChannels } from '../src/server/db/schema.js';
 import type { Config } from '../src/server/config.js';
-import { makeTestApp } from './helpers.js';
+import { addUser, makeTestApp } from './helpers.js';
 
 async function login(opts: { status?: number; config?: Partial<Config> } = {}) {
   const fetchMock = vi.fn(async (_url: string, _init: RequestInit) =>
@@ -148,5 +148,34 @@ describe('subscriptions API reminder fields', () => {
     const c = await agent.patch(`/api/subscriptions/${a.body.id}`).send({ reminderOffsets: null, trialEndsAt: null }).expect(200);
     expect(c.body).toMatchObject({ reminderOffsets: null, trialEndsAt: null });
     expect((await agent.post('/api/subscriptions').send({ ...base, reminderOffsets: [61] })).status).toBe(400);
+  });
+});
+
+describe('channels belong to their user', () => {
+  it('hides another user’s channels, secrets and log', async () => {
+    const t = await login();
+    const created = await t.agent.post('/api/notifications/channels').send(telegram).expect(201);
+    const id = created.body.id as number;
+    await t.agent.post(`/api/notifications/channels/${id}/test`).expect(200);
+    const b = addUser(t, 'b');
+    await b.agent.patch(`/api/notifications/channels/${id}`).send({ name: 'x' }).expect(404);
+    await b.agent.delete(`/api/notifications/channels/${id}`).expect(404);
+    await b.agent.post(`/api/notifications/channels/${id}/test`).expect(404);
+    await b.agent.post('/api/notifications/channels/test').send({ ...telegram, id }).expect(404);
+    await b.agent.post('/api/notifications/templates/reminder/test').send({ channelId: id, title: 't', body: 'b' }).expect(404);
+    const page = await b.agent.get('/api/notifications').expect(200);
+    expect(page.body.channels).toEqual([]);
+    expect(JSON.stringify(page.body)).not.toContain('SECRET-TOKEN');
+    expect((await b.agent.get('/api/notifications/log').expect(200)).body).toEqual([]);
+    expect((await t.agent.get('/api/notifications/log').expect(200)).body).toHaveLength(1);
+  });
+
+  it('waits for the first account before turning the Telegram variables into a channel', async () => {
+    const config = { telegramBotToken: 'ENVTOKEN', telegramChatId: '-1009' };
+    const t = makeTestApp({ config });
+    expect(t.db.select().from(notificationChannels).all()).toEqual([]);
+    const agent = request.agent(t.app);
+    const me = await agent.post('/api/auth/setup').send({ username: 'y', password: 'password-123456' }).expect(201);
+    expect(t.db.select().from(notificationChannels).all()).toEqual([expect.objectContaining({ type: 'telegram', userId: me.body.id })]);
   });
 });

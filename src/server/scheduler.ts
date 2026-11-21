@@ -1,9 +1,9 @@
 import { eq } from 'drizzle-orm';
-import { subscriptions } from './db/schema.js';
+import { subscriptions, users } from './db/schema.js';
 import { todayIn } from '../shared/schedule.js';
 import { runAutoPay } from './services/autopay.js';
 import { getRates, refreshRates, type FetchFn } from './services/fx.js';
-import { getInternalValue, getSettings, setInternalValue } from './services/settings.js';
+import { getInstanceValue, getSettings, setInstanceValue } from './services/settings.js';
 import { runNotifications } from './services/notify/index.js';
 import type { ServiceCtx } from './services/context.js';
 
@@ -11,28 +11,31 @@ import type { ServiceCtx } from './services/context.js';
 const triedToday = new Set<string>();
 
 /**
- * Refresh FX rates for the currencies of active subscriptions once per local day, and fetch a
- * currency the same day it first appears (a new foreign subscription) instead of waiting for tomorrow.
+ * Refresh FX rates once per UTC day for every main currency in use and the currencies of active
+ * subscriptions, and fetch a currency the same day it first appears instead of waiting for tomorrow.
  */
 async function refreshRatesDaily(ctx: ServiceCtx): Promise<void> {
-  const { timezone, baseCurrency } = getSettings(ctx);
-  const today = todayIn(timezone, ctx.now());
+  const today = todayIn('UTC', ctx.now());
+  const bases = [...new Set(ctx.db.select({ id: users.id }).from(users).all().map((u) => getSettings(ctx, u.id).baseCurrency))];
   const currencies = ctx.db
     .selectDistinct({ currency: subscriptions.currency })
     .from(subscriptions)
     .where(eq(subscriptions.active, true))
     .all()
     .map((r) => r.currency);
-  if (getInternalValue(ctx, 'lastFxDate') === today) {
-    const cached = getRates(ctx.db, baseCurrency, today).rates;
-    const missing = currencies.filter((c) => c !== baseCurrency && !(c in cached) && !triedToday.has(`${today}:${baseCurrency}:${c}`));
-    if (missing.length === 0) return;
-    missing.forEach((c) => triedToday.add(`${today}:${baseCurrency}:${c}`));
-    await refreshRates(ctx.db, baseCurrency, missing, ctx.fetch as FetchFn, today);
-    return;
+  const fresh = getInstanceValue(ctx, 'lastFxDate') !== today;
+  for (const base of bases) {
+    if (fresh) {
+      await refreshRates(ctx.db, base, currencies, ctx.fetch as FetchFn, today);
+      continue;
+    }
+    const cached = getRates(ctx.db, base, today).rates;
+    const missing = currencies.filter((c) => c !== base && !(c in cached) && !triedToday.has(`${today}:${base}:${c}`));
+    if (missing.length === 0) continue;
+    missing.forEach((c) => triedToday.add(`${today}:${base}:${c}`));
+    await refreshRates(ctx.db, base, missing, ctx.fetch as FetchFn, today);
   }
-  await refreshRates(ctx.db, baseCurrency, currencies, ctx.fetch as FetchFn, today);
-  setInternalValue(ctx, 'lastFxDate', today);
+  if (fresh && bases.length > 0) setInstanceValue(ctx, 'lastFxDate', today);
 }
 
 /**

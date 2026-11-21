@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { eq } from 'drizzle-orm';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { payments, settings, subscriptions, users } from '../src/server/db/schema.js';
+import { instanceSettings, payments, settings, subscriptions, users } from '../src/server/db/schema.js';
 import { startScheduler } from '../src/server/scheduler.js';
 import { runAutoPay } from '../src/server/services/autopay.js';
 import type { ServiceCtx } from '../src/server/services/context.js';
@@ -15,7 +15,7 @@ function setup(now = '2026-11-18T09:00:00Z') {
   const t = makeTestApp({ now: new Date(now) });
   const ctx: ServiceCtx = { db: t.db, config: t.config, fetch, now: () => t.clock.now };
   const user = t.db.insert(users).values({ username: 'y', passwordHash: 'x', createdAt: now }).returning().get();
-  t.db.insert(settings).values({ key: 'baseCurrency', value: 'TRY' }).run(); // scenarios below are priced in lira
+  t.db.insert(settings).values({ userId: user.id, key: 'baseCurrency', value: 'TRY' }).run(); // scenarios below are priced in lira
   const add = (over: Partial<typeof subscriptions.$inferInsert> = {}) =>
     t.db
       .insert(subscriptions)
@@ -82,8 +82,8 @@ describe('runAutoPay', () => {
   });
 
   it('uses configured timezone for today', () => {
-    const { ctx, db, add } = setup('2026-11-18T21:30:00Z');
-    db.insert(settings).values({ key: 'timezone', value: 'Europe/Istanbul' }).run();
+    const { ctx, db, add, user } = setup('2026-11-18T21:30:00Z');
+    db.insert(settings).values({ userId: user.id, key: 'timezone', value: 'Europe/Istanbul' }).run();
     add({ nextDue: '2026-11-19', anchorDay: 19 });
     expect(runAutoPay(ctx)).toBe(1);
     expect(db.select().from(payments).get()!.dueDate).toBe('2026-11-19');
@@ -116,7 +116,7 @@ describe('startScheduler', () => {
     await vi.advanceTimersByTimeAsync(0);
     expect(onTick).toHaveBeenCalledTimes(1);
     expect(f).toHaveBeenCalledTimes(1);
-    expect(db.select().from(settings).where(eq(settings.key, 'lastFxDate')).get()?.value).toBe('2026-11-18');
+    expect(db.select().from(instanceSettings).where(eq(instanceSettings.key, 'lastFxDate')).get()?.value).toBe('2026-11-18');
     await vi.advanceTimersByTimeAsync(2000);
     expect(onTick).toHaveBeenCalledTimes(3);
     expect(f).toHaveBeenCalledTimes(1);
@@ -128,13 +128,13 @@ describe('startScheduler', () => {
   it('keeps lastFxDate out of GET /api/settings', async () => {
     vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
     const { app, db, config, clock } = makeTestApp();
-    const ctx: ServiceCtx = { db, config, fetch, now: () => clock.now };
-    const stop = startScheduler(ctx);
-    await vi.waitFor(() => expect(db.select().from(settings).where(eq(settings.key, 'lastFxDate')).get()).toBeTruthy());
-    stop();
-    vi.useRealTimers();
     const agent = request.agent(app);
     await agent.post('/api/auth/setup').send({ username: 'yakup', password: 'correct horse battery' });
+    const ctx: ServiceCtx = { db, config, fetch, now: () => clock.now };
+    const stop = startScheduler(ctx);
+    await vi.waitFor(() => expect(db.select().from(instanceSettings).where(eq(instanceSettings.key, 'lastFxDate')).get()).toBeTruthy());
+    stop();
+    vi.useRealTimers();
     const res = await agent.get('/api/settings');
     expect(res.status).toBe(200);
     expect(res.body).not.toHaveProperty('lastFxDate');
