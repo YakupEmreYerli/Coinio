@@ -14,7 +14,22 @@ export type CoinioPlugin = {
   onTick?(ctx: ServiceCtx): Promise<void> | void;
   /** Called after the built-in rows of a user were deleted. */
   onUserDeleted?(ctx: ServiceCtx, userId: number): void;
+  /**
+   * The server's own mailer: enables the "account" notification channel, which mails the user's address
+   * without any SMTP settings. `send` may throw an error with `transient: true` to have it retried.
+   */
+  mailer?: PluginMailer;
 };
+
+export type PluginMailer = {
+  address(ctx: ServiceCtx, userId: number): string | null;
+  send(ctx: ServiceCtx, userId: number, msg: { subject: string; text: string; html: string }): Promise<void>;
+};
+
+/** The first plugin mailer, if any. */
+export function pluginMailer(ctx: ServiceCtx): PluginMailer | null {
+  return (ctx.plugins ?? []).find((p) => p.mailer)?.mailer ?? null;
+}
 
 /** Whether every plugin lets this user in. */
 export function userAllowed(ctx: ServiceCtx, userId: number): boolean {

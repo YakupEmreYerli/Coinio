@@ -3,10 +3,13 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { ext } from '@coinio/ext';
 import { addMessages, t } from '../i18n';
 import { Login } from '../routes/Login';
-import { renderApp } from './render';
+import { render } from '@testing-library/react';
+import { App } from '../App';
+import { mockApi, renderApp } from './render';
 
 afterEach(() => {
   delete ext.SignInExtras;
+  delete ext.publicRoutes;
 });
 
 describe('web extension points', () => {
@@ -24,5 +27,15 @@ describe('web extension points', () => {
   it('adds messages that win over the built-in ones', () => {
     addMessages({ en: { 'ext.test.hello': 'Hello' } });
     expect(t('ext.test.hello')).toBe('Hello');
+  });
+});
+
+describe('extension routes', () => {
+  it('replace a built-in page with the same path', async () => {
+    mockApi({ 'GET /api/auth/state': { setupRequired: false, user: null } });
+    ext.publicRoutes = [{ path: '/login', Component: () => <p>Custom sign-in</p> }];
+    window.history.pushState({}, '', '/login');
+    render(<App />);
+    expect(await screen.findByText('Custom sign-in')).toBeInTheDocument();
   });
 });

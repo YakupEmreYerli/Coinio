@@ -10,6 +10,8 @@ export type NotificationsPage = {
   templates: Record<NotifyType, TemplateText & { custom: boolean }>;
   defaults: TemplateSet;
   appUrl: string | null;
+  /** The signed-in user's address when the server can mail it without settings. */
+  accountMail?: string | null;
 };
 
 export type { Appearance, CardId } from '../../shared/appearance';

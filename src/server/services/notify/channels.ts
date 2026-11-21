@@ -4,6 +4,7 @@ import { notificationChannels, users } from '../../db/schema.js';
 import { CHANNEL_FIELDS, CHANNEL_TYPES, parseChannelValues, type ApiChannel, type ChannelType } from '../../../shared/notify/types.js';
 import type { ServiceCtx } from '../context.js';
 import { getInstanceValue, setInstanceValue } from '../settings.js';
+import { pluginMailer } from '../../plugins.js';
 import { NotFoundError, checkLimit } from '../errors.js';
 
 export type ChannelRow = typeof notificationChannels.$inferSelect;
@@ -66,6 +67,9 @@ const mergeSecrets = (old: Record<string, string>, next: Record<string, string |
 /** A channel built from the form without saving it (for "Send test" before saving); an id fills in saved secrets. */
 export function draftChannel(ctx: ServiceCtx, userId: number, input: unknown, id?: number): ChannelRow {
   const v = ChannelInput.parse(input);
+  if (v.type === 'account' && !pluginMailer(ctx)) {
+    throw new z.ZodError([{ code: 'custom', path: ['type'], message: 'This server has no mailer', input: v.type }]);
+  }
   const saved = id === undefined ? null : getChannel(ctx, userId, id);
   const keep = saved && saved.type === v.type ? Object.keys(saved.secrets) : [];
   const parsed = parseChannelValues(v.type, v.config, v.secrets, keep);

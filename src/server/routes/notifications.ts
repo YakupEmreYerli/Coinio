@@ -11,6 +11,7 @@ import { getSettings } from '../services/settings.js';
 import { defaultTemplates } from '../../shared/notify/defaults.js';
 import { NOTIFY_TYPES, TemplateText } from '../../shared/notify/types.js';
 import { toLocale } from '../i18n/index.js';
+import { pluginMailer } from '../plugins.js';
 
 const idParam = z.coerce.number().int().positive();
 const typeParam = z.enum(NOTIFY_TYPES);
@@ -47,6 +48,7 @@ export function notificationsRouter(ctx: ServiceCtx): Router {
       templates: Object.fromEntries(NOTIFY_TYPES.map((t) => [t, { ...(overrides[t] ?? defaults[t]), custom: t in overrides }])),
       defaults,
       appUrl: ctx.config.publicUrl,
+      accountMail: pluginMailer(ctx)?.address(ctx, req.userId!) ?? null,
     });
   }));
 

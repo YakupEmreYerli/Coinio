@@ -36,13 +36,13 @@ function SignedIn({ user }: { user: { id: number; username: string } }) {
       <Routes>
         <Route path="/welcome" element={<Welcome onDone={() => navigate('/', { replace: true })} />} />
         <Route element={<AppShell user={user} onLogout={() => window.location.assign('/login')} />}>
+          {ext.routes?.map((r) => <Route key={r.path} path={r.path} element={<r.Component />} />)}
           <Route path="/" element={<Dashboard />} />
           <Route path="/subscriptions/:id?" element={<Subscriptions />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/settings/:section?" element={<SettingsLayout />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/reports" element={<Reports />} />
-          {ext.routes?.map((r) => <Route key={r.path} path={r.path} element={<r.Component />} />)}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
@@ -75,11 +75,11 @@ export function App() {
         <SignedIn user={auth.user} />
       ) : (
         <Routes>
+          {ext.publicRoutes?.map((r) => <Route key={r.path} path={r.path} element={<r.Component />} />)}
           <Route
             path="/setup"
             element={auth.setupRequired ? ext.SetupScreen ? <ext.SetupScreen /> : <Setup onDone={() => location.assign('/')} /> : <Navigate to="/login" replace />}
           />
-          {ext.publicRoutes?.map((r) => <Route key={r.path} path={r.path} element={<r.Component />} />)}
           <Route path="/login" element={auth.setupRequired ? <Navigate to="/setup" replace /> : <Login />} />
           <Route path="*" element={<Navigate to={auth.setupRequired ? '/setup' : '/login'} replace />} />
         </Routes>

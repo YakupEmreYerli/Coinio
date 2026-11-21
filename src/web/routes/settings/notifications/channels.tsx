@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { Bell, BellRing, CheckCircle2, Hash, Layers, Mail, MessageSquare, Pencil, Plus, Send, Smartphone, Webhook, XCircle, type LucideIcon } from 'lucide-react';
+import { AtSign, Bell, BellRing, CheckCircle2, Hash, Layers, Mail, MessageSquare, Pencil, Plus, Send, Smartphone, Webhook, XCircle, type LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import { api, ApiError } from '../../../api';
 import { Button } from '../../../components/ui/Button';
@@ -19,7 +19,7 @@ import { CHANNEL_FIELDS, CHANNEL_TYPES, type ChannelField, type ChannelType } fr
 import { Section } from '../Section';
 
 export const CHANNEL_ICONS: Record<ChannelType, LucideIcon> = {
-  email: Mail, telegram: Send, discord: MessageSquare, slack: Hash, ntfy: Bell, gotify: BellRing, pushover: Smartphone, webhook: Webhook, apprise: Layers,
+  email: Mail, telegram: Send, discord: MessageSquare, slack: Hash, ntfy: Bell, gotify: BellRing, pushover: Smartphone, webhook: Webhook, apprise: Layers, account: AtSign,
 };
 
 export const channelLabel = (type: ChannelType) => t(`notify.type.${type}`);
@@ -93,7 +93,7 @@ function FieldInput({ field, value, saved, onChange }: { field: ChannelField; va
 
 type TestState = { ok: true } | { ok: false; message: string } | null;
 
-function ChannelDialog({ open, onOpenChange, channel }: { open: boolean; onOpenChange: (v: boolean) => void; channel: ApiChannel | null }) {
+function ChannelDialog({ open, onOpenChange, channel, accountMail }: { open: boolean; onOpenChange: (v: boolean) => void; channel: ApiChannel | null; accountMail: string | null }) {
   const qc = useQueryClient();
   const [draft, setDraft] = useState<Draft | null>(channel ? fromChannel(channel) : null);
   const [busy, setBusy] = useState<'save' | 'test' | null>(null);
@@ -156,7 +156,7 @@ function ChannelDialog({ open, onOpenChange, channel }: { open: boolean; onOpenC
         {!draft ? (
           <DialogBody>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {CHANNEL_TYPES.map((type) => {
+              {CHANNEL_TYPES.filter((type) => type !== 'account' || accountMail).map((type) => {
                 const Icon = CHANNEL_ICONS[type];
                 return (
                   <button
@@ -182,6 +182,7 @@ function ChannelDialog({ open, onOpenChange, channel }: { open: boolean; onOpenC
           >
             <DialogBody>
               <Input label={t('notify.channelName')} value={draft.name} maxLength={60} onChange={(e) => set({ name: e.target.value })} />
+              {draft.type === 'account' && <p className="text-[13px] text-text-2">{t('notify.account.hint', { address: accountMail ?? '' })}</p>}
               {CHANNEL_FIELDS[draft.type].map((f) => (
                 <FieldInput
                   key={f.key}
@@ -233,7 +234,7 @@ function ChannelDialog({ open, onOpenChange, channel }: { open: boolean; onOpenC
   );
 }
 
-export function ChannelsCard({ channels }: { channels: ApiChannel[] }) {
+export function ChannelsCard({ channels, accountMail = null }: { channels: ApiChannel[]; accountMail?: string | null }) {
   const qc = useQueryClient();
   const [editing, setEditing] = useState<{ channel: ApiChannel | null; key: number } | null>(null);
   const toggle = async (c: ApiChannel, enabled: boolean) => {
@@ -278,7 +279,7 @@ export function ChannelsCard({ channels }: { channels: ApiChannel[] }) {
           })}
         </ul>
       )}
-      {editing && <ChannelDialog key={editing.key} open onOpenChange={(v) => !v && setEditing(null)} channel={editing.channel} />}
+      {editing && <ChannelDialog key={editing.key} open onOpenChange={(v) => !v && setEditing(null)} channel={editing.channel} accountMail={accountMail} />}
     </Section>
   );
 }

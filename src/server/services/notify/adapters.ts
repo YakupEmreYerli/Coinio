@@ -5,6 +5,7 @@ import { renderTemplate, type Format, type TemplateVars } from '../../../shared/
 import { CHANNEL_FORMATS, parseHeaderLines, type ChannelType, type ChannelValues, type NotifyType } from '../../../shared/notify/types.js';
 import type { ServiceCtx } from '../context.js';
 import { BlockedAddressError, assertPublicSmtpHost, guardedFetch } from '../netGuard.js';
+import { pluginMailer } from '../../plugins.js';
 
 export class DeliveryError extends Error {
   constructor(message: string, readonly transient: boolean) {
@@ -24,7 +25,7 @@ export type OutMessage = {
 };
 
 type Secrets = Record<string, string>;
-type Send = (ctx: ServiceCtx, config: ChannelValues, secrets: Secrets, msg: OutMessage) => Promise<void>;
+type Send = (ctx: ServiceCtx, config: ChannelValues, secrets: Secrets, msg: OutMessage, ownerId?: number) => Promise<void>;
 
 /** The body format each channel is rendered in (plus plain text, always). */
 export const bodyFormat = (type: ChannelType): Format => CHANNEL_FORMATS[type];
@@ -176,9 +177,7 @@ const email: Send = async (ctx, c, s, m) => {
       to: str(c.to),
       subject: m.title,
       text: m.text,
-      html:
-        '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;font-size:15px;line-height:1.55;color:#1b1b1f">' +
-        `<p style="font-size:17px;font-weight:600;margin:0 0 12px">${escapeHtml(m.title)}</p>${m.body}</div>`,
+      html: mailHtml(m),
     });
   } catch (err) {
     const e = err as { message?: string; responseCode?: number; code?: string };
@@ -190,4 +189,19 @@ const email: Send = async (ctx, c, s, m) => {
   }
 };
 
-export const ADAPTERS: Record<ChannelType, Send> = { email, telegram, discord, slack, ntfy, gotify, pushover, webhook, apprise };
+const mailHtml = (m: OutMessage) =>
+  '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;font-size:15px;line-height:1.55;color:#1b1b1f">' +
+  `<p style="font-size:17px;font-weight:600;margin:0 0 12px">${escapeHtml(m.title)}</p>${m.body}</div>`;
+
+const account: Send = async (ctx, _c, _s, m, ownerId) => {
+  const mailer = pluginMailer(ctx);
+  if (!mailer || ownerId === undefined) throw new DeliveryError('This server has no mailer', false);
+  try {
+    await mailer.send(ctx, ownerId, { subject: m.title, text: m.text, html: mailHtml(m) });
+  } catch (err) {
+    const e = err as { message?: string; transient?: boolean };
+    throw new DeliveryError(e.message ?? String(err), e.transient === true);
+  }
+};
+
+export const ADAPTERS: Record<ChannelType, Send> = { email, telegram, discord, slack, ntfy, gotify, pushover, webhook, apprise, account };

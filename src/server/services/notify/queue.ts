@@ -29,7 +29,7 @@ export function renderMessage(channelType: ChannelType, type: NotifyType, tpl: T
 /** Sends right away (tests and "Send test"); null on success, otherwise the error text. */
 export async function sendDirect(ctx: ServiceCtx, channel: ChannelRow, msg: OutMessage): Promise<string | null> {
   try {
-    await ADAPTERS[channel.type as ChannelType](ctx, channel.config, channel.secrets, msg);
+    await ADAPTERS[channel.type as ChannelType](ctx, channel.config, channel.secrets, msg, channel.userId);
     return null;
   } catch (err) {
     return err instanceof DeliveryError ? err.message : String((err as Error)?.message ?? err);
@@ -107,7 +107,7 @@ export async function deliverQueued(ctx: ServiceCtx): Promise<number> {
     let error: string | null = null;
     let transient = false;
     try {
-      await ADAPTERS[channel.type as ChannelType](ctx, channel.config, channel.secrets, log.payload as unknown as OutMessage);
+      await ADAPTERS[channel.type as ChannelType](ctx, channel.config, channel.secrets, log.payload as unknown as OutMessage, channel.userId);
     } catch (err) {
       error = err instanceof DeliveryError ? err.message : String((err as Error)?.message ?? err);
       transient = err instanceof DeliveryError ? err.transient : false;

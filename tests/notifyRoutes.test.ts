@@ -179,3 +179,37 @@ describe('channels belong to their user', () => {
     expect(t.db.select().from(notificationChannels).all()).toEqual([expect.objectContaining({ type: 'telegram', userId: me.body.id })]);
   });
 });
+
+describe('account mail channel', () => {
+  it('is refused when no plugin provides a mailer', async () => {
+    const t = await login();
+    await t.agent.post('/api/notifications/channels').send({ type: 'account', name: 'Mail' }).expect(400);
+    expect((await t.agent.get('/api/notifications').expect(200)).body.accountMail).toBeNull();
+  });
+
+  it('sends through the plugin mailer', async () => {
+    const send = vi.fn(async () => {});
+    const base = makeTestApp();
+    const { createApp } = await import('../src/server/app.js');
+    const plugins = [{ name: 't', mailer: { address: () => 'me@example.com', send } }];
+    const app = createApp({ db: base.db, config: base.config, now: () => base.clock.now, plugins });
+    const a = addUser({ ...base, app }, 'a');
+    expect((await a.agent.get('/api/notifications').expect(200)).body.accountMail).toBe('me@example.com');
+    const ch = await a.agent.post('/api/notifications/channels').send({ type: 'account', name: 'Mail' }).expect(201);
+    await a.agent.post(`/api/notifications/channels/${ch.body.id}/test`).expect(200);
+    expect(send).toHaveBeenCalledWith(expect.anything(), a.id, expect.objectContaining({ subject: expect.any(String), text: expect.any(String), html: expect.any(String) }));
+  });
+
+  it('passes on a mailer error and whether it is worth a retry', async () => {
+    const send = vi.fn(async () => {
+      throw Object.assign(new Error('Daily mail limit reached'), { transient: false });
+    });
+    const base = makeTestApp();
+    const { createApp } = await import('../src/server/app.js');
+    const app = createApp({ db: base.db, config: base.config, now: () => base.clock.now, plugins: [{ name: 't', mailer: { address: () => 'me@example.com', send } }] });
+    const a = addUser({ ...base, app }, 'a');
+    const ch = await a.agent.post('/api/notifications/channels').send({ type: 'account', name: 'Mail' }).expect(201);
+    const res = await a.agent.post(`/api/notifications/channels/${ch.body.id}/test`).expect(502);
+    expect(res.body.message).toBe('Daily mail limit reached');
+  });
+});

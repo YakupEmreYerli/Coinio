@@ -4,7 +4,7 @@ import { templateError } from './template';
 export const NOTIFY_TYPES = ['reminder', 'dueToday', 'overdue', 'digest', 'trialEnding', 'budgetExceeded', 'priceChange', 'test'] as const;
 export type NotifyType = (typeof NOTIFY_TYPES)[number];
 
-export const CHANNEL_TYPES = ['email', 'telegram', 'discord', 'slack', 'ntfy', 'gotify', 'pushover', 'webhook', 'apprise'] as const;
+export const CHANNEL_TYPES = ['email', 'telegram', 'discord', 'slack', 'ntfy', 'gotify', 'pushover', 'webhook', 'apprise', 'account'] as const;
 export type ChannelType = (typeof CHANNEL_TYPES)[number];
 
 export type ChannelField = {
@@ -20,6 +20,8 @@ export type ChannelField = {
 
 /** Every channel's settings, in form order. Labels come from the `notify.field.<key>` strings. */
 export const CHANNEL_FIELDS: Record<ChannelType, ChannelField[]> = {
+  /** Mail to the account's own address through the server's mailer; only when a plugin provides one. */
+  account: [],
   email: [
     { key: 'host', kind: 'text', required: true, placeholder: 'smtp.example.com' },
     { key: 'port', kind: 'number', required: true, default: 587 },
@@ -235,6 +237,7 @@ export const CHANNEL_FORMATS: Record<ChannelType, 'markdown' | 'telegram' | 'sla
   pushover: 'telegram',
   webhook: 'text',
   apprise: 'markdown',
+  account: 'html',
 };
 
 /** One channel as the API returns it: secrets only as "saved" flags. */

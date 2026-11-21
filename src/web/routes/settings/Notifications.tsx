@@ -41,7 +41,7 @@ export function Notifications() {
 
   return (
     <div className="flex flex-col gap-[var(--gap)]">
-      <ChannelsCard channels={page.channels} />
+      <ChannelsCard channels={page.channels} accountMail={page.accountMail ?? null} />
       <RemindersCard {...common} reminderTime={time} onTimeChange={setTime} />
       <DigestsCard {...common} />
       <AlertsCard {...common} base={s.baseCurrency} />
