@@ -6,8 +6,9 @@ import { AuthForm } from './AuthForm';
 const RESET_DOCS = 'https://docs.getcoinio.me/docs/reference/troubleshooting#i-forgot-my-password';
 
 /** Only same-origin relative paths are followed; anything else falls back to the dashboard. */
+/** Only same-site paths. Control characters are refused too: browsers drop them, so "/\t/x" would become "//x". */
 export function safeNext(raw: string | null): string {
-  return raw && raw.startsWith('/') && !raw.startsWith('//') && !raw.includes('\\') ? raw : '/';
+  return raw && raw.startsWith('/') && !raw.startsWith('//') && !/[\\\x00-\x1f\x7f]/.test(raw) ? raw : '/';
 }
 
 export function Login() {
