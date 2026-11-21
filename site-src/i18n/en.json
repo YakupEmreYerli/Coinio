@@ -59,7 +59,7 @@
   "features.remindersTitle": "Reminders before the charge",
   "features.remindersBody": "Every due date on one calendar. Email, Telegram, Discord or Slack warn you days before anything renews, with several reminders per subscription if you like.",
   "features.currencyTitle": "Any currency",
-  "features.currencyBody": "Netflix in lira, ChatGPT in dollars, hosting in euros. Daily rates roll it all into one total in your own currency.",
+  "features.currencyBody": "Netflix in pounds, ChatGPT in dollars, hosting in euros. Daily rates roll it all into one total in your own currency.",
   "features.catalogTitle": "161 services built in",
   "features.catalogBody": "Type \"spot\" and Spotify fills in with its logo, category and billing cycle. Anything else gets its own site's icon.",
   "features.aiTitle": "Ask Claude or ChatGPT",

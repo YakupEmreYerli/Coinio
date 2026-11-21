@@ -1,20 +1,12 @@
 import { formatMinor } from '../../shared/money';
-import { siIcloud, siNetflix, siSpotify } from 'simple-icons';
+import { siIcloud, siNetflix, siSpotify, siYoutube, type SimpleIcon } from 'simple-icons';
+import { SAMPLE_CURRENCY, samplesFor } from '../../shared/sampleData';
 import type { ReactNode } from 'react';
 import { SlicedMark } from '../brand/SlicedMark';
 import { LOCALES, LOCALE_NAMES, getLocale, isLocale, setLocale, t, useLocale } from '../i18n';
 import { Select } from '../components/ui/Select';
 import { Wordmark } from '../layout/Wordmark';
 import { cn } from '../lib/cn';
-import { guessCurrency } from '../components/pickers/data';
-
-const PREVIEW_PRICES: Record<string, [number, number, number]> = {
-  TRY: [22999, 9999, 3999],
-  USD: [1549, 1199, 299],
-  EUR: [1399, 1099, 299],
-  GBP: [1299, 1199, 299],
-  JPY: [1590, 1080, 150],
-};
 
 function BrandIcon({ path, hex }: { path: string; hex: string }) {
   return (
@@ -26,19 +18,19 @@ function BrandIcon({ path, hex }: { path: string; hex: string }) {
   );
 }
 
-/** A still frame of the product: the next three renewals, in the visitor's language and likely currency. */
+const PREVIEW_ICONS: Record<string, SimpleIcon> = { Netflix: siNetflix, Spotify: siSpotify, 'iCloud+': siIcloud, 'YouTube Premium': siYoutube };
+
+/** A still frame of the product: the next three renewals, with the services, prices and currency of the chosen language. */
 function PreviewCard() {
   const { locale } = useLocale();
-  const currency = guessCurrency();
-  const prices = PREVIEW_PRICES[currency] ?? PREVIEW_PRICES.USD!;
-  const cur = PREVIEW_PRICES[currency] ? currency : 'USD';
+  const cur = SAMPLE_CURRENCY[locale];
   const money = (minor: number) => formatMinor(minor, cur, locale);
-  const rows = [
-    { icon: siNetflix, name: 'Netflix', due: t('auth.preview.in', { n: 3 }), amount: prices[0] },
-    { icon: siSpotify, name: 'Spotify', due: t('auth.preview.in', { n: 9 }), amount: prices[1] },
-    { icon: siIcloud, name: 'iCloud+', due: t('auth.preview.in', { n: 14 }), amount: prices[2] },
-  ];
-  const total = prices.reduce((a, b) => a + b, 0);
+  const rows = samplesFor(locale, cur)
+    .filter((s) => PREVIEW_ICONS[s.name] && s.currency === cur)
+    .sort((a, b) => a.dueIn - b.dueIn)
+    .slice(0, 3)
+    .map((s) => ({ icon: PREVIEW_ICONS[s.name]!, name: s.name, due: t('auth.preview.in', { n: s.dueIn }), amount: s.amountMinor }));
+  const total = rows.reduce((a, r) => a + r.amount, 0);
   return (
     <div className="w-full max-w-[360px] rounded-[16px] text-left border border-white/10 bg-[linear-gradient(180deg,rgb(18_20_30/0.92),rgb(10_11_17/0.94))] p-1.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.05),0_30px_80px_-30px_rgb(79_91_213/0.5)]" aria-hidden>
       <div className="flex items-baseline justify-between px-3.5 pt-3 pb-2.5">
