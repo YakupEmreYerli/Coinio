@@ -11,6 +11,7 @@ Coinio is configured with environment variables. Everything else (currency, time
 | `COINIO_TELEGRAM_BOT_TOKEN` | not set | Telegram bot token. With the chat ID, creates a Telegram channel on first start; then manage it in **Settings › Notifications**. |
 | `COINIO_TELEGRAM_CHAT_ID` | not set | Telegram chat ID for that channel. |
 | `COINIO_TELEGRAM_THREAD_ID` | not set | Optional topic ID for forum groups (Telegram's `message_thread_id`). |
+| `COINIO_BLOCK_PRIVATE_NETWORKS` | off | Set to `1` to stop notification channels (webhooks, ntfy, Gotify, Apprise, SMTP) from reaching loopback, private and link-local addresses. Turn it on if people you do not fully trust can edit notification channels. Leave it off if you send to a server on your own network. |
 | `PORT` | `8080` | Port the server listens on inside the container. |
 | `COINIO_DATA_DIR` | `/data` | Folder for the database (`coinio.db`) and logos (`logos/`). |
 | `COINIO_WEB_DIR` | built-in | Folder with the built web app. Only useful for development; the image ships with it. |

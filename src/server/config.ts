@@ -10,6 +10,8 @@ export type Config = {
   migrationsDir: string;
   /** Built web UI; served only when it contains index.html. */
   webDir: string;
+  /** Refuse requests to private networks from notification channels (COINIO_BLOCK_PRIVATE_NETWORKS). */
+  blockPrivateNetworks: boolean;
 };
 
 type Env = Record<string, string | undefined>;
@@ -34,5 +36,6 @@ export function loadConfig(env: Env = process.env): Config {
     telegramThreadId: orNull(env.COINIO_TELEGRAM_THREAD_ID),
     migrationsDir: fileURLToPath(new URL('./db/migrations', import.meta.url)),
     webDir: orNull(env.COINIO_WEB_DIR) ?? fileURLToPath(new URL('../web', import.meta.url)),
+    blockPrivateNetworks: ['1', 'true', 'yes'].includes((env.COINIO_BLOCK_PRIVATE_NETWORKS ?? '').toLowerCase()),
   };
 }

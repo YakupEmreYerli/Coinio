@@ -4,6 +4,7 @@ import nodemailer from 'nodemailer';
 import { renderTemplate, type Format, type TemplateVars } from '../../../shared/notify/template.js';
 import { CHANNEL_FORMATS, parseHeaderLines, type ChannelType, type ChannelValues, type NotifyType } from '../../../shared/notify/types.js';
 import type { ServiceCtx } from '../context.js';
+import { BlockedAddressError, assertPublicSmtpHost, guardedFetch } from '../netGuard.js';
 
 export class DeliveryError extends Error {
   constructor(message: string, readonly transient: boolean) {
@@ -48,8 +49,9 @@ function detailOf(text: string): string {
 async function http(ctx: ServiceCtx, url: string, init: RequestInit & { headers?: Record<string, string> }): Promise<void> {
   let res: Response;
   try {
-    res = await ctx.fetch(url, { ...init, signal: AbortSignal.timeout(TIMEOUT_MS) });
+    res = await guardedFetch(ctx, url, { ...init, signal: AbortSignal.timeout(TIMEOUT_MS) });
   } catch (err) {
+    if (err instanceof BlockedAddressError) throw new DeliveryError(err.message, false);
     const cause = (err as { cause?: { code?: string; message?: string } }).cause;
     const reason = (err as Error).name === 'TimeoutError' ? 'timed out' : (cause?.code ?? cause?.message ?? (err as Error).message);
     throw new DeliveryError(`Could not reach ${new URL(url).host}: ${reason}`, true);
@@ -146,10 +148,19 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-const email: Send = async (_ctx, c, s, m) => {
+const email: Send = async (ctx, c, s, m) => {
   const security = str(c.security);
+  const name = str(c.host);
+  let host: string;
+  try {
+    host = await assertPublicSmtpHost(ctx, name);
+  } catch (err) {
+    if (err instanceof BlockedAddressError) throw new DeliveryError(err.message, false);
+    throw err;
+  }
   const transport = nodemailer.createTransport({
-    host: str(c.host),
+    host,
+    ...(host !== name ? { tls: { servername: name } } : {}),
     port: Number(c.port),
     secure: security === 'tls',
     requireTLS: security === 'starttls',

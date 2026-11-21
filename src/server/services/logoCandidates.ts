@@ -1,8 +1,9 @@
 import { createHash } from 'node:crypto';
-import { lookup as dnsLookup } from 'node:dns/promises';
-import { isIP } from 'node:net';
 import * as simpleIcons from 'simple-icons';
-import type { LookupFn, ServiceCtx } from './context.js';
+import type { ServiceCtx } from './context.js';
+import { isPublicHost } from './netGuard.js';
+
+export { isPublicHost };
 import { MAX_LOGO_BYTES, fetchLogo, readCapped, sniffLogoExt, writeLogoFile, type LogoExt } from './logos.js';
 
 export type LogoCandidate = {
@@ -85,30 +86,6 @@ export function brandSvg(slug: string, style: BrandStyle = 'filled'): string | n
   const bg = style === 'filled' ? `#${b.hex}` : '#ffffff';
   const fg = style === 'filled' ? (lum > 0.6 ? '#111111' : '#ffffff') : lum > 0.85 ? '#111111' : `#${b.hex}`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="256" height="256"><rect width="24" height="24" fill="${bg}"/><g transform="translate(5 5) scale(0.5833)"><path fill="${fg}" d="${b.path}"/></g></svg>`;
-}
-
-function isPrivateAddress(address: string): boolean {
-  const mapped = address.toLowerCase().match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
-  const ip = mapped ? mapped[1]! : address;
-  if (isIP(ip) === 4) {
-    const [a, b] = ip.split('.').map(Number) as [number, number];
-    return a === 0 || a === 10 || a === 127 || a >= 224 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127);
-  }
-  const v6 = ip.toLowerCase();
-  return v6 === '::' || v6 === '::1' || /^f[cd]/.test(v6) || /^fe[89ab]/.test(v6);
-}
-
-const systemLookup: LookupFn = (host) => dnsLookup(host, { all: true });
-
-/** Only dotted names that resolve exclusively to public addresses; keeps the server from probing its own network. */
-export async function isPublicHost(ctx: ServiceCtx, host: string): Promise<boolean> {
-  if (!host.includes('.') || isIP(host) !== 0) return false;
-  try {
-    const addrs = await (ctx.lookup ?? systemLookup)(host);
-    return addrs.length > 0 && addrs.every((a) => !isPrivateAddress(a.address));
-  } catch {
-    return false;
-  }
 }
 
 // Many sites (Trendyol among them) answer 403 to a bare Node fetch; ask like a browser does.

@@ -149,3 +149,33 @@ describe('channel adapters', () => {
     expect(createTransport).toHaveBeenCalledWith(expect.objectContaining({ secure: false, requireTLS: true, auth: undefined }));
   });
 });
+
+describe('private network guard', () => {
+  const guarded = (fetch = vi.fn(async () => new Response('{}'))) =>
+    ({
+      fetch: fetch as unknown as typeof globalThis.fetch,
+      config: { blockPrivateNetworks: true },
+      lookup: async (host: string) => [{ address: host === 'smtp.internal.example' ? '10.0.0.2' : '93.184.216.34', family: 4 }],
+    }) as unknown as ServiceCtx;
+
+  it('refuses a webhook on a private address, without retrying', async () => {
+    const fetch = vi.fn(async () => new Response('{}'));
+    const err = (await ADAPTERS.webhook(guarded(fetch), { url: 'http://169.254.169.254/latest', method: 'POST' }, {}, msg).catch((e: unknown) => e)) as InstanceType<typeof DeliveryError>;
+    expect(err).toBeInstanceOf(DeliveryError);
+    expect(err.message).toMatch(/^Blocked: .* private network/);
+    expect(err.transient).toBe(false);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('refuses an SMTP host on a private address', async () => {
+    const err = (await ADAPTERS.email(guarded(), { host: 'smtp.internal.example', port: 587, security: 'starttls', from: 'a@x', to: 'b@x' }, {}, msg).catch((e: unknown) => e)) as InstanceType<typeof DeliveryError>;
+    expect(err.message).toMatch(/^Blocked:/);
+    expect(err.transient).toBe(false);
+    expect(createTransport).not.toHaveBeenCalled();
+  });
+
+  it('connects to the checked SMTP address and keeps the name for TLS', async () => {
+    await ADAPTERS.email(guarded(), { host: 'smtp.example.com', port: 465, security: 'tls', from: 'a@x', to: 'b@x' }, {}, msg);
+    expect(createTransport).toHaveBeenCalledWith(expect.objectContaining({ host: '93.184.216.34', tls: { servername: 'smtp.example.com' } }));
+  });
+});
