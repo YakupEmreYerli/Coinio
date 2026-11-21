@@ -132,6 +132,7 @@ function head(lang, pg, t, fonts) {
 
 function homeGraph(t, url, faqPage) {
   return [
+    { '@type': 'WebSite', name: 'Coinio', alternateName: 'getcoinio.me', url: `${ORIGIN}/` },
     {
       '@type': 'SoftwareApplication',
       name: 'Coinio',
@@ -202,7 +203,9 @@ function headTags(lang, t, fonts, url, alternates, graph) {
   <meta name="twitter:title" content="${escAttr(t['og.title'])}">
   <meta name="twitter:description" content="${escAttr(t['og.description'])}">
   <meta name="twitter:image" content="${ORIGIN}/assets/og.png">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   ${fonts.preloads}
   <style>${fonts.faces}</style>

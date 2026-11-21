@@ -1,6 +1,6 @@
 {
-  "meta.title": "Coinio: kendi sunucunda açık kaynak abonelik takibi",
-  "meta.description": "Abonelik ve faturalarını kendi sunucunda takip et. Ücretsiz, açık kaynak Wallos alternatifi: yenileme hatırlatması, her para birimi, tek Docker imajı.",
+  "meta.title": "Kendi sunucunda açık kaynak abonelik takibi · Coinio",
+  "meta.description": "Coinio ile abonelik ve faturalarını kendi sunucunda takip et. Ücretsiz ve açık kaynak Wallos alternatifi: ödemeden önce hatırlatma, her para birimi, tek Docker imajı.",
   "og.title": "Coinio: bütün aboneliklerin tek sakin sayfada",
   "og.description": "Kendi sunucunda çalıştırdığın açık kaynak abonelik ve fatura takibi. Tek Docker imajı.",
   "app.description": "Kendi sunucunda çalışan abonelik ve fatura takibi: yenileme hatırlatmaları, farklı para birimlerinde tek toplam, takvim, Wallos'tan içe aktarma, Claude ve ChatGPT için MCP sunucusu ve iPhone widget'ı.",
