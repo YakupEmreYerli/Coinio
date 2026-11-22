@@ -40,3 +40,13 @@ fun Setup.unreachableFromPhone(): Boolean {
         Regex("""^172\.(1[6-9]|2\d|3[01])\.""").containsMatchIn(h) ||
         !h.contains('.')
 }
+
+/**
+ * Whether the activity should act on its launch link: only on a fresh start, not when it is recreated
+ * (rotation) or reopened from Recents, which would replay an old link after Disconnect.
+ */
+fun shouldHandleLink(restored: Boolean, intentFlags: Int): Boolean =
+    !restored && intentFlags and FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY == 0
+
+/** Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY, kept here so this file stays free of Android classes. */
+private const val FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY = 0x00100000

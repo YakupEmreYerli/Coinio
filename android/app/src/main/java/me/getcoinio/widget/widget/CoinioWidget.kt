@@ -3,7 +3,6 @@ package me.getcoinio.widget.widget
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
@@ -37,20 +36,17 @@ import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
 import me.getcoinio.widget.R
-import me.getcoinio.widget.core.Bucket
 import me.getcoinio.widget.core.FileCache
 import me.getcoinio.widget.core.WidgetItem
 import me.getcoinio.widget.core.WidgetPayload
 import me.getcoinio.widget.core.money
 import me.getcoinio.widget.core.parsePayload
-import me.getcoinio.widget.core.rowsFor
+import me.getcoinio.widget.core.rowCount
 import me.getcoinio.widget.core.shortDate
 import me.getcoinio.widget.ui.MainActivity
 
-private val SMALL = DpSize(110.dp, 110.dp)
-private val TALL = DpSize(110.dp, 170.dp)
-private val MEDIUM = DpSize(250.dp, 110.dp)
-private val LARGE = DpSize(250.dp, 250.dp)
+private val WIDE = 250.dp
+private val TALL = 250.dp
 
 internal object Palette {
     val surface = ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFF1C1C1E))
@@ -70,7 +66,8 @@ internal fun relativeDay(context: Context, daysLeft: Int): String = when {
 }
 
 class CoinioWidget : GlanceAppWidget() {
-    override val sizeMode = SizeMode.Responsive(setOf(SMALL, TALL, MEDIUM, LARGE))
+    // Exact: the real size, so the row count matches the space and no row is cut in half.
+    override val sizeMode = SizeMode.Exact
 
     override val stateDefinition = PreferencesGlanceStateDefinition
 
@@ -93,12 +90,9 @@ class CoinioWidget : GlanceAppWidget() {
 private fun Content(context: Context, status: Status, payload: WidgetPayload?, fetchedAt: Long) {
     val size = LocalSize.current
     // Rows follow the height; dates need the width (a narrow but tall widget lists amounts only).
-    val bucket = when {
-        size.height >= LARGE.height -> Bucket.LARGE
-        size.height >= TALL.height || size.width >= MEDIUM.width -> Bucket.MEDIUM
-        else -> Bucket.SMALL
-    }
-    val wide = size.width >= MEDIUM.width
+    val wide = size.width >= WIDE
+    val withDay = wide && size.height >= TALL
+    val small = size.height < 150.dp && !wide
     val locale = Locale.getDefault()
     Box(
         modifier = GlanceModifier.fillMaxSize().background(Palette.surface).cornerRadius(22.dp).padding(14.dp)
@@ -117,31 +111,31 @@ private fun Content(context: Context, status: Status, payload: WidgetPayload?, f
         Column(modifier = GlanceModifier.fillMaxSize()) {
             Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(context.getString(R.string.left).uppercase(locale), style = TextStyle(color = Palette.accent, fontSize = 10.sp, fontWeight = FontWeight.Medium))
-                if (status != Status.FRESH && wide) {
-                    val at = if (fetchedAt > 0) " · " + DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(Date(fetchedAt)) else ""
+                if (status != Status.FRESH) {
+                    val at = if (fetchedAt > 0 && wide) " · " + DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(Date(fetchedAt)) else ""
                     Spacer(GlanceModifier.defaultWeight())
                     Text(context.getString(R.string.offline) + at, style = TextStyle(color = Palette.muted, fontSize = 10.sp))
                 }
             }
             Text(
                 money(payload.leftThisMonthMinor, payload.base, payload.digits, locale),
-                style = TextStyle(color = Palette.text, fontSize = if (bucket == Bucket.SMALL) 21.sp else 24.sp, fontWeight = FontWeight.Bold),
+                style = TextStyle(color = Palette.text, fontSize = if (small) 21.sp else 24.sp, fontWeight = FontWeight.Bold),
             )
             Spacer(GlanceModifier.height(4.dp))
             Box(GlanceModifier.fillMaxWidth().height(1.dp).background(Palette.rule)) {}
             Spacer(GlanceModifier.height(4.dp))
             // Rows in a column of their own: Glance draws at most 10 children per container.
-            val rows = rowsFor(bucket, payload)
+            val rows = payload.items.take(rowCount(size.height.value, withDay))
             Column(modifier = GlanceModifier.fillMaxWidth()) {
                 if (rows.isEmpty()) Text(context.getString(R.string.none), style = TextStyle(color = Palette.muted, fontSize = 12.sp))
-                rows.forEach { ItemRow(context, it, payload, bucket, wide, locale) }
+                rows.forEach { ItemRow(context, it, payload, wide, withDay, locale) }
             }
         }
     }
 }
 
 @Composable
-private fun ItemRow(context: Context, item: WidgetItem, payload: WidgetPayload, bucket: Bucket, wide: Boolean, locale: Locale) {
+private fun ItemRow(context: Context, item: WidgetItem, payload: WidgetPayload, wide: Boolean, withDay: Boolean, locale: Locale) {
     val late = item.daysLeft < 0
     Column(modifier = GlanceModifier.fillMaxWidth().padding(vertical = 2.dp)) {
         Row(modifier = GlanceModifier.fillMaxWidth()) {
@@ -158,7 +152,7 @@ private fun ItemRow(context: Context, item: WidgetItem, payload: WidgetPayload, 
                 style = TextStyle(color = Palette.muted, fontSize = 11.sp),
             )
         }
-        if (bucket == Bucket.LARGE && wide) {
+        if (withDay) {
             Text(relativeDay(context, item.daysLeft), style = TextStyle(color = if (late) Palette.late else Palette.muted, fontSize = 10.sp))
         }
     }

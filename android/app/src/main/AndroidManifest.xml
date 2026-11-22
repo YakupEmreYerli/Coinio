@@ -6,6 +6,8 @@
     <!-- Cleartext is allowed: people run Coinio on plain-http LAN addresses too; the app warns about them. -->
     <application
         android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"

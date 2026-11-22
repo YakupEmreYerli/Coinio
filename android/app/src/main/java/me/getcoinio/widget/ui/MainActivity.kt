@@ -20,6 +20,7 @@ import me.getcoinio.widget.core.SetupStore
 import me.getcoinio.widget.core.WidgetPayload
 import me.getcoinio.widget.core.parsePayload
 import me.getcoinio.widget.core.parseSetupLink
+import me.getcoinio.widget.core.shouldHandleLink
 import me.getcoinio.widget.widget.Status
 import me.getcoinio.widget.widget.WidgetState
 import me.getcoinio.widget.widget.refreshNow
@@ -38,7 +39,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        handle(intent)
+        if (shouldHandleLink(restored = savedInstanceState != null, intentFlags = intent.flags)) handle(intent)
         setContent {
             CoinioTheme {
                 val s = setup
@@ -60,6 +61,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         handle(intent)
     }
 
@@ -69,8 +71,11 @@ class MainActivity : ComponentActivity() {
         if (setup != null) refresh()
     }
 
+    /** Uses the link once, then forgets it so a later recreate cannot connect again after Disconnect. */
     private fun handle(intent: Intent?) {
-        intent?.dataString?.let(::connect)
+        val link = intent?.dataString ?: return
+        intent.data = null
+        connect(link)
     }
 
     private fun startScan() {
