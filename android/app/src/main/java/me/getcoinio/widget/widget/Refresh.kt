@@ -2,7 +2,8 @@ package me.getcoinio.widget.widget
 
 import android.content.Context
 import androidx.core.content.edit
-import androidx.glance.appwidget.updateAll
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -51,7 +52,11 @@ suspend fun refreshNow(context: Context) {
             }
         }
     }
-    CoinioWidget().updateAll(context)
+    val widget = CoinioWidget()
+    GlanceAppWidgetManager(context).getGlanceIds(CoinioWidget::class.java).forEach { id ->
+        updateAppWidgetState(context, id) { it[CoinioWidget.VERSION] = System.currentTimeMillis() }
+        widget.update(context, id)
+    }
 }
 
 /** About every 30 minutes while there is a network; Android decides the exact moment. */

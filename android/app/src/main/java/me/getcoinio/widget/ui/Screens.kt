@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -86,12 +88,12 @@ fun SummaryScreen(
     Mark()
     Text(stringResource(R.string.connected_to, setup.origin.substringAfter("://")), color = MaterialTheme.colorScheme.onSurfaceVariant)
     if (setup.unreachableFromPhone()) {
-        Text(stringResource(R.string.unreachable_note, setup.origin), color = MaterialTheme.colorScheme.error, fontSize = 14.sp)
+        Text(stringResource(R.string.unreachable_note, setup.origin), color = Color(0xFFB45309), fontSize = 14.sp)
     }
     when {
         status == Status.AUTH_REJECTED -> Text(stringResource(R.string.auth), color = MaterialTheme.colorScheme.error)
         payload == null -> Text(stringResource(R.string.unreachable), color = MaterialTheme.colorScheme.error)
-        else -> Card(modifier = Modifier.fillMaxWidth()) {
+        else -> Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.left).uppercase(locale), color = MaterialTheme.colorScheme.primary, fontSize = 12.sp, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))

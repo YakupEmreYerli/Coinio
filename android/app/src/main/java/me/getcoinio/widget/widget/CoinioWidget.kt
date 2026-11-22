@@ -16,6 +16,9 @@ import androidx.glance.appwidget.SizeMode
 import androidx.glance.action.actionStartActivity
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
+import androidx.glance.currentState
+import androidx.glance.state.PreferencesGlanceStateDefinition
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.glance.background
 import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
@@ -45,6 +48,7 @@ import me.getcoinio.widget.core.shortDate
 import me.getcoinio.widget.ui.MainActivity
 
 private val SMALL = DpSize(110.dp, 110.dp)
+private val TALL = DpSize(110.dp, 170.dp)
 private val MEDIUM = DpSize(250.dp, 110.dp)
 private val LARGE = DpSize(250.dp, 250.dp)
 
@@ -66,24 +70,35 @@ internal fun relativeDay(context: Context, daysLeft: Int): String = when {
 }
 
 class CoinioWidget : GlanceAppWidget() {
-    override val sizeMode = SizeMode.Responsive(setOf(SMALL, MEDIUM, LARGE))
+    override val sizeMode = SizeMode.Responsive(setOf(SMALL, TALL, MEDIUM, LARGE))
+
+    override val stateDefinition = PreferencesGlanceStateDefinition
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val status = WidgetState.status(context)
-        val payload = FileCache(context).read()?.let { runCatching { parsePayload(it) }.getOrNull() }
-        val fetchedAt = WidgetState.fetchedAt(context)
-        provideContent { Content(context, status, payload, fetchedAt) }
+        provideContent {
+            // Read on every recomposition: refreshNow() bumps VERSION so a running session redraws with new data.
+            currentState(VERSION)
+            val status = WidgetState.status(context)
+            val payload = FileCache(context).read()?.let { runCatching { parsePayload(it) }.getOrNull() }
+            Content(context, status, payload, WidgetState.fetchedAt(context))
+        }
+    }
+
+    companion object {
+        val VERSION = longPreferencesKey("version")
     }
 }
 
 @Composable
 private fun Content(context: Context, status: Status, payload: WidgetPayload?, fetchedAt: Long) {
     val size = LocalSize.current
+    // Rows follow the height; dates need the width (a narrow but tall widget lists amounts only).
     val bucket = when {
         size.height >= LARGE.height -> Bucket.LARGE
-        size.width >= MEDIUM.width -> Bucket.MEDIUM
+        size.height >= TALL.height || size.width >= MEDIUM.width -> Bucket.MEDIUM
         else -> Bucket.SMALL
     }
+    val wide = size.width >= MEDIUM.width
     val locale = Locale.getDefault()
     Box(
         modifier = GlanceModifier.fillMaxSize().background(Palette.surface).cornerRadius(22.dp).padding(14.dp)
@@ -102,7 +117,7 @@ private fun Content(context: Context, status: Status, payload: WidgetPayload?, f
         Column(modifier = GlanceModifier.fillMaxSize()) {
             Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(context.getString(R.string.left).uppercase(locale), style = TextStyle(color = Palette.accent, fontSize = 10.sp, fontWeight = FontWeight.Medium))
-                if (status != Status.FRESH && bucket != Bucket.SMALL) {
+                if (status != Status.FRESH && wide) {
                     val at = if (fetchedAt > 0) " · " + DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(Date(fetchedAt)) else ""
                     Spacer(GlanceModifier.defaultWeight())
                     Text(context.getString(R.string.offline) + at, style = TextStyle(color = Palette.muted, fontSize = 10.sp))
@@ -115,15 +130,18 @@ private fun Content(context: Context, status: Status, payload: WidgetPayload?, f
             Spacer(GlanceModifier.height(4.dp))
             Box(GlanceModifier.fillMaxWidth().height(1.dp).background(Palette.rule)) {}
             Spacer(GlanceModifier.height(4.dp))
+            // Rows in a column of their own: Glance draws at most 10 children per container.
             val rows = rowsFor(bucket, payload)
-            if (rows.isEmpty()) Text(context.getString(R.string.none), style = TextStyle(color = Palette.muted, fontSize = 12.sp))
-            rows.forEach { ItemRow(context, it, payload, bucket, locale) }
+            Column(modifier = GlanceModifier.fillMaxWidth()) {
+                if (rows.isEmpty()) Text(context.getString(R.string.none), style = TextStyle(color = Palette.muted, fontSize = 12.sp))
+                rows.forEach { ItemRow(context, it, payload, bucket, wide, locale) }
+            }
         }
     }
 }
 
 @Composable
-private fun ItemRow(context: Context, item: WidgetItem, payload: WidgetPayload, bucket: Bucket, locale: Locale) {
+private fun ItemRow(context: Context, item: WidgetItem, payload: WidgetPayload, bucket: Bucket, wide: Boolean, locale: Locale) {
     val late = item.daysLeft < 0
     Column(modifier = GlanceModifier.fillMaxWidth().padding(vertical = 2.dp)) {
         Row(modifier = GlanceModifier.fillMaxWidth()) {
@@ -135,12 +153,12 @@ private fun ItemRow(context: Context, item: WidgetItem, payload: WidgetPayload, 
             )
             val amount = money(item.amountMinor, item.currency, payload.digits, locale)
             Text(
-                if (bucket == Bucket.SMALL) amount else "${shortDate(item.dueDate, locale)} · $amount",
+                if (wide) "${shortDate(item.dueDate, locale)} · $amount" else amount,
                 maxLines = 1,
                 style = TextStyle(color = Palette.muted, fontSize = 11.sp),
             )
         }
-        if (bucket == Bucket.LARGE) {
+        if (bucket == Bucket.LARGE && wide) {
             Text(relativeDay(context, item.daysLeft), style = TextStyle(color = if (late) Palette.late else Palette.muted, fontSize = 10.sp))
         }
     }
