@@ -1,44 +1,39 @@
 ---
 title: Android widget
-description: A Home Screen widget through the small Coinio Widget app.
+description: A Home Screen widget on Android through the free ScriptWidget app.
 ---
 
-The widget shows what is left to pay this month and your next payments, like the [iPhone widget](/docs/integrations/iphone-widget). On Android it comes as a small open-source app, **Coinio Widget**, whose only job is the widget. It is distributed as an APK on the [GitHub releases](https://github.com/yakupemreyerli/coinio/releases/latest), not on Google Play.
+On Android, Coinio's widget runs in [ScriptWidget](https://github.com/everettjf/scriptwidget), a free open-source app for JavaScript widgets (it also runs on iPhone, iPad, Mac and Linux). It shows what is left to pay this month and your next payments, like the [iPhone widget](/docs/integrations/iphone-widget).
 
-Your phone has to reach Coinio wherever it is, so you need an [https address](/docs/expose). A LAN address only works while you are at home.
+ScriptWidget only lets a widget reach the hosts it declares and does not allow private network addresses, so your Coinio needs an [https address on the internet](/docs/expose).
 
 ## Set it up
 
 <Steps>
 <Step>
 
-On your phone, download `coinio-widget-<version>.apk` from the [latest release](https://github.com/yakupemreyerli/coinio/releases/latest) and open it. If Android asks, allow installing apps from your browser.
+Install ScriptWidget on your phone from its [releases](https://github.com/everettjf/scriptwidget/releases) (Android 13 or later).
 
 </Step>
 <Step>
 
-In Coinio, open **Settings › Integrations › Android widget** and tap **Connect Android**. Coinio makes a read-only key and shows a QR code. Open Coinio Widget and tap **Scan the QR code**, or, if you are looking at Coinio on the same phone, tap **Open in the app**.
+Add **Coinio** from ScriptWidget's **Gallery** to your Home Screen. If it is not listed yet, create a new widget and paste [`widget/scriptwidget/coinio`](https://github.com/yakupemreyerli/coinio/tree/main/widget/scriptwidget/coinio) (`widget.json` and `main.jsx`).
 
 </Step>
 <Step>
 
-Long-press the Home Screen, tap **Widgets** and add **Coinio**. Resize it for more rows.
+In Coinio, open **Settings › Integrations › Android widget** and tap **Prepare the widget**. Coinio makes a read-only key; tap **Copy parameter** and paste it into the widget's parameter in ScriptWidget.
 
 </Step>
 </Steps>
 
+### Your own server
+
+The Gallery version reaches only the free hosted Coinio (`app.getcoinio.me`). For your own server, remix the widget in ScriptWidget and add your host to `networkDomains` in `widget.json`. The parameter Coinio gives you then holds the address too: `https://coinio.example.com coi_read_…`.
+
 ## How it behaves
 
-- Three sizes: small shows the total and the next payment, medium the next four, large the next six with "in 3 days" under each. Overdue payments are red.
-- It refreshes about every 30 minutes while there is a network, and right after you connect. Opening the app refreshes it too.
+- Small and medium show the total and the next three payments, large the next six with "in 3 days" under each. Overdue payments are red. Lock Screen sizes work where the launcher supports them.
 - Without a connection it shows the last data it saw and marks it *offline* with the time of that data.
-- If the key is deleted in Coinio, it says *API key rejected*; connect again from Settings.
-- Tapping the widget opens the app, which shows the same list and an **Open Coinio** button.
-
-## Privacy
-
-The app talks only to your Coinio, and only to `/api/widget` with the read-only key: it can see your upcoming payments but cannot change anything. The key is stored encrypted on the phone. **Disconnect** in the app forgets it; delete the key under **Settings › Integrations › API keys** to revoke it everywhere.
-
-## Updates
-
-New versions come with each Coinio release. [Obtainium](https://github.com/ImranR98/Obtainium) can watch the GitHub releases and update the app for you: add `https://github.com/yakupemreyerli/coinio` and keep only files matching `coinio-widget`.
+- If the key is deleted in Coinio, it says *API key rejected*.
+- The widget only reads `/api/widget` with the read-only key: it can see your upcoming payments but cannot change anything.

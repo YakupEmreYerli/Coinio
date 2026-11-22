@@ -130,7 +130,7 @@ MCP サーバーは、Coinio のアドレスの末尾に `/mcp` を付けた場�
 
 [`widget/coinio-widget.js`](widget/coinio-widget.js) は、ホーム画面の小・中・大サイズのウィジェットとロック画面ウィジェット向けの [Scriptable](https://scriptable.app) スクリプトです。閲覧専用の API キーを作成し、スクリプトを貼り付けて、`SERVER_URL` と `API_KEY` を入力してください。ガイド: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget)。
 
-**Android：** 小さな Coinio Widget アプリ（APK は [Releases](https://github.com/yakupemreyerli/coinio/releases/latest)）を「設定 › 連携 › Android ウィジェット」の QR コードで接続します。ガイド：[docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget)。
+**Android：** Coinio ウィジェットは無料アプリ [ScriptWidget](https://github.com/everettjf/scriptwidget) で動きます。貼り付けるパラメータは「設定 › 連携 › Android ウィジェット」で取得できます。ガイド：[docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget)。
 
 ## アップデート
 
