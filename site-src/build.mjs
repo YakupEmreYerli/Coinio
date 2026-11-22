@@ -31,7 +31,7 @@ const ASSET_V = { js: assetHash('main.js') };
 // The stylesheet is inlined: one round trip less before first paint (it is ~7 KB gzipped).
 const CSS = readFileSync(join(site, 'styles.css'), 'utf8');
 
-const FAQ = ['free', 'needs', 'data', 'https', 'updates', 'privacy', 'family', 'import', 'languages', 'mcp', 'iphone', 'sheet'];
+const FAQ = ['free', 'hosted', 'needs', 'data', 'https', 'updates', 'privacy', 'family', 'import', 'languages', 'mcp', 'iphone', 'sheet'];
 
 /**
  * Every page, built in every language. `slug` is the folder under the language path ('' = home page), `faq` the

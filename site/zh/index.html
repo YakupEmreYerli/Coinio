@@ -521,14 +521,21 @@ pre .kv i { font-style: normal; color: var(--muted); }
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 1px rgba(142,150,255,0.25), 0 6px 20px -6px rgba(79,91,213,0.7);
 }
 .btn-primary:hover { background: #5b67e0; }
-.btn-lg { height: 48px; padding: 0 22px; font-size: 16px; border-radius: 12px; }
-
-/* Hosted option above the install box: the free app, then "or run it yourself". */
-.hosted { margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.hosted-note { margin: 0; font-size: 14px; color: var(--muted); }
-.or-divider { width: 100%; max-width: 820px; margin: 44px 0 0; display: flex; align-items: center; gap: 16px; color: var(--muted); font-size: 14px; }
-.or-divider::before, .or-divider::after { content: ""; flex: 1; height: 1px; background: var(--line-2); }
-.or-divider + .term { margin-top: 20px; }
+/* Free hosted app: a pill above the hero title and a quiet button beside "Install" in the nav. */
+.hosted-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 22px; padding: 6px 12px 6px 10px;
+  border: 1px solid var(--line-2); border-radius: 999px;
+  background: var(--wash-1);
+  color: var(--text); font-size: 14px; font-weight: 500; text-decoration: none;
+  transition: background-color .15s, border-color .15s;
+}
+.hosted-pill:hover { background: var(--wash-3); border-color: var(--tint); }
+.hosted-pill svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; color: var(--muted); }
+.hosted-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 3px rgba(142,150,255,0.25); }
+.nav-cta-ghost { color: var(--text); background: var(--wash-1); box-shadow: inset 0 0 0 1px var(--line-2); }
+.nav-cta-ghost:hover { background: var(--wash-3); }
+@media (max-width: 640px) { .nav-cta-ghost { display: none; } }
 .final-hosted { margin: 14px 0 0; font-size: 14px; color: var(--muted); }
 .final-hosted a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--tint); }
 
@@ -1135,7 +1142,7 @@ h1 .eyebrow { display: block; }
 .legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Coinio","alternateName":"getcoinio.me","url":"https://getcoinio.me/"},{"@type":"SoftwareApplication","name":"Coinio","url":"https://getcoinio.me/zh/","description":"自托管的订阅和账单管理工具，支持续费提醒、多币种汇总、日历视图、Wallos 导入、面向 Claude 和 ChatGPT 的 MCP 服务器，以及 iPhone 小组件。","applicationCategory":"FinanceApplication","applicationSubCategory":"Subscription tracker","operatingSystem":"Docker, Linux","softwareVersion":"0.2.0","isAccessibleForFree":true,"license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/yakupemreyerli/coinio","installUrl":"https://getcoinio.me/install","screenshot":"https://getcoinio.me/assets/dashboard-night.webp","image":"https://getcoinio.me/assets/og.png","inLanguage":["en","tr","de","fr","es","pt-BR","zh-CN","ja"],"sameAs":["https://github.com/yakupemreyerli/coinio"]},{"@type":"FAQPage","inLanguage":"zh-CN","url":"https://getcoinio.me/zh/","mainEntity":[{"@type":"Question","name":"Coinio 免费吗？用的是什么许可证？","acceptedAnswer":{"@type":"Answer","text":"免费。Coinio 基于 MIT 许可证开源。没有付费版，也无需注册我们的账户；你来运行，归你所有。代码托管在 GitHub 上。"}},{"@type":"Question","name":"运行它需要什么？","acceptedAnswer":{"@type":"Answer","text":"一台装有 Docker 的机器：VPS、家用服务器、NAS 或树莓派都可以。镜像支持 amd64 和 arm64。无需单独运行数据库，空闲时内存占用约 60 MB。"}},{"@type":"Question","name":"数据存在哪里？如何备份？","acceptedAnswer":{"@type":"Answer","text":"所有内容都在容器的 /data 目录中：一个 SQLite 文件（ coinio.db ）和你选用的图标。备份这个数据卷，就备份了全部内容。使用安装脚本或 docker run 时，数据卷名为 coinio-data ： docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine \\ tar czf /backup/coinio-backup.tgz -C /data . 使用 Compose 时，就是文件旁的 ./data 目录。你也可以在应用中将订阅和付款记录导出为 CSV 或 JSON。"}},{"@type":"Question","name":"如何启用 HTTPS 并在手机上访问？","acceptedAnswer":{"@type":"Answer","text":"安装脚本可以帮你配置 Cloudflare Tunnel：粘贴隧道令牌，Coinio 就能获得 https 地址，无需开放任何端口。如果你已经在用反向代理（Caddy、Traefik、Nginx、Dokploy），把域名指向 8080 端口即可。 无论哪种方式，都要把 COINIO_PUBLIC_URL 设为这个 https 地址。claude.ai 连接器和安全 Cookie 都依赖它。"}},{"@type":"Question","name":"如何更新？","acceptedAnswer":{"@type":"Answer","text":"拉取新镜像并重新创建容器。数据保留在数据卷中，数据库变更会在启动时自动应用。使用 Compose 时运行 docker compose pull && docker compose up -d 。使用 docker run 时，先拉取镜像，删除旧容器，再运行同样的命令。"}},{"@type":"Question","name":"它会向外发送数据吗？汇率从哪里来？","acceptedAnswer":{"@type":"Answer","text":"没有遥测，没有统计分析，也没有账户。汇率每天从 Frankfurter 获取一次，数据来自欧洲中央银行发布的参考汇率，且只获取你用到的币种。 其他外部请求都由你主动触发：获取你添加的网站图标，以及向你所设置的通知渠道发送的消息。"}},{"@type":"Question","name":"家人可以一起用吗？","acceptedAnswer":{"@type":"Answer","text":"每个安装实例只有一个账户，一家人可以共用，把所有账单放在一处。如果两个人想分开管理数据，就在另一个端口上再运行一个容器，只需多一条命令。"}},{"@type":"Question","name":"可以从其他订阅管理工具导入吗？","acceptedAnswer":{"@type":"Answer","text":"Wallos 可以：在 Wallos 中将订阅导出为 JSON，然后在“设置 › 导入”中加载该文件。保存之前，你会看到预览和所有警告。还在两者之间犹豫？可以看看 Coinio 与 Wallos 的对比 。 来自其他工具的数据，手动添加也很快：输入时，161 个常见服务会自动填好图标、分类和计费周期。也可以连接 Claude，让它帮你添加。"}},{"@type":"Question","name":"支持哪些语言？","acceptedAnswer":{"@type":"Answer","text":"应用支持英语、土耳其语、德语、法语、西班牙语、巴西葡萄牙语、简体中文和日语。默认使用浏览器语言，随时可以在设置中切换。日期、金额和币种会按所选语言的习惯显示。"}},{"@type":"Question","name":"MCP 是什么？Claude 和 ChatGPT 如何连接？","acceptedAnswer":{"@type":"Answer","text":"MCP（Model Context Protocol）是一项开放标准，让 AI 助手能够使用工具。Coinio 在 /mcp 提供 MCP 服务，助手可以列出本周的续费、添加订阅或将账单标记为已付款。 在 claude.ai 或 Claude 移动应用中，用你的 Coinio 地址添加自定义连接器并登录即可，无需密钥。Claude Code、Claude Desktop 和 Cursor 使用在设置中创建的 API 密钥。ChatGPT 的自定义连接器也使用同一地址。以上都需要前面提到的 https 地址。"}},{"@type":"Question","name":"有 iPhone 应用吗？","acceptedAnswer":{"@type":"Answer","text":"App Store 里没有。不过有一个免费的 Scriptable 小组件 ，可放在主屏幕和锁定屏幕上，用只读密钥读取即将到期的付款，离线时继续显示最近的数据。网页应用也可以添加到主屏幕，打开方式和普通应用一样。"}},{"@type":"Question","name":"为什么不用电子表格？","acceptedAnswer":{"@type":"Answer","text":"电子表格能记下金额，但不会自动顺延到期日，不会每天换算汇率，也不会在周二提醒你周五有一笔续费。Coinio 能做到这些，还会自动记录自动扣款，并保留可用于报表的历史记录。"}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Coinio","alternateName":"getcoinio.me","url":"https://getcoinio.me/"},{"@type":"SoftwareApplication","name":"Coinio","url":"https://getcoinio.me/zh/","description":"自托管的订阅和账单管理工具，支持续费提醒、多币种汇总、日历视图、Wallos 导入、面向 Claude 和 ChatGPT 的 MCP 服务器，以及 iPhone 小组件。","applicationCategory":"FinanceApplication","applicationSubCategory":"Subscription tracker","operatingSystem":"Docker, Linux","softwareVersion":"0.2.0","isAccessibleForFree":true,"license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/yakupemreyerli/coinio","installUrl":"https://getcoinio.me/install","screenshot":"https://getcoinio.me/assets/dashboard-night.webp","image":"https://getcoinio.me/assets/og.png","inLanguage":["en","tr","de","fr","es","pt-BR","zh-CN","ja"],"sameAs":["https://github.com/yakupemreyerli/coinio"]},{"@type":"FAQPage","inLanguage":"zh-CN","url":"https://getcoinio.me/zh/","mainEntity":[{"@type":"Question","name":"Coinio 免费吗？用的是什么许可证？","acceptedAnswer":{"@type":"Answer","text":"免费。Coinio 基于 MIT 许可证开源。没有付费版，也无需注册我们的账户；你来运行，归你所有。代码托管在 GitHub 上。"}},{"@type":"Question","name":"不安装也能用 Coinio 吗？","acceptedAnswer":{"@type":"Answer","text":"可以。在 app.getcoinio.me 免费注册即可马上使用：没有广告和跟踪，和你自己部署的是同一个应用。你可以随时在「设置 › 账户」中下载数据或删除账户。"}},{"@type":"Question","name":"运行它需要什么？","acceptedAnswer":{"@type":"Answer","text":"一台装有 Docker 的机器：VPS、家用服务器、NAS 或树莓派都可以。镜像支持 amd64 和 arm64。无需单独运行数据库，空闲时内存占用约 60 MB。"}},{"@type":"Question","name":"数据存在哪里？如何备份？","acceptedAnswer":{"@type":"Answer","text":"所有内容都在容器的 /data 目录中：一个 SQLite 文件（ coinio.db ）和你选用的图标。备份这个数据卷，就备份了全部内容。使用安装脚本或 docker run 时，数据卷名为 coinio-data ： docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine \\ tar czf /backup/coinio-backup.tgz -C /data . 使用 Compose 时，就是文件旁的 ./data 目录。你也可以在应用中将订阅和付款记录导出为 CSV 或 JSON。"}},{"@type":"Question","name":"如何启用 HTTPS 并在手机上访问？","acceptedAnswer":{"@type":"Answer","text":"安装脚本可以帮你配置 Cloudflare Tunnel：粘贴隧道令牌，Coinio 就能获得 https 地址，无需开放任何端口。如果你已经在用反向代理（Caddy、Traefik、Nginx、Dokploy），把域名指向 8080 端口即可。 无论哪种方式，都要把 COINIO_PUBLIC_URL 设为这个 https 地址。claude.ai 连接器和安全 Cookie 都依赖它。"}},{"@type":"Question","name":"如何更新？","acceptedAnswer":{"@type":"Answer","text":"拉取新镜像并重新创建容器。数据保留在数据卷中，数据库变更会在启动时自动应用。使用 Compose 时运行 docker compose pull && docker compose up -d 。使用 docker run 时，先拉取镜像，删除旧容器，再运行同样的命令。"}},{"@type":"Question","name":"它会向外发送数据吗？汇率从哪里来？","acceptedAnswer":{"@type":"Answer","text":"没有遥测，没有统计分析，也没有账户。汇率每天从 Frankfurter 获取一次，数据来自欧洲中央银行发布的参考汇率，且只获取你用到的币种。 其他外部请求都由你主动触发：获取你添加的网站图标，以及向你所设置的通知渠道发送的消息。"}},{"@type":"Question","name":"家人可以一起用吗？","acceptedAnswer":{"@type":"Answer","text":"每个安装实例只有一个账户，一家人可以共用，把所有账单放在一处。如果两个人想分开管理数据，就在另一个端口上再运行一个容器，只需多一条命令。"}},{"@type":"Question","name":"可以从其他订阅管理工具导入吗？","acceptedAnswer":{"@type":"Answer","text":"Wallos 可以：在 Wallos 中将订阅导出为 JSON，然后在“设置 › 导入”中加载该文件。保存之前，你会看到预览和所有警告。还在两者之间犹豫？可以看看 Coinio 与 Wallos 的对比 。 来自其他工具的数据，手动添加也很快：输入时，161 个常见服务会自动填好图标、分类和计费周期。也可以连接 Claude，让它帮你添加。"}},{"@type":"Question","name":"支持哪些语言？","acceptedAnswer":{"@type":"Answer","text":"应用支持英语、土耳其语、德语、法语、西班牙语、巴西葡萄牙语、简体中文和日语。默认使用浏览器语言，随时可以在设置中切换。日期、金额和币种会按所选语言的习惯显示。"}},{"@type":"Question","name":"MCP 是什么？Claude 和 ChatGPT 如何连接？","acceptedAnswer":{"@type":"Answer","text":"MCP（Model Context Protocol）是一项开放标准，让 AI 助手能够使用工具。Coinio 在 /mcp 提供 MCP 服务，助手可以列出本周的续费、添加订阅或将账单标记为已付款。 在 claude.ai 或 Claude 移动应用中，用你的 Coinio 地址添加自定义连接器并登录即可，无需密钥。Claude Code、Claude Desktop 和 Cursor 使用在设置中创建的 API 密钥。ChatGPT 的自定义连接器也使用同一地址。以上都需要前面提到的 https 地址。"}},{"@type":"Question","name":"有 iPhone 应用吗？","acceptedAnswer":{"@type":"Answer","text":"App Store 里没有。不过有一个免费的 Scriptable 小组件 ，可放在主屏幕和锁定屏幕上，用只读密钥读取即将到期的付款，离线时继续显示最近的数据。网页应用也可以添加到主屏幕，打开方式和普通应用一样。"}},{"@type":"Question","name":"为什么不用电子表格？","acceptedAnswer":{"@type":"Answer","text":"电子表格能记下金额，但不会自动顺延到期日，不会每天换算汇率，也不会在周二提醒你周五有一笔续费。Coinio 能做到这些，还会自动记录自动扣款，并保留可用于报表的历史记录。"}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -1179,6 +1186,7 @@ h1 .eyebrow { display: block; }
           <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
           <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
         </button>
+        <a class="nav-cta nav-cta-ghost" href="https://app.getcoinio.me/signup">免费使用</a>
         <a class="nav-cta" href="#install">安装</a>
       </nav>
     </div>
@@ -1212,14 +1220,9 @@ h1 .eyebrow { display: block; }
         </svg>
       </div>
 
+      <a class="hosted-pill" href="https://app.getcoinio.me/signup"><span class="hosted-dot" aria-hidden="true"></span>无需安装，免费使用<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
       <h1><span class="eyebrow">开源订阅管理工具<span class="vh">：</span></span> 所有订阅，<br>一页看清<span class="pd">。</span></h1>
-      <p class="lede">Coinio 记录你为哪些服务付费，并在续费前提醒你。可以免费在线使用，也可以部署在自己的服务器上，数据始终不离开你的服务器。</p>
-
-      <div class="hosted">
-        <a class="btn btn-primary btn-lg" href="https://app.getcoinio.me/signup">免费使用<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-        <p class="hosted-note">无需安装，没有广告和跟踪。</p>
-      </div>
-      <p class="or-divider"><span>或部署在自己的服务器上</span></p>
+      <p class="lede">Coinio 记录你为哪些服务付费，在续费前提醒你，并运行在你自己的服务器上。数据从不离开你的服务器。</p>
 
       <div class="term" id="install" data-tabs>
         <div class="term-head">
@@ -1421,6 +1424,12 @@ h1 .eyebrow { display: block; }
             <summary>Coinio 免费吗？用的是什么许可证？</summary>
             <div class="faq-a">
               <p>免费。Coinio 基于 MIT 许可证开源。没有付费版，也无需注册我们的账户；你来运行，归你所有。代码托管在 <a href="https://github.com/yakupemreyerli/coinio">GitHub</a> 上。</p>
+            </div>
+          </details>
+          <details>
+            <summary>不安装也能用 Coinio 吗？</summary>
+            <div class="faq-a">
+              <p>可以。在 <a href="https://app.getcoinio.me/signup">app.getcoinio.me</a> 免费注册即可马上使用：没有广告和跟踪，和你自己部署的是同一个应用。你可以随时在「设置 › 账户」中下载数据或删除账户。</p>
             </div>
           </details>
           <details>

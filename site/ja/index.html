@@ -521,14 +521,21 @@ pre .kv i { font-style: normal; color: var(--muted); }
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 1px rgba(142,150,255,0.25), 0 6px 20px -6px rgba(79,91,213,0.7);
 }
 .btn-primary:hover { background: #5b67e0; }
-.btn-lg { height: 48px; padding: 0 22px; font-size: 16px; border-radius: 12px; }
-
-/* Hosted option above the install box: the free app, then "or run it yourself". */
-.hosted { margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.hosted-note { margin: 0; font-size: 14px; color: var(--muted); }
-.or-divider { width: 100%; max-width: 820px; margin: 44px 0 0; display: flex; align-items: center; gap: 16px; color: var(--muted); font-size: 14px; }
-.or-divider::before, .or-divider::after { content: ""; flex: 1; height: 1px; background: var(--line-2); }
-.or-divider + .term { margin-top: 20px; }
+/* Free hosted app: a pill above the hero title and a quiet button beside "Install" in the nav. */
+.hosted-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 22px; padding: 6px 12px 6px 10px;
+  border: 1px solid var(--line-2); border-radius: 999px;
+  background: var(--wash-1);
+  color: var(--text); font-size: 14px; font-weight: 500; text-decoration: none;
+  transition: background-color .15s, border-color .15s;
+}
+.hosted-pill:hover { background: var(--wash-3); border-color: var(--tint); }
+.hosted-pill svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; color: var(--muted); }
+.hosted-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 3px rgba(142,150,255,0.25); }
+.nav-cta-ghost { color: var(--text); background: var(--wash-1); box-shadow: inset 0 0 0 1px var(--line-2); }
+.nav-cta-ghost:hover { background: var(--wash-3); }
+@media (max-width: 640px) { .nav-cta-ghost { display: none; } }
 .final-hosted { margin: 14px 0 0; font-size: 14px; color: var(--muted); }
 .final-hosted a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--tint); }
 
@@ -1135,7 +1142,7 @@ h1 .eyebrow { display: block; }
 .legal-body a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 720px) { .legal { padding-top: 40px; } .legal-body h2 { font-size: 19px; margin-top: 34px; } }
 </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Coinio","alternateName":"getcoinio.me","url":"https://getcoinio.me/"},{"@type":"SoftwareApplication","name":"Coinio","url":"https://getcoinio.me/ja/","description":"セルフホスト型のサブスクリプション・請求管理アプリ。更新前のリマインダー、多通貨の合計、カレンダー、Wallos からのインポート、Claude と ChatGPT 向けの MCP サーバー、iPhone ウィジェットを備えています。","applicationCategory":"FinanceApplication","applicationSubCategory":"Subscription tracker","operatingSystem":"Docker, Linux","softwareVersion":"0.2.0","isAccessibleForFree":true,"license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/yakupemreyerli/coinio","installUrl":"https://getcoinio.me/install","screenshot":"https://getcoinio.me/assets/dashboard-night.webp","image":"https://getcoinio.me/assets/og.png","inLanguage":["en","tr","de","fr","es","pt-BR","zh-CN","ja"],"sameAs":["https://github.com/yakupemreyerli/coinio"]},{"@type":"FAQPage","inLanguage":"ja","url":"https://getcoinio.me/ja/","mainEntity":[{"@type":"Question","name":"Coinio は無料ですか？ライセンスは？","acceptedAnswer":{"@type":"Answer","text":"はい、無料です。Coinio は MIT ライセンスのオープンソースです。有料プランも、こちらへのアカウント登録もありません。自分で動かし、自分で所有します。コードは GitHub にあります。"}},{"@type":"Question","name":"動かすには何が必要ですか？","acceptedAnswer":{"@type":"Answer","text":"Docker が動くマシンです。VPS、自宅サーバー、NAS、Raspberry Pi のいずれでも構いません。イメージは amd64 と arm64 向けに用意しています。別途データベースを動かす必要はなく、待機時のメモリ使用量は約 60 MB です。"}},{"@type":"Question","name":"データはどこに保存されますか？バックアップの方法は？","acceptedAnswer":{"@type":"Answer","text":"すべてコンテナの /data フォルダにあります。SQLite ファイル1つ（ coinio.db ）と、選んだロゴだけです。このボリュームをバックアップすれば、すべてが残ります。インストールスクリプトか docker run を使った場合、ボリューム名は coinio-data です。 docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine \\ tar czf /backup/coinio-backup.tgz -C /data . Compose の場合は、ファイルと同じ場所の ./data フォルダです。サブスクリプションと支払いは、アプリから CSV または JSON でダウンロードすることもできます。"}},{"@type":"Question","name":"HTTPS にしてスマートフォンで開くには？","acceptedAnswer":{"@type":"Answer","text":"インストールスクリプトが Cloudflare Tunnel の設定を案内します。トンネルトークンを貼り付けるだけで、ポートを開けずに Coinio に https のアドレスが付きます。すでにリバースプロキシ（Caddy、Traefik、Nginx、Dokploy）を使っている場合は、ドメインをポート 8080 に向けてください。 どちらの場合も、 COINIO_PUBLIC_URL にその https アドレスを設定してください。claude.ai のコネクタと安全な Cookie に必要です。"}},{"@type":"Question","name":"アップデートはどうすればいいですか？","acceptedAnswer":{"@type":"Answer","text":"新しいイメージを取得して、コンテナを作り直します。データはボリュームに残り、データベースの変更は起動時に適用されます。Compose なら docker compose pull && docker compose up -d です。 docker run の場合は、イメージを取得し、古いコンテナを削除してから、同じコマンドをもう一度実行します。"}},{"@type":"Question","name":"外部にデータを送信しますか？為替レートはどこから？","acceptedAnswer":{"@type":"Answer","text":"テレメトリーも、アクセス解析も、アカウント登録もありません。為替レートは、欧州中央銀行の参照レートを公開している Frankfurter から1日1回、使っている通貨の分だけ取得します。 それ以外の外部への通信は、自分で求めたときだけです。追加したウェブサイトのアイコンの取得と、設定した通知チャネルへのメッセージ送信です。"}},{"@type":"Question","name":"家族でも使えますか？","acceptedAnswer":{"@type":"Answer","text":"1つのインストールにつきアカウントは1つです。家族で共有すれば、すべての支払いを1か所で管理できます。データを分けたい場合は、別のポートで2つ目のコンテナを動かしてください。コマンドを1つ追加するだけです。"}},{"@type":"Question","name":"ほかの管理アプリから移行できますか？","acceptedAnswer":{"@type":"Answer","text":"Wallos からは移行できます。Wallos でサブスクリプションを JSON でエクスポートし、そのファイルを「設定 › インポート」で読み込んでください。保存する前に、プレビューと警告を確認できます。迷っている場合は、 Coinio と Wallos の比較 もご覧ください。 それ以外からの場合も、手動ですぐに追加できます。主要な161のサービスは、入力するだけでロゴ、カテゴリ、請求サイクルが入ります。Claude を連携して、追加を頼むこともできます。"}},{"@type":"Question","name":"対応している言語は？","acceptedAnswer":{"@type":"Answer","text":"アプリは英語、トルコ語、ドイツ語、フランス語、スペイン語、ポルトガル語（ブラジル）、簡体字中国語、日本語に対応しています。最初はブラウザの言語で表示され、設定からいつでも切り替えられます。日付、金額、通貨は選んだ言語に合わせて表示されます。"}},{"@type":"Question","name":"MCP とは？Claude や ChatGPT とはどう連携しますか？","acceptedAnswer":{"@type":"Answer","text":"MCP（Model Context Protocol）は、AI アシスタントがツールを使えるようにするオープンな標準です。Coinio は /mcp で MCP サーバーを提供しているので、アシスタントが今週更新されるものを一覧にしたり、サブスクリプションを追加したり、支払い済みにしたりできます。 claude.ai や Claude モバイルアプリでは、Coinio のアドレスでカスタムコネクタを追加してサインインするだけです。キーは要りません。Claude Code、Claude Desktop、Cursor では、設定で作成した API キーを使います。ChatGPT のカスタムコネクタにも同じアドレスを使えます。いずれも、上で説明した https のアドレスが必要です。"}},{"@type":"Question","name":"iPhone アプリはありますか？","acceptedAnswer":{"@type":"Answer","text":"App Store にはありません。代わりに、ホーム画面とロック画面に置ける無料の Scriptable ウィジェット があります。閲覧専用のキーで今後の支払いを読み込み、オフラインでも最後のデータを表示し続けます。ウェブアプリをホーム画面に追加すれば、アプリのように開くこともできます。"}},{"@type":"Question","name":"スプレッドシートではだめですか？","acceptedAnswer":{"@type":"Answer","text":"スプレッドシートは金額を記録できますが、期限日を自動で先に進めたり、毎日通貨を換算したり、金曜に更新されるものを火曜に知らせたりはしてくれません。Coinio はそれをすべて行い、自動引き落としも自動で記録し、レポートに使える履歴を残します。"}}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Coinio","alternateName":"getcoinio.me","url":"https://getcoinio.me/"},{"@type":"SoftwareApplication","name":"Coinio","url":"https://getcoinio.me/ja/","description":"セルフホスト型のサブスクリプション・請求管理アプリ。更新前のリマインダー、多通貨の合計、カレンダー、Wallos からのインポート、Claude と ChatGPT 向けの MCP サーバー、iPhone ウィジェットを備えています。","applicationCategory":"FinanceApplication","applicationSubCategory":"Subscription tracker","operatingSystem":"Docker, Linux","softwareVersion":"0.2.0","isAccessibleForFree":true,"license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/yakupemreyerli/coinio","installUrl":"https://getcoinio.me/install","screenshot":"https://getcoinio.me/assets/dashboard-night.webp","image":"https://getcoinio.me/assets/og.png","inLanguage":["en","tr","de","fr","es","pt-BR","zh-CN","ja"],"sameAs":["https://github.com/yakupemreyerli/coinio"]},{"@type":"FAQPage","inLanguage":"ja","url":"https://getcoinio.me/ja/","mainEntity":[{"@type":"Question","name":"Coinio は無料ですか？ライセンスは？","acceptedAnswer":{"@type":"Answer","text":"はい、無料です。Coinio は MIT ライセンスのオープンソースです。有料プランも、こちらへのアカウント登録もありません。自分で動かし、自分で所有します。コードは GitHub にあります。"}},{"@type":"Question","name":"インストールせずに Coinio を使えますか？","acceptedAnswer":{"@type":"Answer","text":"はい。 app.getcoinio.me で無料アカウントを作ればすぐに使えます。広告もトラッキングもなく、自分でインストールするものと同じアプリです。データのダウンロードやアカウントの削除は「設定 › アカウント」からいつでもできます。"}},{"@type":"Question","name":"動かすには何が必要ですか？","acceptedAnswer":{"@type":"Answer","text":"Docker が動くマシンです。VPS、自宅サーバー、NAS、Raspberry Pi のいずれでも構いません。イメージは amd64 と arm64 向けに用意しています。別途データベースを動かす必要はなく、待機時のメモリ使用量は約 60 MB です。"}},{"@type":"Question","name":"データはどこに保存されますか？バックアップの方法は？","acceptedAnswer":{"@type":"Answer","text":"すべてコンテナの /data フォルダにあります。SQLite ファイル1つ（ coinio.db ）と、選んだロゴだけです。このボリュームをバックアップすれば、すべてが残ります。インストールスクリプトか docker run を使った場合、ボリューム名は coinio-data です。 docker run --rm -v coinio-data:/data -v \"$PWD\":/backup alpine \\ tar czf /backup/coinio-backup.tgz -C /data . Compose の場合は、ファイルと同じ場所の ./data フォルダです。サブスクリプションと支払いは、アプリから CSV または JSON でダウンロードすることもできます。"}},{"@type":"Question","name":"HTTPS にしてスマートフォンで開くには？","acceptedAnswer":{"@type":"Answer","text":"インストールスクリプトが Cloudflare Tunnel の設定を案内します。トンネルトークンを貼り付けるだけで、ポートを開けずに Coinio に https のアドレスが付きます。すでにリバースプロキシ（Caddy、Traefik、Nginx、Dokploy）を使っている場合は、ドメインをポート 8080 に向けてください。 どちらの場合も、 COINIO_PUBLIC_URL にその https アドレスを設定してください。claude.ai のコネクタと安全な Cookie に必要です。"}},{"@type":"Question","name":"アップデートはどうすればいいですか？","acceptedAnswer":{"@type":"Answer","text":"新しいイメージを取得して、コンテナを作り直します。データはボリュームに残り、データベースの変更は起動時に適用されます。Compose なら docker compose pull && docker compose up -d です。 docker run の場合は、イメージを取得し、古いコンテナを削除してから、同じコマンドをもう一度実行します。"}},{"@type":"Question","name":"外部にデータを送信しますか？為替レートはどこから？","acceptedAnswer":{"@type":"Answer","text":"テレメトリーも、アクセス解析も、アカウント登録もありません。為替レートは、欧州中央銀行の参照レートを公開している Frankfurter から1日1回、使っている通貨の分だけ取得します。 それ以外の外部への通信は、自分で求めたときだけです。追加したウェブサイトのアイコンの取得と、設定した通知チャネルへのメッセージ送信です。"}},{"@type":"Question","name":"家族でも使えますか？","acceptedAnswer":{"@type":"Answer","text":"1つのインストールにつきアカウントは1つです。家族で共有すれば、すべての支払いを1か所で管理できます。データを分けたい場合は、別のポートで2つ目のコンテナを動かしてください。コマンドを1つ追加するだけです。"}},{"@type":"Question","name":"ほかの管理アプリから移行できますか？","acceptedAnswer":{"@type":"Answer","text":"Wallos からは移行できます。Wallos でサブスクリプションを JSON でエクスポートし、そのファイルを「設定 › インポート」で読み込んでください。保存する前に、プレビューと警告を確認できます。迷っている場合は、 Coinio と Wallos の比較 もご覧ください。 それ以外からの場合も、手動ですぐに追加できます。主要な161のサービスは、入力するだけでロゴ、カテゴリ、請求サイクルが入ります。Claude を連携して、追加を頼むこともできます。"}},{"@type":"Question","name":"対応している言語は？","acceptedAnswer":{"@type":"Answer","text":"アプリは英語、トルコ語、ドイツ語、フランス語、スペイン語、ポルトガル語（ブラジル）、簡体字中国語、日本語に対応しています。最初はブラウザの言語で表示され、設定からいつでも切り替えられます。日付、金額、通貨は選んだ言語に合わせて表示されます。"}},{"@type":"Question","name":"MCP とは？Claude や ChatGPT とはどう連携しますか？","acceptedAnswer":{"@type":"Answer","text":"MCP（Model Context Protocol）は、AI アシスタントがツールを使えるようにするオープンな標準です。Coinio は /mcp で MCP サーバーを提供しているので、アシスタントが今週更新されるものを一覧にしたり、サブスクリプションを追加したり、支払い済みにしたりできます。 claude.ai や Claude モバイルアプリでは、Coinio のアドレスでカスタムコネクタを追加してサインインするだけです。キーは要りません。Claude Code、Claude Desktop、Cursor では、設定で作成した API キーを使います。ChatGPT のカスタムコネクタにも同じアドレスを使えます。いずれも、上で説明した https のアドレスが必要です。"}},{"@type":"Question","name":"iPhone アプリはありますか？","acceptedAnswer":{"@type":"Answer","text":"App Store にはありません。代わりに、ホーム画面とロック画面に置ける無料の Scriptable ウィジェット があります。閲覧専用のキーで今後の支払いを読み込み、オフラインでも最後のデータを表示し続けます。ウェブアプリをホーム画面に追加すれば、アプリのように開くこともできます。"}},{"@type":"Question","name":"スプレッドシートではだめですか？","acceptedAnswer":{"@type":"Answer","text":"スプレッドシートは金額を記録できますが、期限日を自動で先に進めたり、毎日通貨を換算したり、金曜に更新されるものを火曜に知らせたりはしてくれません。Coinio はそれをすべて行い、自動引き落としも自動で記録し、レポートに使える履歴を残します。"}}]}]}</script>
   <script>
     // Theme before first paint: the visitor's choice, else the system setting.
     (function () {
@@ -1179,6 +1186,7 @@ h1 .eyebrow { display: block; }
           <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
           <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
         </button>
+        <a class="nav-cta nav-cta-ghost" href="https://app.getcoinio.me/signup">無料で使う</a>
         <a class="nav-cta" href="#install">インストール</a>
       </nav>
     </div>
@@ -1212,14 +1220,9 @@ h1 .eyebrow { display: block; }
         </svg>
       </div>
 
+      <a class="hosted-pill" href="https://app.getcoinio.me/signup"><span class="hosted-dot" aria-hidden="true"></span>インストールなしで無料で使う<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
       <h1><span class="eyebrow">オープンソースのサブスク管理<span class="vh">：</span></span> すべてのサブスクを、<br>落ち着いた1ページに<span class="pd">。</span></h1>
-      <p class="lede">Coinio は支払っているものを記録し、更新の前に知らせます。オンラインで無料で使うことも、自分のサーバーで動かしてデータを手元から出さないこともできます。</p>
-
-      <div class="hosted">
-        <a class="btn btn-primary btn-lg" href="https://app.getcoinio.me/signup">無料で使う<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-        <p class="hosted-note">インストール不要。広告もトラッキングもありません。</p>
-      </div>
-      <p class="or-divider"><span>または自分のサーバーで動かす</span></p>
+      <p class="lede">Coinio は支払っているものを記録し、更新の前にお知らせします。動くのは自分のサーバーの上だけ。データが外に出ることはありません。</p>
 
       <div class="term" id="install" data-tabs>
         <div class="term-head">
@@ -1421,6 +1424,12 @@ h1 .eyebrow { display: block; }
             <summary>Coinio は無料ですか？ライセンスは？</summary>
             <div class="faq-a">
               <p>はい、無料です。Coinio は MIT ライセンスのオープンソースです。有料プランも、こちらへのアカウント登録もありません。自分で動かし、自分で所有します。コードは <a href="https://github.com/yakupemreyerli/coinio">GitHub</a> にあります。</p>
+            </div>
+          </details>
+          <details>
+            <summary>インストールせずに Coinio を使えますか？</summary>
+            <div class="faq-a">
+              <p>はい。<a href="https://app.getcoinio.me/signup">app.getcoinio.me</a> で無料アカウントを作ればすぐに使えます。広告もトラッキングもなく、自分でインストールするものと同じアプリです。データのダウンロードやアカウントの削除は「設定 › アカウント」からいつでもできます。</p>
             </div>
           </details>
           <details>
