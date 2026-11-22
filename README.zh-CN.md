@@ -130,6 +130,8 @@ MCP 服务器位于你的 Coinio 地址加 `/mcp`。claude.ai 和 ChatGPT 等云
 
 [`widget/coinio-widget.js`](widget/coinio-widget.js) 是一个 [Scriptable](https://scriptable.app) 脚本，提供小、中、大三种主屏幕小组件以及锁定屏幕小组件。创建一个只读 API 密钥，粘贴脚本，再填写 `SERVER_URL` 和 `API_KEY`。指南：[docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget)。
 
+**Android：** 小巧的 Coinio Widget 应用（APK 见 [Releases](https://github.com/yakupemreyerli/coinio/releases/latest)）通过“设置 › 集成 › Android 小组件”中的二维码连接。指南：[docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget)。
+
 ## 更新
 
 新版本启动时，数据库迁移会自动执行。

@@ -1,4 +1,8 @@
 {
   "title": "Integrations",
-  "pages": ["mcp", "iphone-widget"]
+  "pages": [
+    "mcp",
+    "iphone-widget",
+    "android-widget"
+  ]
 }

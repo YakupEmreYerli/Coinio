@@ -130,6 +130,8 @@ MCP sunucusu Coinio adresinin sonuna `/mcp` eklenerek bulunur. claude.ai ve Chat
 
 [`widget/coinio-widget.js`](widget/coinio-widget.js), küçük, orta ve büyük ana ekran widget'ları ile kilit ekranı widget'ları için bir [Scriptable](https://scriptable.app) betiği. Salt okunur bir API anahtarı oluştur, betiği yapıştır, `SERVER_URL` ve `API_KEY` satırlarını doldur. Rehber: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
 
+**Android:** küçük Coinio Widget uygulaması ([sürümlerde](https://github.com/yakupemreyerli/coinio/releases/latest) APK olarak) **Ayarlar › Entegrasyonlar › Android widget'ı**ndaki QR kodla bağlanır. Rehber: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+
 ## Güncelleme
 
 Yeni sürüm açılırken veritabanı geçişleri kendiliğinden çalışır.

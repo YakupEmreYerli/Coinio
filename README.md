@@ -130,6 +130,8 @@ The MCP server lives at your Coinio address plus `/mcp`. Cloud apps such as clau
 
 [`widget/coinio-widget.js`](widget/coinio-widget.js) is a [Scriptable](https://scriptable.app) script for small, medium and large Home Screen widgets and Lock Screen widgets. Create a read-only API key, paste the script, fill in `SERVER_URL` and `API_KEY`. Guide: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
 
+**Android:** the small Coinio Widget app (APK on the [releases](https://github.com/yakupemreyerli/coinio/releases/latest)) connects with a QR code from **Settings › Integrations › Android widget**. Guide: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+
 ## Updating
 
 Database migrations run by themselves when a new version starts.

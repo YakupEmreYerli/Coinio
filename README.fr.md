@@ -130,6 +130,8 @@ Le serveur MCP se trouve à l’adresse de votre Coinio suivie de `/mcp`. Les ap
 
 [`widget/coinio-widget.js`](widget/coinio-widget.js) est un script [Scriptable](https://scriptable.app) pour des widgets petits, moyens et grands sur l’écran d’accueil, ainsi que pour l’écran verrouillé. Créez une clé API en lecture seule, collez le script et renseignez `SERVER_URL` et `API_KEY`. Guide : [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
 
+**Android :** la petite app Coinio Widget (APK dans les [releases](https://github.com/yakupemreyerli/coinio/releases/latest)) se connecte avec un QR code depuis **Réglages › Intégrations › Widget Android**. Guide : [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+
 ## Mise à jour
 
 Les migrations de la base de données s’exécutent d’elles-mêmes au démarrage d’une nouvelle version.
