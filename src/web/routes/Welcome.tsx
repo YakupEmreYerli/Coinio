@@ -70,7 +70,8 @@ function StepHeading({ step, title, intro }: { step: number; title: string; intr
       </div>
       <p className="mb-2 text-[12.5px] font-medium text-text-3">{t('welcome.step', { n: step + 1, total: STEPS.length })}</p>
       <h1 className="font-display text-[28px] leading-[1.15] text-text">{title}</h1>
-      <p className="mt-2 text-[14px] leading-relaxed text-text-2">{intro}</p>
+      {/* Two lines reserved: the intro is one line in some languages and two in others, and the column is centred. */}
+      <p className="mt-2 min-h-[3.25em] text-[14px] leading-relaxed text-text-2">{intro}</p>
     </div>
   );
 }
@@ -181,8 +182,9 @@ export function Welcome({ onDone, initialStep = 0 }: { onDone: () => void; initi
                     aria-label={LOCALE_NAMES[l]}
                     className="group relative flex flex-col items-start rounded-card border border-line bg-card px-4 py-3.5 text-left transition-[border-color,box-shadow] hover:border-line-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-soft data-[state=checked]:border-accent data-[state=checked]:shadow-[0_0_0_3px_var(--accent-soft)]"
                   >
-                    <span className="pr-7 text-[16px] font-medium text-text">{LOCALE_NAMES[l]}</span>
-                    <span className="pr-7 text-[12.5px] text-text-3" lang={locale}>{new Intl.DisplayNames(locale, { type: 'language' }).of(l === 'zh-CN' ? 'zh-Hans' : l)}</span>
+                    <span className="line-clamp-2 min-h-[2lh] pr-7 text-[16px] font-medium text-text sm:min-h-0">{LOCALE_NAMES[l]}</span>
+                    {/* Phones reserve two lines for each label: names wrap differently in each language and the tiles would jump. */}
+                    <span className="line-clamp-2 min-h-[2lh] pr-7 text-[12.5px] text-text-3 sm:min-h-0" lang={locale}>{new Intl.DisplayNames(locale, { type: 'language' }).of(l === 'zh-CN' ? 'zh-Hans' : l)}</span>
                     <span className="absolute top-3.5 right-3.5 grid size-5 place-items-center rounded-full border border-line-2 group-data-[state=checked]:border-accent group-data-[state=checked]:bg-accent">
                       <R.Indicator>
                         <Check className="size-3 text-white" strokeWidth={3} />
@@ -237,7 +239,7 @@ export function Welcome({ onDone, initialStep = 0 }: { onDone: () => void; initi
             </Button>
           )}
           {step < 2 && (
-            <Button type="submit" variant="primary" className="h-10 px-4" disabled={saveBasics.isPending}>
+            <Button type="submit" variant="primary" className="h-10 min-w-36 px-4" disabled={saveBasics.isPending}>
               {saveBasics.isPending && <Loader2 className="animate-spin" />}
               {t('welcome.continue')}
               {!saveBasics.isPending && <ArrowRight />}
