@@ -48,3 +48,11 @@ export const api = {
 };
 
 export type AuthState = { setupRequired: boolean; user: { id: number; username: string } | null };
+
+const AUTH_CHANGED = 'coinio:auth-changed';
+/** Tells the app to fetch the signed-in user again (after a name change, say) without reloading the page. */
+export const refreshAuth = () => window.dispatchEvent(new Event(AUTH_CHANGED));
+export const onAuthChanged = (fn: () => void) => {
+  window.addEventListener(AUTH_CHANGED, fn);
+  return () => window.removeEventListener(AUTH_CHANGED, fn);
+};

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ext } from '@coinio/ext';
-import { api, type AuthState } from './api';
+import { api, onAuthChanged, type AuthState } from './api';
 import { addMessages, resolveLocale, setLocale, t, useLocale } from './i18n';
 import { SlicedMark } from './brand/SlicedMark';
 import { AppShell } from './layout/AppShell';
@@ -69,6 +69,7 @@ export function App() {
 
   useEffect(() => {
     void refresh();
+    return onAuthChanged(() => void refresh());
   }, [refresh]);
 
   if (!auth) return <Loading />;

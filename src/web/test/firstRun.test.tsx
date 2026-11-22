@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { App } from '../App';
+import { refreshAuth } from '../api';
 import { TooltipProvider } from '../components/ui/Tooltip';
 
 const renderWhole = () =>
@@ -54,5 +55,17 @@ describe('first run', () => {
     release();
     await vi.waitFor(() => expect(container.querySelector('main')).not.toBeNull());
     expect(window.location.pathname).toBe('/');
+  });
+});
+
+describe('auth refresh', () => {
+  it('fetches the signed-in user again when asked, without reloading the page', async () => {
+    serverWithSlowOnboarding(true)();
+    window.history.pushState({}, '', '/');
+    renderWhole();
+    const authCalls = () => vi.mocked(fetch).mock.calls.filter(([u]) => String(u).startsWith('/api/auth/state')).length;
+    await vi.waitFor(() => expect(authCalls()).toBe(1));
+    refreshAuth();
+    await vi.waitFor(() => expect(authCalls()).toBe(2));
   });
 });
