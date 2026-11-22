@@ -80,9 +80,11 @@ export function SearchPicker({
         </P.Trigger>
         <P.Portal>
           <P.Content
+            side="bottom"
             align="start"
             sideOffset={6}
             collisionPadding={12}
+            avoidCollisions={false}
             className="z-50 w-[var(--radix-popover-trigger-width)] min-w-[280px] overflow-hidden rounded-card border border-line bg-card text-text shadow-[var(--shadow)] outline-none"
           >
             <Command label={label} loop>
@@ -90,7 +92,7 @@ export function SearchPicker({
                 <Search className="size-4 shrink-0 text-text-3" aria-hidden />
                 <Command.Input autoFocus placeholder={searchPlaceholder} className="h-11 w-full bg-transparent text-sm outline-none placeholder:text-text-3 focus-visible:outline-none" />
               </div>
-              <Command.List className="max-h-[min(50vh,320px)] overflow-y-auto overscroll-contain p-1.5 [&_[cmdk-group-heading]]:px-2.5 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-text-3 [&_[cmdk-group-heading]]:uppercase">
+              <Command.List className="max-h-[clamp(160px,calc(var(--radix-popover-content-available-height)-56px),320px)] overflow-y-auto overscroll-contain p-1.5 [&_[cmdk-group-heading]]:px-2.5 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-text-3 [&_[cmdk-group-heading]]:uppercase">
                 <Command.Empty className="px-3 py-8 text-center text-sm text-text-3">{emptyText}</Command.Empty>
                 {top.length > 0 && <Command.Group heading={suggestedHeading}>{top.map((i) => row(i, 's'))}</Command.Group>}
                 <Command.Group heading={top.length > 0 ? allHeading : undefined}>{rest.map((i) => row(i, 'a'))}</Command.Group>

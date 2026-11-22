@@ -153,7 +153,7 @@ export function Subscriptions() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="flex w-64 gap-2">
-                <input list="bulk-cats" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder={t('form.categoryPh')} className="h-9 min-w-0 flex-1 rounded-[8px] border border-line-2 bg-card px-2.5 text-sm outline-none" />
+                <input list="bulk-cats" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder={t('form.categoryPh')} className="h-9 min-w-0 flex-1 rounded-[8px] border border-line-2 bg-card px-2.5 text-sm outline-none focus:border-accent" />
                 <datalist id="bulk-cats">{categories.map((c) => <option key={c} value={c} />)}</datalist>
                 <Button size="sm" variant="primary" onClick={() => void bulk({ category: newCategory.trim() || null })}>
                   {t('common.save')}

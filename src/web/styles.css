@@ -198,9 +198,12 @@ body {
   letter-spacing: -0.02em;
 }
 
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+/* In the base layer so a component's own focus style (outline-none, a ring) wins over it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 }
 
 ::selection {
