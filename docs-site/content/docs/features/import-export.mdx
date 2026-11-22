@@ -1,6 +1,6 @@
 ---
 title: Import and export
-description: Bring subscriptions over from Wallos, and get your data out as CSV or JSON.
+description: Bring subscriptions over from Wallos or another Coinio, and get your data out as CSV or JSON.
 ---
 
 ## Import from Wallos
@@ -13,7 +13,7 @@ In Wallos, open **Settings** and use **Export subscriptions** to download the JS
 </Step>
 <Step>
 
-In Coinio, open **Settings › Import** (or choose **Import from Wallos** in the welcome steps) and pick the file. Files up to 1 MB are accepted.
+In Coinio, open **Settings › Import** (or choose **Import from Wallos** in the welcome steps) and pick the file. Files up to 8 MB are accepted.
 
 </Step>
 <Step>
@@ -41,6 +41,15 @@ Coinio shows what it found and any warnings first. Nothing is saved yet. Check t
 
 A manual subscription whose next payment is already in the past is imported as is and shows as overdue. You get a warning for each one so you can fix the date or mark it paid.
 
+## Import from another Coinio
+
+**Settings › Import** also reads Coinio's own export files, so you can move between installs, or from the [free hosted version](/docs/hosted) to your own server and back.
+
+- Choose the **Subscriptions** and **Payments** files from **Export** together (JSON or CSV) to bring the payment history along. The subscriptions file alone works too.
+- The hosted version's **Download my data** file (Settings › Account) works on its own.
+
+You see what will be imported before anything is saved. Subscriptions that already exist (same name, currency and billing cycle) are skipped, so importing the same files twice adds nothing. Notification channels, settings and uploaded logos are not part of the export; logos come back by themselves for subscriptions that have a website.
+
 ## Export
 
 The **Export** menu in the top bar (on phones, on the **History** page) downloads:
@@ -54,4 +63,4 @@ CSV columns for subscriptions: `id`, `name`, `domain`, `amount`, `currency`, `va
 
 CSV columns for payments: `id`, `subscription_id`, `subscription_name`, `due_date`, `paid_at`, `amount`, `currency`, `actual_base_amount`, `source`, `status`.
 
-Exports are for spreadsheets and other tools; Coinio does not import its own export files. To move an install to another server, copy the data volume ([backup and restore](/docs/maintenance#back-up)).
+Exports open in spreadsheets and other tools, and Settings › Import reads them back. To move a whole install to another server with everything (channels, keys, settings), copy the data volume instead ([backup and restore](/docs/maintenance#back-up)).
