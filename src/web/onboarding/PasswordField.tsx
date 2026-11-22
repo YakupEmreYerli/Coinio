@@ -51,7 +51,8 @@ export function PasswordField({
       <label htmlFor={id} className="text-[13px] font-medium text-text-2">
         {label}
       </label>
-      <div className={cn(fieldClass, 'flex h-11 items-center gap-1 pr-1 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent-soft', error && 'border-neg')}>
+      {/* The input fills the whole box (the button sits on top), so browser autofill colours all of it. */}
+      <div className="relative">
         <input
           id={id}
           name={name}
@@ -68,14 +69,14 @@ export function PasswordField({
           required
           aria-invalid={!!error || undefined}
           aria-describedby={describedBy}
-          className="h-full min-w-0 flex-1 bg-transparent outline-none"
+          className={cn(fieldClass, 'h-11 w-full pr-11 focus:border-accent focus:ring-2 focus:ring-accent-soft', error && 'border-neg')}
         />
         <button
           type="button"
           onClick={() => setShown((s) => !s)}
           aria-label={shown ? t('auth.password.hide') : t('auth.password.show')}
           aria-pressed={shown}
-          className="grid size-8 shrink-0 place-items-center rounded-[7px] text-text-3 transition-colors hover:bg-sunk hover:text-text-2"
+          className="absolute top-1/2 right-1.5 grid size-8 -translate-y-1/2 place-items-center rounded-[7px] text-text-3 transition-colors hover:bg-sunk hover:text-text-2"
         >
           {shown ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
         </button>
