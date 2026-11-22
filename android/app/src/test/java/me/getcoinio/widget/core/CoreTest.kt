@@ -56,4 +56,13 @@ class CoreTest {
         assertEquals("Nov 25", shortDate("2026-11-25", Locale.US))
         assertEquals("25 Kas", shortDate("2026-11-25", Locale.forLanguageTag("tr")))
     }
+
+    @Test fun rowsPerWidgetSize() {
+        val p = sample()
+        assertEquals(1, rowsFor(Bucket.SMALL, p).size)
+        assertEquals(4, rowsFor(Bucket.MEDIUM, p).size)
+        assertEquals(6, rowsFor(Bucket.LARGE, p).size)
+        assertEquals(listOf("Netflix"), rowsFor(Bucket.SMALL, p).map { it.name })
+        assertEquals(emptyList<WidgetItem>(), rowsFor(Bucket.LARGE, p.copy(items = emptyList())))
+    }
 }
