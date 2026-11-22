@@ -7,6 +7,7 @@ import { t } from '../../i18n';
 import { ApiKeys } from './ApiKeys';
 import { ConnectedApps } from './ConnectedApps';
 import { Section } from './Section';
+import { AndroidSetup } from './AndroidSetup';
 import { WidgetSetup } from './WidgetSetup';
 
 const PARTS = [
@@ -14,6 +15,7 @@ const PARTS = [
   { id: 'apps', label: 'settings.apps' },
   { id: 'keys', label: 'settings.keys' },
   { id: 'widget', label: 'conn.widgetTitle' },
+  { id: 'android', label: 'conn.androidTitle' },
 ];
 
 const tabClass =
@@ -104,6 +106,7 @@ export function Integrations() {
       <ConnectedApps />
       <ApiKeys />
       <WidgetSetup origin={origin} />
+      <AndroidSetup origin={origin} />
     </div>
   );
 }
