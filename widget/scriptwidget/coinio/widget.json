@@ -1,0 +1,33 @@
+{
+  "formatVersion": 2,
+  "id": "me.getcoinio.widget",
+  "name": "Coinio",
+  "version": "1.0.0",
+  "runtimeVersion": "1.0",
+  "minimumRuntimeVersion": "1.0",
+  "entry": "main.jsx",
+  "supportedFamilies": [
+    "systemSmall",
+    "systemMedium",
+    "systemLarge",
+    "accessoryCircular",
+    "accessoryRectangular",
+    "accessoryInline"
+  ],
+  "permissions": [
+    "network",
+    "storage"
+  ],
+  "networkDomains": [
+    "app.getcoinio.me"
+  ],
+  "description": "What is left to pay this month and your next payments from Coinio, the open-source subscription tracker. Works with the free hosted Coinio; put a read-only API key in the widget parameter.",
+  "category": "finance",
+  "tags": [
+    "subscriptions",
+    "finance",
+    "coinio"
+  ],
+  "icon": "creditcard.fill",
+  "preview": "preview.png"
+}
