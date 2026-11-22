@@ -1,0 +1,84 @@
+{
+    "base": "USD",
+    "leftThisMonthMinor": 3549,
+    "monthlyAverageMinor": 14397,
+    "ratesStale": false,
+    "items": [
+        {
+            "subscriptionId": 1,
+            "name": "Netflix",
+            "logoPath": "15b7e69ddffa3a8cbf9c9ab7e434a79bcd42b285.svg",
+            "dueDate": "2026-11-25",
+            "daysLeft": 3,
+            "amountMinor": 1549,
+            "currency": "USD",
+            "baseMinor": 1549,
+            "autoPay": true,
+            "variableAmount": false
+        },
+        {
+            "subscriptionId": 2,
+            "name": "ChatGPT Plus",
+            "logoPath": "f18e241fb1fb59b1577c83ab8402bb3cd5d06b90.png",
+            "dueDate": "2026-11-27",
+            "daysLeft": 5,
+            "amountMinor": 2000,
+            "currency": "USD",
+            "baseMinor": 2000,
+            "autoPay": true,
+            "variableAmount": false
+        },
+        {
+            "subscriptionId": 3,
+            "name": "Spotify",
+            "logoPath": "a50309441bb417ca1dc0104b3bd549040f11b250.svg",
+            "dueDate": "2026-12-01",
+            "daysLeft": 9,
+            "amountMinor": 1199,
+            "currency": "USD",
+            "baseMinor": 1199,
+            "autoPay": true,
+            "variableAmount": false
+        },
+        {
+            "subscriptionId": 4,
+            "name": "Gym",
+            "logoPath": null,
+            "dueDate": "2026-12-04",
+            "daysLeft": 12,
+            "amountMinor": 3900,
+            "currency": "USD",
+            "baseMinor": 3900,
+            "autoPay": false,
+            "variableAmount": false
+        },
+        {
+            "subscriptionId": 5,
+            "name": "iCloud+",
+            "logoPath": "dfe6a9c7c1a5867f3084ec73a219da75643eef5a.svg",
+            "dueDate": "2026-12-06",
+            "daysLeft": 14,
+            "amountMinor": 299,
+            "currency": "USD",
+            "baseMinor": 299,
+            "autoPay": true,
+            "variableAmount": false
+        },
+        {
+            "subscriptionId": 6,
+            "name": "Home internet",
+            "logoPath": null,
+            "dueDate": "2026-12-20",
+            "daysLeft": 28,
+            "amountMinor": 4500,
+            "currency": "USD",
+            "baseMinor": 4500,
+            "autoPay": false,
+            "variableAmount": false
+        }
+    ],
+    "digits": {
+        "USD": 2
+    },
+    "generatedAt": "2026-11-22T16:07:26.498Z"
+}

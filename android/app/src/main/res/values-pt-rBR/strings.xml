@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="left">Falta este mês</string>
+    <string name="today">hoje</string>
+    <string name="tomorrow">amanhã</string>
+    <plurals name="in_days"><item quantity="one">em %d d</item><item quantity="other">em %d d</item></plurals>
+    <plurals name="days_late"><item quantity="one">%d d de atraso</item><item quantity="other">%d d de atraso</item></plurals>
+    <string name="none">Nenhum pagamento próximo</string>
+    <string name="offline">offline</string>
+    <string name="unreachable">Não foi possível acessar o Coinio</string>
+    <string name="auth">Chave de API recusada. Conecte de novo pelo Coinio.</string>
+    <string name="not_connected">Abra o app para conectar</string>
+    <string name="connect_title">Conectar ao Coinio</string>
+    <string name="connect_body">No Coinio, abra Configurações › Integrações › Android e toque em “Conectar Android”. Depois escaneie o QR code mostrado.</string>
+    <string name="scan">Escanear o QR code</string>
+    <string name="bad_code">Isto não é um código do Coinio. Use o QR code em Configurações › Integrações › Android.</string>
+    <string name="open_coinio">Abrir o Coinio</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="disconnect_confirm">Desconectar? O widget não mostrará seus pagamentos até você conectar de novo.</string>
+    <string name="cancel">Cancelar</string>
+    <string name="add_widget_hint">Adicione o widget: toque e segure a tela de início, toque em Widgets e escolha Coinio.</string>
+    <string name="unreachable_note">Fora de casa, seu celular talvez não alcance %1$s. Isso exige que o Coinio tenha um endereço https.</string>
+    <string name="connected_to">Conectado a %1$s</string>
+    <string name="widget_desc">O que falta este mês e seus próximos pagamentos</string>
+    <string name="refresh">Atualizar</string>
+    <string name="scan_prompt">Aponte a câmera para o QR code no Coinio</string>
+</resources>
