@@ -8,13 +8,15 @@ Um controle de assinaturas e contas auto-hospedado: um contêiner Docker, uma pa
 
 [English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · **Português (Brasil)** · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
-[Site](https://getcoinio.me) · [Documentação](https://docs.getcoinio.me) · [Demo ao vivo](https://getcoinio.me/demo/)
+[Site](https://getcoinio.me) · [Documentação](https://docs.getcoinio.me) · [Demo ao vivo](https://getcoinio.me/demo/) · [Usar de graça](https://app.getcoinio.me/signup)
 
 ![Coinio: todas as assinaturas, numa página tranquila](docs/banner.pt-BR.png)
 
 O Coinio reúne todos os pagamentos recorrentes numa página só: streaming, armazenamento na nuvem, academia, aluguel, o domínio que você renova uma vez por ano. Você vê o que vence esta semana, quanto ainda falta pagar neste mês e quanto o ano inteiro custa, tudo convertido para a sua moeda principal. Não há conta no servidor de ninguém, nem telemetria, nem plano pago.
 
 **Experimente primeiro:** a [demo ao vivo](https://getcoinio.me/demo/) é o app web de verdade rodando no seu navegador, com dados de exemplo. Nada é enviado para lugar nenhum, e você pode reiniciar quando quiser.
+
+**Prefere não instalar nada?** Use o Coinio de graça em [app.getcoinio.me](https://app.getcoinio.me/signup): o mesmo app, sem anúncios nem rastreamento. [Mais](https://docs.getcoinio.me/docs/hosted)
 
 ## Capturas de tela
 

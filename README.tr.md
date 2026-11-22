@@ -8,13 +8,15 @@ Kendi sunucunda çalışan abonelik ve fatura takibi: tek Docker kapsayıcısı,
 
 [English](README.md) · **Türkçe** · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
-[Site](https://getcoinio.me) · [Belgeler](https://docs.getcoinio.me) · [Canlı demo](https://getcoinio.me/demo/)
+[Site](https://getcoinio.me) · [Belgeler](https://docs.getcoinio.me) · [Canlı demo](https://getcoinio.me/demo/) · [Ücretsiz kullan](https://app.getcoinio.me/signup)
 
 ![Coinio: bütün aboneliklerin tek sakin sayfada](docs/banner.tr.png)
 
 Coinio düzenli ödediğin her şeyi tek sayfada toplar: dizi platformu, bulut depolama, spor salonu, kira, yılda bir yenilediğin alan adı. Bu hafta neyin çekileceğini, bu ay ne kadar ödemen kaldığını ve bütün yılın sana kaça patladığını kendi para biriminde görürsün. Başkasının sunucusunda hesap açmazsın; telemetri ve ücretli sürüm de yok.
 
 **Önce dene:** [canlı demo](https://getcoinio.me/demo/) gerçek web uygulamasının tarayıcında örnek veriyle çalışan hâli. Hiçbir yere veri gitmez, istediğin an sıfırlarsın.
+
+**Kurmak istemiyor musun?** Coinio'yu [app.getcoinio.me](https://app.getcoinio.me/signup)'de ücretsiz kullan: aynı uygulama, reklam ve takip yok. [Ayrıntı](https://docs.getcoinio.me/docs/hosted)
 
 ## Ekran görüntüleri
 

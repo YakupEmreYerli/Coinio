@@ -2,6 +2,7 @@
   "pages": [
     "---Get started---",
     "index",
+    "hosted",
     "installation",
     "expose",
     "first-run",

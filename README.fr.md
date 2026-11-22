@@ -8,13 +8,15 @@ Un gestionnaire d’abonnements et de factures auto-hébergé : un seul conteneu
 
 [English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · **Français** · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
-[Site](https://getcoinio.me) · [Documentation](https://docs.getcoinio.me) · [Démo en direct](https://getcoinio.me/demo/)
+[Site](https://getcoinio.me) · [Documentation](https://docs.getcoinio.me) · [Démo en direct](https://getcoinio.me/demo/) · [Utiliser gratuitement](https://app.getcoinio.me/signup)
 
 ![Coinio : tous vos abonnements, sur une seule page](docs/banner.fr.png)
 
 Coinio réunit chaque paiement récurrent sur une seule page : streaming, stockage cloud, salle de sport, loyer, le nom de domaine que vous renouvelez une fois par an. Vous voyez ce qui arrive à échéance cette semaine, ce qu’il reste à payer ce mois-ci et ce que coûte l’année entière, converti dans votre devise principale. Pas de compte sur le serveur de quelqu’un d’autre, pas de télémétrie et pas d’offre payante.
 
 **Essayez d’abord :** la [démo en direct](https://getcoinio.me/demo/) est la vraie application web, qui tourne dans votre navigateur avec des données d’exemple. Rien n’est envoyé nulle part, et vous la réinitialisez quand vous voulez.
+
+**Vous préférez ne rien installer ?** Utilisez Coinio gratuitement sur [app.getcoinio.me](https://app.getcoinio.me/signup) : la même application, ni publicité ni pistage. [En savoir plus](https://docs.getcoinio.me/docs/hosted)
 
 ## Captures d’écran
 

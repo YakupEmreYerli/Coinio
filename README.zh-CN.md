@@ -8,13 +8,15 @@
 
 [English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · **简体中文** · [日本語](README.ja.md)
 
-[网站](https://getcoinio.me) · [文档](https://docs.getcoinio.me) · [在线演示](https://getcoinio.me/demo/)
+[网站](https://getcoinio.me) · [文档](https://docs.getcoinio.me) · [在线演示](https://getcoinio.me/demo/) · [免费使用](https://app.getcoinio.me/signup)
 
 ![Coinio：所有订阅，一页尽览](docs/banner.zh-CN.png)
 
 Coinio 把所有周期性付款放在同一个页面：流媒体、云存储、健身房、房租，还有一年续费一次的域名。本周有哪些要扣款、本月还剩多少没付、全年一共要花多少钱，都会按汇率换算成你的主币种，一目了然。无需在别人的服务器上注册账户，没有遥测，也没有付费版。
 
 **先试试看**：[在线演示](https://getcoinio.me/demo/)就是真正的 Web 应用，在浏览器中使用示例数据运行。不会向任何地方发送数据，也可以随时重置。
+
+**不想自己部署？** 在 [app.getcoinio.me](https://app.getcoinio.me/signup) 免费使用 Coinio：同一个应用，没有广告和跟踪。[了解更多](https://docs.getcoinio.me/docs/hosted)
 
 ## 截图
 

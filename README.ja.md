@@ -8,13 +8,15 @@
 
 [English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md) · **日本語**
 
-[ウェブサイト](https://getcoinio.me) · [ドキュメント](https://docs.getcoinio.me) · [ライブデモ](https://getcoinio.me/demo/)
+[ウェブサイト](https://getcoinio.me) · [ドキュメント](https://docs.getcoinio.me) · [ライブデモ](https://getcoinio.me/demo/) · [無料で使う](https://app.getcoinio.me/signup)
 
 ![Coinio: すべてのサブスクを、1ページに](docs/banner.ja.png)
 
 Coinio は、定期的な支払いをすべて1つのページにまとめます。動画配信、クラウドストレージ、ジム、家賃、年に1回更新するドメイン。今週の支払い、今月の残り、1年間の合計金額が、メインの通貨に換算されてひと目でわかります。他人のサーバーにアカウントを作る必要はなく、テレメトリーも有料プランもありません。
 
 **まずは試してみる:** [ライブデモ](https://getcoinio.me/demo/)は、本物の Web アプリをブラウザ内でサンプルデータを使って動かしたものです。データはどこにも送信されず、いつでもリセットできます。
+
+**インストールしたくない場合は** [app.getcoinio.me](https://app.getcoinio.me/signup) で Coinio を無料で使えます。同じアプリで、広告もトラッキングもありません。[詳しく](https://docs.getcoinio.me/docs/hosted)
 
 ## スクリーンショット
 

@@ -8,13 +8,15 @@ Un gestor de suscripciones y facturas autoalojado: un contenedor Docker, una car
 
 [English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · **Español** · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
-[Web](https://getcoinio.me) · [Documentación](https://docs.getcoinio.me) · [Demo en vivo](https://getcoinio.me/demo/)
+[Web](https://getcoinio.me) · [Documentación](https://docs.getcoinio.me) · [Demo en vivo](https://getcoinio.me/demo/) · [Usar gratis](https://app.getcoinio.me/signup)
 
 ![Coinio: todas tus suscripciones, en una página tranquila](docs/banner.es.png)
 
 Coinio reúne cada pago recurrente en una sola página: streaming, almacenamiento en la nube, el gimnasio, el alquiler, el dominio que renuevas una vez al año. Ves qué vence esta semana, cuánto te queda por pagar este mes y cuánto cuesta el año entero, convertido a tu moneda principal. No hay cuenta en el servidor de otra persona, ni telemetría, ni plan de pago.
 
 **Pruébalo primero:** la [demo en vivo](https://getcoinio.me/demo/) es la app web de verdad, funcionando en tu navegador con datos de ejemplo. No se envía nada a ninguna parte y la restableces cuando quieras.
+
+**¿Prefieres no instalar nada?** Usa Coinio gratis en [app.getcoinio.me](https://app.getcoinio.me/signup): la misma app, sin anuncios ni rastreo. [Más](https://docs.getcoinio.me/docs/hosted)
 
 ## Capturas de pantalla
 
