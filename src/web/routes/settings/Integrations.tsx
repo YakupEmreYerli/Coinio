@@ -1,4 +1,4 @@
-import { ArrowUpRight, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import { Tabs as T } from 'radix-ui';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { t } from '../../i18n';
 import { ApiKeys } from './ApiKeys';
 import { ConnectedApps } from './ConnectedApps';
 import { Section } from './Section';
+import { WidgetSetup } from './WidgetSetup';
 
 const PARTS = [
   { id: 'mcp', label: 'conn.nav.mcp' },
@@ -79,33 +80,6 @@ function Mcp({ origin }: { origin: string }) {
   );
 }
 
-function Widget({ origin }: { origin: string }) {
-  return (
-    <Section id="widget" title={t('conn.widgetTitle')} description={t('conn.widgetDesc')}>
-      <ol className="flex flex-col gap-2.5">
-        {[1, 2, 3, 4].map((n) => (
-          <li key={n} className="flex gap-3 text-[13px] text-text-2">
-            <span className="num grid size-5 shrink-0 place-items-center rounded-full bg-sunk text-[11px] font-medium text-text">{n}</span>
-            <span className="pt-px">{t(`conn.widgetStep${n}`)}</span>
-          </li>
-        ))}
-      </ol>
-      <Field label={t('conn.widgetServer')}>
-        <CopyField value={origin} label={t('conn.widgetServer')} />
-      </Field>
-      <a
-        href="https://docs.getcoinio.me/docs/integrations/iphone-widget"
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center gap-1 self-start text-[13px] font-medium text-accent underline-offset-2 hover:underline"
-      >
-        {t('conn.widgetGuide')}
-        <ArrowUpRight className="size-3.5" />
-      </a>
-    </Section>
-  );
-}
-
 /** One place for everything that talks to Coinio from outside: AI assistants, signed-in apps, API keys, the widget. */
 export function Integrations() {
   const origin = typeof location === 'undefined' ? 'https://example.com' : location.origin;
@@ -129,7 +103,7 @@ export function Integrations() {
       <Mcp origin={origin} />
       <ConnectedApps />
       <ApiKeys />
-      <Widget origin={origin} />
+      <WidgetSetup origin={origin} />
     </div>
   );
 }

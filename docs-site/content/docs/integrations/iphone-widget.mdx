@@ -17,17 +17,12 @@ Install **Scriptable** from the App Store.
 </Step>
 <Step>
 
-In Coinio, open **Settings › Integrations › API keys** and create a **Read only** key. Copy it; it is shown once.
+On your iPhone, open Coinio at **Settings › Integrations › iPhone widget** and tap **Prepare the widget**. Coinio makes a read-only key and writes it, with your server address, into the script. Tap **Copy script**. (On a computer, scan the QR code there to open the page on your phone.)
 
 </Step>
 <Step>
 
-In Scriptable, tap **+** to make a new script and paste the contents of [`widget/coinio-widget.js`](https://raw.githubusercontent.com/yakupemreyerli/coinio/main/widget/coinio-widget.js). Fill in the two lines at the top:
-
-```js
-const SERVER_URL = 'https://coinio.example.com'; // where you open the app, no trailing slash
-const API_KEY = 'coi_read_…'; // Settings › Integrations › API keys › Read only
-```
+In Scriptable, tap **+** to make a new script and paste.
 
 </Step>
 <Step>
@@ -36,6 +31,15 @@ Long-press the Home Screen (or **Lock Screen › Customize**), add a **Scriptabl
 
 </Step>
 </Steps>
+
+### By hand
+
+You can also create a **Read only** key under **Settings › Integrations › API keys**, paste [`widget/coinio-widget.js`](https://raw.githubusercontent.com/yakupemreyerli/coinio/main/widget/coinio-widget.js) into Scriptable and fill in the two lines at the top:
+
+```js
+const SERVER_URL = 'https://coinio.example.com'; // where you open the app, no trailing slash
+const API_KEY = 'coi_read_…'; // Settings › Integrations › API keys › Read only
+```
 
 ## How it behaves
 
