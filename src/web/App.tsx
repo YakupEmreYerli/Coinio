@@ -19,15 +19,24 @@ import { Welcome, useOnboarding } from './routes/Welcome';
 
 if (ext.messages) addMessages(ext.messages);
 
+const Loading = () => (
+  <div className="grid min-h-dvh place-items-center bg-bg" role="status" aria-label={t('common.loading')}>
+    <SlicedMark size={44} animated className="opacity-90" />
+  </div>
+);
+
 /** Signed-in part: keeps language and appearance in sync with the server. */
 function SignedIn({ user }: { user: { id: number; username: string } }) {
   const settings = useSettings().data;
   useEffect(() => {
     if (settings) setLocale(resolveLocale(settings.locale, navigator.languages));
   }, [settings]);
-  const onboarding = useOnboarding().data;
+  const onboardingQuery = useOnboarding();
+  const onboarding = onboardingQuery.data;
   const location = useLocation();
   const navigate = useNavigate();
+  // Until we know whether this is a first run, show the loading mark: drawing the app first flashes it before the welcome.
+  if (onboardingQuery.isPending) return <Loading />;
   if (onboarding && !onboarding.completed && location.pathname !== '/welcome' && !location.pathname.startsWith('/settings/import')) {
     return <Navigate to="/welcome" replace />;
   }
@@ -62,12 +71,7 @@ export function App() {
     void refresh();
   }, [refresh]);
 
-  if (!auth)
-    return (
-      <div className="grid min-h-dvh place-items-center bg-bg" role="status" aria-label={t('common.loading')}>
-        <SlicedMark size={44} animated className="opacity-90" />
-      </div>
-    );
+  if (!auth) return <Loading />;
 
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || undefined}>
