@@ -142,6 +142,7 @@ describe('settings', () => {
   it('import preview lists items then imports', async () => {
     const calls = mockApi({
       'GET /api/settings': settings,
+      'POST /api/import/coinio': new Response(JSON.stringify({ error: 'unknown_file' }), { status: 422 }),
       'POST /api/import/wallos': (init: { body?: unknown }) => {
         const body = JSON.parse(String(init.body));
         return { created: body.dryRun ? 0 : 2, items: [{ name: 'Netflix' }, { name: 'Spotify' }], warnings: ['"Spotify": $ assumed USD'] };
@@ -150,12 +151,31 @@ describe('settings', () => {
     open('import');
     const user = userEvent.setup();
     const file = new File([JSON.stringify([{ Name: 'Netflix' }])], 'wallos.json', { type: 'application/json' });
-    await user.upload(await screen.findByLabelText(/wallos dosyası/i), file);
+    await user.upload(await screen.findByLabelText(/aktarılacak dosya/i), file);
     expect(await screen.findByText('Spotify')).toBeInTheDocument();
     expect(screen.getByText(/assumed USD/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /2 aboneliği içe aktar/i }));
     await vi.waitFor(() => expect(calls.filter((c) => c.url === '/api/import/wallos').map((c) => (c.body as { dryRun: boolean }).dryRun)).toEqual([true, false]));
     expect((await screen.findAllByText(/2 abonelik içe aktarıldı/i)).length).toBeGreaterThan(0);
+  });
+
+  it('imports Coinio export files chosen together, with their payment history', async () => {
+    const calls = mockApi({
+      'GET /api/settings': settings,
+      'POST /api/import/coinio': (init: { body?: unknown }) => {
+        const body = JSON.parse(String(init.body));
+        return { created: body.dryRun ? 0 : 1, payments: 3, items: [{ name: 'Netflix' }], warnings: [] };
+      },
+    });
+    open('import');
+    const user = userEvent.setup();
+    const subs = new File(['[]'], 'coinio-subscriptions.json', { type: 'application/json' });
+    const pays = new File(['[]'], 'coinio-payments.json', { type: 'application/json' });
+    await user.upload(await screen.findByLabelText(/aktarılacak dosya/i), [subs, pays]);
+    expect(await screen.findByText(/geçmişten 3 ödeme de gelecek/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /1 aboneliği içe aktar/i }));
+    await vi.waitFor(() => expect(calls.filter((c) => c.url === '/api/import/coinio').map((c) => (c.body as { files: unknown[]; dryRun: boolean }).files.length)).toEqual([2, 2]));
+    expect(calls.some((c) => c.url === '/api/import/wallos')).toBe(false);
   });
 
   it('password change wrong current shows error', async () => {

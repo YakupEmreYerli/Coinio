@@ -528,14 +528,18 @@
   "conn.widgetServer": "Server address for the widget",
   "conn.widgetGuide": "Full widget guide",
   "settings.import": "Import",
-  "import.desc": "Bring your subscriptions over from Wallos.",
-  "import.choose": "Choose your Wallos file",
-  "import.where": "Wallos › Settings › Export subscriptions (JSON)",
-  "import.file": "Wallos file",
-  "import.badFile": "This file could not be read as a Wallos export.",
+  "import.desc": "Bring your subscriptions over from Wallos or from another Coinio.",
+  "import.choose": "Choose your files",
+  "import.where": "Wallos: Settings › Export subscriptions (JSON). Coinio: the subscriptions and payments files from Export, chosen together, or the hosted version's data file.",
+  "import.file": "Import file",
+  "import.badFile": "These files could not be read as a Wallos or Coinio export.",
   "import.found": {
     "one": "{n} subscription found. Check it, then import.",
     "other": "{n} subscriptions found. Check them, then import."
+  },
+  "import.payments": {
+    "one": "{n} payment from the history comes along.",
+    "other": "{n} payments from the history come along."
   },
   "import.run": {
     "one": "Import {n} subscription",

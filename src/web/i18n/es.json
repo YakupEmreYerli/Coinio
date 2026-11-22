@@ -528,14 +528,18 @@
   "conn.widgetServer": "Dirección del servidor para el widget",
   "conn.widgetGuide": "Guía completa del widget",
   "settings.import": "Importar",
-  "import.desc": "Trae tus suscripciones desde Wallos.",
-  "import.choose": "Elige tu archivo de Wallos",
-  "import.where": "Wallos › Settings › Export subscriptions (JSON)",
-  "import.file": "Archivo de Wallos",
-  "import.badFile": "No se pudo leer este archivo como una exportación de Wallos.",
+  "import.desc": "Trae tus suscripciones desde Wallos o desde otro Coinio.",
+  "import.choose": "Elige tus archivos",
+  "import.where": "Wallos: Ajustes › Exportar suscripciones (JSON). Coinio: los archivos de suscripciones y pagos de Exportar, elegidos juntos, o el archivo de datos de la versión alojada.",
+  "import.file": "Archivo a importar",
+  "import.badFile": "Estos archivos no se pudieron leer como una exportación de Wallos o Coinio.",
   "import.found": {
     "one": "Se encontró {n} suscripción. Revísala y luego impórtala.",
     "other": "Se encontraron {n} suscripciones. Revísalas y luego impórtalas."
+  },
+  "import.payments": {
+    "one": "También viene {n} pago del historial.",
+    "other": "También vienen {n} pagos del historial."
   },
   "import.run": {
     "one": "Importar {n} suscripción",

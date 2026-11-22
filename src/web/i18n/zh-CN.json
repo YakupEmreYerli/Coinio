@@ -517,13 +517,16 @@
   "conn.widgetServer": "小组件使用的服务器地址",
   "conn.widgetGuide": "完整的小组件指南",
   "settings.import": "导入",
-  "import.desc": "从 Wallos 迁移订阅。",
-  "import.choose": "选择 Wallos 文件",
-  "import.where": "Wallos › 设置 › 导出订阅（JSON）",
-  "import.file": "Wallos 文件",
-  "import.badFile": "无法将此文件识别为 Wallos 导出文件。",
+  "import.desc": "从 Wallos 或另一个 Coinio 导入订阅。",
+  "import.choose": "选择文件",
+  "import.where": "Wallos：设置 › 导出订阅（JSON）。Coinio：从“导出”得到的订阅和付款文件（一起选择），或托管版的数据文件。",
+  "import.file": "导入文件",
+  "import.badFile": "无法将这些文件识别为 Wallos 或 Coinio 的导出。",
   "import.found": {
     "other": "找到 {n} 个订阅。确认无误后再导入。"
+  },
+  "import.payments": {
+    "other": "同时导入 {n} 条付款记录。"
   },
   "import.run": {
     "other": "导入 {n} 个订阅"

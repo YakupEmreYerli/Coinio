@@ -528,14 +528,18 @@
   "conn.widgetServer": "Endereço do servidor para o widget",
   "conn.widgetGuide": "Guia completo do widget",
   "settings.import": "Importar",
-  "import.desc": "Traga suas assinaturas do Wallos.",
-  "import.choose": "Escolha seu arquivo do Wallos",
-  "import.where": "Wallos › Configurações › Exportar assinaturas (JSON)",
-  "import.file": "Arquivo do Wallos",
-  "import.badFile": "Não foi possível ler este arquivo como uma exportação do Wallos.",
+  "import.desc": "Traga suas assinaturas do Wallos ou de outro Coinio.",
+  "import.choose": "Escolha seus arquivos",
+  "import.where": "Wallos: Configurações › Exportar assinaturas (JSON). Coinio: os arquivos de assinaturas e pagamentos do Exportar, escolhidos juntos, ou o arquivo de dados da versão hospedada.",
+  "import.file": "Arquivo para importar",
+  "import.badFile": "Não foi possível ler estes arquivos como uma exportação do Wallos ou do Coinio.",
   "import.found": {
     "one": "{n} assinatura encontrada. Confira e depois importe.",
     "other": "{n} assinaturas encontradas. Confira e depois importe."
+  },
+  "import.payments": {
+    "one": "{n} pagamento do histórico também vem junto.",
+    "other": "{n} pagamentos do histórico também vêm juntos."
   },
   "import.run": {
     "one": "Importar {n} assinatura",

@@ -528,14 +528,18 @@
   "conn.widgetServer": "Serveradresse für das Widget",
   "conn.widgetGuide": "Vollständige Widget-Anleitung",
   "settings.import": "Import",
-  "import.desc": "Übernehmen Sie Ihre Abos aus Wallos.",
-  "import.choose": "Wallos-Datei auswählen",
-  "import.where": "Wallos › Einstellungen › Abonnements exportieren (JSON)",
-  "import.file": "Wallos-Datei",
-  "import.badFile": "Diese Datei konnte nicht als Wallos-Export gelesen werden.",
+  "import.desc": "Übernehmen Sie Ihre Abos aus Wallos oder aus einem anderen Coinio.",
+  "import.choose": "Dateien auswählen",
+  "import.where": "Wallos: Einstellungen › Abos exportieren (JSON). Coinio: die Abo- und Zahlungsdateien aus dem Export, zusammen ausgewählt, oder die Datendatei der gehosteten Version.",
+  "import.file": "Importdatei",
+  "import.badFile": "Diese Dateien konnten nicht als Wallos- oder Coinio-Export gelesen werden.",
   "import.found": {
     "one": "{n} Abo gefunden. Prüfen Sie es und importieren Sie es dann.",
     "other": "{n} Abos gefunden. Prüfen Sie sie und importieren Sie sie dann."
+  },
+  "import.payments": {
+    "one": "{n} Zahlung aus dem Verlauf kommt mit.",
+    "other": "{n} Zahlungen aus dem Verlauf kommen mit."
   },
   "import.run": {
     "one": "{n} Abo importieren",

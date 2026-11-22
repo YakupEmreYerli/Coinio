@@ -207,10 +207,10 @@ describe('POST /api/import/wallos', () => {
     expect((await agent.post('/api/import/wallos').send({ data: fixture })).status).toBe(400);
   });
 
-  it('accepts bodies above the default 100 KB up to 1 MB, and refuses larger', async () => {
+  it('accepts bodies above the default 100 KB up to 8 MB (long payment histories), and refuses larger', async () => {
     const { agent } = await login();
     const big = (kb: number) => ({ data: [row({ Pad: 'x'.repeat(kb * 1024) })], dryRun: true });
-    expect((await agent.post('/api/import/wallos').send(big(300))).status).toBe(200);
-    expect((await agent.post('/api/import/wallos').send(big(1100))).status).toBe(413);
+    expect((await agent.post('/api/import/wallos').send(big(1100))).status).toBe(200);
+    expect((await agent.post('/api/import/wallos').send(big(8300))).status).toBe(413);
   });
 });

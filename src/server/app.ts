@@ -49,7 +49,7 @@ export function createApp(deps: AppDeps): express.Express {
   if (plugins.some((p) => p.allowUser)) app.use(cookieParser(), accountGuard(ctx));
 
   // Wallos exports can exceed the default 100 KB body limit; mounted before the global parser, which would reject them.
-  app.use('/api/import', cookieParser(), express.json({ limit: '1mb' }), importRouter(ctx));
+  app.use('/api/import', cookieParser(), express.json({ limit: '8mb' }), importRouter(ctx));
 
   // Custom CSS and HTML cards can be large too.
   app.use('/api/appearance', cookieParser(), express.json({ limit: '2mb' }), appearanceRouter(ctx));

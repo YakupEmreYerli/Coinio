@@ -517,13 +517,16 @@
   "conn.widgetServer": "ウィジェット用のサーバーアドレス",
   "conn.widgetGuide": "ウィジェットの詳しいガイド",
   "settings.import": "インポート",
-  "import.desc": "Wallos からサブスクリプションを移行します。",
-  "import.choose": "Wallos のファイルを選択",
-  "import.where": "Wallos › 設定 › サブスクリプションをエクスポート（JSON）",
-  "import.file": "Wallos のファイル",
-  "import.badFile": "このファイルは Wallos のエクスポートとして読み込めませんでした。",
+  "import.desc": "Wallos や別の Coinio からサブスクを取り込みます。",
+  "import.choose": "ファイルを選択",
+  "import.where": "Wallos：設定 › サブスクをエクスポート（JSON）。Coinio：エクスポートしたサブスクと支払いのファイル（まとめて選択）、またはホスト版のデータファイル。",
+  "import.file": "取り込むファイル",
+  "import.badFile": "これらのファイルを Wallos または Coinio のエクスポートとして読み取れませんでした。",
   "import.found": {
     "other": "{n}件のサブスクリプションが見つかりました。内容を確認してからインポートしてください。"
+  },
+  "import.payments": {
+    "other": "履歴の支払い {n} 件も取り込まれます。"
   },
   "import.run": {
     "other": "{n}件をインポート"

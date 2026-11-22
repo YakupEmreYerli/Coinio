@@ -528,14 +528,18 @@
   "conn.widgetServer": "Widget için sunucu adresi",
   "conn.widgetGuide": "Widget kurulum rehberi",
   "settings.import": "İçe aktar",
-  "import.desc": "Aboneliklerini Wallos'tan taşı.",
-  "import.choose": "Wallos dosyanı seç",
-  "import.where": "Wallos › Ayarlar › Abonelikleri dışa aktar (JSON)",
-  "import.file": "Wallos dosyası",
-  "import.badFile": "Bu dosya Wallos dışa aktarımı olarak okunamadı.",
+  "import.desc": "Aboneliklerini Wallos'tan ya da başka bir Coinio'dan taşı.",
+  "import.choose": "Dosyalarını seç",
+  "import.where": "Wallos: Ayarlar › Abonelikleri dışa aktar (JSON). Coinio: Dışa aktar'dan aldığın abonelik ve ödeme dosyaları (ikisini birlikte seç) ya da ücretsiz sürümün veri dosyası.",
+  "import.file": "İçe aktarılacak dosya",
+  "import.badFile": "Bu dosyalar Wallos ya da Coinio dışa aktarımı olarak okunamadı.",
   "import.found": {
     "one": "{n} abonelik bulundu. Kontrol et, sonra içe aktar.",
     "other": "{n} abonelik bulundu. Kontrol et, sonra içe aktar."
+  },
+  "import.payments": {
+    "one": "Geçmişten {n} ödeme de gelecek.",
+    "other": "Geçmişten {n} ödeme de gelecek."
   },
   "import.run": {
     "one": "{n} aboneliği içe aktar",

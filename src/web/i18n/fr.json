@@ -528,14 +528,18 @@
   "conn.widgetServer": "Adresse du serveur pour le widget",
   "conn.widgetGuide": "Guide complet du widget",
   "settings.import": "Importer",
-  "import.desc": "Récupérez vos abonnements depuis Wallos.",
-  "import.choose": "Choisissez votre fichier Wallos",
-  "import.where": "Wallos › Settings › Export subscriptions (JSON)",
-  "import.file": "Fichier Wallos",
-  "import.badFile": "Impossible de lire ce fichier comme un export Wallos.",
+  "import.desc": "Récupérez vos abonnements depuis Wallos ou depuis un autre Coinio.",
+  "import.choose": "Choisir vos fichiers",
+  "import.where": "Wallos : Réglages › Exporter les abonnements (JSON). Coinio : les fichiers d’abonnements et de paiements de l’export, choisis ensemble, ou le fichier de données de la version hébergée.",
+  "import.file": "Fichier à importer",
+  "import.badFile": "Ces fichiers n’ont pas pu être lus comme un export Wallos ou Coinio.",
   "import.found": {
     "one": "{n} abonnement trouvé. Vérifiez-le, puis importez-le.",
     "other": "{n} abonnements trouvés. Vérifiez-les, puis importez-les."
+  },
+  "import.payments": {
+    "one": "{n} paiement de l’historique sera aussi importé.",
+    "other": "{n} paiements de l’historique seront aussi importés."
   },
   "import.run": {
     "one": "Importer {n} abonnement",
