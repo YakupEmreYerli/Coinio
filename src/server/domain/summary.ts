@@ -63,13 +63,20 @@ export function perYear(sub: SubscriptionRow): number {
   return cycles / sub.intervalCount;
 }
 
+function scaleMinor(value: number, fullAmountMinor: number, overrideMinor: number): number {
+  if (overrideMinor === fullAmountMinor) return value;
+  if (overrideMinor === 0) return 0;
+  return fullAmountMinor > 0 ? Math.round((value * overrideMinor) / fullAmountMinor) : value;
+}
+
 export function computeSummary(input: {
   subs: SubscriptionRow[];
   payments: PaymentRow[];
   today: string;
   rates: Rates;
+  amountOverrides?: ReadonlyMap<number, number>;
 }): Summary {
-  const { today, rates } = input;
+  const { today, rates, amountOverrides } = input;
   const month = today.slice(0, 7);
   const horizon = addDays(today, UPCOMING_DAYS);
   const paid = input.payments.filter((p) => p.status === 'paid');
@@ -88,7 +95,8 @@ export function computeSummary(input: {
   let needsConversion = false;
 
   for (const sub of active) {
-    const baseMinor = convertMinor(sub.amountMinor, sub.currency, rates);
+    const effectiveMinor = amountOverrides?.get(sub.id) ?? sub.amountMinor;
+    const baseMinor = convertMinor(effectiveMinor, sub.currency, rates);
     if (sub.currency !== rates.base) needsConversion = true;
     if (baseMinor === null) unconvertible.push(sub.id);
     else {
@@ -103,7 +111,7 @@ export function computeSummary(input: {
       logoPath: sub.logoPath,
       dueDate,
       daysLeft: dayNumber(dueDate) - dayNumber(today),
-      amountMinor: sub.amountMinor,
+      amountMinor: effectiveMinor,
       currency: sub.currency,
       baseMinor,
       autoPay: sub.autoPay,
@@ -128,17 +136,28 @@ export function computeSummary(input: {
   const paidThisMonth: PaidItem[] = paid
     .filter((p) => byId.has(p.subscriptionId) && p.dueDate.startsWith(month))
     .sort((a, b) => b.paidAt.localeCompare(a.paidAt))
-    .map((p) => ({
-      paymentId: p.id,
-      subscriptionId: p.subscriptionId,
-      name: byId.get(p.subscriptionId)!.name,
-      dueDate: p.dueDate,
-      paidAt: p.paidAt,
-      amountMinor: p.amountMinor,
-      currency: p.currency,
-      baseMinor: p.actualBaseMinor ?? convertMinor(p.amountMinor, p.currency, rates),
-      source: p.source,
-    }));
+    .map((p) => {
+      const sub = byId.get(p.subscriptionId)!;
+      const override = amountOverrides?.get(p.subscriptionId);
+      const amountMinor = override !== undefined ? scaleMinor(p.amountMinor, sub.amountMinor, override) : p.amountMinor;
+      const actualBaseMinor =
+        p.actualBaseMinor !== null
+          ? override !== undefined
+            ? scaleMinor(p.actualBaseMinor, sub.amountMinor, override)
+            : p.actualBaseMinor
+          : null;
+      return {
+        paymentId: p.id,
+        subscriptionId: p.subscriptionId,
+        name: sub.name,
+        dueDate: p.dueDate,
+        paidAt: p.paidAt,
+        amountMinor,
+        currency: p.currency,
+        baseMinor: actualBaseMinor ?? convertMinor(amountMinor, p.currency, rates),
+        source: p.source,
+      };
+    });
 
   return {
     base: rates.base,

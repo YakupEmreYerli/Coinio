@@ -18,6 +18,8 @@ export type CoinioPlugin = {
   onSignIn?(ctx: ServiceCtx, userId: number, method: 'password' | 'passkey'): void;
   /** Return false to prevent removing the passkey (e.g. when it is the user's last sign-in method). */
   canRemovePasskey?(ctx: ServiceCtx, userId: number, remainingPasskeys: number): boolean;
+  /** Set false to require normal Cloud signup/login before accepting a household invite. */
+  allowInviteSignup?: boolean;
   /**
    * The server's own mailer: enables the "account" notification channel, which mails the user's address
    * without any SMTP settings. `send` may throw an error with `transient: true` to have it retried.
@@ -38,4 +40,9 @@ export function pluginMailer(ctx: ServiceCtx): PluginMailer | null {
 /** Whether every plugin lets this user in. */
 export function userAllowed(ctx: ServiceCtx, userId: number): boolean {
   return (ctx.plugins ?? []).every((p) => p.allowUser?.(ctx, userId) ?? true);
+}
+
+/** Whether invited users may create an account directly from an invite link. */
+export function inviteSignupAllowed(plugins?: CoinioPlugin[]): boolean {
+  return (plugins ?? []).every((p) => p.allowInviteSignup !== false);
 }

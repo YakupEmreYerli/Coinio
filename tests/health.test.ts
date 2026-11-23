@@ -23,8 +23,8 @@ describe('openDb', () => {
     const names = rows.map((r) => r.name).sort();
     expect(names).toEqual(
       [
-        'api_keys', 'firefly_connections', 'firefly_links', 'firefly_payment_links', 'fx_rates', 'instance_settings', 'notification_channels', 'notification_log', 'oauth_clients', 'oauth_codes', 'oauth_tokens',
-        'passkeys', 'payments', 'sessions', 'settings', 'subscriptions', 'users',
+        'api_keys', 'firefly_connections', 'firefly_links', 'firefly_payment_links', 'fx_rates', 'household_invites', 'household_members', 'households', 'instance_settings', 'notification_channels', 'notification_log', 'oauth_clients', 'oauth_codes', 'oauth_tokens',
+        'passkeys', 'payments', 'sessions', 'settings', 'subscription_splits', 'subscriptions', 'users',
       ].sort(),
     );
   });

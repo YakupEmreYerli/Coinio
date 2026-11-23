@@ -41,7 +41,7 @@ const settingsWith = (over: Partial<NotifySettings>): NotifySettings => ({ ...DE
 
 function sub(over: Partial<SubscriptionRow>): SubscriptionRow {
   return {
-    id: 1, userId: 1, name: 'S', domain: null, logoPath: null, amountMinor: 1000, currency: 'USD', variableAmount: false, cycle: 'monthly',
+    id: 1, userId: 1, householdId: null, paidByMemberId: null, name: 'S', domain: null, logoPath: null, amountMinor: 1000, currency: 'USD', variableAmount: false, cycle: 'monthly',
     intervalCount: 1, anchorDay: 1, nextDue: '2026-12-01', autoPay: true, paymentMethod: null, category: null, notes: null,
     reminderOffsets: null, trialEndsAt: null, active: true, createdAt: '', updatedAt: '', ...over,
   };

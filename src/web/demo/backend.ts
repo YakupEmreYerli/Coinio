@@ -157,7 +157,7 @@ export class DemoBackend {
       const start = addMonths(due, -SAMPLE_HISTORY_MONTHS);
       const id = state.nextId++;
       state.subs.push({
-        id, userId: USER.id, name: sampleWord(s.name, settings.locale), domain: s.domain, logoPath: this.logoFor(s.domain), amountMinor: s.amountMinor, currency: s.currency,
+        id, userId: USER.id, householdId: null, paidByMemberId: null, name: sampleWord(s.name, settings.locale), domain: s.domain, logoPath: this.logoFor(s.domain), amountMinor: s.amountMinor, currency: s.currency,
         variableAmount: false, cycle: s.cycle, intervalCount: 1, anchorDay: dayOf(due), nextDue: due, autoPay: s.autoPay,
         paymentMethod: sampleWord(s.paymentMethod, settings.locale), category: CATEGORY_LABELS[s.category][settings.locale], notes: null, reminderOffsets: null, trialEndsAt: null, active: true,
         createdAt: `${start}T09:00:00.000Z`, updatedAt: `${start}T09:00:00.000Z`,
@@ -360,7 +360,7 @@ export class DemoBackend {
     const v = SubscriptionInput.parse(input);
     const stamp = this.stamp();
     const row: SubscriptionRow = {
-      id: st.nextId++, userId: USER.id, name: v.name, domain: v.domain ?? null, logoPath: this.logoFor(v.domain ?? null),
+      id: st.nextId++, userId: USER.id, householdId: null, paidByMemberId: null, name: v.name, domain: v.domain ?? null, logoPath: this.logoFor(v.domain ?? null),
       amountMinor: v.amountMinor, currency: v.currency, variableAmount: v.variableAmount, cycle: v.cycle, intervalCount: v.intervalCount,
       anchorDay: dayOf(v.nextDue), nextDue: v.nextDue, autoPay: v.autoPay, paymentMethod: v.paymentMethod ?? null, category: v.category ?? null,
       notes: v.notes ?? null, reminderOffsets: v.reminderOffsets, trialEndsAt: v.trialEndsAt, active: true, createdAt: stamp, updatedAt: stamp,

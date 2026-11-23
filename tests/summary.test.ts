@@ -11,6 +11,8 @@ function sub(over: Partial<SubscriptionRow>): SubscriptionRow {
   return {
     id: seq,
     userId: 1,
+    householdId: null,
+    paidByMemberId: null,
     name: `Sub ${seq}`,
     domain: null,
     logoPath: null,

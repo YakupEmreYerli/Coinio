@@ -9,7 +9,7 @@ import { SubscriptionInput, SubscriptionPatch } from '../src/shared/types.js';
 import type { Cycle } from '../src/shared/schedule.js';
 
 const sub = (over: Partial<SubscriptionRow> = {}): SubscriptionRow => ({
-  id: 1, userId: 1, name: 'Spotify', domain: null, logoPath: null, amountMinor: 2500, currency: 'EUR', variableAmount: false,
+  id: 1, userId: 1, householdId: null, paidByMemberId: null, name: 'Spotify', domain: null, logoPath: null, amountMinor: 2500, currency: 'EUR', variableAmount: false,
   cycle: 'monthly', intervalCount: 1, anchorDay: 9, nextDue: '2026-12-09', autoPay: true, paymentMethod: null, category: null,
   notes: null, reminderOffsets: null, trialEndsAt: null, active: true, createdAt: '2026-01-01T00:00:00Z',
   updatedAt: '2026-01-01T00:00:00Z', ...over,

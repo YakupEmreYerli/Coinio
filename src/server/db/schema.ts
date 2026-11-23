@@ -47,30 +47,100 @@ export const instanceSettings = sqliteTable('instance_settings', {
   value: text('value').notNull(),
 });
 
-export const subscriptions = sqliteTable('subscriptions', {
+export const households = sqliteTable('households', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
-  domain: text('domain'),
-  logoPath: text('logo_path'),
-  amountMinor: integer('amount_minor').notNull(),
-  currency: text('currency').notNull(),
-  variableAmount: integer('variable_amount', { mode: 'boolean' }).notNull().default(false),
-  cycle: text('cycle', { enum: ['weekly', 'monthly', 'yearly'] }).notNull(),
-  intervalCount: integer('interval_count').notNull().default(1),
-  anchorDay: integer('anchor_day').notNull(),
-  nextDue: text('next_due').notNull(),
-  autoPay: integer('auto_pay', { mode: 'boolean' }).notNull().default(true),
-  paymentMethod: text('payment_method'),
-  category: text('category'),
-  notes: text('notes'),
-  /** Days before each due date to remind, 0 = the due day; null uses the defaults for the billing cycle. */
-  reminderOffsets: text('reminder_offsets', { mode: 'json' }).$type<number[]>(),
-  trialEndsAt: text('trial_ends_at'),
-  active: integer('active', { mode: 'boolean' }).notNull().default(true),
+  ownerUserId: integer('owner_user_id')
+    .notNull()
+    .unique()
+    .references(() => users.id, { onDelete: 'cascade' }),
   createdAt: text('created_at').notNull(),
-  updatedAt: text('updated_at').notNull(),
 });
+
+export const householdMembers = sqliteTable(
+  'household_members',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    householdId: integer('household_id')
+      .notNull()
+      .references(() => households.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    color: text('color'),
+    role: text('role', { enum: ['owner', 'member'] }).notNull().default('member'),
+    linkedUserId: integer('linked_user_id')
+      .unique()
+      .references(() => users.id, { onDelete: 'set null' }),
+    createdAt: text('created_at').notNull(),
+  },
+  (t) => [index('household_members_household_idx').on(t.householdId)],
+);
+
+export const subscriptions = sqliteTable(
+  'subscriptions',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    householdId: integer('household_id').references(() => households.id, { onDelete: 'set null' }),
+    paidByMemberId: integer('paid_by_member_id').references(() => householdMembers.id, { onDelete: 'set null' }),
+    name: text('name').notNull(),
+    domain: text('domain'),
+    logoPath: text('logo_path'),
+    amountMinor: integer('amount_minor').notNull(),
+    currency: text('currency').notNull(),
+    variableAmount: integer('variable_amount', { mode: 'boolean' }).notNull().default(false),
+    cycle: text('cycle', { enum: ['weekly', 'monthly', 'yearly'] }).notNull(),
+    intervalCount: integer('interval_count').notNull().default(1),
+    anchorDay: integer('anchor_day').notNull(),
+    nextDue: text('next_due').notNull(),
+    autoPay: integer('auto_pay', { mode: 'boolean' }).notNull().default(true),
+    paymentMethod: text('payment_method'),
+    category: text('category'),
+    notes: text('notes'),
+    /** Days before each due date to remind, 0 = the due day; null uses the defaults for the billing cycle. */
+    reminderOffsets: text('reminder_offsets', { mode: 'json' }).$type<number[]>(),
+    trialEndsAt: text('trial_ends_at'),
+    active: integer('active', { mode: 'boolean' }).notNull().default(true),
+    createdAt: text('created_at').notNull(),
+    updatedAt: text('updated_at').notNull(),
+  },
+  (t) => [index('subscriptions_household_idx').on(t.householdId)],
+);
+
+export const householdInvites = sqliteTable(
+  'household_invites',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    householdId: integer('household_id')
+      .notNull()
+      .references(() => households.id, { onDelete: 'cascade' }),
+    memberId: integer('member_id')
+      .notNull()
+      .references(() => householdMembers.id, { onDelete: 'cascade' }),
+    tokenHash: text('token_hash').notNull().unique(),
+    createdByUserId: integer('created_by_user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    expiresAt: text('expires_at').notNull(),
+    usedAt: text('used_at'),
+    usedByUserId: integer('used_by_user_id').references(() => users.id, { onDelete: 'set null' }),
+    createdAt: text('created_at').notNull(),
+  },
+  (t) => [index('household_invites_household_idx').on(t.householdId)],
+);
+
+export const subscriptionSplits = sqliteTable(
+  'subscription_splits',
+  {
+    subscriptionId: integer('subscription_id')
+      .notNull()
+      .references(() => subscriptions.id, { onDelete: 'cascade' }),
+    memberId: integer('member_id')
+      .notNull()
+      .references(() => householdMembers.id, { onDelete: 'cascade' }),
+    shareMinor: integer('share_minor'),
+  },
+  (t) => [primaryKey({ columns: [t.subscriptionId, t.memberId] })],
+);
 
 export const payments = sqliteTable(
   'payments',
