@@ -7,6 +7,7 @@ import { FireflyError, listAssetAccounts } from '../services/firefly/client.js';
 import {
   connOf, connectionToApi, deleteConnection, getConnection, getLinkAccount, patchConnection, saveConnection, setLinkAccount,
 } from '../services/firefly/store.js';
+import { previewInitial, runInitial, syncUser } from '../services/firefly/sync.js';
 
 const idParam = z.coerce.number().int().positive();
 
@@ -57,6 +58,23 @@ export function fireflyRouter(ctx: ServiceCtx): Router {
   router.delete('/', route((req, res) => {
     deleteConnection(ctx, req.userId!);
     res.status(204).end();
+  }));
+
+  router.get('/preview', route(async (req, res) => {
+    res.json(await previewInitial(ctx, req.userId!));
+  }));
+
+  router.post('/initial', route(async (req, res) => {
+    const choice = z.object({ unmatch: z.array(z.number().int().positive()), exclude: Excluded }).parse(req.body);
+    if (connection(req.userId!).initialSyncDone) return void res.status(409).json({ error: 'initial_done' });
+    res.json(await runInitial(ctx, req.userId!, choice));
+  }));
+
+  router.post('/sync', route(async (req, res) => {
+    const row = connection(req.userId!);
+    if (!row.initialSyncDone) return void res.status(409).json({ error: 'initial_required' });
+    if (!row.enabled) return void res.status(409).json({ error: 'disabled' });
+    res.json(await syncUser(ctx, req.userId!));
   }));
 
   router.get('/links/:subscriptionId', route((req, res) => {

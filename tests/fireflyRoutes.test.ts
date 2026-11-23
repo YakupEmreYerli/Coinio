@@ -127,4 +127,58 @@ describe('firefly settings API', () => {
     await other.agent.delete('/api/firefly').expect(204);
     expect(t.db.select().from(fireflyConnections).all()).toHaveLength(1);
   });
+
+  it('reconnecting after a 401 re-enables the connection', async () => {
+    const { agent, db } = await login();
+    await agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: TOKEN }).expect(200);
+    db.update(fireflyConnections).set({ enabled: false, lastError: 'unauthorized' }).run();
+    await agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: TOKEN }).expect(200);
+    expect(db.select().from(fireflyConnections).get()).toMatchObject({ enabled: true, lastError: null });
+  });
+});
+
+describe('firefly sync API', () => {
+  const bill = { id: '7', name: 'netflix', amountMin: '12.99', amountMax: '12.99', currencyCode: 'EUR', date: '2026-01-05T00:00:00+01:00',
+    repeatFreq: 'monthly' as const, skip: 0, active: true, notes: null, updatedAt: '2026-11-01T00:00:00+00:00', nextExpectedMatch: null };
+
+  async function connected() {
+    const t = await login();
+    t.fake.bills.set('7', { ...bill });
+    await t.agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: TOKEN }).expect(200);
+    const sub = (await t.agent.post('/api/subscriptions').send(netflix).expect(201)).body;
+    return { ...t, sub, writes: () => t.fake.calls.filter((c) => c.method !== 'GET') };
+  }
+
+  it('nothing is written before POST /initial', async () => {
+    const { agent, sub, writes } = await connected();
+    const preview = await agent.get('/api/firefly/preview').expect(200);
+    expect(preview.body).toEqual({ matched: [{ subscriptionId: sub.id, billId: '7', name: 'Netflix' }], toFirefly: [], toCoinio: [] });
+    expect(writes()).toEqual([]);
+  });
+
+  it('POST /sync before initial answers 409', async () => {
+    const { agent, writes } = await connected();
+    expect((await agent.post('/api/firefly/sync').expect(409)).body).toEqual({ error: 'initial_required' });
+    expect(writes()).toEqual([]);
+  });
+
+  it('POST /initial runs once, then POST /sync syncs; a disabled connection answers 409', async () => {
+    const { agent, db } = await connected();
+    const res = await agent.post('/api/firefly/initial').send({ unmatch: [], exclude: { subscriptions: [], bills: [] } }).expect(200);
+    expect(res.body).toMatchObject({ created: { coinio: 0, firefly: 0 }, paymentsIn: 0, paymentsOut: 0 });
+    expect(db.select().from(fireflyLinks).all()).toMatchObject([{ billId: '7', state: 'open' }]);
+    await agent.post('/api/firefly/initial').send({ unmatch: [], exclude: { subscriptions: [], bills: [] } }).expect(409, { error: 'initial_done' });
+    await agent.post('/api/firefly/initial').send({}).expect(400);
+    expect((await agent.post('/api/firefly/sync').expect(200)).body).toMatchObject({ updated: { coinio: 0, firefly: 0 } });
+    await agent.patch('/api/firefly').send({ enabled: false }).expect(200);
+    await agent.post('/api/firefly/sync').expect(409, { error: 'disabled' });
+  });
+
+  it('a Firefly failure during sync answers 502 with its code', async () => {
+    const { agent, db } = await connected();
+    db.update(fireflyConnections).set({ initialSyncDone: true, token: 'stale' }).run();
+    expect((await agent.post('/api/firefly/sync').expect(502)).body).toEqual({ error: 'firefly', message: 'unauthorized' });
+    expect(db.select().from(fireflyConnections).get()).toMatchObject({ enabled: false, lastError: 'unauthorized' });
+    await agent.post('/api/firefly/sync').expect(409);
+  });
 });

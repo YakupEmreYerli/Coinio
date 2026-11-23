@@ -4,7 +4,7 @@ import { fireflyConnections, fireflyLinks, subscriptions, users } from '../src/s
 import type { ServiceCtx } from '../src/server/services/context.js';
 import { listBills, type FfBill } from '../src/server/services/firefly/client.js';
 import { hashMapped, mappedFromBill, mappedFromSubscription } from '../src/server/services/firefly/mapping.js';
-import { syncDefinitions } from '../src/server/services/firefly/sync.js';
+import { FIREFLY_SYNC_EVERY_MS, previewInitial, runFireflySync, runInitial, syncDefinitions } from '../src/server/services/firefly/sync.js';
 import { deleteSubscription, insertSubscription, markPaid, updateSubscription } from '../src/server/services/subscriptions.js';
 import { fakeFirefly } from './fixtures/fakeFirefly.js';
 import { makeTestApp } from './helpers.js';
@@ -230,5 +230,84 @@ describe('syncDefinitions', () => {
     await s.run();
     expect(s.sub(sub.id).name).toBe('Spotify Family');
     expect(s.writes()).toHaveLength(0);
+  });
+});
+
+describe('first sync and scheduler', () => {
+  const none = { subscriptions: [], bills: [] };
+
+  it('preview matches by name ignoring case and spaces', async () => {
+    const s = setup([bill('7', { name: 'spotify ' }), bill('8', { name: 'Disney' }), bill('9', { name: 'Old', active: false })], { initialSyncDone: false });
+    const a = s.addSub({ name: 'Spot ify' });
+    const b = s.addSub({ name: 'Netflix' });
+    updateSubscription(s.ctx, s.user.id, s.addSub({ name: 'Gone' }).id, { active: false });
+    expect(await previewInitial(s.ctx, s.user.id)).toEqual({
+      matched: [{ subscriptionId: a.id, billId: '7', name: 'Spot ify' }],
+      toFirefly: [{ subscriptionId: b.id, name: 'Netflix' }],
+      toCoinio: [{ billId: '8', name: 'Disney' }],
+    });
+    expect(s.writes()).toHaveLength(0);
+  });
+
+  it('initial sync links matched pairs and the newer side wins', async () => {
+    const s = setup([bill('7', { name: 'spotify', amountMin: '30.00', amountMax: '30.00', updatedAt: '2026-11-18T10:00:00Z' })], { initialSyncDone: false });
+    const sub = s.addSub();
+    const res = await runInitial(s.ctx, s.user.id, { unmatch: [], exclude: none });
+    expect(res).toEqual({ created: { coinio: 0, firefly: 0 }, updated: { coinio: 1, firefly: 0 }, deactivated: { coinio: 0, firefly: 0 }, paymentsIn: 0, paymentsOut: 0 });
+    expect(s.sub(sub.id)).toMatchObject({ name: 'spotify', amountMinor: 3000 });
+    expect(s.links()).toMatchObject([{ subscriptionId: sub.id, billId: '7', state: 'open' }]);
+    expect(s.db.select().from(fireflyConnections).get()).toMatchObject({ initialSyncDone: true, lastSyncAt: s.clock.now.toISOString(), lastError: null });
+  });
+
+  it('initial sync with unmatch keeps both records apart', async () => {
+    const s = setup([bill('7')], { initialSyncDone: false });
+    const sub = s.addSub();
+    const res = await runInitial(s.ctx, s.user.id, { unmatch: [sub.id], exclude: none });
+    expect(res.created).toEqual({ coinio: 1, firefly: 1 });
+    const rows = s.db.select().from(subscriptions).all();
+    expect(rows).toHaveLength(2);
+    expect(s.links()).toMatchObject([
+      { subscriptionId: sub.id, billId: '8' },
+      { subscriptionId: rows[1]!.id, billId: '7' },
+    ]);
+  });
+
+  it('initial sync with exclude creates nothing for excluded rows', async () => {
+    const s = setup([bill('7'), bill('8', { name: 'Disney' })], { initialSyncDone: false, excluded: { subscriptions: [], bills: ['3'] } });
+    const sub = s.addSub();
+    const res = await runInitial(s.ctx, s.user.id, { unmatch: [], exclude: { subscriptions: [sub.id], bills: ['7', '8', '3'] } });
+    expect(res.created).toEqual({ coinio: 0, firefly: 0 });
+    expect(s.writes()).toHaveLength(0);
+    expect(s.links()).toHaveLength(0);
+    expect(s.db.select().from(fireflyConnections).get()!.excluded).toEqual({ subscriptions: [sub.id], bills: ['3', '7', '8'] });
+  });
+
+  it('401 disables the connection and the scheduler stops calling firefly', async () => {
+    const s = setup([bill('7')], { token: 'stale' });
+    await runFireflySync(s.ctx);
+    expect(s.fake.calls).toHaveLength(1);
+    expect(s.db.select().from(fireflyConnections).get()).toMatchObject({ enabled: false, lastError: 'unauthorized', lastSyncAt: s.clock.now.toISOString() });
+    s.clock.set(new Date(s.clock.now.getTime() + FIREFLY_SYNC_EVERY_MS + 1));
+    await runFireflySync(s.ctx);
+    expect(s.fake.calls).toHaveLength(1);
+  });
+
+  it('runFireflySync waits 15 minutes between runs', async () => {
+    const s = setup();
+    await runFireflySync(s.ctx);
+    const first = s.fake.calls.length;
+    expect(first).toBeGreaterThan(0);
+    s.clock.set('2026-11-18T09:14:00Z');
+    await runFireflySync(s.ctx);
+    expect(s.fake.calls.length).toBe(first);
+    s.clock.set('2026-11-18T09:15:00Z');
+    await runFireflySync(s.ctx);
+    expect(s.fake.calls.length).toBeGreaterThan(first);
+  });
+
+  it('runFireflySync skips connections before the first sync', async () => {
+    const s = setup([bill('7')], { initialSyncDone: false });
+    await runFireflySync(s.ctx);
+    expect(s.fake.calls).toHaveLength(0);
   });
 });

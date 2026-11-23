@@ -54,11 +54,11 @@ export async function saveConnection(
     // A different Firefly: its accounts and bills are unrelated to the old links.
     ctx.db.transaction(() => {
       dropLinks(ctx, userId);
-      ctx.db.update(fireflyConnections).set({ ...conn, assetAccountId: '', initialSyncDone: false, lastError: null, updatedAt: now })
+      ctx.db.update(fireflyConnections).set({ ...conn, assetAccountId: '', initialSyncDone: false, enabled: true, lastError: null, updatedAt: now })
         .where(eq(fireflyConnections.userId, userId)).run();
     });
   } else {
-    ctx.db.update(fireflyConnections).set({ token, updatedAt: now }).where(eq(fireflyConnections.userId, userId)).run();
+    ctx.db.update(fireflyConnections).set({ token, enabled: true, lastError: null, updatedAt: now }).where(eq(fireflyConnections.userId, userId)).run();
   }
   return { version, accounts };
 }

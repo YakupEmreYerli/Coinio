@@ -1,20 +1,21 @@
 // Two-way sync of subscription definitions and Firefly bills. Nothing is ever deleted on either side.
 import { and, eq, gte } from 'drizzle-orm';
-import { fireflyLinks, fireflyPaymentLinks, payments, subscriptions } from '../../db/schema.js';
+import { fireflyConnections, fireflyLinks, fireflyPaymentLinks, payments, subscriptions } from '../../db/schema.js';
 import type { SubscriptionRow } from '../../domain/summary.js';
 import { convertMinor, decimalToMinor, minorToDecimal } from '../../../shared/money.js';
 import { addDays, daysBetween } from '../../../shared/notify/vars.js';
 import { dueDatesThrough, todayIn } from '../../../shared/schedule.js';
 import type { ServiceCtx } from '../context.js';
+import { NotFoundError } from '../errors.js';
 import { getRates } from '../fx.js';
 import { getSettings } from '../settings.js';
 import { insertSubscription, listSubscriptions, markPaid, updateSubscription } from '../subscriptions.js';
 import {
-  FireflyError, billJournals, createBill, createWithdrawal, getBill, listAssetAccounts, updateBill,
+  FireflyError, billJournals, createBill, createWithdrawal, getBill, listAssetAccounts, listBills, updateBill,
   type FfBill, type FfBillWrite, type FfJournal, type FireflyConn,
 } from './client.js';
-import { billWrite, hashMapped, mappedFromBill, mappedFromSubscription, subscriptionInput, subscriptionPatch } from './mapping.js';
-import { getConnection } from './store.js';
+import { billWrite, hashMapped, mappedFromBill, mappedFromSubscription, sameName, subscriptionInput, subscriptionPatch } from './mapping.js';
+import { connOf, getConnection } from './store.js';
 
 type Counts = { coinio: number; firefly: number };
 export type SyncResult = { created: Counts; updated: Counts; deactivated: Counts; paymentsIn: number; paymentsOut: number };
@@ -208,4 +209,95 @@ export async function syncPayments(ctx: ServiceCtx, userId: number, conn: Firefl
     }
   }
   return out;
+}
+
+export const FIREFLY_SYNC_EVERY_MS = 15 * 60_000;
+
+export type Preview = {
+  matched: { subscriptionId: number; billId: string; name: string }[];
+  toFirefly: { subscriptionId: number; name: string }[];
+  toCoinio: { billId: string; name: string }[];
+};
+
+function requireConnection(ctx: ServiceCtx, userId: number) {
+  const connection = getConnection(ctx, userId);
+  if (!connection) throw new NotFoundError('firefly connection');
+  return connection;
+}
+
+/** Active, not excluded records of both sides; each subscription takes the first bill of the same name still free. */
+export async function previewInitial(ctx: ServiceCtx, userId: number): Promise<Preview> {
+  const connection = requireConnection(ctx, userId);
+  const { excluded } = connection;
+  const bills = (await listBills(ctx, connOf(connection))).filter((b) => b.active && !excluded.bills.includes(b.id));
+  const out: Preview = { matched: [], toFirefly: [], toCoinio: [] };
+  const taken = new Set<string>();
+  for (const sub of listSubscriptions(ctx, userId)) {
+    if (excluded.subscriptions.includes(sub.id)) continue;
+    const bill = bills.find((b) => !taken.has(b.id) && sameName(b.name, sub.name));
+    if (bill) {
+      taken.add(bill.id);
+      out.matched.push({ subscriptionId: sub.id, billId: bill.id, name: sub.name });
+    } else out.toFirefly.push({ subscriptionId: sub.id, name: sub.name });
+  }
+  for (const b of bills) if (!taken.has(b.id)) out.toCoinio.push({ billId: b.id, name: b.name });
+  return out;
+}
+
+/** Links the kept pairs with empty hashes so the first `syncDefinitions` lets the newer side win, then syncs. */
+export async function runInitial(
+  ctx: ServiceCtx, userId: number, choice: { unmatch: number[]; exclude: { subscriptions: number[]; bills: string[] } },
+): Promise<SyncResult> {
+  const { excluded } = requireConnection(ctx, userId);
+  const { unmatch, exclude } = choice;
+  const pairs = (await previewInitial(ctx, userId)).matched
+    .filter((m) => !unmatch.includes(m.subscriptionId) && !exclude.subscriptions.includes(m.subscriptionId) && !exclude.bills.includes(m.billId));
+  ctx.db.transaction((tx) => {
+    for (const m of pairs) tx.insert(fireflyLinks).values({ userId, subscriptionId: m.subscriptionId, billId: m.billId, coinioHash: '', fireflyHash: '' }).run();
+    tx.update(fireflyConnections).set({
+      initialSyncDone: true, updatedAt: ctx.now().toISOString(),
+      excluded: {
+        subscriptions: [...new Set([...excluded.subscriptions, ...exclude.subscriptions])],
+        bills: [...new Set([...excluded.bills, ...exclude.bills])],
+      },
+    }).where(eq(fireflyConnections.userId, userId)).run();
+  });
+  return syncUser(ctx, userId);
+}
+
+/** One full run for a user; the outcome is recorded on the connection and errors are rethrown. */
+export async function syncUser(ctx: ServiceCtx, userId: number): Promise<SyncResult> {
+  const connection = requireConnection(ctx, userId);
+  const conn = connOf(connection);
+  const record = (set: Partial<typeof fireflyConnections.$inferInsert>) =>
+    ctx.db.update(fireflyConnections).set({ lastSyncAt: ctx.now().toISOString(), ...set }).where(eq(fireflyConnections.userId, userId)).run();
+  let since = connection.lastSyncAt?.slice(0, 10);
+  if (!since) {
+    const d = new Date(`${todayIn(getSettings(ctx, userId).timezone, ctx.now())}T00:00:00Z`);
+    d.setUTCFullYear(d.getUTCFullYear() - 1);
+    since = d.toISOString().slice(0, 10);
+  }
+  try {
+    const defs = await syncDefinitions(ctx, userId, conn, await listBills(ctx, conn));
+    const { paymentsIn, paymentsOut, warning } = await syncPayments(ctx, userId, conn, since);
+    record({ lastError: warning });
+    return { ...defs, paymentsIn, paymentsOut };
+  } catch (err) {
+    if (err instanceof FireflyError) record({ lastError: err.code, ...(err.code === 'unauthorized' && { enabled: false }) });
+    else {
+      record({ lastError: 'internal' });
+      console.error(`firefly sync failed for user ${userId}:`, err);
+    }
+    throw err;
+  }
+}
+
+/** Scheduler step: every enabled connection past its first sync, at most once per `FIREFLY_SYNC_EVERY_MS`. */
+export async function runFireflySync(ctx: ServiceCtx): Promise<void> {
+  const now = ctx.now().getTime();
+  for (const c of ctx.db.select().from(fireflyConnections).all()) {
+    if (!c.enabled || !c.initialSyncDone || (c.lastSyncAt && now - Date.parse(c.lastSyncAt) < FIREFLY_SYNC_EVERY_MS)) continue;
+    // Failures are already recorded on the connection; one user's error never stops the others.
+    await syncUser(ctx, c.userId).catch(() => {});
+  }
 }

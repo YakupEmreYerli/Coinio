@@ -5,6 +5,7 @@ import { runAutoPay } from './services/autopay.js';
 import { getRates, refreshRates, type FetchFn } from './services/fx.js';
 import { getInstanceValue, getSettings, setInstanceValue } from './services/settings.js';
 import { runNotifications } from './services/notify/index.js';
+import { runFireflySync } from './services/firefly/sync.js';
 import type { ServiceCtx } from './services/context.js';
 import type { CoinioPlugin } from './plugins.js';
 
@@ -64,6 +65,7 @@ export function startScheduler(
       await step('autopay', () => runAutoPay(ctx));
       await step('fx refresh', () => refreshRatesDaily(ctx));
       await step('notifications', () => runNotifications(ctx));
+      await step('firefly', () => runFireflySync(ctx));
       await step('onTick', async () => opts.onTick?.());
       for (const plugin of opts.plugins ?? ctx.plugins ?? []) {
         if (plugin.onTick) await step(`${plugin.name} onTick`, () => plugin.onTick!(withPlugins));
