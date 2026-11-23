@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { fireflyConnections, fireflyLinks, subscriptions, users } from '../src/server/db/schema.js';
 import type { ServiceCtx } from '../src/server/services/context.js';
 import { listBills, type FfBill } from '../src/server/services/firefly/client.js';
@@ -159,16 +159,39 @@ describe('syncDefinitions', () => {
   });
 
   it('new bill after the first sync creates a subscription', async () => {
-    const s = setup([bill('7', { name: 'Disney', active: false })]);
+    const s = setup([bill('7', { name: 'Disney' })]);
     const res = await s.run();
     expect(res.created).toEqual({ coinio: 1, firefly: 0 });
     const rows = s.db.select().from(subscriptions).all();
-    expect(rows).toMatchObject([{ name: 'Disney', amountMinor: 2500, nextDue: '2026-12-09', autoPay: false, active: false }]);
+    expect(rows).toMatchObject([{ name: 'Disney', amountMinor: 2500, nextDue: '2026-12-09', autoPay: false, active: true }]);
     expect(s.links()).toMatchObject([{ subscriptionId: rows[0]!.id, billId: '7', state: 'open' }]);
     const before = s.fake.calls.length;
     await s.run();
     expect(s.fake.calls.slice(before).every((c) => c.method === 'GET')).toBe(true);
     expect(s.db.select().from(subscriptions).all()).toHaveLength(1);
+  });
+
+  it('inactive unlinked records are not created on either side', async () => {
+    const s = setup([bill('9', { name: 'Disney', active: false })]);
+    updateSubscription(s.ctx, s.user.id, s.addSub({ name: 'Netflix' }).id, { active: false });
+    const res = await s.run();
+    expect(res.created).toEqual({ coinio: 0, firefly: 0 });
+    expect(s.writes()).toHaveLength(0);
+    expect(s.db.select().from(subscriptions).all()).toHaveLength(1);
+    expect(s.links()).toHaveLength(0);
+  });
+
+  it('an unlinked subscription that becomes active is created as a bill', async () => {
+    const s = setup();
+    const sub = s.addSub();
+    updateSubscription(s.ctx, s.user.id, sub.id, { active: false });
+    await s.run();
+    expect(s.writes()).toHaveLength(0);
+    updateSubscription(s.ctx, s.user.id, sub.id, { active: true });
+    const res = await s.run();
+    expect(res.created).toEqual({ coinio: 0, firefly: 1 });
+    expect(s.writes()).toMatchObject([{ method: 'POST', path: '/api/v1/bills', body: { active: true } }]);
+    expect(s.links()).toMatchObject([{ subscriptionId: sub.id, billId: '1', state: 'open' }]);
   });
 
   it('excluded records are left alone', async () => {
@@ -192,7 +215,11 @@ describe('syncDefinitions', () => {
 
   it('a record that cannot be mapped is skipped', async () => {
     const s = setup([bill('8', { name: 'Odd', skip: 40 }), bill('9', { name: 'Disney' })]);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     await s.run();
+    expect(warn).toHaveBeenCalledOnce();
+    expect(warn.mock.calls[0]![0]).toBe('firefly sync: skipped bill 8:');
+    warn.mockRestore();
     expect(s.db.select().from(subscriptions).all().map((r) => r.name)).toEqual(['Disney']);
   });
 

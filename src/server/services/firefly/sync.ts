@@ -18,11 +18,12 @@ const subHash = (s: SubscriptionRow) => hashMapped(mappedFromSubscription(s));
 const billHash = (b: FfBill) => hashMapped(mappedFromBill(b));
 
 /** Runs one record's step; a record that cannot be mapped or validated is skipped, Firefly errors stop the run. */
-async function each(step: () => Promise<void>): Promise<void> {
+async function each(kind: 'subscription' | 'bill', id: number | string, step: () => Promise<void>): Promise<void> {
   try {
     await step();
   } catch (err) {
     if (err instanceof FireflyError) throw err;
+    console.warn(`firefly sync: skipped ${kind} ${id}:`, err instanceof Error ? err.message : err);
   }
 }
 
@@ -38,7 +39,7 @@ export async function syncDefinitions(
   const setLink = (id: number, set: Partial<LinkRow>) => ctx.db.update(fireflyLinks).set(set).where(eq(fireflyLinks.id, id)).run();
 
   for (const link of links.filter((l) => l.state === 'open')) {
-    await each(async () => {
+    await each('bill', link.billId, async () => {
       const sub = link.subscriptionId === null ? undefined : subOf(link.subscriptionId);
       const bill = byId.get(link.billId) ?? (await getBill(ctx, conn, link.billId));
       if (!bill || !sub) {
@@ -79,9 +80,9 @@ export async function syncDefinitions(
   const linkedSubs = new Set(links.map((l) => l.subscriptionId));
   const linkedBills = new Set(links.map((l) => l.billId));
   const { excluded } = connection;
-  for (const sub of listSubscriptions(ctx, userId, { includeInactive: true })) {
-    if (linkedSubs.has(sub.id) || excluded.subscriptions.includes(sub.id)) continue;
-    await each(async () => {
+  for (const sub of listSubscriptions(ctx, userId)) {
+    if (!sub.active || linkedSubs.has(sub.id) || excluded.subscriptions.includes(sub.id)) continue;
+    await each('subscription', sub.id, async () => {
       const written = await createBill(ctx, conn, billWrite(sub, null, { withDate: true }) as FfBillWrite);
       ctx.db.insert(fireflyLinks).values({ userId, subscriptionId: sub.id, billId: written.id, coinioHash: subHash(sub), fireflyHash: billHash(written) }).run();
       out.created.firefly++;
@@ -89,11 +90,9 @@ export async function syncDefinitions(
   }
   const today = todayIn(getSettings(ctx, userId).timezone, ctx.now());
   for (const bill of bills) {
-    if (linkedBills.has(bill.id) || excluded.bills.includes(bill.id)) continue;
-    await each(async () => {
-      let sub = insertSubscription(ctx, userId, subscriptionInput(bill, today));
-      // A new subscription always starts active.
-      if (!bill.active) sub = updateSubscription(ctx, userId, sub.id, { active: false });
+    if (!bill.active || linkedBills.has(bill.id) || excluded.bills.includes(bill.id)) continue;
+    await each('bill', bill.id, async () => {
+      const sub = insertSubscription(ctx, userId, subscriptionInput(bill, today));
       ctx.db.insert(fireflyLinks).values({ userId, subscriptionId: sub.id, billId: bill.id, coinioHash: subHash(sub), fireflyHash: billHash(bill) }).run();
       out.created.coinio++;
     });
