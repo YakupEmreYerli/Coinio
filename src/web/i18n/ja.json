@@ -902,5 +902,16 @@
   "invite.signupIntro": "{member} として参加するためのユーザー名とパスワードを設定してください。",
   "invite.createAndJoin": "アカウント作成して参加",
   "invite.haveAccount": "すでにアカウントをお持ちですか？",
-  "invite.usernameTaken": "そのユーザー名はすでに使われています。"
+  "invite.usernameTaken": "そのユーザー名はすでに使われています。",
+  "family.myRoleLabel": "あなたの役割",
+  "family.roleLabel": "役割",
+  "family.relation.none": "未設定",
+  "family.relation.mother": "母",
+  "family.relation.father": "父",
+  "family.relation.partner": "パートナー",
+  "family.relation.child": "子ども",
+  "family.relation.sibling": "きょうだい",
+  "family.relation.other": "その他",
+  "invite.displayNameLabel": "表示名",
+  "invite.roleLabel": "家族の役割"
 }

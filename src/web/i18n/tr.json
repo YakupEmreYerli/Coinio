@@ -921,5 +921,16 @@
   "invite.signupIntro": "{member} olarak katılmak için kullanıcı adı ve parola belirle.",
   "invite.createAndJoin": "Hesap oluştur ve katıl",
   "invite.haveAccount": "Zaten hesabın var mı?",
-  "invite.usernameTaken": "Bu kullanıcı adı zaten kullanılıyor."
+  "invite.usernameTaken": "Bu kullanıcı adı zaten kullanılıyor.",
+  "family.myRoleLabel": "Senin rolün",
+  "family.roleLabel": "Rol",
+  "family.relation.none": "Seçilmedi",
+  "family.relation.mother": "Anne",
+  "family.relation.father": "Baba",
+  "family.relation.partner": "Eş / Partner",
+  "family.relation.child": "Çocuk",
+  "family.relation.sibling": "Kardeş",
+  "family.relation.other": "Diğer",
+  "invite.displayNameLabel": "Adın",
+  "invite.roleLabel": "Ailedeki rolün"
 }

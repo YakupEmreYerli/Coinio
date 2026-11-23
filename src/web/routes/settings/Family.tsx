@@ -4,6 +4,7 @@ import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { CopyField } from '../../components/CopyField';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
+import { Select } from '../../components/ui/Select';
 import { toast } from '../../components/ui/Toaster';
 import { t } from '../../i18n';
 import {
@@ -18,7 +19,8 @@ import {
   useUpdateFamily,
   useUpdateMember,
 } from '../../lib/hooks';
-import type { ApiInviteCreated } from '../../lib/types';
+import { formatMemberLabel, relationOptions } from '../../lib/memberLabel';
+import type { ApiInviteCreated, FamilyRelation } from '../../lib/types';
 import { Section } from './Section';
 
 const PALETTE = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#06b6d4', '#8b5cf6', '#ef4444', '#14b8a6'];
@@ -37,12 +39,15 @@ export function FamilySettings() {
   const revokeInvite = useRevokeInvite();
 
   const [newFamilyName, setNewFamilyName] = useState('');
+  const [ownerRelation, setOwnerRelation] = useState<string>('');
   const [initialMembers, setInitialMembers] = useState('');
   const [householdName, setHouseholdName] = useState('');
   const [memberName, setMemberName] = useState('');
+  const [memberRelation, setMemberRelation] = useState<string>('');
   const [memberColor, setMemberColor] = useState(PALETTE[1]!);
   const [editingMemberId, setEditingMemberId] = useState<number | null>(null);
   const [editingMemberName, setEditingMemberName] = useState('');
+  const [editingMemberRelation, setEditingMemberRelation] = useState<string>('');
   const [latestInvite, setLatestInvite] = useState<ApiInviteCreated | null>(null);
   const [confirmDeleteFamily, setConfirmDeleteFamily] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
@@ -52,6 +57,7 @@ export function FamilySettings() {
   const household = data?.household ?? null;
   const members = data?.members ?? [];
   const invites = data?.invites ?? [];
+  const roleChoices = relationOptions();
 
   useEffect(() => {
     if (household) setHouseholdName(household.name);
@@ -76,10 +82,15 @@ export function FamilySettings() {
                 .map((s) => s.trim())
                 .filter(Boolean);
               createFamily.mutate(
-                { name: newFamilyName.trim(), ...(extra.length ? { members: extra } : {}) },
+                {
+                  name: newFamilyName.trim(),
+                  ...(ownerRelation ? { ownerRelation: ownerRelation as FamilyRelation } : {}),
+                  ...(extra.length ? { members: extra } : {}),
+                },
                 {
                   onSuccess: () => {
                     setNewFamilyName('');
+                    setOwnerRelation('');
                     setInitialMembers('');
                     toast.success(t('family.created'));
                   },
@@ -92,13 +103,16 @@ export function FamilySettings() {
           </Button>
         }
       >
-        <Input
-          label={t('family.nameLabel')}
-          placeholder={t('family.namePlaceholder')}
-          value={newFamilyName}
-          onChange={(e) => setNewFamilyName(e.target.value)}
-          maxLength={80}
-        />
+        <div className="grid gap-4 sm:grid-cols-[1fr_180px]">
+          <Input
+            label={t('family.nameLabel')}
+            placeholder={t('family.namePlaceholder')}
+            value={newFamilyName}
+            onChange={(e) => setNewFamilyName(e.target.value)}
+            maxLength={80}
+          />
+          <Select label={t('family.myRoleLabel')} value={ownerRelation} onChange={setOwnerRelation} options={roleChoices} />
+        </div>
         <Input
           label={t('family.initialMembers')}
           placeholder={t('family.initialMembersPh')}
@@ -165,18 +179,26 @@ export function FamilySettings() {
           {members.map((m) => {
             const pendingInvite = invites.find((inv) => inv.memberId === m.id);
             const isEditing = editingMemberId === m.id;
+            const canEditMember = isOwner || m.isMe;
             return (
               <li key={m.id} className="flex flex-col gap-2 px-4 py-3">
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="size-3 shrink-0 rounded-full" style={{ background: m.color ?? '#6366f1' }} />
                   {isEditing ? (
-                    <div className="flex min-w-0 flex-1 items-center gap-2">
+                    <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
                       <input
                         aria-label={t('family.memberName')}
-                        className="h-8 min-w-0 flex-1 rounded-[8px] border border-line-2 bg-card px-2.5 text-sm outline-none focus:border-accent"
+                        className="h-8 min-w-[130px] flex-1 rounded-[8px] border border-line-2 bg-card px-2.5 text-sm outline-none focus:border-accent"
                         value={editingMemberName}
                         onChange={(e) => setEditingMemberName(e.target.value)}
                         maxLength={60}
+                      />
+                      <Select
+                        aria-label={t('family.roleLabel')}
+                        className="h-8 w-auto"
+                        value={editingMemberRelation}
+                        onChange={setEditingMemberRelation}
+                        options={roleChoices}
                       />
                       <Button
                         size="icon-sm"
@@ -185,7 +207,13 @@ export function FamilySettings() {
                         disabled={!editingMemberName.trim()}
                         onClick={() =>
                           updateMember.mutate(
-                            { id: m.id, patch: { name: editingMemberName.trim() } },
+                            {
+                              id: m.id,
+                              patch: {
+                                name: editingMemberName.trim(),
+                                relation: editingMemberRelation ? (editingMemberRelation as FamilyRelation) : null,
+                              },
+                            },
                             {
                               onSuccess: () => {
                                 setEditingMemberId(null);
@@ -204,7 +232,7 @@ export function FamilySettings() {
                   ) : (
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-medium">{m.name}</span>
+                        <span className="font-medium">{formatMemberLabel(m)}</span>
                         {m.isMe && <span className="rounded-full bg-sunk px-2 py-0.5 text-[11px] text-text-2">{t('family.you')}</span>}
                         {m.role === 'owner' && (
                           <span className="rounded-full bg-accent-soft px-2 py-0.5 text-[11px] font-medium text-accent">
@@ -218,9 +246,9 @@ export function FamilySettings() {
                     </div>
                   )}
 
-                  {isOwner && !isEditing && (
+                  {canEditMember && !isEditing && (
                     <div className="flex items-center gap-1.5">
-                      {m.linkedUserId === null && (
+                      {isOwner && m.linkedUserId === null && (
                         <Button
                           size="sm"
                           disabled={createInvite.isPending}
@@ -243,17 +271,18 @@ export function FamilySettings() {
                         onClick={() => {
                           setEditingMemberId(m.id);
                           setEditingMemberName(m.name);
+                          setEditingMemberRelation(m.relation ?? '');
                         }}
                       >
                         <Pencil />
                       </Button>
-                      {m.role !== 'owner' && (
+                      {isOwner && m.role !== 'owner' && (
                         <Button
                           size="icon-sm"
                           variant="ghost"
                           className="text-neg hover:text-neg"
                           aria-label={t('family.removeMember')}
-                          onClick={() => setConfirmDeleteMember({ id: m.id, name: m.name })}
+                          onClick={() => setConfirmDeleteMember({ id: m.id, name: formatMemberLabel(m) })}
                         >
                           <Trash2 />
                         </Button>
@@ -297,10 +326,15 @@ export function FamilySettings() {
               e.preventDefault();
               if (!memberName.trim()) return;
               addMember.mutate(
-                { name: memberName.trim(), color: memberColor },
+                {
+                  name: memberName.trim(),
+                  relation: memberRelation ? (memberRelation as FamilyRelation) : null,
+                  color: memberColor,
+                },
                 {
                   onSuccess: () => {
                     setMemberName('');
+                    setMemberRelation('');
                     setMemberColor(PALETTE[(members.length + 1) % PALETTE.length]!);
                     toast.success(t('family.memberAdded'));
                   },
@@ -308,7 +342,7 @@ export function FamilySettings() {
               );
             }}
           >
-            <div className="min-w-[180px] flex-1">
+            <div className="min-w-[160px] flex-1">
               <Input
                 label={t('family.addMemberLabel')}
                 placeholder={t('family.addMemberPh')}
@@ -316,6 +350,9 @@ export function FamilySettings() {
                 onChange={(e) => setMemberName(e.target.value)}
                 maxLength={60}
               />
+            </div>
+            <div className="w-[150px]">
+              <Select label={t('family.roleLabel')} value={memberRelation} onChange={setMemberRelation} options={roleChoices} />
             </div>
             <div className="flex items-center gap-1 pb-2" role="group" aria-label={t('family.memberColor')}>
               {PALETTE.slice(0, 6).map((c) => (

@@ -921,5 +921,16 @@
   "invite.signupIntro": "Elige tu nombre de usuario y contraseña para unirte como {member}.",
   "invite.createAndJoin": "Crear cuenta y unirse",
   "invite.haveAccount": "¿Ya tienes cuenta?",
-  "invite.usernameTaken": "Ese nombre de usuario ya está en uso."
+  "invite.usernameTaken": "Ese nombre de usuario ya está en uso.",
+  "family.myRoleLabel": "Tu rol",
+  "family.roleLabel": "Rol",
+  "family.relation.none": "Sin especificar",
+  "family.relation.mother": "Madre",
+  "family.relation.father": "Padre",
+  "family.relation.partner": "Pareja",
+  "family.relation.child": "Hijo/a",
+  "family.relation.sibling": "Hermano/a",
+  "family.relation.other": "Otro",
+  "invite.displayNameLabel": "Tu nombre",
+  "invite.roleLabel": "Rol familiar"
 }

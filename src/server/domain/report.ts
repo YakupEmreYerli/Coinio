@@ -3,7 +3,7 @@ import { dueDatesThrough } from '../../shared/schedule.js';
 import { perYear, type PaymentRow, type SubscriptionRow } from './summary.js';
 
 export type MemberBreakdown = {
-  members: ReadonlyArray<{ id: number; name: string; color: string | null }>;
+  members: ReadonlyArray<{ id: number; name: string; relation?: string | null; color: string | null }>;
   memberAmounts: ReadonlyMap<number, ReadonlyMap<number, number>>;
 };
 
@@ -11,7 +11,7 @@ export type Report = {
   base: string;
   months: { month: string; paidMinor: number; projectedMinor: number }[];
   byCategory: { category: string | null; monthlyMinor: number }[];
-  byMember?: { memberId: number; name: string; color: string | null; monthlyMinor: number }[];
+  byMember?: { memberId: number; name: string; relation?: string | null; color: string | null; monthlyMinor: number }[];
   top: { subscriptionId: number; name: string; monthlyMinor: number }[];
   foreignShare: { minor: number; percent: number };
   /** Active subscriptions left out of every figure because their currency has no rate. */
@@ -128,7 +128,13 @@ export function computeReport(input: {
     ...(memberBreakdown
       ? {
           byMember: memberBreakdown.members
-            .map((m) => ({ memberId: m.id, name: m.name, color: m.color, monthlyMinor: memberTotals.get(m.id) ?? 0 }))
+            .map((m) => ({
+              memberId: m.id,
+              name: m.name,
+              ...(m.relation !== undefined ? { relation: m.relation } : {}),
+              color: m.color,
+              monthlyMinor: memberTotals.get(m.id) ?? 0,
+            }))
             .sort(byMinorDesc),
         }
       : {}),

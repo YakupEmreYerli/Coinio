@@ -1,7 +1,8 @@
-import type { Settings } from '../../shared/types';
+import type { FamilyRelation, Settings } from '../../shared/types';
 import type { ApiChannel, NotifySettings, NotifyType, TemplateSet, TemplateText } from '../../shared/notify/types';
 
 export type { ApiChannel, ApiNotificationLog, NotifySettings, NotifyType } from '../../shared/notify/types';
+export type { FamilyRelation };
 
 /** GET /api/notifications */
 export type NotificationsPage = {
@@ -39,6 +40,7 @@ export type ApiHousehold = {
 export type ApiHouseholdMember = {
   id: number;
   name: string;
+  relation: FamilyRelation | null;
   color: string | null;
   role: 'owner' | 'member';
   linkedUserId: number | null;
@@ -67,6 +69,7 @@ export type ApiInvitePreview = {
   used: boolean;
   householdName: string | null;
   memberName: string | null;
+  memberRelation: FamilyRelation | null;
   allowInviteSignup: boolean;
   signedIn: boolean;
   alreadyInHousehold: boolean;

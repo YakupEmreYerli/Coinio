@@ -72,6 +72,10 @@ export const ScopeQuery = z.object({
   memberId: z.coerce.number().int().positive().optional(),
 });
 
+export const FAMILY_RELATIONS = ['mother', 'father', 'partner', 'child', 'sibling', 'other'] as const;
+export const FamilyRelation = z.enum(FAMILY_RELATIONS);
+export type FamilyRelation = z.infer<typeof FamilyRelation>;
+
 const hexColor = z
   .string()
   .trim()
@@ -81,16 +85,28 @@ const hexColor = z
 
 export const CreateFamilyInput = z.object({
   name: z.string().trim().min(1).max(80),
-  members: z.array(z.string().trim().min(1).max(60)).max(11).optional(),
+  ownerName: z.string().trim().min(1).max(60).optional(),
+  ownerRelation: FamilyRelation.nullable().optional(),
+  members: z
+    .array(
+      z.union([
+        z.string().trim().min(1).max(60),
+        z.object({ name: z.string().trim().min(1).max(60), relation: FamilyRelation.nullable().optional() }),
+      ]),
+    )
+    .max(11)
+    .optional(),
 });
 export const UpdateFamilyInput = z.object({ name: z.string().trim().min(1).max(80) });
 export const CreateMemberInput = z.object({
   name: z.string().trim().min(1).max(60),
+  relation: FamilyRelation.nullable().optional(),
   color: hexColor,
 });
 export const UpdateMemberInput = z
   .object({
     name: z.string().trim().min(1).max(60),
+    relation: FamilyRelation.nullable(),
     color: hexColor,
   })
   .partial();
@@ -98,6 +114,8 @@ export const CreateInviteInput = z.object({ memberId: z.number().int().positive(
 export const AcceptInviteInput = z.object({
   username: z.string().trim().min(1).max(100).optional(),
   password: z.string().min(10).max(1000).optional(),
+  displayName: z.string().trim().min(1).max(60).optional(),
+  relation: FamilyRelation.nullable().optional(),
 });
 
 export const SubscriptionInput = z.preprocess(legacyReminderDays, z.object({

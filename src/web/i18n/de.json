@@ -921,5 +921,16 @@
   "invite.signupIntro": "Lege Benutzername und Passwort fest, um als {member} beizutreten.",
   "invite.createAndJoin": "Konto erstellen & beitreten",
   "invite.haveAccount": "Schon ein Konto?",
-  "invite.usernameTaken": "Dieser Benutzername ist bereits vergeben."
+  "invite.usernameTaken": "Dieser Benutzername ist bereits vergeben.",
+  "family.myRoleLabel": "Deine Rolle",
+  "family.roleLabel": "Rolle",
+  "family.relation.none": "Keine Angabe",
+  "family.relation.mother": "Mutter",
+  "family.relation.father": "Vater",
+  "family.relation.partner": "Partner",
+  "family.relation.child": "Kind",
+  "family.relation.sibling": "Geschwister",
+  "family.relation.other": "Sonstiges",
+  "invite.displayNameLabel": "Dein Name",
+  "invite.roleLabel": "Rolle in der Familie"
 }

@@ -3,6 +3,7 @@ import { t } from '../i18n';
 import { cn } from '../lib/cn';
 import { useFamilyScope } from '../lib/familyScope';
 import { useFamily } from '../lib/hooks';
+import { formatMemberLabel } from '../lib/memberLabel';
 import { Select } from './ui/Select';
 
 const ALL = 'all';
@@ -20,7 +21,7 @@ export function FamilyScopeBar({ className }: { className?: string }) {
           onClick={() => setScope('mine')}
           aria-pressed={scope === 'mine'}
           className={cn(
-            'rounded-[calc(var(--r-ctl)-3px)] px-3 py-1 text-[13px] font-medium transition-colors',
+            'rounded-[max(0px,calc(var(--radius-sm)-2px))] px-3 py-1 text-[13px] font-medium transition-colors',
             scope === 'mine' ? 'bg-card text-text shadow-xs' : 'text-text-2 hover:text-text',
           )}
         >
@@ -31,7 +32,7 @@ export function FamilyScopeBar({ className }: { className?: string }) {
           onClick={() => setScope('family')}
           aria-pressed={scope === 'family'}
           className={cn(
-            'inline-flex items-center gap-1.5 rounded-[calc(var(--r-ctl)-3px)] px-3 py-1 text-[13px] font-medium transition-colors',
+            'inline-flex items-center gap-1.5 rounded-[max(0px,calc(var(--radius-sm)-2px))] px-3 py-1 text-[13px] font-medium transition-colors',
             scope === 'family' ? 'bg-card text-text shadow-xs' : 'text-text-2 hover:text-text',
           )}
         >
@@ -47,7 +48,7 @@ export function FamilyScopeBar({ className }: { className?: string }) {
           onChange={(v) => setMemberId(v === ALL ? null : Number(v))}
           options={[
             { value: ALL, label: t('family.allMembers') },
-            ...family.members.map((m) => ({ value: String(m.id), label: m.name })),
+            ...family.members.map((m) => ({ value: String(m.id), label: formatMemberLabel(m) })),
           ]}
         />
       )}

@@ -92,18 +92,29 @@ describe('family & household API', () => {
       used: false,
       householdName: 'Ailem',
       memberName: 'Annem',
+      memberRelation: null,
       allowInviteSignup: true,
       signedIn: false,
       alreadyInHousehold: false,
     });
 
-    // Accept via self-hosted invite signup creates user + sets session cookie.
+    // Accept via self-hosted invite signup creates user + sets session cookie, and allows updating display name & relation.
     const momAgent = request.agent(t.app);
     const accepted = await momAgent
       .post(`/api/family/invite/${inv1.body.token}/accept`)
-      .send({ username: 'annem', password: 'mom secret passphrase' });
+      .send({ username: 'annem', password: 'mom secret passphrase', displayName: 'Ayşe', relation: 'mother' });
     expect(accepted.status).toBe(201);
     expect(accepted.body.created).toBe(true);
+
+    // Linked member can see and update their own display name & relation (cannot edit other members).
+    const momFamily = (await momAgent.get('/api/family')).body;
+    const momProfile = momFamily.members.find((m: { isMe: boolean }) => m.isMe);
+    expect(momProfile.name).toBe('Ayşe');
+    expect(momProfile.relation).toBe('mother');
+    expect(
+      (await momAgent.patch(`/api/family/members/${momProfile.id}`).send({ name: 'Ayşe Hanım', relation: 'mother' })).status,
+    ).toBe(200);
+    expect((await momAgent.patch(`/api/family/members/${fam.members[0].id}`).send({ name: 'Nope' })).status).toBe(403);
 
     // Signed in session works immediately.
     const momState = await momAgent.get('/api/auth/state');

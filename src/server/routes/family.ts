@@ -71,6 +71,8 @@ export function familyRouter(ctx: ServiceCtx): Router {
         sessionUserId: sessionUser(req),
         username: body.username,
         password: body.password,
+        displayName: body.displayName,
+        relation: body.relation,
       });
       if (result.created) {
         res.cookie(SESSION_COOKIE, createSession(ctx.db, result.userId, ctx.now()), cookieOptions);

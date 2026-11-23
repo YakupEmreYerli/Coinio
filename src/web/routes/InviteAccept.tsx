@@ -1,14 +1,16 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2, Users } from 'lucide-react';
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { api, ApiError } from '../api';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
+import { Select } from '../components/ui/Select';
 import { toast } from '../components/ui/Toaster';
 import { t } from '../i18n';
+import { formatMemberLabel, relationOptions } from '../lib/memberLabel';
 import { keys } from '../lib/query';
-import type { ApiInvitePreview } from '../lib/types';
+import type { ApiInvitePreview, FamilyRelation } from '../lib/types';
 import { AuthLayout } from '../onboarding/AuthLayout';
 import { PasswordField } from '../onboarding/PasswordField';
 import { FormError } from './AuthForm';
@@ -25,6 +27,8 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
     retry: false,
   });
 
+  const [displayName, setDisplayName] = useState('');
+  const [relation, setRelation] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -32,6 +36,14 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
   const [busy, setBusy] = useState(false);
 
   const data = preview.data;
+  const roleChoices = relationOptions();
+
+  useEffect(() => {
+    if (!data) return;
+    setDisplayName((cur) => cur || data.memberName || '');
+    setRelation((cur) => cur || data.memberRelation || '');
+  }, [data?.memberName, data?.memberRelation]);
+
   const inviteNext = `/invite/${encodeURIComponent(token)}`;
   const loginHref = `/login?next=${encodeURIComponent(inviteNext)}`;
   const signupHref = `/signup?next=${encodeURIComponent(inviteNext)}`;
@@ -48,11 +60,15 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
     return t('error.generic');
   };
 
-  async function acceptSignedIn() {
+  async function acceptSignedIn(e?: FormEvent) {
+    e?.preventDefault();
     setError(null);
     setBusy(true);
     try {
-      await api.post(`/family/invite/${encodeURIComponent(token)}/accept`, {});
+      await api.post(`/family/invite/${encodeURIComponent(token)}/accept`, {
+        ...(displayName.trim() ? { displayName: displayName.trim() } : {}),
+        relation: relation ? (relation as FamilyRelation) : null,
+      });
       await qc.invalidateQueries({ queryKey: keys.family });
       await qc.invalidateQueries({ queryKey: keys.subscriptions });
       await qc.invalidateQueries({ queryKey: keys.summary });
@@ -71,13 +87,36 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
     if (password !== confirm) return setError(t('auth.password.mismatch'));
     setBusy(true);
     try {
-      await api.post(`/family/invite/${encodeURIComponent(token)}/accept`, { username: username.trim(), password });
+      await api.post(`/family/invite/${encodeURIComponent(token)}/accept`, {
+        username: username.trim(),
+        password,
+        ...(displayName.trim() ? { displayName: displayName.trim() } : {}),
+        relation: relation ? (relation as FamilyRelation) : null,
+      });
       location.assign('/');
     } catch (err) {
       setError(acceptErrorText(err));
       setBusy(false);
     }
   }
+
+  const invitedLabel = formatMemberLabel({
+    name: data?.memberName ?? '',
+    relation: data?.memberRelation ?? null,
+  });
+
+  const profileFields = (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Input
+        label={t('invite.displayNameLabel')}
+        value={displayName}
+        onChange={(e) => setDisplayName(e.target.value)}
+        maxLength={60}
+        className="h-11"
+      />
+      <Select label={t('invite.roleLabel')} value={relation} onChange={setRelation} options={roleChoices} />
+    </div>
+  );
 
   const content = (() => {
     if (preview.isPending) {
@@ -129,7 +168,7 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
             {t('invite.title', { household: data.householdName ?? '' })}
           </h1>
           <p className="mt-2 text-[14px] leading-relaxed text-text-2">
-            {t('invite.asMember', { member: data.memberName ?? '' })}
+            {t('invite.asMember', { member: invitedLabel })}
           </p>
           {data.alreadyInHousehold ? (
             <div className="mt-6 flex flex-col gap-4">
@@ -139,13 +178,14 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
               </Link>
             </div>
           ) : (
-            <div className="mt-6 flex flex-col gap-3">
+            <form onSubmit={acceptSignedIn} className="mt-6 flex flex-col gap-4">
+              {profileFields}
               {error && <FormError>{error}</FormError>}
-              <Button variant="primary" disabled={busy} className="h-11 w-full justify-center" onClick={() => void acceptSignedIn()}>
+              <Button type="submit" variant="primary" disabled={busy} className="h-11 w-full justify-center">
                 {busy && <Loader2 className="animate-spin" aria-hidden />}
                 {t('invite.joinButton')}
               </Button>
-            </div>
+            </form>
           )}
         </>
       );
@@ -161,7 +201,7 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
             {t('invite.title', { household: data.householdName ?? '' })}
           </h1>
           <p className="mt-2 text-[14px] leading-relaxed text-text-2">
-            {t('invite.cloudRequired', { member: data.memberName ?? '' })}
+            {t('invite.cloudRequired', { member: invitedLabel })}
           </p>
           <div className="mt-6 flex flex-col gap-2.5">
             <Link to={loginHref} className="inline-flex h-11 items-center justify-center rounded-ctl bg-primary px-4 text-[14.5px] font-medium text-primary-fg">
@@ -184,9 +224,10 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
           {t('invite.title', { household: data.householdName ?? '' })}
         </h1>
         <p className="mt-2 text-[14px] leading-relaxed text-text-2">
-          {t('invite.signupIntro', { member: data.memberName ?? '' })}
+          {t('invite.signupIntro', { member: invitedLabel })}
         </p>
         <form onSubmit={submitSignup} className="mt-7 flex flex-col gap-4">
+          {profileFields}
           <Input
             label={t('common.username')}
             name="username"
@@ -211,7 +252,7 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
           />
           <PasswordField
             label={t('auth.password.confirm')}
-            name="confirmPassword"
+            name="passwordConfirm"
             value={confirm}
             onChange={setConfirm}
             autoComplete="new-password"

@@ -19,6 +19,7 @@ import { cycleLabel } from '../lib/cycle';
 import { shortDate } from '../lib/dates';
 import { useFamilyScope } from '../lib/familyScope';
 import { useDeleteSubscription, useFamily, useSettings, useSubscriptions, useSummary, useUpdateSubscription } from '../lib/hooks';
+import { formatMemberLabel } from '../lib/memberLabel';
 import { monthlyCost } from '../lib/money';
 import { SubscriptionDetail } from '../subscriptions/SubscriptionDetail';
 
@@ -42,7 +43,7 @@ export function Subscriptions() {
   const [confirmBulk, setConfirmBulk] = useState(false);
   const [newCategory, setNewCategory] = useState('');
   const memberNames = useMemo(
-    () => new Map((family?.members ?? []).map((m) => [m.id, m.name])),
+    () => new Map((family?.members ?? []).map((m) => [m.id, formatMemberLabel(m)])),
     [family?.members],
   );
 

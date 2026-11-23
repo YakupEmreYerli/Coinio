@@ -18,21 +18,29 @@ describe('FamilySettings', () => {
     const calls = mockApi({
       'GET /api/family': () => state,
       'POST /api/family': (init: RequestInit & { method: string; url: string }) => {
-        const b = (typeof init.body === 'string' ? JSON.parse(init.body) : init.body) as { name: string; members?: string[] };
+        const b = (typeof init.body === 'string' ? JSON.parse(init.body) : init.body) as {
+          name: string;
+          members?: (string | { name: string; relation?: string | null })[];
+        };
         state = {
           household: { id: 1, name: b.name, ownerUserId: 1, myMemberId: 1, myRole: 'owner', createdAt: '' },
           members: [
-            { id: 1, name: 'yakup', color: '#6366f1', role: 'owner', linkedUserId: 1, linkedUsername: 'yakup', isMe: true, createdAt: '' },
-            ...(b.members ?? []).map((name, i) => ({
-              id: i + 2,
-              name,
-              color: '#10b981',
-              role: 'member',
-              linkedUserId: null,
-              linkedUsername: null,
-              isMe: false,
-              createdAt: '',
-            })),
+            { id: 1, name: 'yakup', relation: null, color: '#6366f1', role: 'owner', linkedUserId: 1, linkedUsername: 'yakup', isMe: true, createdAt: '' },
+            ...(b.members ?? []).map((entry, i) => {
+              const name = typeof entry === 'string' ? entry : entry.name;
+              const relation = typeof entry === 'string' ? null : (entry.relation ?? null);
+              return {
+                id: i + 2,
+                name,
+                relation,
+                color: '#10b981',
+                role: 'member',
+                linkedUserId: null,
+                linkedUsername: null,
+                isMe: false,
+                createdAt: '',
+              };
+            }),
           ],
           invites: [],
           allowInviteSignup: true,
@@ -56,8 +64,8 @@ describe('FamilySettings', () => {
       'GET /api/family': {
         household: { id: 1, name: 'Ev', ownerUserId: 1, myMemberId: 1, myRole: 'owner', createdAt: '' },
         members: [
-          { id: 1, name: 'yakup', color: '#6366f1', role: 'owner', linkedUserId: 1, linkedUsername: 'yakup', isMe: true, createdAt: '' },
-          { id: 2, name: 'Annem', color: '#10b981', role: 'member', linkedUserId: null, linkedUsername: null, isMe: false, createdAt: '' },
+          { id: 1, name: 'yakup', relation: null, color: '#6366f1', role: 'owner', linkedUserId: 1, linkedUsername: 'yakup', isMe: true, createdAt: '' },
+          { id: 2, name: 'Annem', relation: 'mother', color: '#10b981', role: 'member', linkedUserId: null, linkedUsername: null, isMe: false, createdAt: '' },
         ],
         invites: [],
         allowInviteSignup: true,

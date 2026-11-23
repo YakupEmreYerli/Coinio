@@ -11,6 +11,7 @@ CREATE TABLE `household_members` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`household_id` integer NOT NULL,
 	`name` text NOT NULL,
+	`relation` text,
 	`color` text,
 	`role` text DEFAULT 'member' NOT NULL,
 	`linked_user_id` integer,

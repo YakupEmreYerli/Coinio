@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { and, asc, eq, gt, inArray, isNull } from 'drizzle-orm';
 import { z } from 'zod';
+import type { FamilyRelation } from '../../shared/types.js';
 import { hashPassword } from '../auth/password.js';
 import type { Db } from '../db/client.js';
 import {
@@ -125,6 +126,7 @@ export function getFamilyState(ctx: ServiceCtx, userId: number) {
     members: hh.members.map((m) => ({
       id: m.id,
       name: m.name,
+      relation: m.relation as FamilyRelation | null,
       color: m.color,
       role: m.role,
       linkedUserId: m.linkedUserId,
@@ -137,12 +139,23 @@ export function getFamilyState(ctx: ServiceCtx, userId: number) {
   };
 }
 
-export function createFamily(ctx: ServiceCtx, userId: number, input: { name: string; members?: string[] }) {
+export function createFamily(
+  ctx: ServiceCtx,
+  userId: number,
+  input: {
+    name: string;
+    ownerName?: string;
+    ownerRelation?: FamilyRelation | null;
+    members?: Array<string | { name: string; relation?: FamilyRelation | null }>;
+  },
+) {
   if (getHouseholdContext(ctx.db, userId)) throw new ConflictError('already_in_household');
   const user = ctx.db.select({ id: users.id, username: users.username }).from(users).where(eq(users.id, userId)).get();
   if (!user) throw new NotFoundError('user');
 
-  const extra = (input.members ?? []).map((n) => n.trim()).filter(Boolean);
+  const extra = (input.members ?? [])
+    .map((entry) => (typeof entry === 'string' ? { name: entry.trim(), relation: null } : { name: entry.name.trim(), relation: entry.relation ?? null }))
+    .filter((entry) => entry.name.length > 0);
   if (1 + extra.length > MAX_FAMILY_MEMBERS) throw new BadRequestError('member_limit_reached');
 
   const stamp = ctx.now().toISOString();
@@ -151,18 +164,20 @@ export function createFamily(ctx: ServiceCtx, userId: number, input: { name: str
     tx.insert(householdMembers)
       .values({
         householdId: hh.id,
-        name: user.username,
+        name: input.ownerName?.trim() || user.username,
+        relation: input.ownerRelation ?? null,
         color: MEMBER_PALETTE[0]!,
         role: 'owner',
         linkedUserId: userId,
         createdAt: stamp,
       })
       .run();
-    extra.forEach((name, idx) => {
+    extra.forEach((m, idx) => {
       tx.insert(householdMembers)
         .values({
           householdId: hh.id,
-          name,
+          name: m.name,
+          relation: m.relation,
           color: MEMBER_PALETTE[(idx + 1) % MEMBER_PALETTE.length]!,
           role: 'member',
           linkedUserId: null,
@@ -202,7 +217,7 @@ export function leaveFamily(ctx: ServiceCtx, userId: number): void {
   });
 }
 
-export function addMember(ctx: ServiceCtx, userId: number, input: { name: string; color?: string | null }) {
+export function addMember(ctx: ServiceCtx, userId: number, input: { name: string; relation?: FamilyRelation | null; color?: string | null }) {
   const hh = requireOwner(ctx.db, userId);
   if (hh.members.length >= MAX_FAMILY_MEMBERS) throw new ConflictError('member_limit_reached');
   const stamp = ctx.now().toISOString();
@@ -212,6 +227,7 @@ export function addMember(ctx: ServiceCtx, userId: number, input: { name: string
     .values({
       householdId: hh.household.id,
       name: input.name,
+      relation: input.relation ?? null,
       color,
       role: 'member',
       linkedUserId: null,
@@ -221,12 +237,19 @@ export function addMember(ctx: ServiceCtx, userId: number, input: { name: string
   return getFamilyState(ctx, userId);
 }
 
-export function updateMember(ctx: ServiceCtx, userId: number, memberId: number, patch: { name?: string; color?: string | null }) {
-  const hh = requireOwner(ctx.db, userId);
+export function updateMember(
+  ctx: ServiceCtx,
+  userId: number,
+  memberId: number,
+  patch: { name?: string; relation?: FamilyRelation | null; color?: string | null },
+) {
+  const hh = requireHousehold(ctx.db, userId);
+  if (hh.me.role !== 'owner' && memberId !== hh.me.id) throw new ForbiddenError('owner_required');
   const target = hh.members.find((m) => m.id === memberId);
   if (!target) throw new NotFoundError('member');
   const set: Partial<typeof householdMembers.$inferInsert> = {};
   if (patch.name !== undefined) set.name = patch.name;
+  if (patch.relation !== undefined) set.relation = patch.relation;
   if (patch.color !== undefined) set.color = patch.color;
   if (Object.keys(set).length > 0) {
     ctx.db.update(householdMembers).set(set).where(eq(householdMembers.id, memberId)).run();
@@ -324,6 +347,7 @@ export function previewInvite(ctx: ServiceCtx, rawToken: string, sessionUserId: 
       householdName: households.name,
       memberLinkedUserId: householdMembers.linkedUserId,
       memberName: householdMembers.name,
+      memberRelation: householdMembers.relation,
     })
     .from(householdInvites)
     .innerJoin(households, eq(householdInvites.householdId, households.id))
@@ -338,6 +362,7 @@ export function previewInvite(ctx: ServiceCtx, rawToken: string, sessionUserId: 
       used: false,
       householdName: null,
       memberName: null,
+      memberRelation: null,
       allowInviteSignup,
       signedIn,
       alreadyInHousehold,
@@ -352,6 +377,7 @@ export function previewInvite(ctx: ServiceCtx, rawToken: string, sessionUserId: 
     used,
     householdName: row.householdName,
     memberName: row.memberName,
+    memberRelation: (row.memberRelation ?? null) as FamilyRelation | null,
     allowInviteSignup,
     signedIn,
     alreadyInHousehold,
@@ -366,7 +392,13 @@ const InviteSignupBody = z.object({
 export async function acceptInvite(
   ctx: ServiceCtx,
   rawToken: string,
-  opts: { sessionUserId: number | null; username?: string; password?: string },
+  opts: {
+    sessionUserId: number | null;
+    username?: string;
+    password?: string;
+    displayName?: string;
+    relation?: FamilyRelation | null;
+  },
 ): Promise<{ userId: number; username?: string; householdId: number; memberId: number; created: boolean }> {
   const invite = ctx.db
     .select()
@@ -378,6 +410,10 @@ export async function acceptInvite(
   const nowIso = ctx.now().toISOString();
   if (invite.usedAt !== null) throw new ConflictError('invite_used');
   if (invite.expiresAt <= nowIso) throw new GoneError('invite_expired');
+
+  const profilePatch: Partial<typeof householdMembers.$inferInsert> = {};
+  if (opts.displayName?.trim()) profilePatch.name = opts.displayName.trim();
+  if (opts.relation !== undefined) profilePatch.relation = opts.relation;
 
   if (opts.sessionUserId !== null) {
     const uid = opts.sessionUserId;
@@ -392,7 +428,7 @@ export async function acceptInvite(
       if (claimed.changes !== 1) throw new ConflictError('invite_used');
       const linked = tx
         .update(householdMembers)
-        .set({ linkedUserId: uid })
+        .set({ linkedUserId: uid, ...profilePatch })
         .where(and(eq(householdMembers.id, invite.memberId), isNull(householdMembers.linkedUserId)))
         .run();
       if (linked.changes !== 1) throw new ConflictError('member_already_linked');
@@ -422,7 +458,7 @@ export async function acceptInvite(
     if (claimed.changes !== 1) throw new ConflictError('invite_used');
     const linked = tx
       .update(householdMembers)
-      .set({ linkedUserId: user.id })
+      .set({ linkedUserId: user.id, ...profilePatch })
       .where(and(eq(householdMembers.id, invite.memberId), isNull(householdMembers.linkedUserId)))
       .run();
     if (linked.changes !== 1) throw new ConflictError('member_already_linked');

@@ -902,5 +902,16 @@
   "invite.signupIntro": "设置用户名和密码，以 {member} 身份加入。",
   "invite.createAndJoin": "创建账号并加入",
   "invite.haveAccount": "已有账号？",
-  "invite.usernameTaken": "该用户名已被占用。"
+  "invite.usernameTaken": "该用户名已被占用。",
+  "family.myRoleLabel": "你的角色",
+  "family.roleLabel": "角色",
+  "family.relation.none": "未设置",
+  "family.relation.mother": "妈妈",
+  "family.relation.father": "爸爸",
+  "family.relation.partner": "伴侣",
+  "family.relation.child": "孩子",
+  "family.relation.sibling": "兄弟姐妹",
+  "family.relation.other": "其他",
+  "invite.displayNameLabel": "你的名字",
+  "invite.roleLabel": "家庭角色"
 }

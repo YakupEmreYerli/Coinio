@@ -921,5 +921,16 @@
   "invite.signupIntro": "Create your username and password to join as {member}.",
   "invite.createAndJoin": "Create account & join",
   "invite.haveAccount": "Already have an account?",
-  "invite.usernameTaken": "That username is already taken."
+  "invite.usernameTaken": "That username is already taken.",
+  "family.myRoleLabel": "Your role",
+  "family.roleLabel": "Role",
+  "family.relation.none": "Not set",
+  "family.relation.mother": "Mother",
+  "family.relation.father": "Father",
+  "family.relation.partner": "Partner",
+  "family.relation.child": "Child",
+  "family.relation.sibling": "Sibling",
+  "family.relation.other": "Other",
+  "invite.displayNameLabel": "Your name",
+  "invite.roleLabel": "Family role"
 }

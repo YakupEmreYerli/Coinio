@@ -486,7 +486,7 @@ export function buildMemberBreakdown(subs: SubscriptionView[], hh: HouseholdCont
     }
   }
   return {
-    members: hh.members.map((m) => ({ id: m.id, name: m.name, color: m.color })),
+    members: hh.members.map((m) => ({ id: m.id, name: m.name, relation: m.relation, color: m.color })),
     memberAmounts,
   };
 }

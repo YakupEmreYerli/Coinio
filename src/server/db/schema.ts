@@ -65,6 +65,7 @@ export const householdMembers = sqliteTable(
       .notNull()
       .references(() => households.id, { onDelete: 'cascade' }),
     name: text('name').notNull(),
+    relation: text('relation'),
     color: text('color'),
     role: text('role', { enum: ['owner', 'member'] }).notNull().default('member'),
     linkedUserId: integer('linked_user_id')

@@ -18,6 +18,7 @@ import { failureText } from '../lib/failure';
 import { t, useLocale, type Locale } from '../i18n';
 import type { SubscriptionPrefill } from '../layout/subscriptionForm';
 import { useFamily, useFirefly, useFireflyAccounts, useNotifications, useSettings, useSubscription, useSubscriptions } from '../lib/hooks';
+import { formatMemberLabel } from '../lib/memberLabel';
 import type { ApiSubscription, Cycle } from '../lib/types';
 import { amountInputMode, formatAmountInput, parseAmount } from './amount';
 import { CatalogSuggestions } from './CatalogSuggestions';
@@ -374,7 +375,7 @@ export function SubscriptionForm({
                       label={t('family.paidBy')}
                       value={paidByMemberId || String(household.myMemberId)}
                       onChange={setPaidByMemberId}
-                      options={members.map((m) => ({ value: String(m.id), label: m.name }))}
+                      options={members.map((m) => ({ value: String(m.id), label: formatMemberLabel(m) }))}
                     />
                     <Select
                       label={t('family.splitMode')}
@@ -403,7 +404,7 @@ export function SubscriptionForm({
                                     setSplitMemberIds((cur) => (on ? [...new Set([...cur, m.id])] : cur.filter((id) => id !== m.id)))
                                   }
                                 />
-                                <span>{m.name}</span>
+                                <span>{formatMemberLabel(m)}</span>
                               </label>
                               {splitMode === 'custom' && checked && (
                                 <input

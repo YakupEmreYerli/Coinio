@@ -14,6 +14,7 @@ import { useSubscriptionForm } from '../layout/subscriptionForm';
 import { useCategoryColor } from '../lib/categoryColor';
 import { cn } from '../lib/cn';
 import { useReports, useSubscriptions, type Report } from '../lib/hooks';
+import { formatMemberLabel } from '../lib/memberLabel';
 
 export type { Report };
 
@@ -224,7 +225,7 @@ function Members({ report }: { report: Report }) {
             <li key={m.memberId} className="flex flex-col gap-1.5">
               <span className="flex items-center gap-2 text-[14px]">
                 <span className="size-2 rounded-full" style={{ background: m.color ?? '#6366f1' }} />
-                <span className="min-w-0 flex-1 truncate">{m.name}</span>
+                <span className="min-w-0 flex-1 truncate">{formatMemberLabel(m)}</span>
                 <span className="num text-[12px] text-text-3">{Math.round(pct)}%</span>
                 <Money minor={m.monthlyMinor} currency={report.base} size="sm" />
               </span>

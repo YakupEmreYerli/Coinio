@@ -11,6 +11,7 @@ import type {
   ApiPayment,
   ApiSubscription,
   Appearance,
+  FamilyRelation,
   FireflyAccount,
   FireflyConnection,
   NotificationsPage,
@@ -102,15 +103,19 @@ function useFamilyMutation<V, R = ApiFamilyState>(fn: (v: V) => Promise<R>, upda
 }
 
 export const useCreateFamily = () =>
-  useFamilyMutation((body: { name: string; members?: string[] }) => api.post<ApiFamilyState>('/family', body));
+  useFamilyMutation((body: { name: string; ownerName?: string; ownerRelation?: FamilyRelation | null; members?: (string | { name: string; relation?: FamilyRelation | null })[] }) =>
+    api.post<ApiFamilyState>('/family', body),
+  );
 export const useUpdateFamily = () =>
   useFamilyMutation((body: { name: string }) => api.patch<ApiFamilyState>('/family', body));
 export const useDeleteFamily = () => useFamilyMutation<void, void>(() => api.del<void>('/family'), false);
 export const useLeaveFamily = () => useFamilyMutation<void, void>(() => api.post<void>('/family/leave'), false);
 export const useAddMember = () =>
-  useFamilyMutation((body: { name: string; color?: string | null }) => api.post<ApiFamilyState>('/family/members', body));
+  useFamilyMutation((body: { name: string; relation?: FamilyRelation | null; color?: string | null }) =>
+    api.post<ApiFamilyState>('/family/members', body),
+  );
 export const useUpdateMember = () =>
-  useFamilyMutation(({ id, patch }: { id: number; patch: { name?: string; color?: string | null } }) =>
+  useFamilyMutation(({ id, patch }: { id: number; patch: { name?: string; relation?: FamilyRelation | null; color?: string | null } }) =>
     api.patch<ApiFamilyState>(`/family/members/${id}`, patch),
   );
 export const useDeleteMember = () =>
@@ -174,7 +179,7 @@ export type Report = {
   base: string;
   months: { month: string; paidMinor: number; projectedMinor: number }[];
   byCategory: { category: string | null; monthlyMinor: number }[];
-  byMember?: { memberId: number; name: string; color: string | null; monthlyMinor: number }[];
+  byMember?: { memberId: number; name: string; relation?: string | null; color: string | null; monthlyMinor: number }[];
   top: { subscriptionId: number; name: string; monthlyMinor: number }[];
   foreignShare: { minor: number; percent: number };
   unconvertible?: number[];

@@ -11,6 +11,7 @@ import { useSubscriptionForm } from '../layout/subscriptionForm';
 import { cycleLabel } from '../lib/cycle';
 import { shortDate } from '../lib/dates';
 import { useDeleteSubscription, useFamily, useUpdateSubscription } from '../lib/hooks';
+import { formatMemberLabel } from '../lib/memberLabel';
 import type { ApiSubscription } from '../lib/types';
 import { PaymentHistory } from './PaymentHistory';
 
@@ -28,7 +29,7 @@ export function SubscriptionDetail({ sub, base, onClose }: { sub: ApiSubscriptio
   const form = useSubscriptionForm();
   const update = useUpdateSubscription();
   const del = useDeleteSubscription();
-  const members = new Map((useFamily().data?.members ?? []).map((m) => [m.id, m.name]));
+  const members = new Map((useFamily().data?.members ?? []).map((m) => [m.id, formatMemberLabel(m)]));
   const [confirm, setConfirm] = useState(false);
   return (
     <Sheet open={!!sub} onOpenChange={(v) => !v && onClose()}>

@@ -921,5 +921,16 @@
   "invite.signupIntro": "Choisissez votre identifiant et mot de passe pour rejoindre comme {member}.",
   "invite.createAndJoin": "Créer le compte et rejoindre",
   "invite.haveAccount": "Déjà un compte ?",
-  "invite.usernameTaken": "Cet identifiant est déjà utilisé."
+  "invite.usernameTaken": "Cet identifiant est déjà utilisé.",
+  "family.myRoleLabel": "Votre rôle",
+  "family.roleLabel": "Rôle",
+  "family.relation.none": "Non précisé",
+  "family.relation.mother": "Mère",
+  "family.relation.father": "Père",
+  "family.relation.partner": "Conjoint(e)",
+  "family.relation.child": "Enfant",
+  "family.relation.sibling": "Frère / Sœur",
+  "family.relation.other": "Autre",
+  "invite.displayNameLabel": "Votre prénom",
+  "invite.roleLabel": "Rôle familial"
 }
