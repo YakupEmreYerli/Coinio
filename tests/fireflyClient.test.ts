@@ -65,6 +65,20 @@ describe('firefly client', () => {
     expect(seen[0]!.get('accept')).toBe('application/vnd.api+json');
   });
 
+  it('a redirect answer is bad_response and its target gets no request', async () => {
+    const { ctx } = setup();
+    const seen: string[] = [];
+    ctx.fetch = (async (url: string | URL | Request, init?: RequestInit) => {
+      seen.push(String(url));
+      if (init?.redirect === 'manual') return new Response(null, { status: 302, headers: { location: 'https://tracker.example.com/x' } });
+      seen.push('https://tracker.example.com/x');
+      return new Response(JSON.stringify({ data: [] }));
+    }) as typeof fetch;
+    const err = await listBills(ctx, conn).catch((e: unknown) => e);
+    expect(err).toMatchObject({ code: 'bad_response' });
+    expect(seen).toEqual(['https://ff.example.com/api/v1/bills?page=1']);
+  });
+
   it('blocked private address becomes unreachable', async () => {
     const { ctx, fake } = setup({}, { blockPrivateNetworks: true });
     const err = await listBills(ctx, { ...conn, baseUrl: 'http://192.168.1.5' }).catch((e: unknown) => e);

@@ -119,6 +119,13 @@ export async function guardedFetch(ctx: ServiceCtx, url: string, init: RequestIn
     const location = res.headers.get('location');
     if (!location) return res;
     current = new URL(location, parsed).href;
+    // Credentials of the first hop never travel to a different origin.
+    if (new URL(current).origin !== parsed.origin) {
+      const headers = new Headers(req.headers);
+      headers.delete('authorization');
+      headers.delete('cookie');
+      req = { ...req, headers };
+    }
     const method = (req.method ?? 'GET').toUpperCase();
     if (res.status === 303 || ((res.status === 301 || res.status === 302) && method === 'POST')) {
       req = { ...req, method: 'GET', body: undefined };

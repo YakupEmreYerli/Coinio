@@ -63,10 +63,12 @@ async function call(ctx: ServiceCtx, c: FireflyConn, method: string, path: strin
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   let res: Response;
   try {
-    res = await guardedFetch(ctx, `${c.baseUrl}/api/v1${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
+    // The Firefly API never redirects; refusing to follow keeps the token off any other host.
+    res = await guardedFetch(ctx, `${c.baseUrl}/api/v1${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), redirect: 'manual' });
   } catch {
     throw new FireflyError(0, 'unreachable'); // network failure or BlockedAddressError
   }
+  if (res.status >= 300 && res.status < 400) throw new FireflyError(res.status, 'bad_response');
   if (res.status === 401 || res.status === 403) throw new FireflyError(res.status, 'unauthorized');
   if (res.status === 404) throw new FireflyError(404, 'not_found');
   if (res.status === 429) throw new FireflyError(429, 'rate_limited');

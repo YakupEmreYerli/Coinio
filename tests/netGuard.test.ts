@@ -60,6 +60,29 @@ describe('guardedFetch', () => {
     expect(f.mock.calls[1]![0]).toBe('https://hooks.example.com/final');
   });
 
+  it('drops Authorization and Cookie on a cross-origin hop', async () => {
+    const f = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(null, { status: 307, headers: { location: 'https://other.example.com/x' } }))
+      .mockResolvedValueOnce(new Response('done'));
+    const ctx = ctxWith({ block: true, fetch: f, lookup: lookupTo({ 'hooks.example.com': '93.184.216.34', 'other.example.com': '93.184.216.35' }) });
+    await guardedFetch(ctx, 'https://hooks.example.com/x', { headers: { authorization: 'Bearer secret', cookie: 'sid=1', 'x-keep': 'y' } });
+    const headers = new Headers(f.mock.calls[1]![1].headers);
+    expect(headers.get('authorization')).toBeNull();
+    expect(headers.get('cookie')).toBeNull();
+    expect(headers.get('x-keep')).toBe('y');
+  });
+
+  it('keeps the headers on a same-origin redirect', async () => {
+    const f = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(null, { status: 307, headers: { location: '/final' } }))
+      .mockResolvedValueOnce(new Response('done'));
+    const ctx = ctxWith({ block: true, fetch: f });
+    await guardedFetch(ctx, 'https://hooks.example.com/x', { headers: { authorization: 'Bearer secret' } });
+    expect(new Headers(f.mock.calls[1]![1].headers).get('authorization')).toBe('Bearer secret');
+  });
+
   it('passes everything through when the guard is off', async () => {
     const f = vi.fn(async () => new Response('ok'));
     const ctx = ctxWith({ block: false, fetch: f });
