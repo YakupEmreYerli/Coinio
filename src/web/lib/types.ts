@@ -50,7 +50,7 @@ export type ApiPayment = {
   amountMinor: number;
   currency: string;
   actualBaseMinor: number | null;
-  source: 'manual' | 'auto';
+  source: 'manual' | 'auto' | 'firefly';
   status: 'paid' | 'void' | 'skipped';
 };
 
@@ -76,7 +76,7 @@ export type PaidItem = {
   amountMinor: number;
   currency: string;
   baseMinor: number | null;
-  source: 'manual' | 'auto';
+  source: 'manual' | 'auto' | 'firefly';
 };
 
 export type Summary = {

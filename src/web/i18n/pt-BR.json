@@ -237,6 +237,7 @@
   "activity.skipped": "Pulado",
   "activity.auto": "Pago automaticamente",
   "activity.manual": "Pago",
+  "activity.firefly": "Firefly III",
   "all.title": "Todas as assinaturas",
   "all.sort": "Ordenar",
   "all.byCost": "Por custo mensal",

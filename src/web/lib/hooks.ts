@@ -6,7 +6,7 @@ import { failureText } from './failure';
 import { keys } from './query';
 import type { ApiPayment, ApiSubscription, Appearance, NotificationsPage, Settings, Summary } from './types';
 
-export type PaymentFilter = { subscriptionId?: number; from?: string; to?: string; source?: 'manual' | 'auto'; status?: string };
+export type PaymentFilter = { subscriptionId?: number; from?: string; to?: string; source?: 'manual' | 'auto' | 'firefly'; status?: string };
 
 const qs = (o: Record<string, unknown>) => {
   const p = new URLSearchParams();

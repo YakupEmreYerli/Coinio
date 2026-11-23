@@ -55,7 +55,7 @@ export function PaymentHistory({ subscriptionId, base }: { subscriptionId: numbe
           <div className="min-w-0 flex-1">
             <b className="block font-medium">{shortDate(p.dueDate, locale)}</b>
             <span className="text-xs text-text-3">
-              {p.status === 'skipped' ? t('activity.skipped') : p.status === 'void' ? t('history.void') : p.source === 'auto' ? t('activity.auto') : t('activity.manual')}
+              {p.status === 'skipped' ? t('activity.skipped') : p.status === 'void' ? t('history.void') : p.source === 'auto' ? t('activity.auto') : p.source === 'firefly' ? t('activity.firefly') : t('activity.manual')}
             </span>
           </div>
           <div className="flex flex-col items-end gap-0.5">

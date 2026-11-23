@@ -5,6 +5,7 @@ import { dueDatesThrough } from '../../shared/schedule.js';
 
 export type SubscriptionRow = InferSelectModel<typeof subscriptions>;
 export type PaymentRow = InferSelectModel<typeof payments>;
+export type PaymentSource = 'manual' | 'auto' | 'firefly';
 
 export type DueItem = {
   subscriptionId: number;
@@ -28,7 +29,7 @@ export type PaidItem = {
   amountMinor: number;
   currency: string;
   baseMinor: number | null;
-  source: 'manual' | 'auto';
+  source: PaymentSource;
 };
 
 export type Summary = {

@@ -108,3 +108,12 @@ describe('per-user migration', () => {
     expect(db.select().from(instanceSettings).all()).toEqual([{ key: 'lastFxDate', value: '2026-11-20' }]);
   });
 });
+
+describe('firefly migration', () => {
+  it('firefly tables exist after migrate', () => {
+    const raw = new Database(databaseUpTo(Infinity));
+    const names = (raw.prepare("SELECT name FROM sqlite_master WHERE type = 'table'").all() as { name: string }[]).map((r) => r.name);
+    raw.close();
+    expect(names).toEqual(expect.arrayContaining(['firefly_connections', 'firefly_links', 'firefly_payment_links']));
+  });
+});

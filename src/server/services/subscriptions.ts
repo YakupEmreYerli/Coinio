@@ -2,7 +2,7 @@ import { and, count, desc, eq, gte, inArray, lte } from 'drizzle-orm';
 import { PaymentPatch, type PaymentQuery, SubscriptionInput, SubscriptionPatch } from '../../shared/types.js';
 import { payments, subscriptions } from '../db/schema.js';
 import { dueDatesThrough, nextDue, todayIn } from '../../shared/schedule.js';
-import { computeSummary, type PaymentRow, type Summary, type SubscriptionRow } from '../domain/summary.js';
+import { computeSummary, type PaymentRow, type PaymentSource, type Summary, type SubscriptionRow } from '../domain/summary.js';
 import type { ServiceCtx } from './context.js';
 import { getRates } from './fx.js';
 import { fetchLogoInBackground } from './logos.js';
@@ -165,7 +165,7 @@ export function markPaid(
   ctx: ServiceCtx,
   userId: number,
   id: number,
-  opts: { dueDate?: string; actualBaseMinor?: number; amountMinor?: number; now: Date },
+  opts: { dueDate?: string; actualBaseMinor?: number; amountMinor?: number; currency?: string; paidAt?: string; source?: PaymentSource; now: Date },
 ): PaymentRow {
   const changed: { sub?: SubscriptionRow; dueDate?: string } = {};
   const result = ctx.db.transaction((tx) => {
@@ -179,16 +179,16 @@ export function markPaid(
     if (existing?.status === 'paid') return existing;
 
     const values = {
-      paidAt: opts.now.toISOString(),
+      paidAt: opts.paidAt ?? opts.now.toISOString(),
       amountMinor: opts.amountMinor ?? sub.amountMinor,
-      currency: sub.currency,
+      currency: opts.currency ?? sub.currency,
       actualBaseMinor: opts.actualBaseMinor ?? null,
       status: 'paid' as const,
     };
     // A flipped void payment keeps its original source.
     const payment = existing
       ? tx.update(payments).set(values).where(eq(payments.id, existing.id)).returning().get()
-      : tx.insert(payments).values({ subscriptionId: id, dueDate, source: 'manual', ...values }).returning().get();
+      : tx.insert(payments).values({ subscriptionId: id, dueDate, source: opts.source ?? 'manual', ...values }).returning().get();
 
     if (dueDate === sub.nextDue) {
       tx.update(subscriptions)

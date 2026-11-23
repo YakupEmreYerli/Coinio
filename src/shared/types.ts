@@ -92,7 +92,7 @@ export const PaymentQuery = z.object({
   subscriptionId: z.coerce.number().int().positive().optional(),
   from: isoDate.optional(),
   to: isoDate.optional(),
-  source: z.enum(['manual', 'auto']).optional(),
+  source: z.enum(['manual', 'auto', 'firefly']).optional(),
   status: z.enum(['paid', 'void', 'skipped']).optional(),
 });
 export type PaymentQuery = z.infer<typeof PaymentQuery>;

@@ -230,6 +230,7 @@
   "activity.skipped": "スキップ済み",
   "activity.auto": "自動で支払い済み",
   "activity.manual": "支払い済み",
+  "activity.firefly": "Firefly III",
   "all.title": "すべてのサブスクリプション",
   "all.sort": "並べ替え",
   "all.byCost": "月額順",

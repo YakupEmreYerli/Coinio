@@ -49,7 +49,7 @@ export function Payments() {
     from: params.get('from') ?? undefined,
     to: params.get('to') ?? undefined,
     subscriptionId: params.get('subscriptionId') ? Number(params.get('subscriptionId')) : undefined,
-    source: (params.get('source') as 'manual' | 'auto' | null) ?? undefined,
+    source: (params.get('source') as 'manual' | 'auto' | 'firefly' | null) ?? undefined,
     status: params.get('status') ?? undefined,
   };
   const payments = usePayments(filter);
@@ -134,7 +134,7 @@ export function Payments() {
           <ul>
             {rows.map((p) => {
               const s = byId.get(p.subscriptionId);
-              const label = p.status === 'skipped' ? t('activity.skipped') : p.status === 'void' ? t('history.void') : p.source === 'auto' ? t('activity.auto') : t('activity.manual');
+              const label = p.status === 'skipped' ? t('activity.skipped') : p.status === 'void' ? t('history.void') : p.source === 'auto' ? t('activity.auto') : p.source === 'firefly' ? t('activity.firefly') : t('activity.manual');
               return (
                 <li key={p.id} data-testid="payment-row" className={cn('flex items-center gap-3 border-b border-line px-4 py-3 last:border-b-0 md:px-5', p.status === 'void' && 'opacity-55')}>
                   {s && <Logo sub={s} size={34} />}

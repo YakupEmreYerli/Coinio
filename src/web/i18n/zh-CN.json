@@ -230,6 +230,7 @@
   "activity.skipped": "已跳过",
   "activity.auto": "已自动扣款",
   "activity.manual": "已付款",
+  "activity.firefly": "Firefly III",
   "all.title": "全部订阅",
   "all.sort": "排序",
   "all.byCost": "按月费",

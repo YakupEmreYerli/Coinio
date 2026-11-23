@@ -237,6 +237,7 @@
   "activity.skipped": "Ignoré",
   "activity.auto": "Payé automatiquement",
   "activity.manual": "Payé",
+  "activity.firefly": "Firefly III",
   "all.title": "Tous les abonnements",
   "all.sort": "Trier",
   "all.byCost": "Par coût mensuel",

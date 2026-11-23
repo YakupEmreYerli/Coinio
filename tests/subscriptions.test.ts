@@ -1,8 +1,10 @@
 import request from 'supertest';
 import { eq } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
-import { fxRates, payments, subscriptions, users } from '../src/server/db/schema.js';
-import { makeTestApp } from './helpers.js';
+import { fireflyLinks, fxRates, payments, subscriptions, users } from '../src/server/db/schema.js';
+import type { ServiceCtx } from '../src/server/services/context.js';
+import { createSubscription, deleteSubscription, markPaid } from '../src/server/services/subscriptions.js';
+import { addUser, makeTestApp } from './helpers.js';
 
 async function login(t = makeTestApp(), base: string | null = 'TRY') {
   const agent = request.agent(t.app);
@@ -295,5 +297,26 @@ describe('payments filter', () => {
     const paid = await agent.post(`/api/subscriptions/${sub.id}/pay`).send({});
     expect(paid.body).toMatchObject({ dueDate: '2026-11-30', status: 'paid' });
     expect((await agent.get(`/api/subscriptions/${sub.id}`)).body.nextDue).toBe('2027-01-30');
+  });
+});
+
+describe('subscription services', () => {
+  it('markPaid stores paidAt, source and currency when given', () => {
+    const t = makeTestApp();
+    const ctx: ServiceCtx = { db: t.db, config: t.config, fetch, now: () => t.clock.now };
+    const u = addUser(t, 'a').id;
+    const s = createSubscription(ctx, u, netflix);
+    const p = markPaid(ctx, u, s.id, { paidAt: '2026-11-07T00:00:00.000Z', source: 'firefly', currency: 'USD', amountMinor: 999, now: t.clock.now });
+    expect(p).toMatchObject({ paidAt: '2026-11-07T00:00:00.000Z', source: 'firefly', currency: 'USD', amountMinor: 999 });
+  });
+
+  it('deleting a subscription keeps its firefly link with subscription_id null', () => {
+    const t = makeTestApp();
+    const ctx: ServiceCtx = { db: t.db, config: t.config, fetch, now: () => t.clock.now };
+    const u = addUser(t, 'a').id;
+    const s = createSubscription(ctx, u, netflix);
+    t.db.insert(fireflyLinks).values({ userId: u, subscriptionId: s.id, billId: '12', coinioHash: 'c', fireflyHash: 'f' }).run();
+    deleteSubscription(ctx, u, s.id);
+    expect(t.db.select().from(fireflyLinks).all()).toEqual([expect.objectContaining({ subscriptionId: null, billId: '12', state: 'open' })]);
   });
 });

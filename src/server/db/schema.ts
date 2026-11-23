@@ -67,7 +67,7 @@ export const payments = sqliteTable(
     amountMinor: integer('amount_minor').notNull(),
     currency: text('currency').notNull(),
     actualBaseMinor: integer('actual_base_minor'),
-    source: text('source', { enum: ['manual', 'auto'] }).notNull(),
+    source: text('source', { enum: ['manual', 'auto', 'firefly'] }).notNull(),
     status: text('status', { enum: ['paid', 'void', 'skipped'] }).notNull().default('paid'),
   },
   (t) => [unique('payments_subscription_due_unique').on(t.subscriptionId, t.dueDate)],
@@ -158,3 +158,49 @@ export const notificationLog = sqliteTable('notification_log', {
   createdAt: text('created_at').notNull(),
   sentAt: text('sent_at'),
 });
+
+export const fireflyConnections = sqliteTable('firefly_connections', {
+  userId: integer('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
+  baseUrl: text('base_url').notNull(),
+  token: text('token').notNull(),
+  assetAccountId: text('asset_account_id').notNull(),
+  enabled: integer('enabled', { mode: 'boolean' }).notNull().default(true),
+  initialSyncDone: integer('initial_sync_done', { mode: 'boolean' }).notNull().default(false),
+  lastSyncAt: text('last_sync_at'),
+  lastError: text('last_error'),
+  excluded: text('excluded', { mode: 'json' })
+    .$type<{ subscriptions: number[]; bills: string[] }>()
+    .notNull()
+    .default({ subscriptions: [], bills: [] }),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+
+export const fireflyLinks = sqliteTable(
+  'firefly_links',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    subscriptionId: integer('subscription_id').references(() => subscriptions.id, { onDelete: 'set null' }),
+    billId: text('bill_id').notNull(),
+    assetAccountId: text('asset_account_id'),
+    coinioHash: text('coinio_hash').notNull(),
+    fireflyHash: text('firefly_hash').notNull(),
+    state: text('state', { enum: ['open', 'closed'] }).notNull().default('open'),
+  },
+  (t) => [unique('firefly_links_user_bill_unique').on(t.userId, t.billId)],
+);
+
+export const fireflyPaymentLinks = sqliteTable(
+  'firefly_payment_links',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    linkId: integer('link_id').notNull().references(() => fireflyLinks.id, { onDelete: 'cascade' }),
+    paymentId: integer('payment_id').references(() => payments.id, { onDelete: 'set null' }),
+    journalId: text('journal_id').notNull(),
+    groupId: text('group_id').notNull(),
+    state: text('state', { enum: ['linked', 'released'] }).notNull().default('linked'),
+  },
+  (t) => [unique('firefly_payment_links_user_journal_unique').on(t.userId, t.journalId)],
+);

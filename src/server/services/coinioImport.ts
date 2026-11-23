@@ -42,7 +42,7 @@ type Pay = {
   amountMinor: number;
   currency: string;
   actualBaseMinor: number | null;
-  source: 'manual' | 'auto';
+  source: 'manual' | 'auto' | 'firefly';
   status: 'paid' | 'void' | 'skipped';
 };
 
@@ -127,7 +127,7 @@ function payFrom(o: Record<string, unknown>): Pay | null {
     amountMinor,
     currency,
     actualBaseMinor: num(o.actualBaseMinor),
-    source: o.source === 'auto' ? 'auto' : 'manual',
+    source: o.source === 'auto' || o.source === 'firefly' ? o.source : 'manual',
     status,
   };
 }

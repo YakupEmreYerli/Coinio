@@ -29,6 +29,13 @@
       "when": 1795296505762,
       "tag": "0003_per_user",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1795394635379,
+      "tag": "0004_firefly",
+      "breakpoints": true
     }
   ]
 }
