@@ -21,11 +21,11 @@ pnpm test        # Vitest, two projects: server (node) and web (jsdom)
 pnpm build       # server bundle (tsup) and web app (Vite)
 ```
 
-CI runs the same three, plus a Docker build, `shellcheck` on the shell scripts and a check of the install commands in the docs. Add or update tests with your change: server tests live in `tests/`, web tests next to the component (`*.test.tsx`).
+CI runs the same three, plus a Docker build and `shellcheck` on `docker-entrypoint.sh`. Add or update tests with your change: server tests live in `tests/`, web tests next to the component (`*.test.tsx`).
 
 ### The demo
 
-`site/demo/` is the browser-only demo served at https://getcoinio.me/demo/. It is a build output, but it is committed so the landing site can be deployed as static files. If your change touches the web app, rebuild it and commit the result in the same pull request:
+`getcoinio/website` serves the browser-only demo at https://getcoinio.me/demo/. Build it locally with:
 
 ```sh
 pnpm build:demo
@@ -33,18 +33,7 @@ pnpm build:demo
 
 The demo runs the real web app against `src/web/demo/backend.ts`, an in-browser stand-in for the server that reuses the server's pure logic (`src/shared/`, `src/server/domain/`). Keep those modules free of Node-only imports, and when you change a rule in a server service (pausing, skipping, auto-pay), make the same change in the demo backend; there are comments marking the shared rules.
 
-### The docs site
-
-```sh
-cd docs-site
-pnpm install
-pnpm dev                          # http://localhost:4665
-pnpm build                        # static export to out/
-pnpm lint:links                   # internal links and anchors
-node scripts/check-commands.mjs   # install commands vs. image name, port and volume
-```
-
-Pages are MDX in `docs-site/content/docs`; the sidebar order comes from the `meta.json` files. Screenshots in `docs-site/public/screenshots` come in `-light` and `-dark` pairs and must show sample data only.
+The marketing site (`getcoinio.me`) and documentation (`docs.getcoinio.me`) live in their own repositories under `github.com/getcoinio` (`getcoinio/website` and `getcoinio/docs`).
 
 ## Code style
 

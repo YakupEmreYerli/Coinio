@@ -1,7 +1,7 @@
 name: coinio
 services:
   coinio:
-    image: ghcr.io/yakupemreyerli/coinio:latest
+    image: ghcr.io/getcoinio/coinio:latest
     restart: unless-stopped
     ports:
       - target: 8080
@@ -33,7 +33,7 @@ x-casaos:
     en_us: Every subscription on one calm page.
   title:
     en_us: Coinio
-  icon: https://raw.githubusercontent.com/YakupEmreYerli/coinio/main/public/icon-512.png
+  icon: https://raw.githubusercontent.com/getcoinio/coinio/main/public/icon-512.png
   port_map: "8080"
   scheme: http
   index: /

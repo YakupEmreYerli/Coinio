@@ -2,9 +2,9 @@
 
 Kendi sunucunda çalışan abonelik ve fatura takibi: tek Docker kapsayıcısı, tek veri klasörü.
 
-[![CI](https://github.com/yakupemreyerli/coinio/actions/workflows/ci.yml/badge.svg)](https://github.com/yakupemreyerli/coinio/actions/workflows/ci.yml)
+[![CI](https://github.com/getcoinio/coinio/actions/workflows/ci.yml/badge.svg)](https://github.com/getcoinio/coinio/actions/workflows/ci.yml)
 [![Lisans: MIT](https://img.shields.io/badge/lisans-MIT-4f5bd5.svg)](LICENSE)
-[![Docker imajı](https://img.shields.io/badge/imaj-ghcr.io%2Fyakupemreyerli%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/yakupemreyerli/coinio/pkgs/container/coinio)
+[![Docker imajı](https://img.shields.io/badge/imaj-ghcr.io%2Fgetcoinio%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/getcoinio/coinio/pkgs/container/coinio)
 
 [English](README.md) · **Türkçe** · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
@@ -64,9 +64,9 @@ Coinio düzenli ödediğin her şeyi tek sayfada toplar: dizi platformu, bulut d
 
 ## Kurulum
 
-Bütün yöntemler aynı imajı çalıştırır: `ghcr.io/yakupemreyerli/coinio:latest` (amd64 ve arm64). Uygulama **8080** portunu dinler, bütün verisini **`/data`** klasöründe tutar. Kurduktan sonra `http://sunucun:8080` adresini açıp hesabını oluştur.
+Bütün yöntemler aynı imajı çalıştırır: `ghcr.io/getcoinio/coinio:latest` (amd64 ve arm64). Uygulama **8080** portunu dinler, bütün verisini **`/data`** klasöründe tutar. Kurduktan sonra `http://sunucun:8080` adresini açıp hesabını oluştur.
 
-**Kurulum betiği:** Docker'ın kurulu olduğunu kontrol eder, Coinio'yu 8080 portunda başlatır ve https için Cloudflare Tunnel kurmayı önerir ([betiği oku](site/install.sh)).
+**Kurulum betiği:** Docker'ın kurulu olduğunu kontrol eder, Coinio'yu 8080 portunda başlatır ve https için Cloudflare Tunnel kurmayı önerir ([betiği oku](https://github.com/getcoinio/website/blob/main/public/install.sh)).
 
 ```sh
 curl -fsSL https://getcoinio.me/install | sh
@@ -77,14 +77,14 @@ curl -fsSL https://getcoinio.me/install | sh
 ```sh
 docker run -d --name coinio --restart unless-stopped \
   -p 8080:8080 -v coinio-data:/data \
-  ghcr.io/yakupemreyerli/coinio:latest
+  ghcr.io/getcoinio/coinio:latest
 ```
 
 **Docker Compose:** veri, dosyanın yanındaki `./data` klasörüne yazılır; isteğe bağlı ayarlar `.env` dosyasına girer.
 
 ```sh
 mkdir coinio && cd coinio
-curl -fsSLO https://raw.githubusercontent.com/yakupemreyerli/coinio/main/docker-compose.yml
+curl -fsSLO https://raw.githubusercontent.com/getcoinio/coinio/main/docker-compose.yml
 docker compose up -d
 ```
 
@@ -148,11 +148,11 @@ Yeni sürüm açılırken veritabanı geçişleri kendiliğinden çalışır.
 docker compose pull && docker compose up -d
 
 # docker run: imajı çek, kapsayıcıyı sil, aynı komutla yeniden başlat
-docker pull ghcr.io/yakupemreyerli/coinio:latest
+docker pull ghcr.io/getcoinio/coinio:latest
 docker rm -f coinio
 docker run -d --name coinio --restart unless-stopped \
   -p 8080:8080 -v coinio-data:/data \
-  ghcr.io/yakupemreyerli/coinio:latest
+  ghcr.io/getcoinio/coinio:latest
 ```
 
 Kurulum betiğiyle kurduysan son komut yerine betiği yeniden çalıştır.
@@ -180,7 +180,7 @@ pnpm dev          # web http://localhost:4660, API :4661, veri ./.data
 pnpm test         # Vitest: sunucu ve web
 pnpm typecheck
 pnpm build        # dist/server ve dist/web
-pnpm build:demo   # tarayıcıda çalışan demoyu site/demo/ içine derler
+pnpm build:demo   # tarayıcıda çalışan demoyu dist/demo/ içine derler
 ```
 
 Belge sitesi ayrı bir paket: `cd docs-site && pnpm install && pnpm dev`. Gerisi [CONTRIBUTING.md](CONTRIBUTING.md) dosyasında (İngilizce).
@@ -194,8 +194,8 @@ src/shared/     Sunucu, web ve demonun ortak mantığı: ödeme takvimi, katalog
 tests/          Sunucu testleri (web testleri bileşenlerin yanında)
 widget/         Scriptable iPhone widget'ı
 deploy/         Unraid, CasaOS ve Portainer şablonları
-site/           Tanıtım sitesi (getcoinio.me), kurulum betiği ve site/demo/ içindeki derlenmiş demo
-docs-site/      Belgeler (docs.getcoinio.me), Next.js üzerinde Fumadocs
+getcoinio/website  Landing page (getcoinio.me) & install script (separate repo)
+getcoinio/docs     Documentation (docs.getcoinio.me, separate repo)
 docs/           Marka dosyaları ve README görselleri
 ```
 

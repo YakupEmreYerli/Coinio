@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please report security problems privately through GitHub: open the repository's **Security** tab and choose **Report a vulnerability** ([direct link](https://github.com/yakupemreyerli/coinio/security/advisories/new)). Do not open a public issue or discussion.
+Please report security problems privately through GitHub: open the repository's **Security** tab and choose **Report a vulnerability** ([direct link](https://github.com/getcoinio/coinio/security/advisories/new)). Do not open a public issue or discussion.
 
 Include what you found, how to reproduce it and which version or commit you tested. You will get an answer within a week. Once a fix is released, the advisory is published with credit to you unless you prefer otherwise.
 
@@ -12,7 +12,7 @@ Security fixes go into the latest release and the `latest` image tag. Coinio is 
 
 ## Scope
 
-In scope: the Coinio server and web app in this repository, the Docker image `ghcr.io/yakupemreyerli/coinio`, the install script (`site/install.sh`), the deploy templates and the Scriptable widget.
+In scope: the Coinio server and web app in this repository, the Docker image `ghcr.io/getcoinio/coinio`, the install script (`getcoinio/website`), the deploy templates and the Scriptable widget.
 
 Out of scope: the hosting you put in front of Coinio (reverse proxy, Cloudflare Tunnel), third-party services Coinio talks to (Frankfurter, Telegram, favicon services), problems that need an attacker to already hold your password, an API key or shell access to the host, and the browser-only demo at getcoinio.me/demo, which has no server and no real data.
 

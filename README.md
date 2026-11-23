@@ -2,9 +2,9 @@
 
 A self-hosted subscription and bill tracker: one Docker container, one data folder, your server.
 
-[![CI](https://github.com/yakupemreyerli/coinio/actions/workflows/ci.yml/badge.svg)](https://github.com/yakupemreyerli/coinio/actions/workflows/ci.yml)
+[![CI](https://github.com/getcoinio/coinio/actions/workflows/ci.yml/badge.svg)](https://github.com/getcoinio/coinio/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-4f5bd5.svg)](LICENSE)
-[![Docker image](https://img.shields.io/badge/image-ghcr.io%2Fyakupemreyerli%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/yakupemreyerli/coinio/pkgs/container/coinio)
+[![Docker image](https://img.shields.io/badge/image-ghcr.io%2Fgetcoinio%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/getcoinio/coinio/pkgs/container/coinio)
 
 **English** · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
@@ -64,9 +64,9 @@ Coinio keeps every recurring payment on one page: streaming, cloud storage, the 
 
 ## Install
 
-Every method runs the same image, `ghcr.io/yakupemreyerli/coinio:latest` (amd64 and arm64). The app listens on port **8080** and keeps all its data in **`/data`**. Open `http://your-server:8080` afterwards and create your account.
+Every method runs the same image, `ghcr.io/getcoinio/coinio:latest` (amd64 and arm64). The app listens on port **8080** and keeps all its data in **`/data`**. Open `http://your-server:8080` afterwards and create your account.
 
-**Install script:** checks for Docker, starts Coinio on port 8080 and offers a Cloudflare Tunnel for https ([read the script](site/install.sh)).
+**Install script:** checks for Docker, starts Coinio on port 8080 and offers a Cloudflare Tunnel for https ([read the script](https://github.com/getcoinio/website/blob/main/public/install.sh)).
 
 ```sh
 curl -fsSL https://getcoinio.me/install | sh
@@ -77,14 +77,14 @@ curl -fsSL https://getcoinio.me/install | sh
 ```sh
 docker run -d --name coinio --restart unless-stopped \
   -p 8080:8080 -v coinio-data:/data \
-  ghcr.io/yakupemreyerli/coinio:latest
+  ghcr.io/getcoinio/coinio:latest
 ```
 
 **Docker Compose:** data lands in `./data` next to the file; optional settings go in a `.env` file.
 
 ```sh
 mkdir coinio && cd coinio
-curl -fsSLO https://raw.githubusercontent.com/yakupemreyerli/coinio/main/docker-compose.yml
+curl -fsSLO https://raw.githubusercontent.com/getcoinio/coinio/main/docker-compose.yml
 docker compose up -d
 ```
 
@@ -148,11 +148,11 @@ Database migrations run by themselves when a new version starts.
 docker compose pull && docker compose up -d
 
 # docker run: pull, remove the container, start it again with the same command
-docker pull ghcr.io/yakupemreyerli/coinio:latest
+docker pull ghcr.io/getcoinio/coinio:latest
 docker rm -f coinio
 docker run -d --name coinio --restart unless-stopped \
   -p 8080:8080 -v coinio-data:/data \
-  ghcr.io/yakupemreyerli/coinio:latest
+  ghcr.io/getcoinio/coinio:latest
 ```
 
 If you installed with the script, run the script again instead of the last command.
@@ -180,7 +180,7 @@ pnpm dev          # web on http://localhost:4660, API on :4661, data in ./.data
 pnpm test         # Vitest: server and web
 pnpm typecheck
 pnpm build        # dist/server and dist/web
-pnpm build:demo   # browser-only demo into site/demo/
+pnpm build:demo   # browser-only demo into dist/demo/
 ```
 
 The docs site is a separate package: `cd docs-site && pnpm install && pnpm dev`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the rest.
@@ -194,8 +194,8 @@ src/shared/     Logic shared by server, web and demo: schedule, catalog, appeara
 tests/          Server tests (web tests sit next to their components)
 widget/         Scriptable iPhone widget
 deploy/         Unraid, CasaOS and Portainer templates
-site/           Landing page (getcoinio.me), install script and the built demo in site/demo/
-docs-site/      Documentation (docs.getcoinio.me), Fumadocs on Next.js
+getcoinio/website  Landing page (getcoinio.me) & install script (separate repo)
+getcoinio/docs     Documentation (docs.getcoinio.me, separate repo)
 docs/           Brand assets and the README banners
 ```
 

@@ -2,9 +2,9 @@
 
 セルフホストできるサブスクリプション・支払い管理アプリ。Docker コンテナ1つ、データフォルダ1つ、動かすのは自分のサーバー。
 
-[![CI](https://github.com/yakupemreyerli/coinio/actions/workflows/ci.yml/badge.svg)](https://github.com/yakupemreyerli/coinio/actions/workflows/ci.yml)
+[![CI](https://github.com/getcoinio/coinio/actions/workflows/ci.yml/badge.svg)](https://github.com/getcoinio/coinio/actions/workflows/ci.yml)
 [![ライセンス: MIT](https://img.shields.io/badge/%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9-MIT-4f5bd5.svg)](LICENSE)
-[![Docker イメージ](https://img.shields.io/badge/%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8-ghcr.io%2Fyakupemreyerli%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/yakupemreyerli/coinio/pkgs/container/coinio)
+[![Docker イメージ](https://img.shields.io/badge/%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8-ghcr.io%2Fgetcoinio%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/getcoinio/coinio/pkgs/container/coinio)
 
 [English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md) · **日本語**
 
@@ -62,9 +62,9 @@ Coinio は、定期的な支払いをすべて1つのページにまとめます
 
 ## インストール
 
-どの方法でも同じイメージ `ghcr.io/yakupemreyerli/coinio:latest`（amd64 と arm64）が動きます。アプリはポート **8080** で待ち受け、データはすべて **`/data`** に保存します。起動したら `http://your-server:8080` を開いて、アカウントを作成してください。
+どの方法でも同じイメージ `ghcr.io/getcoinio/coinio:latest`（amd64 と arm64）が動きます。アプリはポート **8080** で待ち受け、データはすべて **`/data`** に保存します。起動したら `http://your-server:8080` を開いて、アカウントを作成してください。
 
-**インストールスクリプト:** Docker の有無を確認し、ポート 8080 で Coinio を起動します。https 用に Cloudflare Tunnel の設定も案内します（[スクリプトを読む](site/install.sh)）。
+**インストールスクリプト:** Docker の有無を確認し、ポート 8080 で Coinio を起動します。https 用に Cloudflare Tunnel の設定も案内します（[スクリプトを読む](https://github.com/getcoinio/website/blob/main/public/install.sh)）。
 
 ```sh
 curl -fsSL https://getcoinio.me/install | sh
@@ -75,14 +75,14 @@ curl -fsSL https://getcoinio.me/install | sh
 ```sh
 docker run -d --name coinio --restart unless-stopped \
   -p 8080:8080 -v coinio-data:/data \
-  ghcr.io/yakupemreyerli/coinio:latest
+  ghcr.io/getcoinio/coinio:latest
 ```
 
 **Docker Compose:** データはファイルと同じ場所の `./data` に保存されます。任意の設定は `.env` ファイルに書きます。
 
 ```sh
 mkdir coinio && cd coinio
-curl -fsSLO https://raw.githubusercontent.com/yakupemreyerli/coinio/main/docker-compose.yml
+curl -fsSLO https://raw.githubusercontent.com/getcoinio/coinio/main/docker-compose.yml
 docker compose up -d
 ```
 
@@ -146,11 +146,11 @@ MCP サーバーは、Coinio のアドレスの末尾に `/mcp` を付けた場�
 docker compose pull && docker compose up -d
 
 # docker run: イメージを取得し、コンテナを削除して、同じコマンドでもう一度起動
-docker pull ghcr.io/yakupemreyerli/coinio:latest
+docker pull ghcr.io/getcoinio/coinio:latest
 docker rm -f coinio
 docker run -d --name coinio --restart unless-stopped \
   -p 8080:8080 -v coinio-data:/data \
-  ghcr.io/yakupemreyerli/coinio:latest
+  ghcr.io/getcoinio/coinio:latest
 ```
 
 スクリプトでインストールした場合は、最後のコマンドの代わりにスクリプトをもう一度実行してください。
@@ -178,7 +178,7 @@ pnpm dev          # web は http://localhost:4660、API は :4661、データは
 pnpm test         # Vitest: サーバーと web
 pnpm typecheck
 pnpm build        # dist/server と dist/web
-pnpm build:demo   # ブラウザだけで動くデモを site/demo/ に出力
+pnpm build:demo   # ブラウザだけで動くデモを dist/demo/ に出力
 ```
 
 ドキュメントサイトは別パッケージです: `cd docs-site && pnpm install && pnpm dev`。そのほかは [CONTRIBUTING.md](CONTRIBUTING.md) をご覧ください。
@@ -192,8 +192,8 @@ src/shared/     サーバー・Web・デモで共有するロジック: スケ�
 tests/          サーバーのテスト（Web のテストは各コンポーネントの隣にあります）
 widget/         Scriptable の iPhone ウィジェット
 deploy/         Unraid、CasaOS、Portainer 向けテンプレート
-site/           紹介ページ（getcoinio.me）、インストールスクリプト、site/demo/ にあるビルド済みデモ
-docs-site/      ドキュメント（docs.getcoinio.me）、Next.js 上の Fumadocs
+getcoinio/website  Landing page (getcoinio.me) & install script (separate repo)
+getcoinio/docs     Documentation (docs.getcoinio.me, separate repo)
 docs/           ブランド素材と README のバナー
 ```
 

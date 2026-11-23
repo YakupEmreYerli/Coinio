@@ -4,8 +4,8 @@ contact_links:
     url: https://docs.getcoinio.me
     about: Installation, configuration, MCP, the iPhone widget and troubleshooting.
   - name: Questions and ideas
-    url: https://github.com/yakupemreyerli/coinio/discussions
+    url: https://github.com/getcoinio/coinio/discussions
     about: Ask how to do something or talk an idea through before opening an issue.
   - name: Report a security problem
-    url: https://github.com/yakupemreyerli/coinio/security/advisories/new
+    url: https://github.com/getcoinio/coinio/security/advisories/new
     about: Please report vulnerabilities privately, not as an issue.

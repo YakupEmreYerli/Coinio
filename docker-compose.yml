@@ -1,7 +1,7 @@
 # Start with: docker compose up -d   then open http://localhost:8080
 services:
   coinio:
-    image: ghcr.io/yakupemreyerli/coinio:latest
+    image: ghcr.io/getcoinio/coinio:latest
     # build: .   # uncomment to build from this folder instead of pulling the image
     container_name: coinio
     restart: unless-stopped

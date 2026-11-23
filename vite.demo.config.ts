@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
 
 // Browser-only demo of the web app for the landing page: no server, data in sessionStorage.
-// Built by `pnpm build:demo` into site/demo/ (served at /demo/).
+// Built by `pnpm build:demo` into dist/demo/ (copied into getcoinio/website at deploy time).
 
 /** First paint in the theme the landing page asked for (?theme=dark|light). */
 const themeFromQuery: Plugin = {
@@ -22,7 +22,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), themeFromQuery],
   define: { 'import.meta.env.VITE_DEMO': JSON.stringify('1') },
   publicDir: 'dist/demo-public',
-  build: { outDir: 'website/public/demo', emptyOutDir: true },
+  build: { outDir: 'dist/demo', emptyOutDir: true },
   server: { port: 4667, strictPort: true },
   preview: { port: 4668, strictPort: true },
 });

@@ -2,9 +2,9 @@
 
 自托管的订阅与账单管理工具：一个 Docker 容器，一个数据文件夹，运行在你自己的服务器上。
 
-[![CI](https://github.com/yakupemreyerli/coinio/actions/workflows/ci.yml/badge.svg)](https://github.com/yakupemreyerli/coinio/actions/workflows/ci.yml)
+[![CI](https://github.com/getcoinio/coinio/actions/workflows/ci.yml/badge.svg)](https://github.com/getcoinio/coinio/actions/workflows/ci.yml)
 [![许可证：MIT](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-4f5bd5.svg)](LICENSE)
-[![Docker 镜像](https://img.shields.io/badge/%E9%95%9C%E5%83%8F-ghcr.io%2Fyakupemreyerli%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/yakupemreyerli/coinio/pkgs/container/coinio)
+[![Docker 镜像](https://img.shields.io/badge/%E9%95%9C%E5%83%8F-ghcr.io%2Fgetcoinio%2Fcoinio-4f5bd5?logo=docker&logoColor=white)](https://github.com/getcoinio/coinio/pkgs/container/coinio)
 
 [English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · **简体中文** · [日本語](README.ja.md)
 
@@ -62,9 +62,9 @@ Coinio 把所有周期性付款放在同一个页面：流媒体、云存储、�
 
 ## 安装
 
-所有方式运行的都是同一个镜像：`ghcr.io/yakupemreyerli/coinio:latest`（amd64 和 arm64）。应用监听 **8080** 端口，所有数据都保存在 **`/data`**。安装完成后，打开 `http://你的服务器:8080` 并创建账户。
+所有方式运行的都是同一个镜像：`ghcr.io/getcoinio/coinio:latest`（amd64 和 arm64）。应用监听 **8080** 端口，所有数据都保存在 **`/data`**。安装完成后，打开 `http://你的服务器:8080` 并创建账户。
 
-**安装脚本**：检查 Docker，在 8080 端口启动 Coinio，并可选用 Cloudflare Tunnel 提供 https 访问（[查看脚本](site/install.sh)）。
+**安装脚本**：检查 Docker，在 8080 端口启动 Coinio，并可选用 Cloudflare Tunnel 提供 https 访问（[查看脚本](https://github.com/getcoinio/website/blob/main/public/install.sh)）。
 
 ```sh
 curl -fsSL https://getcoinio.me/install | sh
@@ -75,14 +75,14 @@ curl -fsSL https://getcoinio.me/install | sh
 ```sh
 docker run -d --name coinio --restart unless-stopped \
   -p 8080:8080 -v coinio-data:/data \
-  ghcr.io/yakupemreyerli/coinio:latest
+  ghcr.io/getcoinio/coinio:latest
 ```
 
 **Docker Compose**：数据保存在文件旁的 `./data`；可选设置写在 `.env` 文件中。
 
 ```sh
 mkdir coinio && cd coinio
-curl -fsSLO https://raw.githubusercontent.com/yakupemreyerli/coinio/main/docker-compose.yml
+curl -fsSLO https://raw.githubusercontent.com/getcoinio/coinio/main/docker-compose.yml
 docker compose up -d
 ```
 
@@ -146,11 +146,11 @@ MCP 服务器位于你的 Coinio 地址加 `/mcp`。claude.ai 和 ChatGPT 等云
 docker compose pull && docker compose up -d
 
 # docker run：拉取镜像，删除容器，再用同样的命令重新启动
-docker pull ghcr.io/yakupemreyerli/coinio:latest
+docker pull ghcr.io/getcoinio/coinio:latest
 docker rm -f coinio
 docker run -d --name coinio --restart unless-stopped \
   -p 8080:8080 -v coinio-data:/data \
-  ghcr.io/yakupemreyerli/coinio:latest
+  ghcr.io/getcoinio/coinio:latest
 ```
 
 如果你是用脚本安装的，请重新运行该脚本，而不是最后那条命令。
@@ -178,7 +178,7 @@ pnpm dev          # 网页在 http://localhost:4660，API 在 :4661，数据在 
 pnpm test         # Vitest：服务端和网页
 pnpm typecheck
 pnpm build        # dist/server 和 dist/web
-pnpm build:demo   # 仅在浏览器中运行的演示，输出到 site/demo/
+pnpm build:demo   # 仅在浏览器中运行的演示，输出到 dist/demo/
 ```
 
 文档站是一个独立的包：`cd docs-site && pnpm install && pnpm dev`。其余内容请见 [CONTRIBUTING.md](CONTRIBUTING.md)。
@@ -192,8 +192,8 @@ src/shared/     服务端、网页和演示共用的逻辑：付款日程、目�
 tests/          服务端测试（网页测试放在各自组件旁边）
 widget/         Scriptable iPhone 小组件
 deploy/         Unraid、CasaOS 和 Portainer 模板
-site/           宣传页（getcoinio.me）、安装脚本和 site/demo/ 中构建好的演示
-docs-site/      文档站（docs.getcoinio.me），基于 Next.js 的 Fumadocs
+getcoinio/website  Landing page (getcoinio.me) & install script (separate repo)
+getcoinio/docs     Documentation (docs.getcoinio.me, separate repo)
 docs/           品牌素材和 README 横幅图
 ```
 
