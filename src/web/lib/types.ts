@@ -101,6 +101,8 @@ export type FireflyConnection = {
   lastSyncAt: string | null;
   lastError: string | null;
   excluded: { subscriptions: number[]; bills: string[] };
+  /** Names for `excluded.bills`; only GET /api/firefly fills it. */
+  excludedBills?: { id: string; name: string }[];
 };
 
 export type FireflyAccount = { id: string; name: string; currencyCode: string };

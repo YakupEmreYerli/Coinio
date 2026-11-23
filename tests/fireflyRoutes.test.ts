@@ -30,7 +30,7 @@ describe('firefly settings API', () => {
     const got = await agent.get('/api/firefly').expect(200);
     expect(got.body.connection).toEqual({
       baseUrl: 'https://ff.example.com', hasToken: true, assetAccountId: null, enabled: true, initialSyncDone: false,
-      lastSyncAt: null, lastError: null, excluded: { subscriptions: [], bills: [] },
+      lastSyncAt: null, lastError: null, excluded: { subscriptions: [], bills: [] }, excludedBills: [],
     });
     expect((await agent.get('/api/firefly/accounts').expect(200)).body).toEqual({ accounts });
     const patched = await agent.patch('/api/firefly').send({ assetAccountId: '2', enabled: false, excluded: { subscriptions: [4], bills: ['9'] } }).expect(200);
@@ -134,6 +134,25 @@ describe('firefly settings API', () => {
     db.update(fireflyConnections).set({ enabled: false, lastError: 'unauthorized' }).run();
     await agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: TOKEN }).expect(200);
     expect(db.select().from(fireflyConnections).get()).toMatchObject({ enabled: true, lastError: null });
+  });
+
+  it('excluded bill ids come back with their Firefly names', async () => {
+    const { agent, fake } = await login();
+    fake.bills.set('7', {
+      id: '7', name: 'Netflix', amountMin: '12.99', amountMax: '12.99', currencyCode: 'EUR', date: '2026-01-05T00:00:00+01:00',
+      repeatFreq: 'monthly', skip: 0, active: true, notes: null, updatedAt: '2026-11-01T00:00:00+00:00', nextExpectedMatch: null,
+    });
+    await agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: TOKEN }).expect(200);
+    const billCalls = () => fake.calls.filter((c) => c.path.startsWith('/api/v1/bills'));
+    expect((await agent.get('/api/firefly').expect(200)).body.connection.excludedBills).toEqual([]);
+    expect(billCalls()).toEqual([]);
+    await agent.patch('/api/firefly').send({ excluded: { subscriptions: [2], bills: ['7', '8'] } }).expect(200);
+    const got = await agent.get('/api/firefly').expect(200);
+    expect(got.body.connection.excluded).toEqual({ subscriptions: [2], bills: ['7', '8'] });
+    expect(got.body.connection.excludedBills).toEqual([{ id: '7', name: 'Netflix' }, { id: '8', name: '8' }]);
+    fake.failNext(503);
+    const down = await agent.get('/api/firefly').expect(200);
+    expect(down.body.connection.excludedBills).toEqual([{ id: '7', name: 'Bill #7' }, { id: '8', name: 'Bill #8' }]);
   });
 });
 

@@ -188,6 +188,7 @@ function NewToken({ conn }: { conn: FireflyConnection }) {
 function Excluded({ conn }: { conn: FireflyConnection }) {
   const qc = useQueryClient();
   const subs = useSubscriptions().data ?? [];
+  const billNames = conn.excludedBills ?? [];
   const { subscriptions, bills } = conn.excluded;
   const patch = useMutation({
     mutationFn: (excluded: FireflyConnection['excluded']) => api.patch('/firefly', { excluded }),
@@ -200,7 +201,7 @@ function Excluded({ conn }: { conn: FireflyConnection }) {
       bring: () => patch.mutate({ subscriptions: subscriptions.filter((x) => x !== id), bills }),
     })),
     ...bills.map((id) => ({
-      key: `b:${id}`, name: t('firefly.excludedBill', { id }),
+      key: `b:${id}`, name: billNames.find((b) => b.id === id)?.name ?? t('firefly.excludedBill', { id }),
       bring: () => patch.mutate({ subscriptions, bills: bills.filter((x) => x !== id) }),
     })),
   ];

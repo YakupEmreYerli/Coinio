@@ -5,7 +5,7 @@ import { NotFoundError } from '../services/errors.js';
 import type { ServiceCtx } from '../services/context.js';
 import { FireflyError, listAssetAccounts } from '../services/firefly/client.js';
 import {
-  connOf, connectionToApi, deleteConnection, getConnection, getLinkAccount, patchConnection, saveConnection, setLinkAccount,
+  connOf, connectionToApi, deleteConnection, excludedBillNames, getConnection, getLinkAccount, patchConnection, saveConnection, setLinkAccount,
 } from '../services/firefly/store.js';
 import { SyncBusyError, previewInitial, runInitial, syncUser } from '../services/firefly/sync.js';
 
@@ -38,9 +38,10 @@ export function fireflyRouter(ctx: ServiceCtx): Router {
     return row;
   };
 
-  router.get('/', route((req, res) => {
+  router.get('/', route(async (req, res) => {
     const row = getConnection(ctx, req.userId!);
-    res.json({ connection: row && connectionToApi(row) });
+    const excludedBills = row ? await excludedBillNames(ctx, row) : undefined;
+    res.json({ connection: row && { ...connectionToApi(row), excludedBills } });
   }));
 
   router.put('/', route(async (req, res) => {

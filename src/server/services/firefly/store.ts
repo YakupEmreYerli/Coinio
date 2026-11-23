@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { fireflyConnections, fireflyLinks, fireflyPaymentLinks } from '../../db/schema.js';
 import type { ServiceCtx } from '../context.js';
 import { NotFoundError } from '../errors.js';
-import { about, listAssetAccounts, type FireflyConn } from './client.js';
+import { about, listAssetAccounts, listBills, type FireflyConn } from './client.js';
 
 export type ConnectionRow = typeof fireflyConnections.$inferSelect;
 
@@ -26,6 +26,18 @@ export function connectionToApi(row: ConnectionRow): ApiFireflyConnection {
 }
 
 export const connOf = (row: ConnectionRow): FireflyConn => ({ baseUrl: row.baseUrl, token: row.token });
+
+/** Names for the excluded bill ids; a bill gone on Firefly echoes its id, a Firefly failure falls back to `Bill #id`. */
+export async function excludedBillNames(ctx: ServiceCtx, row: ConnectionRow): Promise<{ id: string; name: string }[]> {
+  const ids = row.excluded.bills;
+  if (!ids.length) return [];
+  try {
+    const names = new Map((await listBills(ctx, connOf(row))).map((b) => [b.id, b.name]));
+    return ids.map((id) => ({ id, name: names.get(id) ?? id }));
+  } catch {
+    return ids.map((id) => ({ id, name: `Bill #${id}` }));
+  }
+}
 
 /** Trims, and drops a trailing `/` or `/api` the user may have pasted. */
 const normaliseBaseUrl = (url: string) => url.trim().replace(/\/+$/, '').replace(/\/api$/, '');

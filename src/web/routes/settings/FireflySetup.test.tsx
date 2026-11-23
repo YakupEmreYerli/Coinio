@@ -107,13 +107,15 @@ describe('Firefly III settings', () => {
 
   it('brings an excluded subscription back', async () => {
     const calls = mockApi({
-      'GET /api/firefly': { connection: conn({ excluded: { subscriptions: [2], bills: ['11'] } }) },
+      'GET /api/firefly': { connection: conn({ excluded: { subscriptions: [2], bills: ['11'] }, excludedBills: [{ id: '11', name: 'Rent' }] }) },
       'GET /api/firefly/accounts': { accounts },
       'GET /api/subscriptions': [{ id: 2, name: 'Spotify' }],
     });
     renderApp(<FireflySetup />);
     const user = userEvent.setup();
     const list = await screen.findByRole('list', { name: 'Left out of syncing' });
+    expect(within(list).getByText('Rent')).toBeInTheDocument();
+    expect(within(list).getByRole('button', { name: 'Rent: include again' })).toBeInTheDocument();
     await user.click(await within(list).findByRole('button', { name: 'Spotify: include again' }));
     await vi.waitFor(() =>
       expect(calls).toContainEqual(expect.objectContaining({ method: 'PATCH', url: '/api/firefly', body: { excluded: { subscriptions: [], bills: ['11'] } } })),
