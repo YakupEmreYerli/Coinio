@@ -56,12 +56,33 @@ describe('firefly settings API', () => {
     expect(fake.calls.filter((c) => c.path.endsWith('/about'))).toHaveLength(2);
   });
 
+  it('a different base URL needs a new token; the saved one is never sent to another host', async () => {
+    const { agent, db, fake } = await login();
+    await agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: TOKEN }).expect(200);
+    const before = fake.calls.length;
+    await agent.put('/api/firefly').send({ baseUrl: 'https://evil.example.com' }).expect(400);
+    await agent.put('/api/firefly').send({ baseUrl: 'https://evil.example.com', token: '' }).expect(400);
+    expect(fake.calls.length).toBe(before);
+    expect(db.select().from(fireflyConnections).get()).toMatchObject({ baseUrl: 'https://ff.example.com', token: TOKEN });
+  });
+
+  it('a failed re-connect leaves the saved connection unchanged', async () => {
+    const { agent, db } = await login();
+    await agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: TOKEN }).expect(200);
+    await agent.patch('/api/firefly').send({ assetAccountId: '1' }).expect(200);
+    const saved = (await agent.get('/api/firefly').expect(200)).body;
+    const res = await agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: 'wrong' }).expect(502);
+    expect(res.body).toEqual({ error: 'firefly', message: 'unauthorized' });
+    expect((await agent.get('/api/firefly').expect(200)).body).toEqual(saved);
+    expect(db.select().from(fireflyConnections).get()!.token).toBe(TOKEN);
+  });
+
   it('a different base URL starts over: links dropped, initial sync again', async () => {
     const { agent, db } = await login();
     await agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: TOKEN }).expect(200);
     db.update(fireflyConnections).set({ initialSyncDone: true }).run();
     db.insert(fireflyLinks).values({ userId: 1, billId: '5', coinioHash: 'a', fireflyHash: 'b' }).run();
-    await agent.put('/api/firefly').send({ baseUrl: 'https://other.example.com' }).expect(200);
+    await agent.put('/api/firefly').send({ baseUrl: 'https://other.example.com', token: TOKEN }).expect(200);
     expect(db.select().from(fireflyConnections).get()).toMatchObject({ baseUrl: 'https://other.example.com', token: TOKEN, initialSyncDone: false });
     expect(db.select().from(fireflyLinks).all()).toEqual([]);
   });

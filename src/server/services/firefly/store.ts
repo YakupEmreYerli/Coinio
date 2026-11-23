@@ -40,9 +40,11 @@ export async function saveConnection(
   ctx: ServiceCtx, userId: number, input: { baseUrl: string; token?: string },
 ): Promise<{ version: string; accounts: { id: string; name: string; currencyCode: string }[] }> {
   const existing = getConnection(ctx, userId);
-  const token = input.token?.trim() || existing?.token;
+  const baseUrl = normaliseBaseUrl(input.baseUrl);
+  // The saved token is only ever sent back to the host it was saved for.
+  const token = input.token?.trim() || (existing?.baseUrl === baseUrl ? existing.token : undefined);
   if (!token) throw new z.ZodError([{ code: 'custom', path: ['token'], message: 'Token is required', input: input.token }]);
-  const conn = { baseUrl: normaliseBaseUrl(input.baseUrl), token };
+  const conn = { baseUrl, token };
   const { version } = await about(ctx, conn);
   const accounts = await listAssetAccounts(ctx, conn);
   const now = ctx.now().toISOString();
