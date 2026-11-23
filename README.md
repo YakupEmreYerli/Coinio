@@ -53,7 +53,9 @@ Coinio keeps every recurring payment on one page: streaming, cloud storage, the 
 - **Calendar and reminders.** Payment days months ahead. Reminders, digests and trial, budget and price alerts by email, Telegram, Discord, Slack, ntfy, Gotify, Pushover, webhooks or Apprise, with editable templates.
 - **Any currency.** Each subscription keeps its own currency; totals are converted with daily exchange rates.
 - **History and reports.** What you paid over the last 12 months and what to expect in the next 12, by category.
-- **Import and export.** Bring your subscriptions over from Wallos; export subscriptions and payments as CSV or JSON.
+- **Import and export.** Bring your subscriptions over from Wallos (including `Paid By` mapped to household members); export subscriptions and payments as CSV or JSON.
+- **Family & shared plans.** Create a household, add member profiles with perspective-aware family roles or invite members via single-use links, split shared plans equally or by custom amounts, while personal subscriptions stay private.
+- **Passkeys (WebAuthn).** Sign in without a password using Face ID, Touch ID, Windows Hello or a security key alongside two-factor authentication.
 - **Firefly III.** Two-way sync with your own [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly): subscriptions become bills, and payments go both ways.
 - **AI assistants (MCP).** A built-in MCP server with OAuth, so Claude, ChatGPT and other MCP clients can read and update your subscriptions.
 - **iPhone widget.** Home Screen and Lock Screen widgets through Scriptable, no App Store app needed.

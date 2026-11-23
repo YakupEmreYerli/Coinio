@@ -53,7 +53,9 @@ Coinio düzenli ödediğin her şeyi tek sayfada toplar: dizi platformu, bulut d
 - **Takvim ve hatırlatma.** Ödeme günlerini aylar öncesinden görürsün. Hatırlatmalar, özetler ve deneme, bütçe, fiyat uyarıları e-posta, Telegram, Discord, Slack, ntfy, Gotify, Pushover, webhook ya da Apprise ile gelir; mesaj şablonlarını sen düzenlersin.
 - **Her para birimi.** Her abonelik kendi para biriminde kalır, toplamlar günlük kurla çevrilir.
 - **Geçmiş ve raporlar.** Son 12 ayda ne ödediğin, önümüzdeki 12 ayda ne bekleyeceğin, kategoriye göre.
-- **İçe ve dışa aktarma.** Wallos'taki aboneliklerini taşı; abonelikleri ve ödemeleri CSV ya da JSON olarak indir.
+- **İçe ve dışa aktarma.** Wallos'taki aboneliklerini (`Paid By` alanı hane üyelerine eşlenerek) taşı; abonelikleri ve ödemeleri CSV ya da JSON olarak indir.
+- **Aile ve ortak abonelikler.** Hane kur, rollü aile profilleri ekle ya da tek kullanımlık davet bağlantısıyla üyeleri çağır; ortak planları eşit veya özel tutarlarla böl, kişisel abonelikler yalnız sahibine görünür kalsın.
+- **Passkey ile şifresiz giriş.** İki adımlı doğrulamanın yanında Face ID, Touch ID, Windows Hello ya da donanım güvenlik anahtarıyla parola yazmadan giriş yap.
 - **Firefly III.** Kendi [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly) kurulumunla iki yönlü eşitleme: abonelikler fatura (bill) olur, ödemeler iki yöne de gider.
 - **Yapay zekâ asistanları (MCP).** OAuth destekli yerleşik MCP sunucusu sayesinde Claude, ChatGPT ve başka MCP istemcileri aboneliklerini okuyup güncelleyebilir.
 - **iPhone widget'ı.** Scriptable ile ana ekran ve kilit ekranı widget'ları; App Store uygulaması gerekmez.
