@@ -37,11 +37,11 @@ Before anything changes, Coinio shows what the first sync will do, in three list
 - **Will be added to Firefly III:** subscriptions with no bill of that name.
 - **Will be added to Coinio:** bills with no subscription of that name.
 
-Uncheck a new record to leave it out of syncing; it stays where it is and Coinio does not touch it. You can bring it back later under **Left out of syncing** with **Include again**. Unchecking a pair only keeps the two from being linked: each is then synced as a record of its own, so both apps end up with two of that name.
+Uncheck a new record to leave it out of syncing; it stays where it is and Coinio does not touch it. You can bring it back later under **Left out of syncing** with **Include again**. Unchecking a pair leaves both records out of syncing, the same as unchecking two new records: nothing is linked and nothing is created for either.
 
 Only active records are created on the other side. A paused subscription or an inactive bill stays out until you turn it back on. Click **Start syncing** to run it.
 
-Subscriptions that come over from Firefly III are set as paid by hand, and their next due date is Firefly III's next expected payment.
+Subscriptions that come over from Firefly III are set as paid by hand, and their next due date is Firefly III's next expected payment (or, if Firefly III has none, the next date from the bill's start date).
 
 ## What syncs
 
@@ -49,7 +49,7 @@ Subscriptions that come over from Firefly III are set as paid by hand, and their
 | --- | --- |
 | Name | Name |
 | Amount | Maximum amount |
-| Variable amount | A range: minimum below maximum |
+| Variable amount | A range: minimum below maximum. An existing range is kept; a bill Coinio creates starts with the minimum equal to the maximum |
 | Currency | Currency |
 | Cycle: weekly, monthly or yearly, every N | Repeats weekly, monthly, quarterly, half-yearly or yearly, with skip. Every 3 months is quarterly, every 6 months half-yearly. |
 | Active | Active |
@@ -73,7 +73,7 @@ Deleting is never copied as a delete. If you delete a subscription in Coinio, it
 **From Coinio to Firefly III.** When a payment is marked paid in Coinio, by hand or automatically, Coinio first looks for a transaction on that bill within 7 days of the due date. If there is one, Coinio links the two and writes nothing. Otherwise it creates a withdrawal from the subscription's account (or the default account) to a payee with the subscription's name, attached to the bill. If the payment is in a different currency from the account, the amount is converted with the daily exchange rate and the original amount is kept as the foreign amount.
 
 - Payments made before you connected are not sent to Firefly III.
-- Undoing a payment in Coinio leaves its Firefly III transaction alone. Coinio does not pull that transaction back in to mark the payment paid again; if you pay it again in Coinio, it is linked to the same transaction.
+- Undoing a payment in Coinio leaves its Firefly III transaction alone. Coinio does not pull that transaction back in to mark the payment paid again; paying the period again in Coinio, by hand or automatically, links it back to the same transaction.
 - Each Firefly III transaction counts once, so the same transaction never pays two periods.
 
 <Callout title="Recording the same payment twice">
