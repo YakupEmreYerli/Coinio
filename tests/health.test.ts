@@ -24,7 +24,7 @@ describe('openDb', () => {
     expect(names).toEqual(
       [
         'api_keys', 'firefly_connections', 'firefly_links', 'firefly_payment_links', 'fx_rates', 'instance_settings', 'notification_channels', 'notification_log', 'oauth_clients', 'oauth_codes', 'oauth_tokens',
-        'payments', 'sessions', 'settings', 'subscriptions', 'users',
+        'passkeys', 'payments', 'sessions', 'settings', 'subscriptions', 'users',
       ].sort(),
     );
   });

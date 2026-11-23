@@ -14,6 +14,10 @@ export type CoinioPlugin = {
   onTick?(ctx: ServiceCtx): Promise<void> | void;
   /** Called after the built-in rows of a user were deleted. */
   onUserDeleted?(ctx: ServiceCtx, userId: number): void;
+  /** Called after a user signs in with a built-in auth method. */
+  onSignIn?(ctx: ServiceCtx, userId: number, method: 'password' | 'passkey'): void;
+  /** Return false to prevent removing the passkey (e.g. when it is the user's last sign-in method). */
+  canRemovePasskey?(ctx: ServiceCtx, userId: number, remainingPasskeys: number): boolean;
   /**
    * The server's own mailer: enables the "account" notification channel, which mails the user's address
    * without any SMTP settings. `send` may throw an error with `transient: true` to have it retried.

@@ -96,6 +96,7 @@ export function authRouter(deps: { db: Db; config: Config; now: () => Date; plug
       return;
     }
     res.cookie(SESSION_COOKIE, createSession(db, user.id, now()), cookieOptions);
+    for (const plugin of deps.plugins ?? []) plugin.onSignIn?.(ctx, user.id, 'password');
     res.json({ id: user.id, username: user.username });
   });
 
