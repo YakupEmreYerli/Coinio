@@ -4,6 +4,36 @@ export class NotFoundError extends Error {
   }
 }
 
+export class BadRequestError extends Error {
+  constructor(readonly code: string) {
+    super(code);
+  }
+}
+
+export class UnauthorizedError extends Error {
+  constructor(readonly code: string) {
+    super(code);
+  }
+}
+
+export class ForbiddenError extends Error {
+  constructor(readonly code = 'forbidden') {
+    super(code);
+  }
+}
+
+export class ConflictError extends Error {
+  constructor(readonly code: string) {
+    super(code);
+  }
+}
+
+export class GoneError extends Error {
+  constructor(readonly code: string) {
+    super(code);
+  }
+}
+
 export type LimitedResource = 'subscriptions' | 'channels' | 'apiKeys';
 
 export class LimitError extends Error {

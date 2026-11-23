@@ -7,9 +7,10 @@ import { fetchLogoInBackground } from './logos.js';
 import { getSettings } from './settings.js';
 import { insertSubscription, updateSubscription } from './subscriptions.js';
 import { LimitError } from './errors.js';
+import { getHouseholdContext } from './family.js';
 
-/** A parsed Wallos row: the regular input plus the `active` flag, which creation does not take. */
-export type WallosItem = SubscriptionInput & { active: boolean };
+/** A parsed Wallos row: the regular input plus `active` and optional `paidBy` name. */
+export type WallosItem = SubscriptionInput & { active: boolean; paidBy?: string | null };
 export type WallosParseResult = { items: WallosItem[]; warnings: string[] };
 
 /** Keys written by Wallos' endpoints/subscriptions/export.php. Only some are used; the rest are known and ignored. */
@@ -159,7 +160,8 @@ export function parseWallosExport(json: unknown): WallosParseResult {
       autoPay: renewal === 'automatic',
     });
     if (!parsed.success) return skip(parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; '));
-    items.push({ ...parsed.data, active: text(r.Active).toLowerCase() !== 'no' });
+    const paidBy = orNull(r['Paid By']);
+    items.push({ ...parsed.data, active: text(r.Active).toLowerCase() !== 'no', ...(paidBy ? { paidBy } : {}) });
   });
 
   for (const key of unknownKeys) warnings.push(`Unrecognized field "${key}" ignored`);
@@ -182,13 +184,19 @@ export function importWallos(
   }
   if (dryRun) return { created: 0, items, warnings };
 
+  const hh = getHouseholdContext(ctx.db, userId);
+  const memberByName = new Map(hh ? hh.members.map((m) => [m.name.trim().toLowerCase(), m.id]) : []);
+
   const rows = ctx.db.transaction((tx) => {
     const txCtx = { ...ctx, db: tx as typeof ctx.db };
     const out = [];
     for (const item of items) {
       let row;
+      const matchedMemberId = item.paidBy ? memberByName.get(item.paidBy.trim().toLowerCase()) : undefined;
+      const inputWithFamily =
+        matchedMemberId !== undefined ? { ...item, shared: true, paidByMemberId: matchedMemberId } : item;
       try {
-        row = insertSubscription(txCtx, userId, item);
+        row = insertSubscription(txCtx, userId, inputWithFamily);
       } catch (err) {
         if (!(err instanceof LimitError)) throw err;
         warnings.push('limit_reached');

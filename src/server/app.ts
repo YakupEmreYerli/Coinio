@@ -8,6 +8,7 @@ import { oauthUrlOf, type Config } from './config.js';
 import type { Db } from './db/client.js';
 import { authRouter } from './routes/auth.js';
 import { passkeyRouter } from './routes/passkeys.js';
+import { familyRouter } from './routes/family.js';
 import { exportRouter } from './routes/export.js';
 import { fireflyRouter } from './routes/firefly.js';
 import { importRouter } from './routes/import.js';
@@ -85,6 +86,7 @@ export function createApp(deps: AppDeps): express.Express {
 
   app.use('/api/auth', authRouter({ db: deps.db, config: deps.config, now, plugins }));
   app.use('/api/auth', passkeyRouter(ctx));
+  app.use('/api/family', familyRouter(ctx));
   app.use('/api/settings', settingsRouter(ctx));
   app.use('/api/notifications', notificationsRouter(ctx));
   app.use('/api/onboarding', onboardingRouter(ctx));

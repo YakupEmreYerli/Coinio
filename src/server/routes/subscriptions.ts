@@ -1,12 +1,20 @@
 import { Router, type RequestHandler, type Response } from 'express';
 import { z, ZodError } from 'zod';
-import { LimitError } from '../services/errors.js';
-import { PayInput, PaymentQuery, SkipInput } from '../../shared/types.js';
+import {
+  BadRequestError,
+  ConflictError,
+  ForbiddenError,
+  GoneError,
+  LimitError,
+  UnauthorizedError,
+} from '../services/errors.js';
+import { PayInput, PaymentQuery, ScopeQuery, SkipInput } from '../../shared/types.js';
 import { requireSession } from '../auth/middleware.js';
 import type { PaymentRow, SubscriptionRow } from '../domain/summary.js';
 import type { ServiceCtx } from '../services/context.js';
 import {
   NotFoundError,
+  type SubscriptionView,
   createSubscription,
   deleteSubscription,
   getSubscription,
@@ -21,7 +29,8 @@ import {
 } from '../services/subscriptions.js';
 
 /** Explicit mappers so REST never exposes raw drizzle rows. */
-export function subscriptionToApi(s: SubscriptionRow) {
+export function subscriptionToApi(s: SubscriptionRow | SubscriptionView) {
+  const view = s as Partial<SubscriptionView>;
   return {
     id: s.id,
     name: s.name,
@@ -41,6 +50,11 @@ export function subscriptionToApi(s: SubscriptionRow) {
     reminderOffsets: s.reminderOffsets,
     trialEndsAt: s.trialEndsAt,
     active: s.active,
+    householdId: s.householdId,
+    paidByMemberId: s.paidByMemberId,
+    ...(view.splits !== undefined ? { splits: view.splits } : {}),
+    ...(view.myShareMinor !== undefined ? { myShareMinor: view.myShareMinor } : {}),
+    ...(view.canEdit !== undefined ? { canEdit: view.canEdit } : {}),
     createdAt: s.createdAt,
     updatedAt: s.updatedAt,
   };
@@ -66,7 +80,12 @@ export function handle(fn: (req: Parameters<RequestHandler>[0], res: Response) =
       fn(req, res);
     } catch (err) {
       if (err instanceof ZodError) res.status(400).json({ error: 'validation', issues: err.issues });
+      else if (err instanceof BadRequestError) res.status(400).json({ error: err.code });
+      else if (err instanceof UnauthorizedError) res.status(401).json({ error: err.code });
+      else if (err instanceof ForbiddenError) res.status(403).json({ error: err.code });
       else if (err instanceof NotFoundError) res.status(404).json({ error: 'not_found' });
+      else if (err instanceof ConflictError) res.status(409).json({ error: err.code });
+      else if (err instanceof GoneError) res.status(410).json({ error: err.code });
       else if (err instanceof LimitError) res.status(409).json({ error: 'limit_reached', resource: err.resource, limit: err.limit });
       else next(err);
     }
@@ -81,7 +100,8 @@ export function subscriptionsRouter(ctx: ServiceCtx): Router {
 
   router.get('/subscriptions', handle((req, res) => {
     const includeInactive = req.query.includeInactive === 'true';
-    res.json(listSubscriptions(ctx, req.userId!, { includeInactive }).map(subscriptionToApi));
+    const q = ScopeQuery.parse(req.query);
+    res.json(listSubscriptions(ctx, req.userId!, { includeInactive, scope: q.scope, memberId: q.memberId }).map(subscriptionToApi));
   }));
   router.post('/subscriptions', handle((req, res) => {
     res.status(201).json(subscriptionToApi(createSubscription(ctx, req.userId!, req.body)));
@@ -119,7 +139,8 @@ export function subscriptionsRouter(ctx: ServiceCtx): Router {
   }));
 
   router.get('/summary', handle((req, res) => {
-    res.json(getSummary(ctx, req.userId!, ctx.now()));
+    const q = ScopeQuery.parse(req.query);
+    res.json(getSummary(ctx, req.userId!, ctx.now(), { scope: q.scope, memberId: q.memberId }));
   }));
 
   return router;

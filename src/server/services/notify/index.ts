@@ -1,6 +1,6 @@
 // The notification jobs: the daily plan, event alerts (price changes) and test sends.
-import { and, asc, eq } from 'drizzle-orm';
-import { payments, subscriptions, users } from '../../db/schema.js';
+import { and, asc, eq, inArray } from 'drizzle-orm';
+import { householdMembers, payments, subscriptions, users } from '../../db/schema.js';
 import type { SubscriptionRow } from '../../domain/summary.js';
 import { todayIn } from '../../../shared/schedule.js';
 import type { TemplateVars } from '../../../shared/notify/template.js';
@@ -59,13 +59,14 @@ export function planForUser(ctx: ServiceCtx, userId: number): number {
   if (localTime(c.s.timezone, ctx.now()) < c.s.reminderTime) return 0;
 
   const subs = listSubscriptions(ctx, userId, { includeInactive: true });
-  const autoPaidToday = ctx.db
-    .select({ payment: payments })
-    .from(payments)
-    .innerJoin(subscriptions, eq(payments.subscriptionId, subscriptions.id))
-    .where(and(eq(subscriptions.userId, userId), eq(payments.dueDate, c.today), eq(payments.source, 'auto'), eq(payments.status, 'paid')))
-    .all()
-    .map((r) => r.payment);
+  const subIds = subs.map((s) => s.id);
+  const autoPaidToday = subIds.length
+    ? ctx.db
+        .select()
+        .from(payments)
+        .where(and(inArray(payments.subscriptionId, subIds), eq(payments.dueDate, c.today), eq(payments.source, 'auto'), eq(payments.status, 'paid')))
+        .all()
+    : [];
   const events = planNotifications({ today: c.today, settings: getNotifySettings(ctx, userId), subs, summary: getSummary(ctx, userId, ctx.now()), autoPaidToday });
 
   let added = 0;
@@ -94,12 +95,30 @@ export async function runNotifications(ctx: ServiceCtx): Promise<void> {
  * Queued at once; the scheduler sends it within a minute.
  */
 export function notifyPriceChange(ctx: ServiceCtx, sub: SubscriptionRow, oldMinor: number, newMinor: number, paidDate: string | null): void {
-  if (oldMinor === newMinor || !getNotifySettings(ctx, sub.userId).priceChange) return;
-  const channels = listChannels(ctx, sub.userId).filter((ch) => ch.enabled);
-  if (channels.length === 0) return;
-  const c = context(ctx, sub.userId);
-  const key = `priceChange:${sub.id}:${paidDate ?? ctx.now().toISOString()}:${oldMinor}>${newMinor}`;
-  fanOut(ctx, channels, { key, type: 'priceChange', subscriptionId: sub.id }, c.templates.priceChange, priceChangeVars(sub, { oldMinor, newMinor, paidDate, appUrl: c.appUrl }, c.f));
+  if (oldMinor === newMinor) return;
+  const targets =
+    sub.householdId !== null
+      ? [
+          ...new Set(
+            ctx.db
+              .select({ uid: householdMembers.linkedUserId })
+              .from(householdMembers)
+              .where(eq(householdMembers.householdId, sub.householdId))
+              .all()
+              .map((r) => r.uid)
+              .filter((uid): uid is number => uid !== null),
+          ),
+        ]
+      : [sub.userId];
+
+  for (const targetUserId of targets) {
+    if (!getNotifySettings(ctx, targetUserId).priceChange) continue;
+    const channels = listChannels(ctx, targetUserId).filter((ch) => ch.enabled);
+    if (channels.length === 0) continue;
+    const c = context(ctx, targetUserId);
+    const key = `priceChange:${sub.id}:${targetUserId}:${paidDate ?? ctx.now().toISOString()}:${oldMinor}>${newMinor}`;
+    fanOut(ctx, channels, { key, type: 'priceChange', subscriptionId: sub.id }, c.templates.priceChange, priceChangeVars(sub, { oldMinor, newMinor, paidDate, appUrl: c.appUrl }, c.f));
+  }
 }
 
 /** "Send test" on a channel: the test template, sent now. Null on success, otherwise the service's error. */

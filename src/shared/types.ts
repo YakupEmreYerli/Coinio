@@ -58,12 +58,57 @@ const reminderFields = {
   trialEndsAt: isoDate.nullable(),
 };
 
+export const SplitInput = z.object({
+  memberId: z.number().int().positive(),
+  shareMinor: z.number().int().min(0).nullable().optional(),
+});
+export type SplitInput = z.infer<typeof SplitInput>;
+
+export const FamilyScope = z.enum(['mine', 'family']);
+export type FamilyScope = z.infer<typeof FamilyScope>;
+
+export const ScopeQuery = z.object({
+  scope: FamilyScope.optional(),
+  memberId: z.coerce.number().int().positive().optional(),
+});
+
+const hexColor = z
+  .string()
+  .trim()
+  .regex(/^#[0-9a-fA-F]{6}$/)
+  .nullable()
+  .optional();
+
+export const CreateFamilyInput = z.object({
+  name: z.string().trim().min(1).max(80),
+  members: z.array(z.string().trim().min(1).max(60)).max(11).optional(),
+});
+export const UpdateFamilyInput = z.object({ name: z.string().trim().min(1).max(80) });
+export const CreateMemberInput = z.object({
+  name: z.string().trim().min(1).max(60),
+  color: hexColor,
+});
+export const UpdateMemberInput = z
+  .object({
+    name: z.string().trim().min(1).max(60),
+    color: hexColor,
+  })
+  .partial();
+export const CreateInviteInput = z.object({ memberId: z.number().int().positive() });
+export const AcceptInviteInput = z.object({
+  username: z.string().trim().min(1).max(100).optional(),
+  password: z.string().min(10).max(1000).optional(),
+});
+
 export const SubscriptionInput = z.preprocess(legacyReminderDays, z.object({
   ...fields,
   autoPay: z.boolean().default(true),
   variableAmount: z.boolean().default(false),
   reminderOffsets: reminderFields.reminderOffsets.default(null),
   trialEndsAt: reminderFields.trialEndsAt.default(null),
+  shared: z.boolean().optional(),
+  paidByMemberId: z.number().int().positive().nullable().optional(),
+  splits: z.array(SplitInput).optional(),
 }));
 export type SubscriptionInput = z.infer<typeof SubscriptionInput>;
 
@@ -73,6 +118,9 @@ export const SubscriptionPatch = z.preprocess(legacyReminderDays, z.object({
   variableAmount: z.boolean(),
   ...reminderFields,
   active: z.boolean(),
+  shared: z.boolean(),
+  paidByMemberId: z.number().int().positive().nullable(),
+  splits: z.array(SplitInput),
 }).partial());
 export type SubscriptionPatch = z.infer<typeof SubscriptionPatch>;
 
