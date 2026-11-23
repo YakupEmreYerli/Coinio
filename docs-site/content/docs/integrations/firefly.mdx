@@ -72,12 +72,14 @@ Deleting is never copied as a delete. If you delete a subscription in Coinio, it
 
 **From Coinio to Firefly III.** When a payment is marked paid in Coinio, by hand or automatically, Coinio first looks for a transaction on that bill within 7 days of the due date. If there is one, Coinio links the two and writes nothing. Otherwise it creates a withdrawal from the subscription's account (or the default account) to a payee with the subscription's name, attached to the bill. If the payment is in a different currency from the account, the amount is converted with the daily exchange rate and the original amount is kept as the foreign amount.
 
+Payments marked automatically wait two days before they are sent, so a transaction you enter or import into Firefly III yourself in the meantime is found and linked instead of a duplicate being written.
+
 - Payments made before you connected are not sent to Firefly III.
 - Undoing a payment in Coinio leaves its Firefly III transaction alone. Coinio does not pull that transaction back in to mark the payment paid again; paying the period again in Coinio, by hand or automatically, links it back to the same transaction.
 - Each Firefly III transaction counts once, so the same transaction never pays two periods.
 
 <Callout title="Recording the same payment twice">
-Coinio only checks Firefly III before it writes. If Coinio records an automatic payment and creates a withdrawal, and later you also enter that payment into Firefly III by hand (or import it from your bank), Firefly III has two transactions for it. Delete one of them in Firefly III.
+Coinio only checks Firefly III before it writes. Automatic payments wait two days first, so a transaction you enter or import in that window is found and linked. If your transaction reaches Firefly III later — after Coinio has already created its withdrawal — Firefly III has two transactions for it. Delete one of them in Firefly III.
 </Callout>
 
 ## Disconnect

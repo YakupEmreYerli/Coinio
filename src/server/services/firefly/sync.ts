@@ -109,6 +109,9 @@ export async function syncDefinitions(
 
 export type PaymentsResult = { paymentsIn: number; paymentsOut: number; warning: 'no_account' | 'no_rate' | null };
 
+/** Auto payments younger than this stay unpushed, so a transaction the user enters or imports first wins the ±7-day match. */
+const AUTO_PUSH_DELAY_DAYS = 2;
+
 /** The open period within ±7 days of the journal's day that has no paid or skipped payment; the nearest, earlier on a tie. */
 function periodFor(ctx: ServiceCtx, sub: SubscriptionRow, day: string): string | null {
   const rows = ctx.db.select().from(payments).where(eq(payments.subscriptionId, sub.id)).all();
@@ -178,6 +181,7 @@ export async function syncPayments(ctx: ServiceCtx, userId: number, conn: Firefl
       .where(and(eq(payments.subscriptionId, sub.id), eq(payments.status, 'paid'), gte(payments.paidAt, connection.createdAt)))
       .orderBy(payments.dueDate).all().filter((p) => !pushed.has(p.id));
     for (const p of paid) {
+      if (p.source === 'auto' && daysBetween(p.paidAt.slice(0, 10), today) < AUTO_PUSH_DELAY_DAYS) continue;
       const journals = (await billJournals(ctx, conn, link.billId, addDays(p.dueDate, -7), addDays(p.dueDate, 7)))
         .filter((j) => j.billId === link.billId);
       // A manual payment undone and paid again is a new row; it goes back to its released transaction.

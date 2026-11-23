@@ -171,7 +171,7 @@ describe('syncPayments', () => {
 
   it('a voided auto payment marked paid again is re-linked, not pushed twice', async () => {
     const s = setup();
-    const p = markPaid(s.ctx, s.user.id, s.sub.id, { source: 'auto', now: s.clock.now });
+    const p = markPaid(s.ctx, s.user.id, s.sub.id, { source: 'auto', paidAt: '2026-11-10T00:00:00.000Z', now: s.clock.now });
     await s.run();
     expect(s.posts()).toHaveLength(1);
     undoPayment(s.ctx, s.user.id, p.id);
@@ -230,5 +230,39 @@ describe('syncPayments', () => {
     expect(res.paymentsOut).toBe(1);
     expect(s.posts()).toHaveLength(1);
     expect(s.payLinks()).toContainEqual(expect.objectContaining({ paymentId: p2.id }));
+  });
+
+  it('an auto payment paid today is pushed only after two days', async () => {
+    const s = setup();
+    const p = markPaid(s.ctx, s.user.id, s.sub.id, { source: 'auto', now: s.clock.now });
+    const res = await s.run();
+    expect(res).toEqual({ paymentsIn: 0, paymentsOut: 0, warning: null });
+    expect(s.posts()).toHaveLength(0);
+    expect(s.payLinks()).toEqual([]);
+    s.clock.set('2026-11-21T09:00:00Z');
+    const res2 = await s.run();
+    expect(res2).toEqual({ paymentsIn: 0, paymentsOut: 1, warning: null });
+    expect(s.posts()).toHaveLength(1);
+    expect(s.payLinks()).toEqual([expect.objectContaining({ paymentId: p.id, journalId: s.fake.journals[0]!.journalId, state: 'linked' })]);
+  });
+
+  it('a manual payment paid today is pushed right away', async () => {
+    const s = setup();
+    markPaid(s.ctx, s.user.id, s.sub.id, { now: s.clock.now });
+    const res = await s.run();
+    expect(res).toEqual({ paymentsIn: 0, paymentsOut: 1, warning: null });
+    expect(s.posts()).toHaveLength(1);
+  });
+
+  it('a transaction entered in Firefly during the delay is linked, not duplicated', async () => {
+    const s = setup();
+    const p = markPaid(s.ctx, s.user.id, s.sub.id, { source: 'auto', now: s.clock.now });
+    await s.run();
+    s.fake.journals.push(journal('9', '2026-11-12'));
+    s.clock.set('2026-11-21T09:00:00Z');
+    const res = await s.run();
+    expect(res).toEqual({ paymentsIn: 0, paymentsOut: 0, warning: null });
+    expect(s.posts()).toHaveLength(0);
+    expect(s.payLinks()).toEqual([expect.objectContaining({ paymentId: p.id, journalId: '9', groupId: 'g9', state: 'linked' })]);
   });
 });
