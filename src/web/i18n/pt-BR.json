@@ -932,5 +932,10 @@
   "family.relation.sibling": "Irmão / Irmã",
   "family.relation.other": "Outro",
   "invite.displayNameLabel": "Seu nome",
-  "invite.roleLabel": "Papel na família"
+  "invite.roleLabel": "Papel na família",
+  "family.relationPossessive.mother": "Minha mãe",
+  "family.relationPossessive.father": "Meu pai",
+  "family.relationPossessive.partner": "Meu parceiro",
+  "family.relationPossessive.child": "Meu filho(a)",
+  "family.relationPossessive.sibling": "Meu irmão/ã"
 }

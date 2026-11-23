@@ -13,7 +13,7 @@ import { t, useLocale } from '../i18n';
 import { useSubscriptionForm } from '../layout/subscriptionForm';
 import { useCategoryColor } from '../lib/categoryColor';
 import { cn } from '../lib/cn';
-import { useReports, useSubscriptions, type Report } from '../lib/hooks';
+import { useFamily, useReports, useSubscriptions, type Report } from '../lib/hooks';
 import { formatMemberLabel } from '../lib/memberLabel';
 
 export type { Report };
@@ -213,6 +213,8 @@ function Top({ report }: { report: Report }) {
 }
 
 function Members({ report }: { report: Report }) {
+  const familyMembers = useFamily().data?.members ?? [];
+  const me = familyMembers.find((m) => m.isMe);
   const list = report.byMember ?? [];
   const total = list.reduce((s, m) => s + m.monthlyMinor, 0) || 1;
   return (
@@ -225,7 +227,9 @@ function Members({ report }: { report: Report }) {
             <li key={m.memberId} className="flex flex-col gap-1.5">
               <span className="flex items-center gap-2 text-[14px]">
                 <span className="size-2 rounded-full" style={{ background: m.color ?? '#6366f1' }} />
-                <span className="min-w-0 flex-1 truncate">{formatMemberLabel(m)}</span>
+                <span className="min-w-0 flex-1 truncate">
+                  {formatMemberLabel({ ...m, isMe: m.memberId === me?.id }, me?.relation)}
+                </span>
                 <span className="num text-[12px] text-text-3">{Math.round(pct)}%</span>
                 <Money minor={m.monthlyMinor} currency={report.base} size="sm" />
               </span>

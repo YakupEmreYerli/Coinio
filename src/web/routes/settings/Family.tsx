@@ -57,6 +57,7 @@ export function FamilySettings() {
   const household = data?.household ?? null;
   const members = data?.members ?? [];
   const invites = data?.invites ?? [];
+  const viewerRelation = members.find((m) => m.isMe)?.relation;
   const roleChoices = relationOptions();
 
   useEffect(() => {
@@ -232,7 +233,7 @@ export function FamilySettings() {
                   ) : (
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-medium">{formatMemberLabel(m)}</span>
+                        <span className="font-medium">{formatMemberLabel(m, viewerRelation)}</span>
                         {m.isMe && <span className="rounded-full bg-sunk px-2 py-0.5 text-[11px] text-text-2">{t('family.you')}</span>}
                         {m.role === 'owner' && (
                           <span className="rounded-full bg-accent-soft px-2 py-0.5 text-[11px] font-medium text-accent">
@@ -282,7 +283,7 @@ export function FamilySettings() {
                           variant="ghost"
                           className="text-neg hover:text-neg"
                           aria-label={t('family.removeMember')}
-                          onClick={() => setConfirmDeleteMember({ id: m.id, name: formatMemberLabel(m) })}
+                          onClick={() => setConfirmDeleteMember({ id: m.id, name: formatMemberLabel(m, viewerRelation) })}
                         >
                           <Trash2 />
                         </Button>

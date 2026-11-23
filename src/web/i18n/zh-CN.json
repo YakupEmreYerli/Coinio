@@ -913,5 +913,10 @@
   "family.relation.sibling": "兄弟姐妹",
   "family.relation.other": "其他",
   "invite.displayNameLabel": "你的名字",
-  "invite.roleLabel": "家庭角色"
+  "invite.roleLabel": "家庭角色",
+  "family.relationPossessive.mother": "我的妈妈",
+  "family.relationPossessive.father": "我的爸爸",
+  "family.relationPossessive.partner": "我的伴侣",
+  "family.relationPossessive.child": "我的孩子",
+  "family.relationPossessive.sibling": "我的兄弟姐妹"
 }

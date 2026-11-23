@@ -932,5 +932,10 @@
   "family.relation.sibling": "Kardeş",
   "family.relation.other": "Diğer",
   "invite.displayNameLabel": "Adın",
-  "invite.roleLabel": "Ailedeki rolün"
+  "invite.roleLabel": "Ailedeki rolün",
+  "family.relationPossessive.mother": "Annem",
+  "family.relationPossessive.father": "Babam",
+  "family.relationPossessive.partner": "Eşim",
+  "family.relationPossessive.child": "Çocuğum",
+  "family.relationPossessive.sibling": "Kardeşim"
 }

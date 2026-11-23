@@ -29,7 +29,9 @@ export function SubscriptionDetail({ sub, base, onClose }: { sub: ApiSubscriptio
   const form = useSubscriptionForm();
   const update = useUpdateSubscription();
   const del = useDeleteSubscription();
-  const members = new Map((useFamily().data?.members ?? []).map((m) => [m.id, formatMemberLabel(m)]));
+  const familyMembers = useFamily().data?.members ?? [];
+  const viewerRelation = familyMembers.find((m) => m.isMe)?.relation;
+  const members = new Map(familyMembers.map((m) => [m.id, formatMemberLabel(m, viewerRelation)]));
   const [confirm, setConfirm] = useState(false);
   return (
     <Sheet open={!!sub} onOpenChange={(v) => !v && onClose()}>

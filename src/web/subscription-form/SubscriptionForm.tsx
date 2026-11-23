@@ -95,6 +95,7 @@ export function SubscriptionForm({
   const family = useFamily().data;
   const household = family?.household ?? null;
   const members = family?.members ?? [];
+  const viewerRelation = members.find((m) => m.isMe)?.relation;
   const notifyDefaults = useNotifications().data?.settings?.offsets;
   const [logo, setLogo] = useState<LogoChoice>({ kind: 'keep' });
   const [saving, setSaving] = useState(false);
@@ -375,7 +376,7 @@ export function SubscriptionForm({
                       label={t('family.paidBy')}
                       value={paidByMemberId || String(household.myMemberId)}
                       onChange={setPaidByMemberId}
-                      options={members.map((m) => ({ value: String(m.id), label: formatMemberLabel(m) }))}
+                      options={members.map((m) => ({ value: String(m.id), label: formatMemberLabel(m, viewerRelation) }))}
                     />
                     <Select
                       label={t('family.splitMode')}
@@ -404,7 +405,7 @@ export function SubscriptionForm({
                                     setSplitMemberIds((cur) => (on ? [...new Set([...cur, m.id])] : cur.filter((id) => id !== m.id)))
                                   }
                                 />
-                                <span>{formatMemberLabel(m)}</span>
+                                <span>{formatMemberLabel(m, viewerRelation)}</span>
                               </label>
                               {splitMode === 'custom' && checked && (
                                 <input

@@ -42,10 +42,11 @@ export function Subscriptions() {
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [confirmBulk, setConfirmBulk] = useState(false);
   const [newCategory, setNewCategory] = useState('');
-  const memberNames = useMemo(
-    () => new Map((family?.members ?? []).map((m) => [m.id, formatMemberLabel(m)])),
-    [family?.members],
-  );
+  const memberNames = useMemo(() => {
+    const members = family?.members ?? [];
+    const viewerRelation = members.find((m) => m.isMe)?.relation;
+    return new Map(members.map((m) => [m.id, formatMemberLabel(m, viewerRelation)]));
+  }, [family?.members]);
 
   const q = params.get('q') ?? '';
   const category = params.get('category') ?? ALL;

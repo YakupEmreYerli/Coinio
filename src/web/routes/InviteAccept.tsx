@@ -103,6 +103,7 @@ export function InviteAccept({ user }: { user: { id: number; username: string } 
   const invitedLabel = formatMemberLabel({
     name: data?.memberName ?? '',
     relation: data?.memberRelation ?? null,
+    isMe: true,
   });
 
   const profileFields = (

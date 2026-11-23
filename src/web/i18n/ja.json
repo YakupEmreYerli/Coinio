@@ -913,5 +913,10 @@
   "family.relation.sibling": "きょうだい",
   "family.relation.other": "その他",
   "invite.displayNameLabel": "表示名",
-  "invite.roleLabel": "家族の役割"
+  "invite.roleLabel": "家族の役割",
+  "family.relationPossessive.mother": "私の母",
+  "family.relationPossessive.father": "私の父",
+  "family.relationPossessive.partner": "パートナー",
+  "family.relationPossessive.child": "子ども",
+  "family.relationPossessive.sibling": "きょうだい"
 }

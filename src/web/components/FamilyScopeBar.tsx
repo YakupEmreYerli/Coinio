@@ -12,6 +12,7 @@ export function FamilyScopeBar({ className }: { className?: string }) {
   const family = useFamily().data;
   const { scope, memberId, setScope, setMemberId } = useFamilyScope();
   if (!family?.household) return null;
+  const viewerRelation = family.members.find((m) => m.isMe)?.relation;
 
   return (
     <div className={cn('flex flex-wrap items-center gap-2', className)} data-testid="family-scope-bar">
@@ -48,7 +49,7 @@ export function FamilyScopeBar({ className }: { className?: string }) {
           onChange={(v) => setMemberId(v === ALL ? null : Number(v))}
           options={[
             { value: ALL, label: t('family.allMembers') },
-            ...family.members.map((m) => ({ value: String(m.id), label: formatMemberLabel(m) })),
+            ...family.members.map((m) => ({ value: String(m.id), label: formatMemberLabel(m, viewerRelation) })),
           ]}
         />
       )}
