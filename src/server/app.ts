@@ -8,6 +8,7 @@ import { oauthUrlOf, type Config } from './config.js';
 import type { Db } from './db/client.js';
 import { authRouter } from './routes/auth.js';
 import { exportRouter } from './routes/export.js';
+import { fireflyRouter } from './routes/firefly.js';
 import { importRouter } from './routes/import.js';
 import { consentRouter } from './oauth/consent.js';
 import { OAUTH_SCOPES, SqliteOAuthProvider } from './oauth/provider.js';
@@ -91,6 +92,7 @@ export function createApp(deps: AppDeps): express.Express {
   app.use('/api/export', exportRouter(ctx));
   app.use('/api/reports', reportsRouter(ctx));
   app.use(logosRouter(ctx));
+  app.use('/api/firefly', fireflyRouter(ctx));
   app.use('/api', subscriptionsRouter(ctx));
   app.use('/mcp', mcpRouter(ctx));
   for (const plugin of plugins) plugin.routes?.(app, ctx);
