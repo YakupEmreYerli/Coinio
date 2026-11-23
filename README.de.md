@@ -54,6 +54,7 @@ Coinio sammelt jede wiederkehrende Zahlung auf einer Seite: Streaming, Cloud-Spe
 - **Jede Währung.** Jedes Abo behält seine eigene Währung; die Summen werden mit tagesaktuellen Wechselkursen umgerechnet.
 - **Verlauf und Berichte.** Was Sie in den letzten 12 Monaten gezahlt haben und was in den nächsten 12 zu erwarten ist, nach Kategorie.
 - **Import und Export.** Übernehmen Sie Ihre Abos aus Wallos; exportieren Sie Abos und Zahlungen als CSV oder JSON.
+- **Firefly III.** Zweiseitiger Abgleich mit Ihrem eigenen [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly): Abos werden zu Rechnungen (Bills), Zahlungen gehen in beide Richtungen.
 - **KI-Assistenten (MCP).** Ein eingebauter MCP-Server mit OAuth, damit Claude, ChatGPT und andere MCP-Clients Ihre Abos lesen und ändern können.
 - **iPhone-Widget.** Widgets für Home- und Sperrbildschirm über Scriptable, ganz ohne App aus dem App Store.
 - **Ganz nach Ihrem Geschmack.** Designs, Akzentfarbe, Schriften, Dichte, Karten der Startseite, eigenes CSS und HTML-Karten in einer Sandbox.
@@ -131,6 +132,10 @@ Der MCP-Server liegt unter Ihrer Coinio-Adresse plus `/mcp`. Cloud-Apps wie clau
 [`widget/coinio-widget.js`](widget/coinio-widget.js) ist ein [Scriptable](https://scriptable.app)-Skript für kleine, mittlere und große Widgets auf dem Home-Bildschirm sowie für Widgets auf dem Sperrbildschirm. Erstellen Sie einen schreibgeschützten API-Schlüssel, fügen Sie das Skript ein und tragen Sie `SERVER_URL` und `API_KEY` ein. Anleitung: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
 
 **Android:** Das Coinio-Widget läuft in der kostenlosen App [ScriptWidget](https://github.com/everettjf/scriptwidget); den einzufügenden Parameter gibt Ihnen **Einstellungen › Integrationen › Android-Widget**. Anleitung: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+
+## Firefly III
+
+**Einstellungen › Integrationen › Firefly III** hält Ihre Abos mit den Rechnungen (Bills) in Ihrem eigenen [Firefly III](https://www.firefly-iii.org) in beide Richtungen abgeglichen, Zahlungen eingeschlossen. Sie brauchen ein Personal Access Token aus Firefly III und eine Adresse, die Coinio erreicht. Auf keiner Seite wird je etwas gelöscht. Anleitung: [docs.getcoinio.me/docs/integrations/firefly](https://docs.getcoinio.me/docs/integrations/firefly).
 
 ## Aktualisieren
 

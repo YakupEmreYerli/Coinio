@@ -54,6 +54,7 @@ Coinio reúne cada pago recurrente en una sola página: streaming, almacenamient
 - **Cualquier moneda.** Cada suscripción conserva su propia moneda; los totales se convierten con tipos de cambio diarios.
 - **Historial e informes.** Lo que has pagado en los últimos 12 meses y lo que te espera en los próximos 12, por categoría.
 - **Importar y exportar.** Trae tus suscripciones desde Wallos; exporta suscripciones y pagos en CSV o JSON.
+- **Firefly III.** Sincronización en ambos sentidos con tu propio [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly): las suscripciones pasan a ser facturas (bills) y los pagos van en las dos direcciones.
 - **Asistentes de IA (MCP).** Un servidor MCP integrado con OAuth, para que Claude, ChatGPT y otros clientes MCP puedan leer y actualizar tus suscripciones.
 - **Widget para iPhone.** Widgets para la pantalla de inicio y la pantalla bloqueada con Scriptable, sin necesidad de una app del App Store.
 - **A tu manera.** Temas, color de acento, fuentes, densidad, tarjetas de inicio, CSS propio y tarjetas HTML en un entorno aislado.
@@ -131,6 +132,10 @@ El servidor MCP está en la dirección de tu Coinio más `/mcp`. Las apps en la 
 [`widget/coinio-widget.js`](widget/coinio-widget.js) es un script de [Scriptable](https://scriptable.app) para widgets pequeños, medianos y grandes en la pantalla de inicio, y para widgets en la pantalla bloqueada. Crea una clave de API de solo lectura, pega el script y rellena `SERVER_URL` y `API_KEY`. Guía: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
 
 **Android:** el widget de Coinio funciona en la app gratuita [ScriptWidget](https://github.com/everettjf/scriptwidget); **Ajustes › Integraciones › Widget de Android** te da el parámetro para pegar. Guía: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+
+## Firefly III
+
+**Ajustes › Integraciones › Firefly III** mantiene tus suscripciones sincronizadas con las facturas (bills) de tu propio [Firefly III](https://www.firefly-iii.org), en ambos sentidos y con los pagos incluidos. Necesitas un Personal Access Token de Firefly III y una dirección a la que Coinio pueda llegar. Nunca se borra nada en ninguno de los dos lados. Guía: [docs.getcoinio.me/docs/integrations/firefly](https://docs.getcoinio.me/docs/integrations/firefly).
 
 ## Actualización
 

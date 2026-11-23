@@ -54,6 +54,7 @@ Coinio düzenli ödediğin her şeyi tek sayfada toplar: dizi platformu, bulut d
 - **Her para birimi.** Her abonelik kendi para biriminde kalır, toplamlar günlük kurla çevrilir.
 - **Geçmiş ve raporlar.** Son 12 ayda ne ödediğin, önümüzdeki 12 ayda ne bekleyeceğin, kategoriye göre.
 - **İçe ve dışa aktarma.** Wallos'taki aboneliklerini taşı; abonelikleri ve ödemeleri CSV ya da JSON olarak indir.
+- **Firefly III.** Kendi [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly) kurulumunla iki yönlü eşitleme: abonelikler fatura (bill) olur, ödemeler iki yöne de gider.
 - **Yapay zekâ asistanları (MCP).** OAuth destekli yerleşik MCP sunucusu sayesinde Claude, ChatGPT ve başka MCP istemcileri aboneliklerini okuyup güncelleyebilir.
 - **iPhone widget'ı.** Scriptable ile ana ekran ve kilit ekranı widget'ları; App Store uygulaması gerekmez.
 - **Kendi görünüşün.** Tema, vurgu rengi, yazı tipi, sıklık, ana sayfa kartları, özel CSS ve korumalı alanda çalışan HTML kartları.
@@ -131,6 +132,10 @@ MCP sunucusu Coinio adresinin sonuna `/mcp` eklenerek bulunur. claude.ai ve Chat
 [`widget/coinio-widget.js`](widget/coinio-widget.js), küçük, orta ve büyük ana ekran widget'ları ile kilit ekranı widget'ları için bir [Scriptable](https://scriptable.app) betiği. Salt okunur bir API anahtarı oluştur, betiği yapıştır, `SERVER_URL` ve `API_KEY` satırlarını doldur. Rehber: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
 
 **Android:** Coinio widget'ı ücretsiz [ScriptWidget](https://github.com/everettjf/scriptwidget) uygulamasında çalışır; yapıştırılacak ayar metnini **Ayarlar › Entegrasyonlar › Android widget'ı** verir. Rehber: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+
+## Firefly III
+
+**Ayarlar › Entegrasyonlar › Firefly III** aboneliklerini kendi [Firefly III](https://www.firefly-iii.org) kurulumundaki faturalarla (bill) iki yönde, ödemeler dahil eşit tutar. Firefly III'ten bir Personal Access Token ve Coinio'nun ulaşabildiği bir adres gerekir. İki tarafta da hiçbir şey silinmez. Rehber: [docs.getcoinio.me/docs/integrations/firefly](https://docs.getcoinio.me/docs/integrations/firefly).
 
 ## Güncelleme
 

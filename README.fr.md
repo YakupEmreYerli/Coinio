@@ -54,6 +54,7 @@ Coinio réunit chaque paiement récurrent sur une seule page : streaming, stocka
 - **Toutes les devises.** Chaque abonnement garde sa propre devise ; les totaux sont convertis avec les taux de change du jour.
 - **Historique et rapports.** Ce que vous avez payé ces 12 derniers mois et ce qui vous attend dans les 12 prochains, par catégorie.
 - **Import et export.** Reprenez vos abonnements depuis Wallos ; exportez abonnements et paiements en CSV ou en JSON.
+- **Firefly III.** Synchronisation dans les deux sens avec votre propre [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly) : les abonnements deviennent des factures (bills), les paiements circulent dans les deux sens.
 - **Assistants IA (MCP).** Un serveur MCP intégré avec OAuth, pour que Claude, ChatGPT et d’autres clients MCP puissent lire et modifier vos abonnements.
 - **Widget iPhone.** Widgets pour l’écran d’accueil et l’écran verrouillé via Scriptable, sans app à installer depuis l’App Store.
 - **À votre image.** Thèmes, couleur d’accent, polices, densité, cartes de l’accueil, CSS personnalisé et cartes HTML isolées dans un bac à sable.
@@ -131,6 +132,10 @@ Le serveur MCP se trouve à l’adresse de votre Coinio suivie de `/mcp`. Les ap
 [`widget/coinio-widget.js`](widget/coinio-widget.js) est un script [Scriptable](https://scriptable.app) pour des widgets petits, moyens et grands sur l’écran d’accueil, ainsi que pour l’écran verrouillé. Créez une clé API en lecture seule, collez le script et renseignez `SERVER_URL` et `API_KEY`. Guide : [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
 
 **Android :** le widget Coinio tourne dans l’app gratuite [ScriptWidget](https://github.com/everettjf/scriptwidget) ; **Réglages › Intégrations › Widget Android** vous donne le paramètre à coller. Guide : [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+
+## Firefly III
+
+**Réglages › Intégrations › Firefly III** synchronise vos abonnements avec les factures (bills) de votre propre [Firefly III](https://www.firefly-iii.org), dans les deux sens, paiements compris. Il vous faut un Personal Access Token de Firefly III et une adresse que Coinio peut joindre. Rien n’est jamais supprimé, d’un côté comme de l’autre. Guide : [docs.getcoinio.me/docs/integrations/firefly](https://docs.getcoinio.me/docs/integrations/firefly).
 
 ## Mise à jour
 

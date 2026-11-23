@@ -54,6 +54,7 @@ Coinio keeps every recurring payment on one page: streaming, cloud storage, the 
 - **Any currency.** Each subscription keeps its own currency; totals are converted with daily exchange rates.
 - **History and reports.** What you paid over the last 12 months and what to expect in the next 12, by category.
 - **Import and export.** Bring your subscriptions over from Wallos; export subscriptions and payments as CSV or JSON.
+- **Firefly III.** Two-way sync with your own [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly): subscriptions become bills, and payments go both ways.
 - **AI assistants (MCP).** A built-in MCP server with OAuth, so Claude, ChatGPT and other MCP clients can read and update your subscriptions.
 - **iPhone widget.** Home Screen and Lock Screen widgets through Scriptable, no App Store app needed.
 - **Your own look.** Themes, accent colour, fonts, density, dashboard cards, custom CSS and sandboxed HTML cards.
@@ -131,6 +132,10 @@ The MCP server lives at your Coinio address plus `/mcp`. Cloud apps such as clau
 [`widget/coinio-widget.js`](widget/coinio-widget.js) is a [Scriptable](https://scriptable.app) script for small, medium and large Home Screen widgets and Lock Screen widgets. Create a read-only API key, paste the script, fill in `SERVER_URL` and `API_KEY`. Guide: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
 
 **Android:** the Coinio widget runs in the free [ScriptWidget](https://github.com/everettjf/scriptwidget) app; **Settings › Integrations › Android widget** gives you the parameter to paste. Guide: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+
+## Firefly III
+
+**Settings › Integrations › Firefly III** keeps your subscriptions in step with the bills in your own [Firefly III](https://www.firefly-iii.org), in both directions, payments included. You need a Personal Access Token from Firefly III and an address Coinio can reach. Nothing is ever deleted on either side. Guide: [docs.getcoinio.me/docs/integrations/firefly](https://docs.getcoinio.me/docs/integrations/firefly).
 
 ## Updating
 

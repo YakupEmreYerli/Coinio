@@ -3,6 +3,7 @@
   "pages": [
     "mcp",
     "iphone-widget",
-    "android-widget"
+    "android-widget",
+    "firefly"
   ]
 }

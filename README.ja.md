@@ -54,6 +54,7 @@ Coinio は、定期的な支払いをすべて1つのページにまとめます
 - **どの通貨でも。** サブスクごとに自分の通貨を保持し、合計は毎日の為替レートで換算します。
 - **履歴とレポート。** 過去12か月に支払った額と、今後12か月の見込みを、カテゴリ別に確認できます。
 - **インポートとエクスポート。** Wallos からサブスクを移行できます。サブスクと支払いは CSV または JSON でエクスポートできます。
+- **Firefly III。** 自分の [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly) と双方向に同期。サブスクは請求（bill）になり、支払いも双方向に反映されます。
 - **AI アシスタント（MCP）。** OAuth 対応の MCP サーバーを内蔵。Claude、ChatGPT などの MCP クライアントが、サブスクを読み取ったり更新したりできます。
 - **iPhone ウィジェット。** Scriptable を使ったホーム画面とロック画面のウィジェット。App Store のアプリは不要です。
 - **自分好みの見た目。** テーマ、アクセントカラー、フォント、表示密度、ダッシュボードのカード、独自 CSS、サンドボックス化された HTML カード。
@@ -131,6 +132,10 @@ MCP サーバーは、Coinio のアドレスの末尾に `/mcp` を付けた場�
 [`widget/coinio-widget.js`](widget/coinio-widget.js) は、ホーム画面の小・中・大サイズのウィジェットとロック画面ウィジェット向けの [Scriptable](https://scriptable.app) スクリプトです。閲覧専用の API キーを作成し、スクリプトを貼り付けて、`SERVER_URL` と `API_KEY` を入力してください。ガイド: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget)。
 
 **Android：** Coinio ウィジェットは無料アプリ [ScriptWidget](https://github.com/everettjf/scriptwidget) で動きます。貼り付けるパラメータは「設定 › 連携 › Android ウィジェット」で取得できます。ガイド：[docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget)。
+
+## Firefly III
+
+「設定 › 連携 › Firefly III」で、サブスクを自分の [Firefly III](https://www.firefly-iii.org) の請求（bill）と双方向に同期できます。支払いも対象です。Firefly III の Personal Access Token と、Coinio から届くアドレスが必要です。どちら側でも削除は一切行いません。ガイド：[docs.getcoinio.me/docs/integrations/firefly](https://docs.getcoinio.me/docs/integrations/firefly)。
 
 ## アップデート
 

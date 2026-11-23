@@ -54,6 +54,7 @@ Coinio 把所有周期性付款放在同一个页面：流媒体、云存储、�
 - **任意币种。** 每个订阅保留自己的币种，合计金额按每日汇率换算。
 - **历史与报表。** 按分类查看过去 12 个月付了多少，以及未来 12 个月预计支出。
 - **导入与导出。** 从 Wallos 迁移订阅；订阅和付款记录可导出为 CSV 或 JSON。
+- **Firefly III。** 与你自己的 [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly) 双向同步：订阅对应账单（bill），付款记录双向传递。
 - **AI 助手（MCP）。** 内置支持 OAuth 的 MCP 服务器，Claude、ChatGPT 和其他 MCP 客户端可以读取并更新你的订阅。
 - **iPhone 小组件。** 通过 Scriptable 提供主屏幕和锁定屏幕小组件，无需安装 App Store 应用。
 - **自定义外观。** 主题、强调色、字体、密度、仪表盘卡片、自定义 CSS 和沙盒化的 HTML 卡片。
@@ -131,6 +132,10 @@ MCP 服务器位于你的 Coinio 地址加 `/mcp`。claude.ai 和 ChatGPT 等云
 [`widget/coinio-widget.js`](widget/coinio-widget.js) 是一个 [Scriptable](https://scriptable.app) 脚本，提供小、中、大三种主屏幕小组件以及锁定屏幕小组件。创建一个只读 API 密钥，粘贴脚本，再填写 `SERVER_URL` 和 `API_KEY`。指南：[docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget)。
 
 **Android：** Coinio 小组件运行在免费的 [ScriptWidget](https://github.com/everettjf/scriptwidget) 应用中；“设置 › 集成 › Android 小组件”会给出要粘贴的参数。指南：[docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget)。
+
+## Firefly III
+
+“设置 › 集成 › Firefly III”让你的订阅与自己的 [Firefly III](https://www.firefly-iii.org) 中的账单（bill）双向保持同步，付款记录也包括在内。需要 Firefly III 的 Personal Access Token，以及 Coinio 能访问到的地址。两边都不会删除任何内容。指南：[docs.getcoinio.me/docs/integrations/firefly](https://docs.getcoinio.me/docs/integrations/firefly)。
 
 ## 更新
 

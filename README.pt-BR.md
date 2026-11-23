@@ -54,6 +54,7 @@ O Coinio reúne todos os pagamentos recorrentes numa página só: streaming, arm
 - **Qualquer moeda.** Cada assinatura mantém a própria moeda; os totais são convertidos com as cotações diárias.
 - **Histórico e relatórios.** O que você pagou nos últimos 12 meses e o que esperar nos próximos 12, por categoria.
 - **Importação e exportação.** Traga suas assinaturas do Wallos; exporte assinaturas e pagamentos em CSV ou JSON.
+- **Firefly III.** Sincronização nos dois sentidos com o seu próprio [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly): as assinaturas viram contas (bills) e os pagamentos vão nas duas direções.
 - **Assistentes de IA (MCP).** Um servidor MCP integrado, com OAuth, para que o Claude, o ChatGPT e outros clientes MCP possam ler e atualizar suas assinaturas.
 - **Widget para iPhone.** Widgets para a Tela de Início e a Tela Bloqueada pelo Scriptable, sem precisar de app da App Store.
 - **Do seu jeito.** Temas, cor de destaque, fontes, densidade, cards do painel, CSS próprio e cards HTML em sandbox.
@@ -131,6 +132,10 @@ O servidor MCP fica no endereço do seu Coinio mais `/mcp`. Apps na nuvem, como 
 [`widget/coinio-widget.js`](widget/coinio-widget.js) é um script do [Scriptable](https://scriptable.app) para widgets pequenos, médios e grandes da Tela de Início e widgets da Tela Bloqueada. Crie uma chave de API somente leitura, cole o script e preencha `SERVER_URL` e `API_KEY`. Guia: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
 
 **Android:** o widget do Coinio roda no app gratuito [ScriptWidget](https://github.com/everettjf/scriptwidget); **Configurações › Integrações › Widget do Android** dá o parâmetro para colar. Guia: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+
+## Firefly III
+
+**Configurações › Integrações › Firefly III** mantém suas assinaturas sincronizadas com as contas (bills) do seu próprio [Firefly III](https://www.firefly-iii.org), nos dois sentidos, pagamentos incluídos. Você precisa de um Personal Access Token do Firefly III e de um endereço que o Coinio consiga acessar. Nada é apagado em nenhum dos lados. Guia: [docs.getcoinio.me/docs/integrations/firefly](https://docs.getcoinio.me/docs/integrations/firefly).
 
 ## Atualização
 
