@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { fireflyConnections, fireflyLinks, fireflyPaymentLinks, subscriptions } from '../src/server/db/schema.js';
 import { fakeFirefly } from './fixtures/fakeFirefly.js';
 import { addUser, makeTestApp } from './helpers.js';
@@ -180,5 +180,31 @@ describe('firefly sync API', () => {
     expect((await agent.post('/api/firefly/sync').expect(502)).body).toEqual({ error: 'firefly', message: 'unauthorized' });
     expect(db.select().from(fireflyConnections).get()).toMatchObject({ enabled: false, lastError: 'unauthorized' });
     await agent.post('/api/firefly/sync').expect(409);
+  });
+
+  it('a sync while one is running answers 409 busy', async () => {
+    let entered = 0;
+    let release = () => {};
+    let hold: Promise<void> | null = null;
+    const fake = fakeFirefly({ token: TOKEN, accounts });
+    const inner = fake.fetch;
+    const t = makeTestApp({
+      fetch: (async (input: string | URL | Request, init?: RequestInit) => {
+        entered++;
+        await hold;
+        return inner(input, init);
+      }) as typeof fetch,
+    });
+    const agent = request.agent(t.app);
+    await agent.post('/api/auth/setup').send({ username: 'y', password: 'password-123456' });
+    await agent.put('/api/firefly').send({ baseUrl: 'https://ff.example.com', token: TOKEN }).expect(200);
+    await agent.post('/api/firefly/initial').send({ unmatch: [], exclude: { subscriptions: [], bills: [] } }).expect(200);
+    hold = new Promise<void>((r) => (release = r));
+    const before = entered;
+    const first = agent.post('/api/firefly/sync').expect(200).then((r) => r);
+    await vi.waitFor(() => expect(entered).toBeGreaterThan(before));
+    await agent.post('/api/firefly/sync').expect(409, { error: 'busy' });
+    release();
+    await first;
   });
 });

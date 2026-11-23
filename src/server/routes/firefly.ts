@@ -7,7 +7,7 @@ import { FireflyError, listAssetAccounts } from '../services/firefly/client.js';
 import {
   connOf, connectionToApi, deleteConnection, getConnection, getLinkAccount, patchConnection, saveConnection, setLinkAccount,
 } from '../services/firefly/store.js';
-import { previewInitial, runInitial, syncUser } from '../services/firefly/sync.js';
+import { SyncBusyError, previewInitial, runInitial, syncUser } from '../services/firefly/sync.js';
 
 const idParam = z.coerce.number().int().positive();
 
@@ -19,6 +19,7 @@ function route(fn: (req: Parameters<RequestHandler>[0], res: Parameters<RequestH
     } catch (err) {
       if (err instanceof ZodError) res.status(400).json({ error: 'validation', issues: err.issues });
       else if (err instanceof NotFoundError) res.status(404).json({ error: 'not_found' });
+      else if (err instanceof SyncBusyError) res.status(409).json({ error: 'busy' });
       else if (err instanceof FireflyError) res.status(502).json({ error: 'firefly', message: err.code });
       else next(err);
     }

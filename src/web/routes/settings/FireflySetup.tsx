@@ -29,6 +29,7 @@ const codeText = (code: string | null | undefined) => (code && CODES.includes(co
 /** What to tell the user when a Firefly request failed. */
 function failure(e: unknown): string {
   if (e instanceof ApiError && e.code === 'firefly') return codeText(e.detail);
+  if (e instanceof ApiError && e.code === 'busy') return t('firefly.busy');
   if (e instanceof ApiError && e.code === 'validation') return t('firefly.error.address');
   return t('error.generic');
 }

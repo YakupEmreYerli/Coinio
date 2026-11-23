@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm';
 import { describe, expect, it, vi } from 'vitest';
-import { fireflyConnections, fireflyLinks, subscriptions, users } from '../src/server/db/schema.js';
+import { fireflyConnections, fireflyLinks, payments, subscriptions, users } from '../src/server/db/schema.js';
 import type { ServiceCtx } from '../src/server/services/context.js';
-import { listBills, type FfBill } from '../src/server/services/firefly/client.js';
+import { FireflyError, listBills, type FfBill, type FfJournal } from '../src/server/services/firefly/client.js';
 import { hashMapped, mappedFromBill, mappedFromSubscription } from '../src/server/services/firefly/mapping.js';
-import { FIREFLY_SYNC_EVERY_MS, previewInitial, runFireflySync, runInitial, syncDefinitions } from '../src/server/services/firefly/sync.js';
+import { FIREFLY_SYNC_EVERY_MS, SyncBusyError, previewInitial, runFireflySync, runInitial, syncDefinitions, syncUser } from '../src/server/services/firefly/sync.js';
 import { deleteSubscription, insertSubscription, markPaid, updateSubscription } from '../src/server/services/subscriptions.js';
 import { fakeFirefly } from './fixtures/fakeFirefly.js';
 import { makeTestApp } from './helpers.js';
@@ -17,9 +17,9 @@ const bill = (id: string, over: Partial<FfBill> = {}): FfBill => ({
   ...over,
 });
 
-function setup(bills: FfBill[] = [], connOver: Partial<typeof fireflyConnections.$inferInsert> = {}) {
+function setup(bills: FfBill[] = [], connOver: Partial<typeof fireflyConnections.$inferInsert> = {}, journals: FfJournal[] = []) {
   const t = makeTestApp();
-  const fake = fakeFirefly({ token: 'tok', bills }, () => t.clock.now);
+  const fake = fakeFirefly({ token: 'tok', bills, journals, accounts: [{ id: '1', name: 'Checking', currencyCode: 'EUR' }] }, () => t.clock.now);
   const ctx: ServiceCtx = { db: t.db, config: t.config, fetch: fake.fetch, now: () => t.clock.now };
   const now = t.clock.now.toISOString();
   const user = t.db.insert(users).values({ username: 'y', passwordHash: 'x', createdAt: now }).returning().get();
@@ -259,17 +259,15 @@ describe('first sync and scheduler', () => {
     expect(s.db.select().from(fireflyConnections).get()).toMatchObject({ initialSyncDone: true, lastSyncAt: s.clock.now.toISOString(), lastError: null });
   });
 
-  it('initial sync with unmatch keeps both records apart', async () => {
+  it('unchecking a matched pair leaves both out of syncing', async () => {
     const s = setup([bill('7')], { initialSyncDone: false });
     const sub = s.addSub();
     const res = await runInitial(s.ctx, s.user.id, { unmatch: [sub.id], exclude: none });
-    expect(res.created).toEqual({ coinio: 1, firefly: 1 });
-    const rows = s.db.select().from(subscriptions).all();
-    expect(rows).toHaveLength(2);
-    expect(s.links()).toMatchObject([
-      { subscriptionId: sub.id, billId: '8' },
-      { subscriptionId: rows[1]!.id, billId: '7' },
-    ]);
+    expect(res.created).toEqual({ coinio: 0, firefly: 0 });
+    expect(s.fake.calls.filter((c) => c.method === 'POST' && c.path === '/api/v1/bills')).toEqual([]);
+    expect(s.db.select().from(subscriptions).all()).toHaveLength(1);
+    expect(s.links()).toEqual([]);
+    expect(s.db.select().from(fireflyConnections).get()!.excluded).toEqual({ subscriptions: [sub.id], bills: ['7'] });
   });
 
   it('initial sync with exclude creates nothing for excluded rows', async () => {
@@ -309,5 +307,37 @@ describe('first sync and scheduler', () => {
     const s = setup([bill('7')], { initialSyncDone: false });
     await runFireflySync(s.ctx);
     expect(s.fake.calls).toHaveLength(0);
+  });
+});
+
+describe('syncUser', () => {
+  it('a journal dated 20 days before the last sync is pulled', async () => {
+    const s = setup([bill('7')], { lastSyncAt: '2026-11-18T00:00:00.000Z' }, [
+      { groupId: 'g5', journalId: '5', date: '2026-10-29T00:00:00+01:00', amount: '25.00', currencyCode: 'EUR', foreignAmount: null, foreignCurrencyCode: null, billId: '7' },
+    ]);
+    const sub = s.addSub({ nextDue: '2026-10-30' });
+    s.link(sub.id, '7');
+    const res = await syncUser(s.ctx, s.user.id);
+    expect(res.paymentsIn).toBe(1);
+    expect(s.db.select().from(payments).all()).toMatchObject([{ dueDate: '2026-10-30', source: 'firefly' }]);
+  });
+
+  it('a second sync for the same user is refused while one is running', async () => {
+    const s = setup([bill('7')]);
+    const sub = s.addSub();
+    s.link(sub.id, '7');
+    markPaid(s.ctx, s.user.id, sub.id, { now: s.clock.now });
+    const [first, second] = await Promise.allSettled([syncUser(s.ctx, s.user.id), syncUser(s.ctx, s.user.id)]);
+    expect(first.status).toBe('fulfilled');
+    expect(second.status).toBe('rejected');
+    expect((second as PromiseRejectedResult).reason).toBeInstanceOf(SyncBusyError);
+    expect(s.fake.calls.filter((c) => c.method === 'POST' && c.path === '/api/v1/transactions')).toHaveLength(1);
+  });
+
+  it('the lock is released after a failed sync', async () => {
+    const s = setup([bill('7')]);
+    s.fake.failNext(500);
+    await expect(syncUser(s.ctx, s.user.id)).rejects.toBeInstanceOf(FireflyError);
+    await expect(syncUser(s.ctx, s.user.id)).resolves.toBeDefined();
   });
 });

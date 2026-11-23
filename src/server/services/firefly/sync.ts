@@ -149,7 +149,7 @@ export async function syncPayments(ctx: ServiceCtx, userId: number, conn: Firefl
   const known = new Set(payLinks().map((pl) => pl.journalId));
   for (const link of links) {
     if (link.subscriptionId === null) continue;
-    for (const j of await billJournals(ctx, conn, link.billId, since, today)) {
+    for (const j of (await billJournals(ctx, conn, link.billId, since, today)).filter((j) => j.billId === link.billId)) {
       const sub = subOf(link.subscriptionId);
       if (!sub || known.has(j.journalId)) continue;
       const day = j.date.slice(0, 10);
@@ -178,7 +178,16 @@ export async function syncPayments(ctx: ServiceCtx, userId: number, conn: Firefl
       .where(and(eq(payments.subscriptionId, sub.id), eq(payments.status, 'paid'), gte(payments.paidAt, connection.createdAt)))
       .orderBy(payments.dueDate).all().filter((p) => !pushed.has(p.id));
     for (const p of paid) {
-      const journals = await billJournals(ctx, conn, link.billId, addDays(p.dueDate, -7), addDays(p.dueDate, 7));
+      const journals = (await billJournals(ctx, conn, link.billId, addDays(p.dueDate, -7), addDays(p.dueDate, 7)))
+        .filter((j) => j.billId === link.billId);
+      // A manual payment undone and paid again is a new row; it goes back to its released transaction.
+      const released = payLinks().find((pl) =>
+        pl.linkId === link.id && pl.paymentId === null && pl.state === 'released' &&
+        journals.some((j) => j.journalId === pl.journalId && Math.abs(daysBetween(j.date.slice(0, 10), p.dueDate)) <= 7));
+      if (released) {
+        ctx.db.update(fireflyPaymentLinks).set({ paymentId: p.id, state: 'linked' }).where(eq(fireflyPaymentLinks.id, released.id)).run();
+        continue;
+      }
       let j = journals.find((x) => !known.has(x.journalId));
       if (!j) {
         const accountId = link.assetAccountId || connection.assetAccountId;
@@ -248,30 +257,54 @@ export async function previewInitial(ctx: ServiceCtx, userId: number): Promise<P
 export async function runInitial(
   ctx: ServiceCtx, userId: number, choice: { unmatch: number[]; exclude: { subscriptions: number[]; bills: string[] } },
 ): Promise<SyncResult> {
-  const { excluded } = requireConnection(ctx, userId);
-  const { unmatch, exclude } = choice;
-  const pairs = (await previewInitial(ctx, userId)).matched
-    .filter((m) => !unmatch.includes(m.subscriptionId) && !exclude.subscriptions.includes(m.subscriptionId) && !exclude.bills.includes(m.billId));
-  ctx.db.transaction((tx) => {
-    for (const m of pairs) tx.insert(fireflyLinks).values({ userId, subscriptionId: m.subscriptionId, billId: m.billId, coinioHash: '', fireflyHash: '' }).run();
-    tx.update(fireflyConnections).set({
-      initialSyncDone: true, updatedAt: ctx.now().toISOString(),
-      excluded: {
-        subscriptions: [...new Set([...excluded.subscriptions, ...exclude.subscriptions])],
-        bills: [...new Set([...excluded.bills, ...exclude.bills])],
-      },
-    }).where(eq(fireflyConnections.userId, userId)).run();
+  return locked(userId, async () => {
+    const { excluded } = requireConnection(ctx, userId);
+    const { unmatch, exclude } = choice;
+    const matched = (await previewInitial(ctx, userId)).matched;
+    const pairs = matched
+      .filter((m) => !unmatch.includes(m.subscriptionId) && !exclude.subscriptions.includes(m.subscriptionId) && !exclude.bills.includes(m.billId));
+    const unmatched = matched.filter((m) => unmatch.includes(m.subscriptionId));
+    ctx.db.transaction((tx) => {
+      for (const m of pairs) tx.insert(fireflyLinks).values({ userId, subscriptionId: m.subscriptionId, billId: m.billId, coinioHash: '', fireflyHash: '' }).run();
+      tx.update(fireflyConnections).set({
+        initialSyncDone: true, updatedAt: ctx.now().toISOString(),
+        excluded: {
+          subscriptions: [...new Set([...excluded.subscriptions, ...exclude.subscriptions, ...unmatched.map((m) => m.subscriptionId)])],
+          bills: [...new Set([...excluded.bills, ...exclude.bills, ...unmatched.map((m) => m.billId)])],
+        },
+      }).where(eq(fireflyConnections.userId, userId)).run();
+    });
+    return syncOne(ctx, userId);
   });
-  return syncUser(ctx, userId);
+}
+
+/** A second sync for a user already syncing is refused, not queued. */
+export class SyncBusyError extends Error {}
+
+const syncing = new Set<number>();
+
+async function locked<T>(userId: number, fn: () => Promise<T>): Promise<T> {
+  if (syncing.has(userId)) throw new SyncBusyError();
+  syncing.add(userId);
+  try {
+    return await fn();
+  } finally {
+    syncing.delete(userId);
+  }
 }
 
 /** One full run for a user; the outcome is recorded on the connection and errors are rethrown. */
 export async function syncUser(ctx: ServiceCtx, userId: number): Promise<SyncResult> {
+  return locked(userId, () => syncOne(ctx, userId));
+}
+
+async function syncOne(ctx: ServiceCtx, userId: number): Promise<SyncResult> {
   const connection = requireConnection(ctx, userId);
   const conn = connOf(connection);
   const record = (set: Partial<typeof fireflyConnections.$inferInsert>) =>
     ctx.db.update(fireflyConnections).set({ lastSyncAt: ctx.now().toISOString(), ...set }).where(eq(fireflyConnections.userId, userId)).run();
-  let since = connection.lastSyncAt?.slice(0, 10);
+  // Backdated transactions reach Firefly late; look a month further back than the last run (first run: a year).
+  let since = connection.lastSyncAt ? addDays(connection.lastSyncAt.slice(0, 10), -30) : undefined;
   if (!since) {
     const d = new Date(`${todayIn(getSettings(ctx, userId).timezone, ctx.now())}T00:00:00Z`);
     d.setUTCFullYear(d.getUTCFullYear() - 1);
@@ -286,7 +319,7 @@ export async function syncUser(ctx: ServiceCtx, userId: number): Promise<SyncRes
     if (err instanceof FireflyError) record({ lastError: err.code, ...(err.code === 'unauthorized' && { enabled: false }) });
     else {
       record({ lastError: 'internal' });
-      console.error(`firefly sync failed for user ${userId}:`, err);
+      console.error('firefly sync failed for user', userId, err instanceof Error ? err.message : String(err));
     }
     throw err;
   }
@@ -296,7 +329,7 @@ export async function syncUser(ctx: ServiceCtx, userId: number): Promise<SyncRes
 export async function runFireflySync(ctx: ServiceCtx): Promise<void> {
   const now = ctx.now().getTime();
   for (const c of ctx.db.select().from(fireflyConnections).all()) {
-    if (!c.enabled || !c.initialSyncDone || (c.lastSyncAt && now - Date.parse(c.lastSyncAt) < FIREFLY_SYNC_EVERY_MS)) continue;
+    if (!c.enabled || !c.initialSyncDone || syncing.has(c.userId) || (c.lastSyncAt && now - Date.parse(c.lastSyncAt) < FIREFLY_SYNC_EVERY_MS)) continue;
     // Failures are already recorded on the connection; one user's error never stops the others.
     await syncUser(ctx, c.userId).catch(() => {});
   }

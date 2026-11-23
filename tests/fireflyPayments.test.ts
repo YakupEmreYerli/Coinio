@@ -193,4 +193,42 @@ describe('syncPayments', () => {
     expect(s.posts()).toHaveLength(0);
     expect(s.payLinks()).toEqual([]);
   });
+
+  it('a manual payment undone and paid again re-links the same Firefly transaction', async () => {
+    const s = setup();
+    const p = markPaid(s.ctx, s.user.id, s.sub.id, { paidAt: '2026-11-10T00:00:00.000Z', now: s.clock.now });
+    await s.run();
+    expect(s.posts()).toHaveLength(1);
+    undoPayment(s.ctx, s.user.id, p.id);
+    await s.run();
+    expect(s.payLinks()).toEqual([expect.objectContaining({ paymentId: null, state: 'released' })]);
+    const again = markPaid(s.ctx, s.user.id, s.sub.id, { dueDate: '2026-11-09', now: s.clock.now });
+    expect(again.id).not.toBe(p.id);
+    const res = await s.run();
+    expect(res).toEqual({ paymentsIn: 0, paymentsOut: 0, warning: null });
+    expect(s.payLinks()).toEqual([expect.objectContaining({ paymentId: again.id, journalId: s.fake.journals[0]!.journalId, state: 'linked' })]);
+    expect(s.posts()).toHaveLength(1);
+  });
+
+  it('a split not attached to the bill marks nothing paid', async () => {
+    const s = setup({
+      journals: [journal('5', '2026-11-10'), journal('6', '2026-11-18', { groupId: 'g5', billId: null })],
+      sub: { cycle: 'weekly', nextDue: '2026-11-11' },
+    });
+    const res = await s.run();
+    expect(res.paymentsIn).toBe(1);
+    expect(s.pays()).toEqual([expect.objectContaining({ dueDate: '2026-11-11' })]);
+    expect(s.payLinks()).toEqual([expect.objectContaining({ journalId: '5' })]);
+  });
+
+  it('outbound ignores a split that is not attached to the bill', async () => {
+    const s = setup({ journals: [journal('5', '2026-11-12'), journal('6', '2026-11-18', { groupId: 'g5', billId: null })] });
+    const p1 = markPaid(s.ctx, s.user.id, s.sub.id, { dueDate: '2026-11-11', now: s.clock.now });
+    s.db.insert(fireflyPaymentLinks).values({ userId: s.user.id, linkId: s.link.id, paymentId: p1.id, journalId: '5', groupId: 'g5' }).run();
+    const p2 = markPaid(s.ctx, s.user.id, s.sub.id, { dueDate: '2026-11-18', now: s.clock.now });
+    const res = await s.run();
+    expect(res.paymentsOut).toBe(1);
+    expect(s.posts()).toHaveLength(1);
+    expect(s.payLinks()).toContainEqual(expect.objectContaining({ paymentId: p2.id }));
+  });
 });
