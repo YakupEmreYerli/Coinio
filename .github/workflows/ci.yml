@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v4
       # shellcheck is preinstalled on GitHub's Ubuntu runners.
       - name: shellcheck
-        run: shellcheck --shell=sh site/install.sh docker-entrypoint.sh
+        run: shellcheck --shell=sh website/public/install.sh docker-entrypoint.sh
       - uses: actions/setup-node@v4
         with:
           node-version: 22

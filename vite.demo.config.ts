@@ -22,7 +22,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), themeFromQuery],
   define: { 'import.meta.env.VITE_DEMO': JSON.stringify('1') },
   publicDir: 'dist/demo-public',
-  build: { outDir: 'site/demo', emptyOutDir: true },
+  build: { outDir: 'website/public/demo', emptyOutDir: true },
   server: { port: 4667, strictPort: true },
   preview: { port: 4668, strictPort: true },
 });
