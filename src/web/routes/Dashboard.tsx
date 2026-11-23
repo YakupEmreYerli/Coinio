@@ -1,6 +1,7 @@
 import { Fragment, type ReactNode } from 'react';
 import { CardFrame } from '../dashboard/CardFrame';
 import { HtmlCard } from '../dashboard/cards/HtmlCard';
+import { FamilyScopeBar } from '../components/FamilyScopeBar';
 import { SampleBanner } from './Welcome';
 import { DASHBOARD_CARDS } from '../dashboard/registry';
 import { t } from '../i18n';
@@ -54,6 +55,7 @@ export function Dashboard() {
   );
   return (
     <div className="flex flex-col gap-[var(--gap)] px-4 pt-2 pb-12 md:px-9">
+      <FamilyScopeBar />
       <SampleBanner />
       {blocks.map((b, i) =>
         b.full ? (

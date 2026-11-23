@@ -6,9 +6,11 @@ import { addMessages, resolveLocale, setLocale, t, useLocale } from './i18n';
 import { SlicedMark } from './brand/SlicedMark';
 import { AppShell } from './layout/AppShell';
 import { AppearanceRoot } from './lib/AppearanceRoot';
+import { FamilyScopeProvider } from './lib/familyScope';
 import { useSettings } from './lib/hooks';
 import { Calendar } from './routes/Calendar';
 import { Dashboard } from './routes/Dashboard';
+import { InviteAccept } from './routes/InviteAccept';
 import { Login } from './routes/Login';
 import { Payments } from './routes/Payments';
 import { Reports } from './routes/Reports';
@@ -37,25 +39,34 @@ function SignedIn({ user }: { user: { id: number; username: string } }) {
   const navigate = useNavigate();
   // Until we know whether this is a first run, show the loading mark: drawing the app first flashes it before the welcome.
   if (onboardingQuery.isPending) return <Loading />;
-  if (onboarding && !onboarding.completed && location.pathname !== '/welcome' && !location.pathname.startsWith('/settings/import')) {
+  if (
+    onboarding &&
+    !onboarding.completed &&
+    location.pathname !== '/welcome' &&
+    !location.pathname.startsWith('/settings/import') &&
+    !location.pathname.startsWith('/invite/')
+  ) {
     return <Navigate to="/welcome" replace />;
   }
   return (
-    <AppearanceRoot>
-      <Routes>
-        <Route path="/welcome" element={<Welcome onDone={() => navigate('/', { replace: true })} />} />
-        <Route element={<AppShell user={user} onLogout={() => window.location.assign('/login')} />}>
-          {ext.routes?.map((r) => <Route key={r.path} path={r.path} element={<r.Component />} />)}
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/subscriptions/:id?" element={<Subscriptions />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/settings/:section?" element={<SettingsLayout />} />
-          <Route path="/payments" element={<Payments />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </AppearanceRoot>
+    <FamilyScopeProvider>
+      <AppearanceRoot>
+        <Routes>
+          <Route path="/welcome" element={<Welcome onDone={() => navigate('/', { replace: true })} />} />
+          <Route path="/invite/:token" element={<InviteAccept user={user} />} />
+          <Route element={<AppShell user={user} onLogout={() => window.location.assign('/login')} />}>
+            {ext.routes?.map((r) => <Route key={r.path} path={r.path} element={<r.Component />} />)}
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/subscriptions/:id?" element={<Subscriptions />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/settings/:section?" element={<SettingsLayout />} />
+            <Route path="/payments" element={<Payments />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </AppearanceRoot>
+    </FamilyScopeProvider>
   );
 }
 
@@ -81,6 +92,7 @@ export function App() {
       ) : (
         <Routes>
           {ext.publicRoutes?.map((r) => <Route key={r.path} path={r.path} element={<r.Component />} />)}
+          <Route path="/invite/:token" element={<InviteAccept user={null} />} />
           <Route
             path="/setup"
             element={auth.setupRequired ? ext.SetupScreen ? <ext.SetupScreen /> : <Setup onDone={() => location.assign('/')} /> : <Navigate to="/login" replace />}

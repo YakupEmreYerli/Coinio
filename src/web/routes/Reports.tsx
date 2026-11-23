@@ -1,9 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
 import { BarChart3 } from 'lucide-react';
 import { useMemo } from 'react';
-import { api } from '../api';
 import { fmt } from '../calendar/dates';
 import { EmptyState } from '../components/EmptyState';
+import { FamilyScopeBar } from '../components/FamilyScopeBar';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import { Logo } from '../components/Logo';
 import { Money } from '../components/Money';
@@ -14,23 +13,15 @@ import { t, useLocale } from '../i18n';
 import { useSubscriptionForm } from '../layout/subscriptionForm';
 import { useCategoryColor } from '../lib/categoryColor';
 import { cn } from '../lib/cn';
-import { useSubscriptions } from '../lib/hooks';
+import { useReports, useSubscriptions, type Report } from '../lib/hooks';
 
-export type Report = {
-  base: string;
-  months: { month: string; paidMinor: number; projectedMinor: number }[];
-  byCategory: { category: string | null; monthlyMinor: number }[];
-  top: { subscriptionId: number; name: string; monthlyMinor: number }[];
-  foreignShare: { minor: number; percent: number };
-  unconvertible?: number[];
-  ratesStale?: boolean;
-};
+export type { Report };
 
 const CURRENT = 12; // index of the current month: 12 past, current, 12 ahead
 
 export function Reports() {
   const form = useSubscriptionForm();
-  const report = useQuery({ queryKey: ['reports'], queryFn: () => api.get<Report>('/reports') }).data;
+  const report = useReports().data;
 
   if (!report)
     return (
@@ -79,6 +70,7 @@ export function Reports() {
             <Categories report={report} />
             <Top report={report} />
           </div>
+          {report.byMember && report.byMember.length > 0 && <Members report={report} />}
         </div>
       )}
     </div>
@@ -87,9 +79,12 @@ export function Reports() {
 
 function Title() {
   return (
-    <div className="pt-2 pb-5">
-      <h1 className="font-display text-[30px] leading-tight">{t('nav.reports')}</h1>
-      <p className="mt-1 text-[13px] text-text-3">{t('reports.intro')}</p>
+    <div className="flex flex-wrap items-end justify-between gap-3 pt-2 pb-5">
+      <div>
+        <h1 className="font-display text-[30px] leading-tight">{t('nav.reports')}</h1>
+        <p className="mt-1 text-[13px] text-text-3">{t('reports.intro')}</p>
+      </div>
+      <FamilyScopeBar />
     </div>
   );
 }
@@ -208,6 +203,34 @@ function Top({ report }: { report: Report }) {
                 {s && s.currency !== report.base && <span className="text-[12px] text-text-3">{s.currency}</span>}
               </span>
               <Money minor={x.monthlyMinor} currency={report.base} />
+            </li>
+          );
+        })}
+      </ul>
+    </Card>
+  );
+}
+
+function Members({ report }: { report: Report }) {
+  const list = report.byMember ?? [];
+  const total = list.reduce((s, m) => s + m.monthlyMinor, 0) || 1;
+  return (
+    <Card>
+      <CardHeader title={t('reports.byMember')} sub={t('reports.perMonth')} />
+      <ul className="flex flex-col gap-3 px-5 pb-5">
+        {list.map((m) => {
+          const pct = (m.monthlyMinor / total) * 100;
+          return (
+            <li key={m.memberId} className="flex flex-col gap-1.5">
+              <span className="flex items-center gap-2 text-[14px]">
+                <span className="size-2 rounded-full" style={{ background: m.color ?? '#6366f1' }} />
+                <span className="min-w-0 flex-1 truncate">{m.name}</span>
+                <span className="num text-[12px] text-text-3">{Math.round(pct)}%</span>
+                <Money minor={m.monthlyMinor} currency={report.base} size="sm" />
+              </span>
+              <span className="h-1.5 overflow-hidden rounded-full bg-sunk">
+                <span className="block h-full rounded-full" style={{ width: `${pct}%`, background: m.color ?? '#6366f1' }} />
+              </span>
             </li>
           );
         })}

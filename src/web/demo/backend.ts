@@ -280,6 +280,12 @@ export class DemoBackend {
       case 'POST /notifications':
       case 'PATCH /notifications':
         throw unavailable();
+      case 'GET /family':
+        return { household: null, members: [], invites: [], allowInviteSignup: false };
+      case 'POST /family':
+      case 'PATCH /family':
+      case 'DELETE /family':
+        throw unavailable();
       case 'GET /appearance':
         return st.appearance;
       case 'PUT /appearance':

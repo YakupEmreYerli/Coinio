@@ -10,7 +10,7 @@ import { t, useLocale } from '../i18n';
 import { useSubscriptionForm } from '../layout/subscriptionForm';
 import { cycleLabel } from '../lib/cycle';
 import { shortDate } from '../lib/dates';
-import { useDeleteSubscription, useUpdateSubscription } from '../lib/hooks';
+import { useDeleteSubscription, useFamily, useUpdateSubscription } from '../lib/hooks';
 import type { ApiSubscription } from '../lib/types';
 import { PaymentHistory } from './PaymentHistory';
 
@@ -28,6 +28,7 @@ export function SubscriptionDetail({ sub, base, onClose }: { sub: ApiSubscriptio
   const form = useSubscriptionForm();
   const update = useUpdateSubscription();
   const del = useDeleteSubscription();
+  const members = new Map((useFamily().data?.members ?? []).map((m) => [m.id, m.name]));
   const [confirm, setConfirm] = useState(false);
   return (
     <Sheet open={!!sub} onOpenChange={(v) => !v && onClose()}>
@@ -41,21 +42,40 @@ export function SubscriptionDetail({ sub, base, onClose }: { sub: ApiSubscriptio
               {cycleLabel(sub)}
               {!sub.active && ` · ${t('subs.paused')}`}
             </span>
-            <div className="mt-2 flex gap-2">
-              <Button size="sm" onClick={() => form.openEdit(sub.id)}>
-                <Pencil />
-                {t('upcoming.edit')}
-              </Button>
-              <Button size="sm" onClick={() => update.mutate({ id: sub.id, patch: { active: !sub.active } })}>
-                {sub.active ? <Pause /> : <Play />}
-                {sub.active ? t('upcoming.pause') : t('subs.resume')}
-              </Button>
-              <Button size="sm" variant="ghost" className="text-neg hover:text-neg" onClick={() => setConfirm(true)}>
-                <Trash2 />
-                {t('common.delete')}
-              </Button>
-            </div>
+            {sub.canEdit !== false && (
+              <div className="mt-2 flex gap-2">
+                <Button size="sm" onClick={() => form.openEdit(sub.id)}>
+                  <Pencil />
+                  {t('upcoming.edit')}
+                </Button>
+                <Button size="sm" onClick={() => update.mutate({ id: sub.id, patch: { active: !sub.active } })}>
+                  {sub.active ? <Pause /> : <Play />}
+                  {sub.active ? t('upcoming.pause') : t('subs.resume')}
+                </Button>
+                <Button size="sm" variant="ghost" className="text-neg hover:text-neg" onClick={() => setConfirm(true)}>
+                  <Trash2 />
+                  {t('common.delete')}
+                </Button>
+              </div>
+            )}
           </div>
+          {sub.householdId && (
+            <>
+              <Field label={t('family.paidBy')}>
+                {(sub.paidByMemberId && members.get(sub.paidByMemberId)) || t('family.sharedBadge')}
+              </Field>
+              {sub.myShareMinor !== undefined && (
+                <Field label={t('family.myShare')}>
+                  <Money minor={sub.myShareMinor} currency={sub.currency} size="sm" cents="inline" />
+                </Field>
+              )}
+              {sub.splits && sub.splits.length > 0 && (
+                <Field label={t('family.splitAmong')}>
+                  {sub.splits.map((sp) => members.get(sp.memberId) ?? `#${sp.memberId}`).join(', ')}
+                </Field>
+              )}
+            </>
+          )}
           <Field label={t('form.nextDue')}>{sub.active ? shortDate(sub.nextDue, locale) : '—'}</Field>
           <Field label={t('form.autoPay')}>{sub.autoPay ? t('common.yes') : t('common.no')}</Field>
           {sub.paymentMethod && <Field label={t('form.method')}>{sub.paymentMethod}</Field>}

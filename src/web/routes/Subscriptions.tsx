@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { EmptyState } from '../components/EmptyState';
+import { FamilyScopeBar } from '../components/FamilyScopeBar';
 import { RowsSkeleton } from '../components/ui/Skeleton';
 import { Logo } from '../components/Logo';
 import { Money } from '../components/Money';
@@ -16,7 +17,8 @@ import { useSubscriptionForm } from '../layout/subscriptionForm';
 import { cn } from '../lib/cn';
 import { cycleLabel } from '../lib/cycle';
 import { shortDate } from '../lib/dates';
-import { useDeleteSubscription, useSettings, useSubscriptions, useSummary, useUpdateSubscription } from '../lib/hooks';
+import { useFamilyScope } from '../lib/familyScope';
+import { useDeleteSubscription, useFamily, useSettings, useSubscriptions, useSummary, useUpdateSubscription } from '../lib/hooks';
 import { monthlyCost } from '../lib/money';
 import { SubscriptionDetail } from '../subscriptions/SubscriptionDetail';
 
@@ -29,6 +31,8 @@ export function Subscriptions() {
   const [params, setParams] = useSearchParams();
   const form = useSubscriptionForm();
   const subs = useSubscriptions();
+  const family = useFamily().data;
+  const { scope, memberId } = useFamilyScope();
   const summary = useSummary().data;
   const settings = useSettings().data;
   const base = summary?.base ?? settings?.baseCurrency ?? 'USD';
@@ -37,6 +41,10 @@ export function Subscriptions() {
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [confirmBulk, setConfirmBulk] = useState(false);
   const [newCategory, setNewCategory] = useState('');
+  const memberNames = useMemo(
+    () => new Map((family?.members ?? []).map((m) => [m.id, m.name])),
+    [family?.members],
+  );
 
   const q = params.get('q') ?? '';
   const category = params.get('category') ?? ALL;
@@ -67,11 +75,23 @@ export function Subscriptions() {
             (mode === ALL || (mode === 'auto') === s.autoPay) &&
             (status === ALL || (status === 'active') === s.active),
         )
-        .map((s) => ({ s, monthly: monthlyCost(s, base, summary?.rates) }))
+        .map((s) => {
+          const effectiveMinor =
+            s.householdId && scope === 'mine' && s.myShareMinor !== undefined
+              ? s.myShareMinor
+              : s.householdId && scope === 'family' && memberId !== null && s.splits
+                ? (s.splits.find((sp) => sp.memberId === memberId)?.effectiveMinor ?? 0)
+                : s.amountMinor;
+          return {
+            s,
+            effectiveMinor,
+            monthly: monthlyCost({ ...s, amountMinor: effectiveMinor }, base, summary?.rates),
+          };
+        })
         .sort((a, b) =>
           sort === 'cost' ? (b.monthly ?? -1) - (a.monthly ?? -1) : sort === 'next' ? a.s.nextDue.localeCompare(b.s.nextDue) : a.s.name.localeCompare(b.s.name, locale),
         ),
-    [all, needle, category, method, mode, status, sort, base, summary?.rates, locale],
+    [all, needle, category, method, mode, status, sort, base, summary?.rates, locale, scope, memberId],
   );
   const toggle = (sid: number, on: boolean) =>
     setSelected((cur) => {
@@ -88,11 +108,12 @@ export function Subscriptions() {
 
   return (
     <div className="flex flex-col gap-5 px-4 pt-2 pb-12 md:px-9">
-      <div className="flex items-end gap-3">
+      <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="font-display text-[26px] leading-tight md:text-[30px]">{t('nav.subscriptions')}</h1>
           <p className="mt-0.5 text-text-2">{t('subs.count', { n: all.filter((s) => s.active).length, paused: all.filter((s) => !s.active).length })}</p>
         </div>
+        <FamilyScopeBar />
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
@@ -187,8 +208,14 @@ export function Subscriptions() {
             <div className="hidden h-9 grid-cols-[40px_minmax(0,1.6fr)_1fr_1fr_110px_150px] items-center gap-3 border-b border-line bg-sunk px-5 text-[12.5px] text-text-3 md:grid">
               <Checkbox
                 aria-label={t('subs.selectAll')}
-                checked={rows.length > 0 && rows.every((r) => selected.has(r.s.id)) ? true : selected.size ? 'indeterminate' : false}
-                onChange={(on) => setSelected(on ? new Set(rows.map((r) => r.s.id)) : new Set())}
+                checked={
+                  rows.some((r) => r.s.canEdit !== false) && rows.filter((r) => r.s.canEdit !== false).every((r) => selected.has(r.s.id))
+                    ? true
+                    : selected.size
+                      ? 'indeterminate'
+                      : false
+                }
+                onChange={(on) => setSelected(on ? new Set(rows.filter((r) => r.s.canEdit !== false).map((r) => r.s.id)) : new Set())}
               />
               <span>{t('form.name')}</span>
               <span>{t('form.category')}</span>
@@ -197,7 +224,7 @@ export function Subscriptions() {
               <span className="text-right">{t('subs.monthlyCost')}</span>
             </div>
             <ul>
-              {rows.map(({ s, monthly }) => (
+              {rows.map(({ s, effectiveMinor, monthly }) => (
                 <li
                   key={s.id}
                   data-testid="sub-row"
@@ -208,7 +235,11 @@ export function Subscriptions() {
                   onClick={() => navigate(`/subscriptions/${s.id}${location.search}`)}
                 >
                   <span onClick={(e) => e.stopPropagation()} className="flex">
-                    <Checkbox aria-label={t('subs.select', { name: s.name })} checked={selected.has(s.id)} onChange={(on) => toggle(s.id, on)} />
+                    {s.canEdit !== false ? (
+                      <Checkbox aria-label={t('subs.select', { name: s.name })} checked={selected.has(s.id)} onChange={(on) => toggle(s.id, on)} />
+                    ) : (
+                      <span className="size-4" aria-hidden />
+                    )}
                   </span>
                   <span className="md:hidden">
                     <Logo sub={s} />
@@ -222,7 +253,14 @@ export function Subscriptions() {
                         {s.name}
                       </b>
                       <span className="block truncate text-[12.5px] text-text-3">
-                        {[s.paymentMethod, s.autoPay ? t('upcoming.auto') : t('all.manual'), !s.active && t('subs.paused')].filter(Boolean).join(' · ')}
+                        {[
+                          s.paymentMethod,
+                          s.autoPay ? t('upcoming.auto') : t('all.manual'),
+                          s.householdId ? (s.paidByMemberId && memberNames.get(s.paidByMemberId) ? t('family.sharedBy', { name: memberNames.get(s.paidByMemberId)! }) : t('family.sharedBadge')) : null,
+                          !s.active && t('subs.paused'),
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
                         <span className="md:hidden"> · {shortDate(s.nextDue, locale)}</span>
                       </span>
                     </div>
@@ -231,8 +269,10 @@ export function Subscriptions() {
                   <span className="hidden text-sm text-text-2 md:block">{cycleLabel(s)}</span>
                   <span className="hidden text-sm md:block">{s.active ? shortDate(s.nextDue, locale) : '—'}</span>
                   <span className="text-right">
-                    {monthly === null ? <Money minor={s.amountMinor} currency={s.currency} size="md" /> : <Money minor={monthly} currency={base} size="md" approx={s.currency !== base} className="font-medium" />}
-                    {s.currency !== base && <Money minor={s.amountMinor} currency={s.currency} size="sm" cents="inline" className="block text-text-3 max-md:hidden" />}
+                    {monthly === null ? <Money minor={effectiveMinor} currency={s.currency} size="md" /> : <Money minor={monthly} currency={base} size="md" approx={s.currency !== base} className="font-medium" />}
+                    {(s.currency !== base || effectiveMinor !== s.amountMinor) && (
+                      <Money minor={effectiveMinor} currency={s.currency} size="sm" cents="inline" className="block text-text-3 max-md:hidden" />
+                    )}
                   </span>
                 </li>
               ))}

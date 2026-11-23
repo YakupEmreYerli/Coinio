@@ -19,6 +19,67 @@ export type { Settings };
 
 export type Cycle = 'weekly' | 'monthly' | 'yearly';
 
+export type FamilyScope = 'mine' | 'family';
+
+export type ApiSubscriptionSplit = {
+  memberId: number;
+  shareMinor: number | null;
+  effectiveMinor: number;
+};
+
+export type ApiHousehold = {
+  id: number;
+  name: string;
+  ownerUserId: number;
+  myMemberId: number;
+  myRole: 'owner' | 'member';
+  createdAt: string;
+};
+
+export type ApiHouseholdMember = {
+  id: number;
+  name: string;
+  color: string | null;
+  role: 'owner' | 'member';
+  linkedUserId: number | null;
+  linkedUsername: string | null;
+  isMe: boolean;
+  createdAt: string;
+};
+
+export type ApiHouseholdInvite = {
+  id: number;
+  memberId: number;
+  expiresAt: string;
+  createdAt: string;
+};
+
+export type ApiFamilyState = {
+  household: ApiHousehold | null;
+  members: ApiHouseholdMember[];
+  invites: ApiHouseholdInvite[];
+  allowInviteSignup: boolean;
+};
+
+export type ApiInvitePreview = {
+  valid: boolean;
+  expired: boolean;
+  used: boolean;
+  householdName: string | null;
+  memberName: string | null;
+  allowInviteSignup: boolean;
+  signedIn: boolean;
+  alreadyInHousehold: boolean;
+};
+
+export type ApiInviteCreated = {
+  id: number;
+  memberId: number;
+  token: string;
+  path: string;
+  expiresAt: string;
+};
+
 export type ApiSubscription = {
   id: number;
   name: string;
@@ -38,6 +99,11 @@ export type ApiSubscription = {
   reminderOffsets: number[] | null;
   trialEndsAt: string | null;
   active: boolean;
+  householdId?: number | null;
+  paidByMemberId?: number | null;
+  splits?: ApiSubscriptionSplit[];
+  myShareMinor?: number;
+  canEdit?: boolean;
   createdAt: string;
   updatedAt: string;
 };

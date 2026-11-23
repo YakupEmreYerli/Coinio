@@ -9,12 +9,14 @@ import { MonthGrid } from '../calendar/MonthGrid';
 import { projectMonth } from '../calendar/projection';
 import { dayTotal, defaultDay, monthSummary, type MonthSummary } from '../calendar/totals';
 import { EmptyState } from '../components/EmptyState';
+import { FamilyScopeBar } from '../components/FamilyScopeBar';
 import { Money } from '../components/Money';
 import { Button } from '../components/ui/Button';
 import { Sheet, SheetContent } from '../components/ui/Sheet';
 import { Skeleton } from '../components/ui/Skeleton';
 import { t, useLocale } from '../i18n';
 import { cn } from '../lib/cn';
+import { useFamilyScope } from '../lib/familyScope';
 import { usePayments, useSettings, useSubscriptions, useSummary } from '../lib/hooks';
 import { useIsMobile } from '../lib/useMediaQuery';
 import { useSubscriptionForm } from '../layout/subscriptionForm';
@@ -29,6 +31,7 @@ export function Calendar() {
   const settings = useSettings().data;
   const summary = useSummary().data;
   const subsQuery = useSubscriptions();
+  const { scope, memberId } = useFamilyScope();
 
   const today = todayIn(settings?.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone, new Date());
   const month = isMonth(params.get('month')) ? params.get('month')! : today.slice(0, 7);
@@ -36,11 +39,24 @@ export function Calendar() {
   const [picked, setPicked] = useState<string | null>(null);
   const [sheetDay, setSheetDay] = useState<string | null>(null);
 
-  const subs = useMemo(() => new Map((subsQuery.data ?? []).map((s) => [s.id, s])), [subsQuery.data]);
+  const scopedSubs = useMemo(
+    () =>
+      (subsQuery.data ?? []).map((s) => {
+        if (!s.householdId) return s;
+        if (scope === 'mine' && s.myShareMinor !== undefined) return { ...s, amountMinor: s.myShareMinor };
+        if (scope === 'family' && memberId !== null && s.splits) {
+          const sp = s.splits.find((x) => x.memberId === memberId);
+          return { ...s, amountMinor: sp?.effectiveMinor ?? 0 };
+        }
+        return s;
+      }),
+    [subsQuery.data, scope, memberId],
+  );
+  const subs = useMemo(() => new Map(scopedSubs.map((s) => [s.id, s])), [scopedSubs]);
   const base = summary?.base ?? settings?.baseCurrency ?? 'USD';
   const days = useMemo(
-    () => projectMonth(subsQuery.data ?? [], payments ?? [], month, today, { base, rates: summary?.rates ?? {} }),
-    [subsQuery.data, payments, month, today, base, summary?.rates],
+    () => projectMonth(scopedSubs, payments ?? [], month, today, { base, rates: summary?.rates ?? {} }),
+    [scopedSubs, payments, month, today, base, summary?.rates],
   );
   const totals = useMemo(() => monthSummary(days), [days]);
   const selected = picked?.startsWith(month) ? picked : defaultDay(month, today, days);
@@ -65,6 +81,7 @@ export function Calendar() {
             {fmt(`${month}-01`, locale, { month: 'long', year: 'numeric' })}
           </h1>
         </div>
+        <FamilyScopeBar className="ml-auto sm:ml-0" />
         <div className="ml-auto flex items-center gap-1.5">
           <Button size="sm" variant="secondary" onClick={goToday}>
             {t('calendar.today')}
