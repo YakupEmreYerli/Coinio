@@ -1,4 +1,5 @@
 import { api } from '../api';
+import { PasskeySignInButton } from '../components/PasskeySignInButton';
 import { t } from '../i18n';
 import { ext } from '@coinio/ext';
 import { AuthForm } from './AuthForm';
@@ -12,22 +13,29 @@ export function safeNext(raw: string | null): string {
 }
 
 export function Login() {
+  const next = safeNext(new URLSearchParams(location.search).get('next'));
   return (
     <AuthForm
       title={t('login.title')}
       intro={t('login.intro')}
       submitLabel={t('login.submit')}
       busyLabel={t('login.busy')}
+      usernameAutoComplete="username webauthn"
       belowPassword={
         <a href={RESET_DOCS} target="_blank" rel="noreferrer" className="-mt-2 self-start text-[13px] text-text-2 underline-offset-4 hover:text-text hover:underline">
           {t('login.forgot')}
         </a>
       }
-      after={ext.SignInExtras && <ext.SignInExtras />}
+      after={
+        <>
+          <PasskeySignInButton next={next} showDivider />
+          {ext.SignInExtras && <ext.SignInExtras />}
+        </>
+      }
       onSubmit={async (username, password) => {
         await api.post('/auth/login', { username, password });
         // Full load: the target may be a server-rendered page (/oauth/consent) and auth state must refresh.
-        location.assign(safeNext(new URLSearchParams(location.search).get('next')));
+        location.assign(next);
       }}
       errorMessage={(e) =>
         e.status === 429 ? t('login.error.tooMany') : e.status === 401 ? t('login.error.invalid') : t('error.generic')

@@ -6,6 +6,7 @@ import { Input } from '../../components/ui/Input';
 import { toast } from '../../components/ui/Toaster';
 import { t } from '../../i18n';
 import { useUser } from '../../lib/user';
+import { PasskeysSection } from './PasskeysSection';
 import { Section } from './Section';
 
 export function Account() {
@@ -39,6 +40,7 @@ export function Account() {
         <Input label={t('account.new')} type="password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} hint={t('setup.passwordHint', { min: 10 })} error={error ?? undefined} />
         <p className="text-xs text-text-3">{t('account.othersOut')}</p>
       </Section>
+      <PasskeysSection />
       <Section title={t('account.session')}>
         <Button
           className="self-start"

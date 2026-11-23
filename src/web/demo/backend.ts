@@ -235,6 +235,8 @@ export class DemoBackend {
     switch (key) {
       case 'GET /auth':
         if (b === 'state') return { setupRequired: false, user: USER };
+        if (b === 'passkey' && c === 'status') return { supported: false };
+        if (b === 'passkeys') return { supported: false, passkeys: [] };
         break;
       case 'POST /auth':
         if (b === 'logout') return undefined;

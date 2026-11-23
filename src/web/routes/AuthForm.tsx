@@ -26,6 +26,7 @@ export function AuthForm(props: {
   newPassword?: { min: number };
   onSubmit: (username: string, password: string) => Promise<void>;
   errorMessage: (e: ApiError) => string;
+  usernameAutoComplete?: string;
   belowPassword?: ReactNode;
   /** Rendered under the form (extra sign-in options). */
   after?: ReactNode;
@@ -63,7 +64,7 @@ export function AuthForm(props: {
           name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          autoComplete="username"
+          autoComplete={props.usernameAutoComplete ?? 'username'}
           autoCapitalize="none"
           spellCheck={false}
           required
