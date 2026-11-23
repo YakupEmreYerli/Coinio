@@ -786,6 +786,7 @@
   "firefly.account": "Compte par défaut",
   "firefly.accountHint": "Les paiements que vous notez dans Coinio vont sur ce compte Firefly III.",
   "firefly.accountPick": "Choisir un compte",
+  "firefly.noAccounts": "Firefly III n’a pas encore de compte d’actifs. Créez-en un, puis revenez ici.",
   "firefly.previewIntro": "Voici ce que fera la première synchronisation. Décochez ce que vous voulez laisser de côté.",
   "firefly.previewEmpty": "Rien à synchroniser pour l’instant. Les abonnements ajoutés plus tard seront pris en compte aux prochaines synchronisations.",
   "firefly.matched": "Même nom des deux côtés",

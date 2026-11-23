@@ -786,6 +786,7 @@
   "firefly.account": "Standardkonto",
   "firefly.accountHint": "Zahlungen, die Sie in Coinio erfassen, landen auf diesem Firefly-III-Konto.",
   "firefly.accountPick": "Konto wählen",
+  "firefly.noAccounts": "Firefly III hat noch kein Bestandskonto. Legen Sie dort eines an und kommen Sie dann zurück.",
   "firefly.previewIntro": "Das passiert beim ersten Abgleich. Entfernen Sie den Haken bei allem, was unberührt bleiben soll.",
   "firefly.previewEmpty": "Noch nichts abzugleichen. Abos, die Sie später hinzufügen, kommen bei den nächsten Abgleichen dazu.",
   "firefly.matched": "Gleicher Name auf beiden Seiten",

@@ -786,6 +786,7 @@
   "firefly.account": "Conta padrão",
   "firefly.accountHint": "Os pagamentos que você registra no Coinio vão para esta conta do Firefly III.",
   "firefly.accountPick": "Escolha uma conta",
+  "firefly.noAccounts": "O Firefly III ainda não tem contas de ativos. Crie uma lá e depois volte aqui.",
   "firefly.previewIntro": "Veja o que a primeira sincronização vai fazer. Desmarque o que você quer deixar como está.",
   "firefly.previewEmpty": "Nada para sincronizar ainda. Assinaturas que você adicionar depois entram nas próximas sincronizações.",
   "firefly.matched": "Mesmo nome nos dois lados",

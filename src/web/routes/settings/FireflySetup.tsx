@@ -79,7 +79,7 @@ function Connect() {
   );
 }
 
-function AccountSelect({ conn, accounts }: { conn: FireflyConnection; accounts: FireflyAccount[] }) {
+function AccountSelect({ conn, accounts }: { conn: FireflyConnection; accounts: FireflyAccount[] | undefined }) {
   const qc = useQueryClient();
   const pick = useMutation({
     mutationFn: (assetAccountId: string) => api.patch('/firefly', { assetAccountId }),
@@ -88,8 +88,8 @@ function AccountSelect({ conn, accounts }: { conn: FireflyConnection; accounts: 
   });
   return (
     <div className="flex flex-col gap-1.5">
-      <Select label={t('firefly.account')} placeholder={t('firefly.accountPick')} value={conn.assetAccountId ?? ''} onChange={(v) => pick.mutate(v)} options={accountOptions(accounts)} />
-      <p className="text-xs text-text-3">{t('firefly.accountHint')}</p>
+      <Select label={t('firefly.account')} placeholder={t('firefly.accountPick')} value={conn.assetAccountId ?? ''} onChange={(v) => pick.mutate(v)} options={accountOptions(accounts ?? [])} />
+      <p className="text-xs text-text-3">{accounts?.length === 0 ? t('firefly.noAccounts') : t('firefly.accountHint')}</p>
     </div>
   );
 }
@@ -115,7 +115,7 @@ function PreviewList({ title, hint, rows }: { title: string; hint: string; rows:
 }
 
 /** Before the first sync: the default account, then what the first run would link, add or leave out. */
-function FirstSync({ conn, accounts, onDone }: { conn: FireflyConnection; accounts: FireflyAccount[]; onDone: (r: SyncResult) => void }) {
+function FirstSync({ conn, accounts, onDone }: { conn: FireflyConnection; accounts: FireflyAccount[] | undefined; onDone: (r: SyncResult) => void }) {
   const qc = useQueryClient();
   const preview = useQuery({ queryKey: ['firefly', 'preview'], queryFn: () => api.get<Preview>('/firefly/preview') });
   const [off, setOff] = useState<Set<string>>(new Set());
@@ -223,7 +223,7 @@ function Excluded({ conn }: { conn: FireflyConnection }) {
   );
 }
 
-function Synced({ conn, accounts, result, setResult }: { conn: FireflyConnection; accounts: FireflyAccount[]; result: SyncResult | null; setResult: (r: SyncResult | null) => void }) {
+function Synced({ conn, accounts, result, setResult }: { conn: FireflyConnection; accounts: FireflyAccount[] | undefined; result: SyncResult | null; setResult: (r: SyncResult | null) => void }) {
   const qc = useQueryClient();
   const sync = useMutation({
     mutationFn: () => api.post<SyncResult>('/firefly/sync'),
@@ -261,14 +261,13 @@ export function FireflySetup() {
   const qc = useQueryClient();
   const firefly = useFirefly();
   const conn = firefly.data?.connection;
-  const accounts = useFireflyAccounts(!!conn).data?.accounts ?? [];
+  const accounts = useFireflyAccounts(!!conn).data?.accounts;
   const [result, setResult] = useState<SyncResult | null>(null);
   const [confirm, setConfirm] = useState(false);
   const del = useMutation({
     mutationFn: () => api.del('/firefly'),
     onSuccess: () => {
       setResult(null);
-      qc.removeQueries({ queryKey: keys.firefly });
       void qc.invalidateQueries({ queryKey: keys.firefly });
     },
     onError: (e) => toast.error(failure(e)),

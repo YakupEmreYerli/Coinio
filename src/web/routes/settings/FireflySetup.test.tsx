@@ -120,8 +120,27 @@ describe('Firefly III settings', () => {
     );
   });
 
+  it('shows a hint when Firefly has no asset accounts', async () => {
+    mockApi({
+      'GET /api/firefly': { connection: conn({ assetAccountId: null, initialSyncDone: false }) },
+      'GET /api/firefly/accounts': { accounts: [] },
+      'GET /api/firefly/preview': preview,
+    });
+    renderApp(<FireflySetup />);
+    expect(await screen.findByText('Firefly III has no asset accounts yet. Add one there, then come back.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Start syncing' })).toBeDisabled();
+  });
+
   it('disconnect asks for confirmation', async () => {
-    const calls = mockApi({ 'GET /api/firefly': { connection: conn() }, 'GET /api/firefly/accounts': { accounts } });
+    let connection: unknown = conn();
+    const calls = mockApi({
+      'GET /api/firefly': () => ({ connection }),
+      'GET /api/firefly/accounts': { accounts },
+      'DELETE /api/firefly': () => {
+        connection = null;
+        return new Response(null, { status: 204 });
+      },
+    });
     renderApp(<FireflySetup />);
     const user = userEvent.setup();
     await user.click(await screen.findByRole('button', { name: 'Disconnect' }));
@@ -130,5 +149,6 @@ describe('Firefly III settings', () => {
     expect(calls.some((c) => c.method === 'DELETE')).toBe(false);
     await user.click(within(dialog).getByRole('button', { name: 'Disconnect' }));
     await vi.waitFor(() => expect(calls.some((c) => c.method === 'DELETE' && c.url === '/api/firefly')).toBe(true));
+    expect(await screen.findByLabelText('Firefly III address')).toBeInTheDocument();
   });
 });

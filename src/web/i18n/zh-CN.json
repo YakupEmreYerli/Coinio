@@ -767,6 +767,7 @@
   "firefly.account": "默认账户",
   "firefly.accountHint": "你在 Coinio 中记录的付款会记入此 Firefly III 账户。",
   "firefly.accountPick": "选择账户",
+  "firefly.noAccounts": "Firefly III 中还没有资产账户。请先在那里创建一个，再回到这里。",
   "firefly.previewIntro": "以下是首次同步要做的事。取消勾选你不想改动的项目。",
   "firefly.previewEmpty": "暂无可同步的内容。之后添加的订阅会在下次同步时加入。",
   "firefly.matched": "两边同名",
