@@ -9,7 +9,7 @@
   "page.title": "広告も銀行ログインも不要な無料サブスク管理アプリ",
   "page.lede": "app.getcoinio.me の無料クラウドなら最大200件まで無料（セルフホストなら無制限）。銀行口座の連携も広告表示もありません。",
   "cta.demo": "デモを試す",
-  "page.checked": "app.getcoinio.me で無料公開中 · MIT オープンソース (v0.3)。",
+  "page.checked": "app.getcoinio.me で無料公開中 · MIT オープンソース (v0.4)。",
   "compare.title": "Coinio 無料クラウド vs 一般的なアプリ",
   "compare.lede": "多くは3〜5件で課金を求めますが、Coinio はオープンソースで全機能を無料で使えます。",
   "table.feature": "Feature",
@@ -42,7 +42,7 @@
   "r.export.self": "自分の SQLite + JSON/CSV",
   "steps.title": "60秒で使い始められます",
   "steps.lede": "クレジットカードもサーバー構築も不要です。",
-  "steps.1": "<strong>app.getcoinio.me/signup</strong> からメール・Google・GitHub で登録。",
+  "steps.1": "<strong>app.getcoinio.me/signup</strong> からメール・パスキー・Google・GitHub で登録。",
   "steps.2": "<strong>161種のプリセット</strong>から追加、または Wallos の JSON を読み込み。",
   "steps.3": "通貨を選んで、請求前の<strong>リマインダー</strong>をオンにするだけ。",
   "move.title": "あとからセルフホストへ移すことも可能",
@@ -58,7 +58,7 @@
   "pfaq.export.q": "データのエクスポートや退会はできますか？",
   "pfaq.export.a": "<p>はい。設定からいつでも CSV/JSON 出力およびアカウント削除が可能です。</p>",
   "pfaq.selfhost.q": "後から自分のサーバーに移行できますか？",
-  "pfaq.selfhost.a": "<p>はい。Coinio 0.3 は支払い履歴を含めて自身の JSON を直接インポートできます。</p>",
+  "pfaq.selfhost.a": "<p>はい。Coinio 0.4 は支払い履歴を含めて自身の JSON を直接インポートできます。</p>",
   "final.pageTitle": "無料でサブスク管理を始めよう<span class=\"pd\">.</span>",
   "final.pageLede": "30秒でオンライン登録、またはコマンド1行で自分のサーバーに構築できます。"
 }

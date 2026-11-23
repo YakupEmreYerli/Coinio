@@ -9,7 +9,7 @@
   "page.title": "Ein kostenloser Abo-Tracker ohne Werbung oder Bank-Login",
   "page.lede": "Verwalte bis zu 200 Abos kostenlos auf app.getcoinio.me – oder unbegrenzt auf deinem Server – ganz ohne Bankverbindung, Werbung oder Abo-Zwang.",
   "cta.demo": "Live-Demo testen",
-  "page.checked": "Kostenlos auf app.getcoinio.me · MIT-Open-Source (v0.3).",
+  "page.checked": "Kostenlos auf app.getcoinio.me · MIT-Open-Source (v0.4).",
   "compare.title": "Coinio Cloud vs. klassische Freemium-Apps",
   "compare.lede": "Viele kostenlose Tracker stoppen bei 5 Abos oder verlangen Bankdaten. Coinio ist Open Source und schaltet alles frei.",
   "table.feature": "Feature",
@@ -42,7 +42,7 @@
   "r.export.self": "Eigene SQLite-Datei + JSON/CSV",
   "steps.title": "In 60 Sekunden startklar",
   "steps.lede": "Keine Kreditkarte, keine Server-Einrichtung.",
-  "steps.1": "Öffne <strong>app.getcoinio.me/signup</strong> und melde dich per E-Mail, Google oder GitHub an.",
+  "steps.1": "Öffne <strong>app.getcoinio.me/signup</strong> und melde dich per E-Mail, Passkey, Google oder GitHub an.",
   "steps.2": "Wähle aus <strong>161 vordefinierten Diensten</strong> oder importiere deinen Wallos-Export.",
   "steps.3": "Wähle deine Währung und aktiviere <strong>Erinnerungen</strong> vor der nächsten Abbuchung.",
   "move.title": "Später selbst hosten? Nimm alles mit",
@@ -58,7 +58,7 @@
   "pfaq.export.q": "Kann ich meine Daten exportieren oder löschen?",
   "pfaq.export.a": "<p>Ja, jederzeit in den Kontoeinstellungen als CSV oder JSON exportieren oder das Konto vollständig löschen.</p>",
   "pfaq.selfhost.q": "Kann ich später zum eigenen Server wechseln?",
-  "pfaq.selfhost.a": "<p>Ja. Coinio 0.3 importiert eigene JSON-Exporte inklusive kompletter Zahlungshistorie.</p>",
+  "pfaq.selfhost.a": "<p>Ja. Coinio 0.4 importiert eigene JSON-Exporte inklusive kompletter Zahlungshistorie.</p>",
   "final.pageTitle": "Kostenlos Abos verfolgen<span class=\"pd\">.</span>",
   "final.pageLede": "In 30 Sekunden online starten oder mit einer Zeile auf dem eigenen Server installieren."
 }

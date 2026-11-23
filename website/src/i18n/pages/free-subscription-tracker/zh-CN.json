@@ -9,7 +9,7 @@
   "page.title": "无广告、不绑网银的免费订阅管理工具",
   "page.lede": "在 app.getcoinio.me 上免费管理多达 200 条订阅（自托管版完全无限），无需连接银行账号，也没有广告或隐藏收费。",
   "cta.demo": "试用在线演示",
-  "page.checked": "app.getcoinio.me 免费托管 · MIT 开源协议（v0.3）。",
+  "page.checked": "app.getcoinio.me 免费托管 · MIT 开源协议（v0.4）。",
   "compare.title": "Coinio 免费云端 vs 常见付费订阅应用",
   "compare.lede": "多数免费工具会限制 5 个以内订阅或要求授权银行流水；Coinio 开源免费且功能完整。",
   "table.feature": "Feature",
@@ -42,7 +42,7 @@
   "r.export.self": "本地 SQLite + JSON/CSV",
   "steps.title": "60 秒即可上手",
   "steps.lede": "无需信用卡，也不用折腾服务器。",
-  "steps.1": "打开 <strong>app.getcoinio.me/signup</strong>，使用邮箱、Google 或 GitHub 注册。",
+  "steps.1": "打开 <strong>app.getcoinio.me/signup</strong>，使用邮箱、Passkey、Google 或 GitHub 注册。",
   "steps.2": "从 <strong>161 个内置服务</strong>快速添加，或导入 Wallos JSON。",
   "steps.3": "选择主币种并开启扣费前<strong>自动提醒</strong>。",
   "move.title": "日后想自己搭建服务器？无缝迁移",
@@ -58,7 +58,7 @@
   "pfaq.export.q": "可以随时导出或删除数据吗？",
   "pfaq.export.a": "<p>可以。随时在设置中导出 CSV/JSON，或一键永久删除账号。</p>",
   "pfaq.selfhost.q": "以后能迁移回自托管版本吗？",
-  "pfaq.selfhost.a": "<p>可以。Coinio 0.3 支持直接导入自身导出的 JSON 文件（含全部付款历史）。</p>",
+  "pfaq.selfhost.a": "<p>可以。Coinio 0.4 支持直接导入自身导出的 JSON 文件（含全部付款历史）。</p>",
   "final.pageTitle": "立即免费管理你的订阅<span class=\"pd\">。</span>",
   "final.pageLede": "30 秒注册免费云端版，或用一行命令部署在自己的服务器上。"
 }

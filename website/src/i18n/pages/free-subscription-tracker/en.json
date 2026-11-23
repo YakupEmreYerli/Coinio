@@ -9,7 +9,7 @@
   "page.title": "A free subscription tracker without ads or bank logins",
   "page.lede": "Coinio lets you track unlimited subscriptions up to 200 entries on the free hosted app at app.getcoinio.me—or unlimited on your own server—without connecting a bank account, watching ads or hitting a paywall.",
   "cta.demo": "Try the live demo",
-  "page.checked": "Hosted free at app.getcoinio.me · MIT-licensed open source (v0.3).",
+  "page.checked": "Hosted free at app.getcoinio.me · MIT-licensed open source (v0.4).",
   "compare.title": "Coinio Free Cloud vs typical freemium apps",
   "compare.lede": "Most free subscription trackers cap you at five bills, ask for bank passwords or show card offers. Coinio is open source and gives you the full app.",
   "table.feature": "Feature",
@@ -42,7 +42,7 @@
   "r.export.self": "Your own SQLite file + JSON/CSV",
   "steps.title": "Start tracking in 60 seconds",
   "steps.lede": "No credit card, no server setup required.",
-  "steps.1": "Open <strong>app.getcoinio.me/signup</strong> and sign in with email, Google or GitHub.",
+  "steps.1": "Open <strong>app.getcoinio.me/signup</strong> and sign in with email, passkey, Google or GitHub.",
   "steps.2": "Add your subscriptions from <strong>161 built-in services</strong> or import a Wallos JSON file.",
   "steps.3": "Pick your currency and turn on <strong>renewal reminders</strong> before the next charge hits.",
   "move.title": "Outgrow the cloud? Take your data home",
@@ -58,7 +58,7 @@
   "pfaq.export.q": "Can I export or delete my data?",
   "pfaq.export.a": "<p>Yes, anytime. Export CSV or full Coinio JSON from Settings, or delete your account permanently in one step.</p>",
   "pfaq.selfhost.q": "Can I switch from the hosted app to self-hosting later?",
-  "pfaq.selfhost.a": "<p>Yes. Coinio 0.3 imports Coinio’s own JSON export files including payment history, so moving to your own Docker container takes one upload.</p>",
+  "pfaq.selfhost.a": "<p>Yes. Coinio 0.4 imports Coinio’s own JSON export files including payment history, so moving to your own Docker container takes one upload.</p>",
   "final.pageTitle": "Start tracking for free<span class=\"pd\">.</span>",
   "final.pageLede": "Open a free account online in 30 seconds, or paste the one-line Docker script on your server."
 }

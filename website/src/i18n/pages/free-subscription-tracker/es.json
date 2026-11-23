@@ -9,7 +9,7 @@
   "page.title": "Un gestor de suscripciones gratis sin anuncios ni acceso bancario",
   "page.lede": "Controla hasta 200 suscripciones gratis en app.getcoinio.me —o sin límite en tu servidor— sin conectar tu banco ni ver anuncios.",
   "cta.demo": "Probar demo en vivo",
-  "page.checked": "Gratis en app.getcoinio.me · Código abierto MIT (v0.3).",
+  "page.checked": "Gratis en app.getcoinio.me · Código abierto MIT (v0.4).",
   "compare.title": "Coinio Cloud frente a apps freemium",
   "compare.lede": "La mayoría limitan a 5 registros o piden claves del banco. Coinio es código abierto y completo.",
   "table.feature": "Feature",
@@ -42,7 +42,7 @@
   "r.export.self": "Tu SQLite + JSON/CSV",
   "steps.title": "Empieza en 60 segundos",
   "steps.lede": "Sin tarjeta y sin configurar servidores.",
-  "steps.1": "Abre <strong>app.getcoinio.me/signup</strong> con correo, Google o GitHub.",
+  "steps.1": "Abre <strong>app.getcoinio.me/signup</strong> con correo, passkey, Google o GitHub.",
   "steps.2": "Elige entre <strong>161 servicios integrados</strong> o importa tu JSON de Wallos.",
   "steps.3": "Escoge tu moneda y activa los <strong>avisos de renovación</strong>.",
   "move.title": "¿Quieres pasar a tu servidor más adelante?",
@@ -58,7 +58,7 @@
   "pfaq.export.q": "¿Puedo exportar o borrar mis datos?",
   "pfaq.export.a": "<p>Sí, en cualquier momento desde Ajustes › Cuenta.</p>",
   "pfaq.selfhost.q": "¿Puedo migrar a mi propio servidor después?",
-  "pfaq.selfhost.a": "<p>Sí. Coinio 0.3 importa sus propios JSON conservando el historial de pagos.</p>",
+  "pfaq.selfhost.a": "<p>Sí. Coinio 0.4 importa sus propios JSON conservando el historial de pagos.</p>",
   "final.pageTitle": "Controla tus pagos gratis<span class=\"pd\">.</span>",
   "final.pageLede": "Abre tu cuenta gratis en 30 segundos o instala en tu servidor con una línea."
 }

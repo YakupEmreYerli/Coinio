@@ -738,18 +738,6 @@ h2 {
   transition: background-color .2s;
 }
 .feature:hover { background: var(--feature-hover); }
-.feature-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.badge-soon {
-  display: inline-flex; align-items: center;
-  padding: 4px 9px; border-radius: 999px;
-  border: 1px solid var(--icon-border);
-  background: var(--icon-bg);
-  color: var(--tint);
-  font: 600 11px/1 var(--mono);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
 .icon {
   width: 40px; height: 40px;
   padding: 9px;

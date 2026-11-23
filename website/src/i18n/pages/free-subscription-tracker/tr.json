@@ -9,7 +9,7 @@
   "page.title": "Reklamsız ve banka şifresi istemeyen ücretsiz abonelik takip uygulaması",
   "page.lede": "Coinio ile app.getcoinio.me üzerinde 200 aboneliğe kadar tamamen ücretsiz—kendi sunucunda ise sınırsız—abonelik ve fatura takip edebilirsin. Reklam yok, takip yok, kredi kartı veya banka girişi istenmez.",
   "cta.demo": "Canlı demoyu dene",
-  "page.checked": "app.getcoinio.me üzerinde ücretsiz bulut · MIT lisanslı açık kaynak (v0.3).",
+  "page.checked": "app.getcoinio.me üzerinde ücretsiz bulut · MIT lisanslı açık kaynak (v0.4).",
   "compare.title": "Coinio Ücretsiz Bulut ve klasik uygulamalar",
   "compare.lede": "Çoğu abonelik uygulaması 4-5 kayıtta sınır koyar, banka girişi ister veya reklam gösterir. Coinio açık kaynaklıdır ve tüm özellikleri ücretsiz açar.",
   "table.feature": "Özellik",
@@ -42,7 +42,7 @@
   "r.export.self": "Kendi SQLite dosyan + JSON/CSV",
   "steps.title": "60 saniyede başla",
   "steps.lede": "Kredi kartı gerekmez, sunucu kurulumu şart değil.",
-  "steps.1": "<strong>app.getcoinio.me/signup</strong> sayfasını aç; e-posta, Google ya da GitHub ile hesap aç.",
+  "steps.1": "<strong>app.getcoinio.me/signup</strong> sayfasını aç; e-posta, passkey, Google ya da GitHub ile gir.",
   "steps.2": "<strong>161 hazır servisten</strong> seçerek ekle ya da Wallos JSON dosyanı içe aktar.",
   "steps.3": "Ana para birimini seç ve çekimden günler önce <strong>hatırlatmaları</strong> aç.",
   "move.title": "İleride kendi sunucuna geçmek ister misin?",
@@ -58,7 +58,7 @@
   "pfaq.export.q": "Verimi indirip hesabımı silebilir miyim?",
   "pfaq.export.a": "<p>Evet, istediğin an Ayarlar › Hesap’tan tüm verini CSV/JSON olarak indirebilir veya hesabını kalıcı olarak silebilirsin.</p>",
   "pfaq.selfhost.q": "Buluttan kendi sunucuma geçiş kolay mı?",
-  "pfaq.selfhost.a": "<p>Evet. Coinio 0.3 kendi JSON dışa aktarmalarını ödeme geçmişiyle birlikte doğrudan geri içe alır; geçiş tek dosya yüklemek kadar kolaydır.</p>",
+  "pfaq.selfhost.a": "<p>Evet. Coinio 0.4 kendi JSON dışa aktarmalarını ödeme geçmişiyle birlikte doğrudan geri içe alır; geçiş tek dosya yüklemek kadar kolaydır.</p>",
   "final.pageTitle": "Ücretsiz takip etmeye başla<span class=\"pd\">.</span>",
   "final.pageLede": "30 saniyede çevrim içi hesap aç ya da tek satır komutla kendi sunucuna kur."
 }

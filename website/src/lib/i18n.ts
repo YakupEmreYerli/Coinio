@@ -42,7 +42,7 @@ export interface PageDef {
 export const PAGES: PageDef[] = [
   {
     slug: '',
-    faq: ['hosted', 'free', 'needs', 'data', 'https', 'updates', 'privacy', 'firefly', 'family', 'import', 'languages', 'mcp', 'iphone', 'sheet'],
+    faq: ['hosted', 'free', 'needs', 'data', 'https', 'updates', 'privacy', 'firefly', 'family', 'passkey', 'import', 'languages', 'mcp', 'iphone', 'sheet'],
     faqPrefix: 'faq',
   },
   {
