@@ -13,4 +13,6 @@ export const keys = {
   appearance: ['appearance'] as const,
   notifications: ['notifications'] as const,
   notificationLog: ['notifications', 'log'] as const,
+  firefly: ['firefly'] as const,
+  fireflyAccounts: ['firefly', 'accounts'] as const,
 };

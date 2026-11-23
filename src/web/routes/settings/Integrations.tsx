@@ -3,11 +3,13 @@ import { Tabs as T } from 'radix-ui';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CopyField } from '../../components/CopyField';
+import { DEMO } from '../../demo/flag';
 import { t } from '../../i18n';
 import { ApiKeys } from './ApiKeys';
 import { ConnectedApps } from './ConnectedApps';
 import { Section } from './Section';
 import { AndroidSetup } from './AndroidSetup';
+import { FireflySetup } from './FireflySetup';
 import { WidgetSetup } from './WidgetSetup';
 
 const PARTS = [
@@ -16,6 +18,7 @@ const PARTS = [
   { id: 'keys', label: 'settings.keys' },
   { id: 'widget', label: 'conn.widgetTitle' },
   { id: 'android', label: 'conn.androidTitle' },
+  ...(DEMO ? [] : [{ id: 'firefly', label: 'firefly.title' }]),
 ];
 
 const tabClass =
@@ -107,6 +110,7 @@ export function Integrations() {
       <ApiKeys />
       <WidgetSetup origin={origin} />
       <AndroidSetup origin={origin} />
+      {!DEMO && <FireflySetup />}
     </div>
   );
 }

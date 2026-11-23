@@ -4,7 +4,7 @@ import { toast } from '../components/ui/Toaster';
 import { t } from '../i18n';
 import { failureText } from './failure';
 import { keys } from './query';
-import type { ApiPayment, ApiSubscription, Appearance, NotificationsPage, Settings, Summary } from './types';
+import type { ApiPayment, ApiSubscription, Appearance, FireflyAccount, FireflyConnection, NotificationsPage, Settings, Summary } from './types';
 
 export type PaymentFilter = { subscriptionId?: number; from?: string; to?: string; source?: 'manual' | 'auto' | 'firefly'; status?: string };
 
@@ -32,6 +32,11 @@ export const usePayments = (filter: PaymentFilter = {}) =>
 export const useSettings = () => useQuery({ queryKey: keys.settings, queryFn: () => api.get<Settings>('/settings') });
 export const useNotifications = () => useQuery({ queryKey: keys.notifications, queryFn: () => api.get<NotificationsPage>('/notifications') });
 export const useAppearance = () => useQuery({ queryKey: keys.appearance, queryFn: () => api.get<Appearance>('/appearance') });
+export const useFirefly = (enabled = true) =>
+  useQuery({ queryKey: keys.firefly, queryFn: () => api.get<{ connection: FireflyConnection | null }>('/firefly'), enabled });
+/** Asset accounts of the connected Firefly III; asks Firefly itself, so only once a connection exists. */
+export const useFireflyAccounts = (enabled: boolean) =>
+  useQuery({ queryKey: keys.fireflyAccounts, queryFn: () => api.get<{ accounts: FireflyAccount[] }>('/firefly/accounts'), enabled, retry: false });
 
 function useDataMutation<V, R>(fn: (v: V) => Promise<R>, onSuccess?: (r: R, v: V) => void) {
   const qc = useQueryClient();

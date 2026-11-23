@@ -1,4 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { api } from '../api';
@@ -12,10 +12,11 @@ import { Select } from '../components/ui/Select';
 import { Switch } from '../components/ui/Switch';
 import { Textarea } from '../components/ui/Textarea';
 import { toast } from '../components/ui/Toaster';
+import { DEMO } from '../demo/flag';
 import { failureText } from '../lib/failure';
 import { t, useLocale, type Locale } from '../i18n';
 import type { SubscriptionPrefill } from '../layout/subscriptionForm';
-import { useNotifications, useSettings, useSubscription, useSubscriptions } from '../lib/hooks';
+import { useFirefly, useFireflyAccounts, useNotifications, useSettings, useSubscription, useSubscriptions } from '../lib/hooks';
 import type { ApiSubscription, Cycle } from '../lib/types';
 import { amountInputMode, formatAmountInput, parseAmount } from './amount';
 import { CatalogSuggestions } from './CatalogSuggestions';
@@ -40,6 +41,7 @@ type Values = {
 };
 
 const CURRENCIES = ['TRY', 'USD', 'EUR', 'GBP', 'CHF', 'CAD', 'AUD', 'JPY'];
+const FF_DEFAULT = 'default';
 
 function localToday(): string {
   const d = new Date();
@@ -92,6 +94,16 @@ export function SubscriptionForm({
   const [logo, setLogo] = useState<LogoChoice>({ kind: 'keep' });
   const [saving, setSaving] = useState(false);
   const [picked, setPicked] = useState(false);
+  // Only a subscription already linked to a Firefly III bill has an account of its own; `undefined` = untouched.
+  const [ffAccount, setFfAccount] = useState<string>();
+  const firefly = useFirefly(open && editing && !DEMO);
+  const link = useQuery({
+    queryKey: ['firefly', 'link', editId],
+    queryFn: () => api.get<{ assetAccountId: string | null }>(`/firefly/links/${editId}`),
+    enabled: open && editing && !!firefly.data?.connection,
+    retry: false,
+  });
+  const ffAccounts = useFireflyAccounts(link.isSuccess).data?.accounts;
   const form = useForm<Values>({ defaultValues: toValues(null, prefill, base, locale) });
   const { register, handleSubmit, control, reset, watch, formState } = form;
 
@@ -101,6 +113,7 @@ export function SubscriptionForm({
     reset(toValues(sub, prefill, base, locale));
     setLogo({ kind: 'keep' });
     setPicked(false);
+    setFfAccount(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, sub?.id, sub?.updatedAt, base]);
 
@@ -144,6 +157,7 @@ export function SubscriptionForm({
         fd.append('logo', logo.file);
         await api.upload(`/subscriptions/${saved.id}/logo`, fd);
       } else if (logo.kind === 'none' && saved.logoPath) await api.del(`/subscriptions/${saved.id}/logo`);
+      if (ffAccount !== undefined) await api.put(`/firefly/links/${saved.id}`, { assetAccountId: ffAccount === FF_DEFAULT ? null : ffAccount });
       await qc.invalidateQueries();
       toast.success(editing ? t('form.saved') : t('form.created', { name: saved.name }));
       onOpenChange(false);
@@ -220,6 +234,17 @@ export function SubscriptionForm({
               <datalist id="st-methods">{methods.map((m) => <option key={m} value={m} />)}</datalist>
               <datalist id="st-categories">{categories.map((c) => <option key={c} value={c} />)}</datalist>
             </div>
+            {link.isSuccess && ffAccounts && (
+              <div className="flex flex-col gap-1.5">
+                <Select
+                  label={t('form.firefly')}
+                  value={ffAccount ?? link.data.assetAccountId ?? FF_DEFAULT}
+                  onChange={setFfAccount}
+                  options={[{ value: FF_DEFAULT, label: t('form.fireflyDefault') }, ...ffAccounts.map((a) => ({ value: a.id, label: `${a.name} (${a.currencyCode})` }))]}
+                />
+                <p className="text-xs text-text-3">{t('form.fireflyHint')}</p>
+              </div>
+            )}
             <div className="flex flex-col gap-4 rounded-ctl border border-line p-4">
               <Controller control={control} name="autoPay" render={({ field }) => <Switch checked={field.value} onChange={field.onChange} label={t('form.autoPay')} description={t('form.autoPayHint')} />} />
               <Controller control={control} name="variableAmount" render={({ field }) => <Switch checked={field.value} onChange={field.onChange} label={t('form.variable')} description={t('form.variableHint')} />} />

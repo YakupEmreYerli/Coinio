@@ -112,6 +112,7 @@ export function Payments() {
             { value: ALL, label: t('subs.anyMode') },
             { value: 'auto', label: t('upcoming.auto') },
             { value: 'manual', label: t('upcoming.manual') },
+            { value: 'firefly', label: t('activity.firefly') },
           ]}
         />
         <Select

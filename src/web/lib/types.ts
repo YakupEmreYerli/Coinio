@@ -91,3 +91,16 @@ export type Summary = {
   ratesStale: boolean;
   rates: Record<string, number>;
 };
+
+export type FireflyConnection = {
+  baseUrl: string;
+  hasToken: true;
+  assetAccountId: string | null;
+  enabled: boolean;
+  initialSyncDone: boolean;
+  lastSyncAt: string | null;
+  lastError: string | null;
+  excluded: { subscriptions: number[]; bills: string[] };
+};
+
+export type FireflyAccount = { id: string; name: string; currencyCode: string };
