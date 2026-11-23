@@ -98,12 +98,27 @@ describe('SubscriptionForm', () => {
     renderApp(<SubscriptionForm open onOpenChange={() => {}} editId={1} />);
     const user = userEvent.setup();
     const select = await screen.findByRole('combobox', { name: 'Firefly hesabı' });
-    expect(select).toHaveTextContent('Varsayılan hesap');
+    expect(select).toHaveTextContent('Varsayılan hesap — Checking (EUR)');
     await user.click(select);
     await user.click(await screen.findByRole('option', { name: 'Savings (EUR)' }));
     await user.click(screen.getByRole('button', { name: /kaydet/i }));
     await vi.waitFor(() => expect(calls).toContainEqual(expect.objectContaining({ method: 'PUT', url: '/api/firefly/links/1', body: { assetAccountId: '2' } })));
     expect(calls.findIndex((c) => c.method === 'PATCH')).toBeLessThan(calls.findIndex((c) => c.method === 'PUT'));
+  });
+
+  it('the default option stays plain without a known default account', async () => {
+    mockApi({
+      'GET /api/settings': settings,
+      'GET /api/logos/candidates': { candidates: [] },
+      'GET /api/subscriptions/1': sub(),
+      'GET /api/firefly': { connection: { baseUrl: 'https://ff.example.com', hasToken: true, assetAccountId: '9', enabled: true, initialSyncDone: true, lastSyncAt: null, lastError: null, excluded: { subscriptions: [], bills: [] } } },
+      'GET /api/firefly/links/1': { assetAccountId: null },
+      'GET /api/firefly/accounts': { accounts: [{ id: '1', name: 'Checking', currencyCode: 'EUR' }] },
+    });
+    renderApp(<SubscriptionForm open onOpenChange={() => {}} editId={1} />);
+    const select = await screen.findByRole('combobox', { name: 'Firefly hesabı' });
+    expect(select).toHaveTextContent('Varsayılan hesap');
+    expect(select).not.toHaveTextContent('Checking');
   });
 
   it('no Firefly account field without a link', async () => {

@@ -104,6 +104,7 @@ export function SubscriptionForm({
     retry: false,
   });
   const ffAccounts = useFireflyAccounts(link.isSuccess).data?.accounts;
+  const ffDefault = ffAccounts?.find((a) => a.id === firefly.data?.connection?.assetAccountId);
   const form = useForm<Values>({ defaultValues: toValues(null, prefill, base, locale) });
   const { register, handleSubmit, control, reset, watch, formState } = form;
 
@@ -240,7 +241,13 @@ export function SubscriptionForm({
                   label={t('form.firefly')}
                   value={ffAccount ?? link.data.assetAccountId ?? FF_DEFAULT}
                   onChange={setFfAccount}
-                  options={[{ value: FF_DEFAULT, label: t('form.fireflyDefault') }, ...ffAccounts.map((a) => ({ value: a.id, label: `${a.name} (${a.currencyCode})` }))]}
+                  options={[
+                    {
+                      value: FF_DEFAULT,
+                      label: ffDefault ? `${t('form.fireflyDefault')} — ${ffDefault.name} (${ffDefault.currencyCode})` : t('form.fireflyDefault'),
+                    },
+                    ...ffAccounts.map((a) => ({ value: a.id, label: `${a.name} (${a.currencyCode})` })),
+                  ]}
                 />
                 <p className="text-xs text-text-3">{t('form.fireflyHint')}</p>
               </div>
