@@ -169,6 +169,22 @@ describe('syncPayments', () => {
     expect(s.posts()).toHaveLength(0);
   });
 
+  it('a voided auto payment marked paid again is re-linked, not pushed twice', async () => {
+    const s = setup();
+    const p = markPaid(s.ctx, s.user.id, s.sub.id, { source: 'auto', now: s.clock.now });
+    await s.run();
+    expect(s.posts()).toHaveLength(1);
+    undoPayment(s.ctx, s.user.id, p.id);
+    await s.run();
+    expect(s.payLinks()).toEqual([expect.objectContaining({ paymentId: p.id, state: 'released' })]);
+    const again = markPaid(s.ctx, s.user.id, s.sub.id, { dueDate: '2026-11-09', now: s.clock.now });
+    expect(again.id).toBe(p.id);
+    const res = await s.run();
+    expect(res).toEqual({ paymentsIn: 0, paymentsOut: 0, warning: null });
+    expect(s.payLinks()).toEqual([expect.objectContaining({ paymentId: p.id, state: 'linked' })]);
+    expect(s.posts()).toHaveLength(1);
+  });
+
   it('payments before the connection are not pushed', async () => {
     const s = setup({ conn: { createdAt: '2026-11-18T09:00:00.000Z' } });
     markPaid(s.ctx, s.user.id, s.sub.id, { paidAt: '2026-11-10T00:00:00.000Z', now: s.clock.now });

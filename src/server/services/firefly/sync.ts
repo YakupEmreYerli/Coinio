@@ -137,10 +137,11 @@ export async function syncPayments(ctx: ServiceCtx, userId: number, conn: Firefl
   const payLinks = () => ctx.db.select().from(fireflyPaymentLinks).where(eq(fireflyPaymentLinks.userId, userId)).all();
   const subOf = (id: number) => ctx.db.select().from(subscriptions).where(eq(subscriptions.id, id)).get();
 
+  // A voided auto payment that is paid again is the same row, so it goes back to its Firefly transaction.
   for (const pl of payLinks()) {
-    if (pl.state !== 'linked') continue;
     const p = pl.paymentId === null ? undefined : ctx.db.select().from(payments).where(eq(payments.id, pl.paymentId)).get();
-    if (!p || p.status !== 'paid') ctx.db.update(fireflyPaymentLinks).set({ state: 'released' }).where(eq(fireflyPaymentLinks.id, pl.id)).run();
+    const state = p?.status === 'paid' ? 'linked' : 'released';
+    if (state !== pl.state) ctx.db.update(fireflyPaymentLinks).set({ state }).where(eq(fireflyPaymentLinks.id, pl.id)).run();
   }
 
   const links = ctx.db.select().from(fireflyLinks).where(and(eq(fireflyLinks.userId, userId), eq(fireflyLinks.state, 'open'))).all();
