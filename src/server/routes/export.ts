@@ -16,7 +16,9 @@ const decimal = (minor: number | null, currency: string): string => (minor === n
 /** RFC 4180: quote fields holding a comma, quote or line break; double inner quotes; CRLF rows. */
 function toCsv(header: string[], rows: Cell[][]): string {
   const cell = (v: Cell) => {
-    const s = v === null ? '' : String(v);
+    let s = v === null ? '' : String(v);
+    // Neutralize spreadsheet formulas (=, +, -, @, tab, CR) before RFC 4180 quoting.
+    if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
     return /[",\r\n]/.test(s) ? `"${s.replaceAll('"', '""')}"` : s;
   };
   return [header, ...rows].map((r) => r.map(cell).join(',')).join('\r\n') + '\r\n';

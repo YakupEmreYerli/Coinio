@@ -17,8 +17,8 @@ const intPart = (s: string, grp: string) => {
  */
 export function parseAmount(text: string, locale: Locale, currency: string): number | null {
   if (text.includes('-')) return null;
-  const s = text.replace(/[^\d.,]/g, '');
-  if (!s) return null;
+  const s = text.replace(/[\s\p{Sc}]/gu, '');
+  if (!s || !/^[\d.,]+$/.test(s)) return null;
   const digits = minorDigits(currency);
   const fracOk = (f: string) => /^\d+$/.test(f) && f.length <= digits;
   const dec = decimalMark(locale);

@@ -17,7 +17,7 @@ describe('amount input', () => {
   });
 
   it('rejects garbage, negatives and more than two decimals', () => {
-    for (const bad of ['', 'abc', '-5', '1,2,3', '9,999', '1.2.3,4.5']) expect(parseAmount(bad, 'tr', 'EUR'), bad).toBeNull();
+    for (const bad of ['', 'abc', '1o0', '10a', '1_00', '-5', '1,2,3', '9,999', '1.2.3,4.5']) expect(parseAmount(bad, 'tr', 'EUR'), bad).toBeNull();
   });
 
   it('formats minor units for editing', () => {

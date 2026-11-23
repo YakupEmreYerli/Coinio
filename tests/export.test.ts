@@ -40,6 +40,21 @@ describe('export', () => {
     expect(lines[1]).toContain('"Acme, ""Pro"" plan",,1234.56,USD,false,monthly,1,2026-12-05,true,,,"line one\nline two"');
   });
 
+  it('csv export neutralizes leading spreadsheet formula characters', async () => {
+    const { agent } = await login();
+    await agent.post('/api/subscriptions').send({
+      ...tricky,
+      name: '=cmd|"/C calc"!A0',
+      paymentMethod: '+1-card',
+      category: '@sum',
+      notes: '-danger',
+    });
+    const res = await agent.get('/api/export?format=csv&what=subscriptions');
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('"\'=cmd|""/C calc""!A0"');
+    expect(res.text).toContain(",'+1-card,'@sum,'-danger,");
+  });
+
   it('csv payments export uses decimal amounts', async () => {
     const { agent, db } = await login();
     const sub = (await agent.post('/api/subscriptions').send(tricky)).body;

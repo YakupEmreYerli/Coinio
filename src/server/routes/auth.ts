@@ -1,10 +1,10 @@
 import { count, eq } from 'drizzle-orm';
-import { Router, type CookieOptions } from 'express';
+import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { z } from 'zod';
 import { requireSession } from '../auth/middleware.js';
 import { burnPasswordCheck, hashPassword, verifyPassword } from '../auth/password.js';
-import { SESSION_COOKIE, SESSION_TTL_MS, createSession, deleteOtherSessions, deleteSession, findSessionUserId } from '../auth/sessions.js';
+import { SESSION_COOKIE, createSession, deleteOtherSessions, deleteSession, findSessionUserId, sessionCookieOptions } from '../auth/sessions.js';
 import type { Config } from '../config.js';
 import type { Db } from '../db/client.js';
 import { users } from '../db/schema.js';
@@ -20,14 +20,6 @@ export function authRouter(deps: { db: Db; config: Config; now: () => Date; plug
   const { db, config, now } = deps;
   const ctx = { db, config, now, fetch, plugins: deps.plugins };
   const router = Router();
-
-  const cookieOptions: CookieOptions = {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: config.publicUrl?.startsWith('https://') ?? false,
-    maxAge: SESSION_TTL_MS,
-    path: '/',
-  };
 
   // Counts failed attempts only (successful requests are skipped), per IP.
   const limiter = rateLimit({
@@ -77,7 +69,7 @@ export function authRouter(deps: { db: Db; config: Config; now: () => Date; plug
       .returning()
       .get();
     seedTelegramFromEnv({ db, config, now, fetch });
-    res.cookie(SESSION_COOKIE, createSession(db, user.id, now()), cookieOptions);
+    res.cookie(SESSION_COOKIE, createSession(db, user.id, now()), sessionCookieOptions(req));
     res.status(201).json({ id: user.id, username: user.username });
   });
 
@@ -95,7 +87,7 @@ export function authRouter(deps: { db: Db; config: Config; now: () => Date; plug
       res.status(401).json({ error: 'invalid_credentials' });
       return;
     }
-    res.cookie(SESSION_COOKIE, createSession(db, user.id, now()), cookieOptions);
+    res.cookie(SESSION_COOKIE, createSession(db, user.id, now()), sessionCookieOptions(req));
     for (const plugin of deps.plugins ?? []) plugin.onSignIn?.(ctx, user.id, 'password');
     res.json({ id: user.id, username: user.username });
   });
@@ -118,7 +110,7 @@ export function authRouter(deps: { db: Db; config: Config; now: () => Date; plug
 
   router.post('/logout', requireSession(db, now), (req, res) => {
     deleteSession(db, req.cookies[SESSION_COOKIE]);
-    res.clearCookie(SESSION_COOKIE, { ...cookieOptions, maxAge: undefined });
+    res.clearCookie(SESSION_COOKIE, { ...sessionCookieOptions(req), maxAge: undefined });
     res.status(204).end();
   });
 

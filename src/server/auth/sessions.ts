@@ -1,10 +1,27 @@
 import { createHash, randomBytes } from 'node:crypto';
+import type { CookieOptions } from 'express';
 import { and, eq, gt, lte, ne } from 'drizzle-orm';
 import type { Db } from '../db/client.js';
 import { sessions } from '../db/schema.js';
 
 export const SESSION_COOKIE = 'sid';
 export const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+export function sessionCookieOptions(req: {
+  secure?: boolean;
+  headers?: Record<string, string | string[] | undefined>;
+}): CookieOptions {
+  const protoHeader = req.headers?.['x-forwarded-proto'];
+  const firstProto = (Array.isArray(protoHeader) ? protoHeader[0] : protoHeader)?.split(',')[0]?.trim().toLowerCase();
+  const secure = Boolean(req.secure || firstProto === 'https');
+  return {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure,
+    maxAge: SESSION_TTL_MS,
+    path: '/',
+  };
+}
 
 const hashId = (id: string) => createHash('sha256').update(id).digest('hex');
 

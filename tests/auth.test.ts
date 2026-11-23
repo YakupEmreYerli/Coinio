@@ -29,9 +29,14 @@ describe('auth', () => {
     expect(state.body).toEqual({ setupRequired: false, user: { id: 1, username: 'yakup' } });
   });
 
-  it('sets Secure cookie when publicUrl is https', async () => {
-    const { cookie } = await setup(makeTestApp({ config: { publicUrl: 'https://subs.example.com' } }));
-    expect(cookie).toMatch(/Secure/i);
+  it('sets Secure cookie based on request protocol or X-Forwarded-Proto, not publicUrl', async () => {
+    const plain = await setup(makeTestApp({ config: { publicUrl: 'https://subs.example.com' } }));
+    expect(plain.cookie).not.toMatch(/Secure/i);
+
+    const proxied = makeTestApp({ config: { publicUrl: 'https://subs.example.com' } });
+    const res = await request(proxied.app).post('/api/auth/setup').set('X-Forwarded-Proto', 'https').send(creds);
+    const proxiedCookie = (res.headers['set-cookie'] as unknown as string[] | undefined)?.[0] ?? '';
+    expect(proxiedCookie).toMatch(/Secure/i);
   });
 
   it('second setup returns 409', async () => {

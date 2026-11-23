@@ -1,6 +1,6 @@
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server';
 import { and, eq } from 'drizzle-orm';
-import { Router, type CookieOptions } from 'express';
+import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { z } from 'zod';
 import { requireSession } from '../auth/middleware.js';
@@ -13,7 +13,7 @@ import {
   resolveWebAuthnOrigin,
   type PasskeyOps,
 } from '../auth/passkeys.js';
-import { SESSION_COOKIE, SESSION_TTL_MS, createSession } from '../auth/sessions.js';
+import { SESSION_COOKIE, createSession, sessionCookieOptions } from '../auth/sessions.js';
 import { passkeys, users } from '../db/schema.js';
 import { userAllowed } from '../plugins.js';
 import type { ServiceCtx } from '../services/context.js';
@@ -35,14 +35,6 @@ export function passkeyRouter(ctx: ServiceCtx, ops: PasskeyOps = defaultPasskeyO
   const { db, config, now } = ctx;
   const router = Router();
   const challenges = createChallengeStore();
-
-  const cookieOptions: CookieOptions = {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: config.publicUrl?.startsWith('https://') ?? false,
-    maxAge: SESSION_TTL_MS,
-    path: '/',
-  };
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -252,7 +244,7 @@ export function passkeyRouter(ctx: ServiceCtx, ops: PasskeyOps = defaultPasskeyO
       .where(eq(passkeys.id, row.id))
       .run();
 
-    res.cookie(SESSION_COOKIE, createSession(db, user.id, now()), cookieOptions);
+    res.cookie(SESSION_COOKIE, createSession(db, user.id, now()), sessionCookieOptions(req));
     for (const plugin of ctx.plugins ?? []) plugin.onSignIn?.(ctx, user.id, 'passkey');
     res.json({ id: user.id, username: user.username });
   });

@@ -50,7 +50,7 @@ export function useSubscriptions() {
 }
 
 export const useSubscription = (id: number) =>
-  useQuery({ queryKey: keys.subscription(id), queryFn: () => api.get<ApiSubscription>(`/subscriptions/${id}`) });
+  useQuery({ queryKey: keys.subscription(id), queryFn: () => api.get<ApiSubscription>(`/subscriptions/${id}`), enabled: id > 0 });
 
 export function useSummary() {
   const { scope, memberId } = useFamilyScope();

@@ -1,8 +1,8 @@
-import { Router, type CookieOptions, type ErrorRequestHandler } from 'express';
+import { Router, type ErrorRequestHandler } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { z } from 'zod';
 import { requireSession } from '../auth/middleware.js';
-import { SESSION_COOKIE, SESSION_TTL_MS, createSession, findSessionUserId } from '../auth/sessions.js';
+import { SESSION_COOKIE, createSession, findSessionUserId, sessionCookieOptions } from '../auth/sessions.js';
 import type { ServiceCtx } from '../services/context.js';
 import {
   acceptInvite,
@@ -34,14 +34,6 @@ const tokenParam = z.string().trim().min(10).max(128);
 export function familyRouter(ctx: ServiceCtx): Router {
   const router = Router();
   const auth = requireSession(ctx.db, ctx.now);
-
-  const cookieOptions: CookieOptions = {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: ctx.config.publicUrl?.startsWith('https://') ?? false,
-    maxAge: SESSION_TTL_MS,
-    path: '/',
-  };
 
   const inviteLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -75,7 +67,7 @@ export function familyRouter(ctx: ServiceCtx): Router {
         relation: body.relation,
       });
       if (result.created) {
-        res.cookie(SESSION_COOKIE, createSession(ctx.db, result.userId, ctx.now()), cookieOptions);
+        res.cookie(SESSION_COOKIE, createSession(ctx.db, result.userId, ctx.now()), sessionCookieOptions(req));
         for (const plugin of ctx.plugins ?? []) plugin.onSignIn?.(ctx, result.userId, 'password');
       }
       res.status(result.created ? 201 : 200).json(result);
