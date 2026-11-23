@@ -5,6 +5,8 @@ import { relativeDue, shortDate } from '../../lib/dates';
 import { useReports } from '../../lib/hooks';
 import { useDashboardData } from '../useDueItems';
 
+const cap = (s: string, locale: string) => (s ? s[0]!.toLocaleUpperCase(locale) + s.slice(1) : s);
+
 function Stat({ label, children, sub }: { label: string; children: React.ReactNode; sub?: React.ReactNode }) {
   return (
     <div className="@container min-w-0 border-line px-5 py-[18px] [&:not(:first-child)]:border-l max-md:[&:nth-child(3)]:border-l-0 max-md:[&:nth-child(n+3)]:border-t">
@@ -34,7 +36,7 @@ export function StatsStrip() {
         <Money minor={report?.foreignShare.minor ?? 0} currency={base} size="xl" />
       </Stat>
       <Stat label={t('stats.next')} sub={next ? `${next.name} · ${shortDate(next.dueDate, locale)}` : undefined}>
-        <span className="font-display text-[26px]">{next ? relativeDue(next.daysLeft) : '—'}</span>
+        <span className="font-display text-[26px]">{next ? cap(relativeDue(next.daysLeft), locale) : '—'}</span>
       </Stat>
     </Card>
   );
