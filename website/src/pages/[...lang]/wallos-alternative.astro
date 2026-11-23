@@ -29,10 +29,14 @@ const demoHref = `/demo/?lang=${lang.code}`;
       <p class="eyebrow">{t['page.eyebrow']}</p>
       <h1>{t['page.title']}</h1>
       <p class="page-lede">{t['page.lede']}</p>
-      <div class="final-cta-row">
-        <a class="btn btn-primary btn-lg" href="https://app.getcoinio.me/signup">
+      <div class="page-actions">
+        <a class="btn btn-primary" href="https://app.getcoinio.me/signup">
           {t['hero.cloudCta']}
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <a class="btn" href={demoHref} data-demo-link>
+          {t['cta.demo']}
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg>
         </a>
       </div>
       <div class="term term-solo" id="install">
@@ -45,12 +49,6 @@ const demoHref = `/demo/?lang=${lang.code}`;
         </div>
       </div>
       <p class="page-cta-note">{t['cta.note']}</p>
-      <p class="page-cta">
-        <a class="btn" href={demoHref} data-demo-link>
-          {t['cta.demo']}
-          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg>
-        </a>
-      </p>
       <p class="checked">{t['page.checked']}</p>
     </section>
 
