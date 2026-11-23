@@ -1,8 +1,8 @@
 {
-  "meta.title": "Gestionnaire d’abonnements auto-hébergé et gratuit · Coinio",
-  "meta.description": "Suivez vos abonnements et factures sur votre serveur. Coinio, alternative gratuite et open source à Wallos : rappels, toutes devises, une image Docker.",
+  "meta.title": "Coinio — Gestionnaire d’abonnements gratuit et open source",
+  "meta.description": "Suivez vos abonnements et factures au même endroit. Utilisez-le gratuitement en ligne ou auto-hébergez-le avec Docker : rappels, toutes devises, Firefly III et MCP.",
   "og.title": "Coinio : tous vos abonnements, sur une seule page",
-  "og.description": "Gestionnaire d’abonnements et de factures open source, sur votre propre serveur. Une seule image Docker.",
+  "og.description": "Gestionnaire d’abonnements et factures gratuit et open source, en ligne ou auto-hébergé avec Docker.",
   "app.description": "Gestionnaire d’abonnements et de factures auto-hébergé : rappels avant renouvellement, totaux multidevises, calendrier, import depuis Wallos, serveur MCP pour Claude et ChatGPT, et widget iPhone.",
   "nav.home": "Accueil Coinio",
   "crumb.home": "Accueil",

@@ -1,8 +1,8 @@
 {
-  "meta.title": "Abos verwalten – selbst gehostet und Open Source · Coinio",
-  "meta.description": "Abos und Rechnungen auf dem eigenen Server verwalten. Coinio ist die kostenlose Open-Source-Alternative zu Wallos: Erinnerungen, jede Währung, Docker.",
+  "meta.title": "Coinio — Kostenloser Abo- und Rechnungstracker",
+  "meta.description": "Verwalte Abos und Rechnungen an einem Ort. Kostenlos online nutzen oder per Docker selbst hosten: Erinnerungen, alle Währungen, Firefly III und MCP.",
   "og.title": "Coinio: alle Abos auf einer ruhigen Seite",
-  "og.description": "Open-Source-Verwaltung für Abos und Rechnungen auf Ihrem eigenen Server. Ein Docker-Image.",
+  "og.description": "Kostenloser Open-Source-Tracker für Abos und Rechnungen — online nutzen oder per Docker selbst hosten.",
   "app.description": "Selbst gehostete Verwaltung für Abos und Rechnungen mit Verlängerungs-Erinnerungen, Summen in mehreren Währungen, Kalender, Wallos-Import, MCP-Server für Claude und ChatGPT und iPhone-Widget.",
   "nav.home": "Coinio-Startseite",
   "crumb.home": "Startseite",

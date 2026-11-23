@@ -1,8 +1,8 @@
 {
-  "meta.title": "Free, open-source self-hosted subscription tracker · Coinio",
-  "meta.description": "Track subscriptions and bills on your own server. Coinio is a free, open-source Wallos alternative with renewal reminders, any currency and one Docker image.",
+  "meta.title": "Coinio — Free Subscription & Bill Tracker",
+  "meta.description": "Track subscriptions and bills in one place. Use it free online or self-host with Docker: renewal reminders, multi-currency totals, Firefly III sync and MCP.",
   "og.title": "Coinio: every subscription, one calm page",
-  "og.description": "Open-source subscription and bill tracker you run on your own server. One Docker image.",
+  "og.description": "Free, open-source subscription and bill tracker. Use the hosted app or self-host in one Docker image.",
   "app.description": "Self-hosted subscription and bill tracker with renewal reminders, multi-currency totals, a calendar, Wallos import, an MCP server for Claude and ChatGPT, and an iPhone widget.",
   "nav.home": "Coinio home",
   "crumb.home": "Home",

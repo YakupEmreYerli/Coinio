@@ -1,8 +1,8 @@
 {
-  "meta.title": "Controle de assinaturas auto-hospedado e grátis · Coinio",
-  "meta.description": "Controle assinaturas e contas no seu servidor. Coinio é uma alternativa ao Wallos, grátis e de código aberto, com lembretes, várias moedas e Docker.",
+  "meta.title": "Coinio — Controle de assinaturas grátis e código aberto",
+  "meta.description": "Acompanhe assinaturas e contas em um só lugar. Use grátis online ou hospede no seu servidor com Docker: lembretes, várias moedas, Firefly III e MCP.",
   "og.title": "Coinio: todas as assinaturas, numa página tranquila",
-  "og.description": "Gerenciador de assinaturas e contas de código aberto que roda no seu próprio servidor. Uma imagem Docker.",
+  "og.description": "Controle de assinaturas e contas grátis e de código aberto — online ou auto-hospedado com Docker.",
   "app.description": "Gerenciador de assinaturas e contas auto-hospedado, com lembretes de renovação, totais em várias moedas, calendário, importação do Wallos, servidor MCP para Claude e ChatGPT e widget para iPhone.",
   "nav.home": "Início do Coinio",
   "crumb.home": "Início",

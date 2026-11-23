@@ -1,8 +1,8 @@
 {
-  "meta.title": "自托管订阅管理工具，开源免费 · Coinio",
-  "meta.description": "Coinio 是开源免费的自托管订阅管理和订阅记账工具，可替代 Wallos。支持续费提醒、多币种汇总，一个 Docker 镜像即可部署在自己的服务器上。",
+  "meta.title": "Coinio — 免费开源的订阅与账单管理工具",
+  "meta.description": "在一个页面管理所有订阅和账单。可免费在线使用，也能用 Docker 自托管：支持续费提醒、多币种汇总、Firefly III 同步和 MCP。",
   "og.title": "Coinio：所有订阅，一页看清",
-  "og.description": "开源的订阅和账单管理工具，运行在你自己的服务器上。只需一个 Docker 镜像。",
+  "og.description": "免费开源的订阅与账单管理工具，支持免费在线使用或单容器 Docker 自托管。",
   "app.description": "自托管的订阅和账单管理工具，支持续费提醒、多币种汇总、日历视图、Wallos 导入、面向 Claude 和 ChatGPT 的 MCP 服务器，以及 iPhone 小组件。",
   "nav.home": "Coinio 首页",
   "crumb.home": "首页",

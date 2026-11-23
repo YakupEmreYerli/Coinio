@@ -1,8 +1,8 @@
 {
-  "meta.title": "Gestor de suscripciones gratis y de código abierto · Coinio",
-  "meta.description": "Controla tus suscripciones y facturas en tu propio servidor con Coinio, la alternativa gratuita y de código abierto a Wallos: avisos de renovación, multimoneda e imagen Docker.",
+  "meta.title": "Coinio — Gestor de suscripciones gratis y de código abierto",
+  "meta.description": "Controla tus suscripciones y facturas en un solo lugar. Úsalo gratis en línea o instálalo en tu servidor con Docker: avisos, multimoneda, Firefly III y MCP.",
   "og.title": "Coinio: todas tus suscripciones, en una página tranquila",
-  "og.description": "Gestor de suscripciones y facturas de código abierto que funciona en tu propio servidor. Una sola imagen Docker.",
+  "og.description": "Gestor de suscripciones y facturas gratis y de código abierto, en línea o en tu propio servidor con Docker.",
   "app.description": "Gestor de suscripciones y facturas autoalojado, con avisos de renovación, totales en varias monedas, calendario, importación desde Wallos, un servidor MCP para Claude y ChatGPT y un widget para iPhone.",
   "nav.home": "Inicio de Coinio",
   "crumb.home": "Inicio",

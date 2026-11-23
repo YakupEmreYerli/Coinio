@@ -192,6 +192,7 @@ function headTags(lang, t, fonts, url, alternates, graph) {
   <link rel="canonical" href="${url}">
   ${alternates.join('\n  ')}
   <meta property="og:type" content="website">
+  <meta name="application-name" content="Coinio">
   <meta property="og:site_name" content="Coinio">
   <meta property="og:title" content="${escAttr(t['og.title'])}">
   <meta property="og:description" content="${escAttr(t['og.description'])}">
