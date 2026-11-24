@@ -60,7 +60,7 @@ Coinio は、定期的な支払いをすべて1つのページにまとめます
 - **インポートとエクスポート。** Wallos からサブスクを移行できます。サブスクと支払いは CSV または JSON でエクスポートできます。
 - **Firefly III。** 自分の [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly) と双方向に同期。サブスクは請求（bill）になり、支払いも双方向に反映されます。
 - **AI アシスタント（MCP）。** OAuth 対応の MCP サーバーを内蔵。Claude、ChatGPT などの MCP クライアントが、サブスクを読み取ったり更新したりできます。
-- **iPhone ウィジェット。** Scriptable を使ったホーム画面とロック画面のウィジェット。App Store のアプリは不要です。
+- **スマホウィジェット（iPhone・Android）。** iPhone は [Scriptable](https://scriptable.app)、Android は [ScriptWidget](https://github.com/everettjf/scriptwidget) でホーム画面とロック画面にウィジェットを表示できます。ストアアプリは不要です。
 - **自分好みの見た目。** テーマ、アクセントカラー、フォント、表示密度、ダッシュボードのカード、独自 CSS、サンドボックス化された HTML カード。
 - **8つの言語:** 英語、トルコ語、ドイツ語、フランス語、スペイン語、ポルトガル語（ブラジル）、簡体字中国語、日本語。Web アプリとしてインストールできます。
 
@@ -120,7 +120,7 @@ Docker では `PORT` と `COINIO_DATA_DIR` は変更せず、別のポートを�
 
 ## HTTPS とリモートアクセス
 
-自宅のネットワークや VPN 内なら、`http://<サーバーの IP>:8080` で十分です。外出先からの iPhone ウィジェットや、claude.ai / ChatGPT のコネクタには、公開された **https** のアドレスが必要です。
+自宅のネットワークや VPN 内なら、`http://<サーバーの IP>:8080` で十分です。外出先からのスマホウィジェットや、claude.ai / ChatGPT のコネクタには、公開された **https** のアドレスが必要です。
 
 - **Cloudflare Tunnel:** インストールスクリプトがトンネルトークンを尋ね、Coinio と並べて `cloudflared` を起動します。ポートを開けずに https が使えます。
 - **リバースプロキシ:** すでに Caddy、Traefik、Nginx、Dokploy を使っているなら、ドメインをポート 8080 に向けてください。
@@ -131,11 +131,10 @@ Docker では `PORT` と `COINIO_DATA_DIR` は変更せず、別のポートを�
 
 MCP サーバーは、Coinio のアドレスの末尾に `/mcp` を付けた場所にあります。claude.ai や ChatGPT などのクラウドアプリは OAuth でサインインします（https の `COINIO_PUBLIC_URL` が必要です）。自分のマシン上のツールは、**設定 › 連携 › API キー** で作成した API キーを使います。**設定 › 連携** には、そのまま使える設定例があります。ガイド: [docs.getcoinio.me/docs/integrations/mcp](https://docs.getcoinio.me/docs/integrations/mcp)。
 
-## iPhone ウィジェット
+## スマホウィジェット（iPhone・Android）
 
-[`widget/coinio-widget.js`](widget/coinio-widget.js) は、ホーム画面の小・中・大サイズのウィジェットとロック画面ウィジェット向けの [Scriptable](https://scriptable.app) スクリプトです。閲覧専用の API キーを作成し、スクリプトを貼り付けて、`SERVER_URL` と `API_KEY` を入力してください。ガイド: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget)。
-
-**Android：** Coinio ウィジェットは無料アプリ [ScriptWidget](https://github.com/everettjf/scriptwidget) で動きます。貼り付けるパラメータは「設定 › 連携 › Android ウィジェット」で取得できます。ガイド：[docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget)。
+- **iPhone（Scriptable）：** [`widget/coinio-widget.js`](widget/coinio-widget.js) は、ホーム画面の小・中・大サイズのウィジェットとロック画面ウィジェット向けの [Scriptable](https://scriptable.app) スクリプトです。閲覧専用の API キーを作成し、スクリプトを貼り付けて、`SERVER_URL` と `API_KEY` を入力してください。ガイド：[docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget)。
+- **Android（ScriptWidget）：** 無料アプリ [ScriptWidget](https://github.com/everettjf/scriptwidget) で動きます。貼り付けるパラメータは「設定 › 連携 › Android ウィジェット」で取得できます。ガイド：[docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget)。
 
 ## Firefly III
 
@@ -194,7 +193,7 @@ src/server/     Express API、SQLite (Drizzle)、認証、OAuth、MCP サーバ�
 src/web/        React + Vite の Web アプリ（ルート、ダッシュボードのカード、設定、i18n、デモ用バックエンド）
 src/shared/     サーバー・Web・デモで共有するロジック: スケジュール、カタログ、外観、型
 tests/          サーバーのテスト（Web のテストは各コンポーネントの隣にあります）
-widget/         Scriptable の iPhone ウィジェット
+widget/         iPhone（Scriptable）・Android（ScriptWidget）ウィジェット
 deploy/         Unraid、CasaOS、Portainer 向けテンプレート
 getcoinio/website  Landing page (getcoinio.me) & install script (separate repo)
 getcoinio/docs     Documentation (docs.getcoinio.me, separate repo)

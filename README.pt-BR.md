@@ -60,7 +60,7 @@ O Coinio reúne todos os pagamentos recorrentes numa página só: streaming, arm
 - **Importação e exportação.** Traga suas assinaturas do Wallos; exporte assinaturas e pagamentos em CSV ou JSON.
 - **Firefly III.** Sincronização nos dois sentidos com o seu próprio [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly): as assinaturas viram contas (bills) e os pagamentos vão nas duas direções.
 - **Assistentes de IA (MCP).** Um servidor MCP integrado, com OAuth, para que o Claude, o ChatGPT e outros clientes MCP possam ler e atualizar suas assinaturas.
-- **Widget para iPhone.** Widgets para a Tela de Início e a Tela Bloqueada pelo Scriptable, sem precisar de app da App Store.
+- **Widgets no celular (iPhone e Android).** Widgets para a Tela de Início e a Tela Bloqueada via [Scriptable](https://scriptable.app) no iPhone e [ScriptWidget](https://github.com/everettjf/scriptwidget) no Android, sem app de loja.
 - **Do seu jeito.** Temas, cor de destaque, fontes, densidade, cards do painel, CSS próprio e cards HTML em sandbox.
 - **Oito idiomas:** inglês, turco, alemão, francês, espanhol, português do Brasil, chinês simplificado e japonês. Instalável como app web.
 
@@ -120,7 +120,7 @@ No Docker, deixe `PORT` e `COINIO_DATA_DIR` como estão: publique outra porta (`
 
 ## HTTPS e acesso remoto
 
-Na rede de casa ou numa VPN, `http://<ip-do-servidor>:8080` basta. O widget para iPhone (fora de casa) e os conectores do claude.ai / ChatGPT precisam de um endereço **https** público:
+Na rede de casa ou numa VPN, `http://<ip-do-servidor>:8080` basta. Os widgets no celular (fora de casa) e os conectores do claude.ai / ChatGPT precisam de um endereço **https** público:
 
 - **Cloudflare Tunnel:** o script de instalação pede um token de túnel e inicia o `cloudflared` ao lado do Coinio, então você tem https sem abrir nenhuma porta.
 - **Proxy reverso:** se você já usa Caddy, Traefik, Nginx ou Dokploy, aponte um domínio para a porta 8080.
@@ -131,11 +131,10 @@ Nos dois casos, defina `COINIO_PUBLIC_URL` com esse endereço https. Veja [Expos
 
 O servidor MCP fica no endereço do seu Coinio mais `/mcp`. Apps na nuvem, como o claude.ai e o ChatGPT, entram com OAuth (exige `COINIO_PUBLIC_URL` em https); ferramentas na sua própria máquina usam uma chave de API de **Configurações › Integrações › Chaves de API**. Em **Configurações › Integrações** há trechos prontos para copiar. Guia: [docs.getcoinio.me/docs/integrations/mcp](https://docs.getcoinio.me/docs/integrations/mcp).
 
-## Widget para iPhone
+## Widgets no celular (iPhone e Android)
 
-[`widget/coinio-widget.js`](widget/coinio-widget.js) é um script do [Scriptable](https://scriptable.app) para widgets pequenos, médios e grandes da Tela de Início e widgets da Tela Bloqueada. Crie uma chave de API somente leitura, cole o script e preencha `SERVER_URL` e `API_KEY`. Guia: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
-
-**Android:** o widget do Coinio roda no app gratuito [ScriptWidget](https://github.com/everettjf/scriptwidget); **Configurações › Integrações › Widget do Android** dá o parâmetro para colar. Guia: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+- **iPhone (Scriptable):** [`widget/coinio-widget.js`](widget/coinio-widget.js) é um script do [Scriptable](https://scriptable.app) para widgets pequenos, médios e grandes na Tela de Início e na Tela Bloqueada. Crie uma chave de API somente leitura, cole o script e preencha `SERVER_URL` e `API_KEY`. Guia: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
+- **Android (ScriptWidget):** roda no app gratuito [ScriptWidget](https://github.com/everettjf/scriptwidget); **Configurações › Integrações › Widget do Android** dá o parâmetro para colar. Guia: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
 
 ## Firefly III
 
@@ -194,7 +193,7 @@ src/server/     API Express, SQLite (Drizzle), autenticação, OAuth, servidor M
 src/web/        App web React + Vite (rotas, cards do painel, configurações, i18n, backend da demo)
 src/shared/     Lógica comum ao servidor, à web e à demo: agenda, catálogo, aparência, tipos
 tests/          Testes do servidor (os testes da web ficam junto dos componentes)
-widget/         Widget do Scriptable para iPhone
+widget/         Widgets para iPhone (Scriptable) e Android (ScriptWidget)
 deploy/         Templates do Unraid, CasaOS e Portainer
 getcoinio/website  Landing page (getcoinio.me) & install script (separate repo)
 getcoinio/docs     Documentation (docs.getcoinio.me, separate repo)

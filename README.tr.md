@@ -62,7 +62,7 @@ Coinio düzenli ödediğin her şeyi tek sayfada toplar: dizi platformu, bulut d
 - **Passkey ile şifresiz giriş.** İki adımlı doğrulamanın yanında Face ID, Touch ID, Windows Hello ya da donanım güvenlik anahtarıyla parola yazmadan giriş yap.
 - **Firefly III.** Kendi [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly) kurulumunla iki yönlü eşitleme: abonelikler fatura (bill) olur, ödemeler iki yöne de gider.
 - **Yapay zekâ asistanları (MCP).** OAuth destekli yerleşik MCP sunucusu sayesinde Claude, ChatGPT ve başka MCP istemcileri aboneliklerini okuyup güncelleyebilir.
-- **iPhone widget'ı.** Scriptable ile ana ekran ve kilit ekranı widget'ları; App Store uygulaması gerekmez.
+- **Telefon widget'ları (iPhone ve Android).** iPhone'da [Scriptable](https://scriptable.app), Android'de [ScriptWidget](https://github.com/everettjf/scriptwidget) ile ana ekran ve kilit ekranı widget'ları; mağaza uygulaması gerekmez.
 - **Kendi görünüşün.** Tema, vurgu rengi, yazı tipi, sıklık, ana sayfa kartları, özel CSS ve korumalı alanda çalışan HTML kartları.
 - **Sekiz dil:** Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, Brezilya Portekizcesi, Basitleştirilmiş Çince ve Japonca. Web uygulaması olarak ana ekrana eklenebilir.
 
@@ -122,7 +122,7 @@ Docker'da `PORT` ve `COINIO_DATA_DIR` ile oynama: başka bir port istiyorsan dı
 
 ## HTTPS ve dışarıdan erişim
 
-Ev ağında ya da VPN üzerinden `http://<sunucu-ip>:8080` yeter. Evden uzaktayken iPhone widget'ı ve claude.ai / ChatGPT bağlayıcıları için herkese açık bir **https** adresi gerekir:
+Ev ağında ya da VPN üzerinden `http://<sunucu-ip>:8080` yeter. Evden uzaktayken telefon widget'ları ve claude.ai / ChatGPT bağlayıcıları için herkese açık bir **https** adresi gerekir:
 
 - **Cloudflare Tunnel:** kurulum betiği tünel token'ını sorar ve Coinio'nun yanında `cloudflared` başlatır; hiçbir port açmadan https adresin olur.
 - **Ters vekil sunucu:** zaten Caddy, Traefik, Nginx ya da Dokploy kullanıyorsan bir alan adını 8080 portuna yönlendir.
@@ -133,11 +133,10 @@ Ev ağında ya da VPN üzerinden `http://<sunucu-ip>:8080` yeter. Evden uzaktayk
 
 MCP sunucusu Coinio adresinin sonuna `/mcp` eklenerek bulunur. claude.ai ve ChatGPT gibi bulut uygulamaları OAuth ile giriş yapar (https'li `COINIO_PUBLIC_URL` gerekir); kendi bilgisayarındaki araçlar **Ayarlar › Entegrasyonlar › API anahtarları**'ndan alınan anahtarı kullanır. **Ayarlar › Entegrasyonlar** hazır kod parçalarını gösterir. Rehber: [docs.getcoinio.me/docs/integrations/mcp](https://docs.getcoinio.me/docs/integrations/mcp).
 
-## iPhone widget'ı
+## Telefon widget'ları (iPhone ve Android)
 
-[`widget/coinio-widget.js`](widget/coinio-widget.js), küçük, orta ve büyük ana ekran widget'ları ile kilit ekranı widget'ları için bir [Scriptable](https://scriptable.app) betiği. Salt okunur bir API anahtarı oluştur, betiği yapıştır, `SERVER_URL` ve `API_KEY` satırlarını doldur. Rehber: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
-
-**Android:** Coinio widget'ı ücretsiz [ScriptWidget](https://github.com/everettjf/scriptwidget) uygulamasında çalışır; yapıştırılacak ayar metnini **Ayarlar › Entegrasyonlar › Android widget'ı** verir. Rehber: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
+- **iPhone (Scriptable):** [`widget/coinio-widget.js`](widget/coinio-widget.js), küçük, orta ve büyük ana ekran widget'ları ile kilit ekranı widget'ları için bir [Scriptable](https://scriptable.app) betiğidir. Salt okunur bir API anahtarı oluşturup `SERVER_URL` ve `API_KEY` satırlarını doldurman yeter. Rehber: [docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget).
+- **Android (ScriptWidget):** Ücretsiz [ScriptWidget](https://github.com/everettjf/scriptwidget) uygulamasında çalışır; yapıştırılacak ayar metnini **Ayarlar › Entegrasyonlar › Android widget'ı** verir. Rehber: [docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget).
 
 ## Firefly III
 
@@ -196,7 +195,7 @@ src/server/        Express API, SQLite (Drizzle), oturum, OAuth, MCP sunucusu, z
 src/web/           React + Vite web uygulaması (sayfalar, ana sayfa kartları, ayarlar, i18n, demo arka ucu)
 src/shared/        Sunucu, web ve demonun ortak mantığı: ödeme takvimi, katalog, görünüş, tipler
 tests/             Sunucu testleri (web testleri bileşenlerin yanında)
-widget/            Scriptable iPhone widget'ı
+widget/            iPhone (Scriptable) ve Android (ScriptWidget) widget'ları
 deploy/            Unraid, CasaOS ve Portainer şablonları
 getcoinio/website  Tanıtım sitesi (getcoinio.me) ve kurulum betiği (ayrı depo)
 getcoinio/docs     Belge sitesi (docs.getcoinio.me, ayrı depo)

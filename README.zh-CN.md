@@ -60,7 +60,7 @@ Coinio 把所有周期性付款放在同一个页面：流媒体、云存储、�
 - **导入与导出。** 从 Wallos 迁移订阅；订阅和付款记录可导出为 CSV 或 JSON。
 - **Firefly III。** 与你自己的 [Firefly III](https://docs.getcoinio.me/docs/integrations/firefly) 双向同步：订阅对应账单（bill），付款记录双向传递。
 - **AI 助手（MCP）。** 内置支持 OAuth 的 MCP 服务器，Claude、ChatGPT 和其他 MCP 客户端可以读取并更新你的订阅。
-- **iPhone 小组件。** 通过 Scriptable 提供主屏幕和锁定屏幕小组件，无需安装 App Store 应用。
+- **手机小组件（iPhone 与 Android）。** 通过 iPhone 的 [Scriptable](https://scriptable.app) 与 Android 的 [ScriptWidget](https://github.com/everettjf/scriptwidget) 提供主屏幕和锁屏小组件，无需安装应用商店客户端。
 - **自定义外观。** 主题、强调色、字体、密度、仪表盘卡片、自定义 CSS 和沙盒化的 HTML 卡片。
 - **八种语言**：英语、土耳其语、德语、法语、西班牙语、巴西葡萄牙语、简体中文和日语。可安装为 Web 应用。
 
@@ -120,7 +120,7 @@ Coinio 通过环境变量配置。其余所有设置（币种、时区、语言�
 
 ## HTTPS 与远程访问
 
-在家庭网络或 VPN 中，`http://<服务器 IP>:8080` 就够用了。iPhone 小组件（不在家时）以及 claude.ai / ChatGPT 连接器需要一个公网 **https** 地址：
+在家庭网络或 VPN 中，`http://<服务器 IP>:8080` 就够用了。手机小组件（不在家时）以及 claude.ai / ChatGPT 连接器需要一个公网 **https** 地址：
 
 - **Cloudflare Tunnel**：安装脚本会询问隧道令牌，并在 Coinio 旁边启动 `cloudflared`，无需开放任何端口即可获得 https。
 - **反向代理**：如果你已经在用 Caddy、Traefik、Nginx 或 Dokploy，把域名指向 8080 端口即可。
@@ -131,11 +131,10 @@ Coinio 通过环境变量配置。其余所有设置（币种、时区、语言�
 
 MCP 服务器位于你的 Coinio 地址加 `/mcp`。claude.ai 和 ChatGPT 等云端应用通过 OAuth 登录（需要 https 的 `COINIO_PUBLIC_URL`）；你自己电脑上的工具则使用在 **设置 › 集成 › API 密钥** 中创建的 API 密钥。**设置 › 集成** 里有现成的配置片段。指南：[docs.getcoinio.me/docs/integrations/mcp](https://docs.getcoinio.me/docs/integrations/mcp)。
 
-## iPhone 小组件
+## 手机小组件（iPhone 与 Android）
 
-[`widget/coinio-widget.js`](widget/coinio-widget.js) 是一个 [Scriptable](https://scriptable.app) 脚本，提供小、中、大三种主屏幕小组件以及锁定屏幕小组件。创建一个只读 API 密钥，粘贴脚本，再填写 `SERVER_URL` 和 `API_KEY`。指南：[docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget)。
-
-**Android：** Coinio 小组件运行在免费的 [ScriptWidget](https://github.com/everettjf/scriptwidget) 应用中；“设置 › 集成 › Android 小组件”会给出要粘贴的参数。指南：[docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget)。
+- **iPhone（Scriptable）：** [`widget/coinio-widget.js`](widget/coinio-widget.js) 是一个 [Scriptable](https://scriptable.app) 脚本，提供小、中、大三种主屏幕小组件以及锁定屏幕小组件。创建一个只读 API 密钥，粘贴脚本，再填写 `SERVER_URL` 和 `API_KEY`。指南：[docs.getcoinio.me/docs/integrations/iphone-widget](https://docs.getcoinio.me/docs/integrations/iphone-widget)。
+- **Android（ScriptWidget）：** 运行在免费的 [ScriptWidget](https://github.com/everettjf/scriptwidget) 应用中；“设置 › 集成 › Android 小组件”会给出要粘贴的参数。指南：[docs.getcoinio.me/docs/integrations/android-widget](https://docs.getcoinio.me/docs/integrations/android-widget)。
 
 ## Firefly III
 
@@ -194,7 +193,7 @@ src/server/     Express API、SQLite (Drizzle)、认证、OAuth、MCP 服务器�
 src/web/        React + Vite Web 应用（路由、仪表盘卡片、设置、i18n、演示后端）
 src/shared/     服务端、网页和演示共用的逻辑：付款日程、目录、外观、类型
 tests/          服务端测试（网页测试放在各自组件旁边）
-widget/         Scriptable iPhone 小组件
+widget/         iPhone（Scriptable）与 Android（ScriptWidget）小组件
 deploy/         Unraid、CasaOS 和 Portainer 模板
 getcoinio/website  Landing page (getcoinio.me) & install script (separate repo)
 getcoinio/docs     Documentation (docs.getcoinio.me, separate repo)
