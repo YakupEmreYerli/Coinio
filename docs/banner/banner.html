@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  Source of Coinio README, org, website, docs and OG banners.
-  Open banner.html?lang=<lang>&theme=<dark|light>&variant=<coinio|org|website|docs|og>
+  Source of Coinio README, org, website, docs, cloud and OG banners.
+  Open banner.html?lang=<lang>&theme=<dark|light>&variant=<coinio|org|website|docs|cloud|og>
   at a 1280x640 viewport (1200x630 for og) and take a screenshot.
 -->
 <html lang="en" data-theme="dark">
@@ -68,8 +68,9 @@
       radial-gradient(ellipse 45% 55% at 82% 70%, var(--glow-b), transparent 70%);
   }
   .copy {
-    position: absolute; left: 68px; top: 0; bottom: 0; width: 540px;
+    position: absolute; left: 68px; top: 0; bottom: 0; width: 535px;
     display: flex; flex-direction: column; justify-content: center;
+    z-index: 3;
   }
   .logo { height: 44px; width: auto; align-self: flex-start; }
   h1 {
@@ -100,22 +101,50 @@
   }
   html[data-variant="og"] .chips { display: none; }
   html[data-variant="og"] .og-foot { display: block; }
+
+  .shot-back {
+    display: none;
+    position: absolute; left: 720px; top: 44px; width: 760px; height: 490px;
+    border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--shot-border);
+    box-shadow: var(--shot-shadow);
+    background: var(--shot-bg);
+    opacity: 0.86;
+    z-index: 1;
+  }
+  .shot-back img { display: block; width: 760px; height: auto; }
+  html[data-variant="org"] .shot-back { display: block; }
+
   .shot {
     position: absolute; left: 632px; top: 82px; width: 860px; height: 570px;
     border-radius: 16px; overflow: hidden;
     border: 1px solid var(--shot-border);
     box-shadow: var(--shot-shadow);
     background: var(--shot-bg);
+    z-index: 2;
     -webkit-mask-image: linear-gradient(#000 72%, transparent 97%);
             mask-image: linear-gradient(#000 72%, transparent 97%);
   }
   .shot img { display: block; width: 1080px; height: auto; }
+
+  html[data-variant="org"] .shot { left: 616px; top: 132px; width: 840px; height: 520px; }
+  html[data-variant="website"] .shot,
+  html[data-variant="docs"] .shot,
+  html[data-variant="cloud"] .shot {
+    left: 626px; top: 76px; width: 780px; height: 540px;
+  }
+  html[data-variant="website"] .shot img,
+  html[data-variant="docs"] .shot img,
+  html[data-variant="cloud"] .shot img {
+    width: 780px;
+  }
 </style>
 </head>
 <body>
   <div class="grid"></div>
   <div class="glow"></div>
 
+  <div class="shot-back"><img data-t="shotBack" src="../screenshots/site-dark.webp" alt=""></div>
   <div class="shot"><img data-t="shot" src="../screenshots/dashboard-dark.en.webp" alt=""></div>
 
   <div class="copy">
@@ -186,6 +215,11 @@
       lede: 'Install guides, Docker &amp; Dokploy setup, MCP, Firefly III and API reference at docs.getcoinio.me.',
       chips: ['Fumadocs · Next.js', 'Docker &amp; Dokploy', 'MCP &amp; Firefly III', 'LLMs.txt ready'],
     },
+    cloud: {
+      headline: 'Coinio Cloud<br>app.getcoinio.me<span class="pd">.</span>',
+      lede: 'Ücretsiz barındırılan Coinio sürümü. E-posta, Google, GitHub ve aile planlarıyla tek tıkla başla.',
+      chips: ['app.getcoinio.me', 'Ücretsiz bulut', 'Aile ve ortak planlar', 'Özel depo'],
+    },
     og: {
       headline: 'Every subscription,<br>one calm page<span class="pd">.</span>',
       lede: 'Track subscriptions, bills and shared family plans. Use the free cloud or self-host in one Docker container.',
@@ -200,12 +234,19 @@
   const theme = params.get('theme') === 'light' ? 'light' : 'dark';
   const variant = params.get('variant') || 'coinio';
 
-  document.documentElement.lang = variant === 'coinio' ? lang : 'en';
+  document.documentElement.lang = variant === 'coinio' ? lang : (variant === 'cloud' ? 'tr' : 'en');
   document.documentElement.dataset.theme = theme;
   document.documentElement.dataset.variant = variant;
 
-  const shotFile = theme === 'light' ? `dashboard.${lang}.webp` : `dashboard-dark.${lang}.webp`;
+  const shotMap = {
+    website: theme === 'light' ? 'site-light.webp' : 'site-dark.webp',
+    docs: theme === 'light' ? 'docs-light.webp' : 'docs-dark.webp',
+    cloud: theme === 'light' ? 'cloud-light.webp' : 'cloud-dark.webp',
+    org: theme === 'light' ? 'dashboard.en.webp' : 'dashboard-dark.en.webp',
+  };
+  const shotFile = shotMap[variant] || (theme === 'light' ? `dashboard.${lang}.webp` : `dashboard-dark.${lang}.webp`);
   document.querySelector('[data-t="shot"]').src = `../screenshots/${shotFile}`;
+  document.querySelector('[data-t="shotBack"]').src = `../screenshots/${theme === 'light' ? 'site-light.webp' : 'site-dark.webp'}`;
   document.querySelector('[data-t="logo"]').src =
     theme === 'light' ? '../brand/export/coinio-logo.svg' : '../brand/export/coinio-logo-on-dark.svg';
 
