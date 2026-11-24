@@ -181,7 +181,7 @@ pnpm build        # dist/server と dist/web
 pnpm build:demo   # ブラウザだけで動くデモを dist/demo/ に出力
 ```
 
-ドキュメントサイトは別パッケージです: `cd docs-site && pnpm install && pnpm dev`。そのほかは [CONTRIBUTING.md](CONTRIBUTING.md) をご覧ください。
+Web サイトとドキュメントは別リポジトリで管理しています: [getcoinio/website](https://github.com/getcoinio/website)・[getcoinio/docs](https://github.com/getcoinio/docs)。そのほかは [CONTRIBUTING.md](CONTRIBUTING.md) をご覧ください。
 
 ## プロジェクト構成
 

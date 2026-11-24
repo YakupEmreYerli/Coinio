@@ -183,20 +183,20 @@ pnpm build        # dist/server ve dist/web
 pnpm build:demo   # tarayıcıda çalışan demoyu dist/demo/ içine derler
 ```
 
-Belge sitesi ayrı bir paket: `cd docs-site && pnpm install && pnpm dev`. Gerisi [CONTRIBUTING.md](CONTRIBUTING.md) dosyasında (İngilizce).
+Tanıtım sitesi ([getcoinio/website](https://github.com/getcoinio/website)) ve belge sitesi ([getcoinio/docs](https://github.com/getcoinio/docs)) ayrı depolarda durur. Gerisi [CONTRIBUTING.md](CONTRIBUTING.md) dosyasında (İngilizce).
 
 ## Proje yapısı
 
 ```text
-src/server/     Express API, SQLite (Drizzle), oturum, OAuth, MCP sunucusu, zamanlayıcı, servisler
-src/web/        React + Vite web uygulaması (sayfalar, ana sayfa kartları, ayarlar, i18n, demo arka ucu)
-src/shared/     Sunucu, web ve demonun ortak mantığı: ödeme takvimi, katalog, görünüş, tipler
-tests/          Sunucu testleri (web testleri bileşenlerin yanında)
-widget/         Scriptable iPhone widget'ı
-deploy/         Unraid, CasaOS ve Portainer şablonları
-getcoinio/website  Landing page (getcoinio.me) & install script (separate repo)
-getcoinio/docs     Documentation (docs.getcoinio.me, separate repo)
-docs/           Marka dosyaları ve README görselleri
+src/server/        Express API, SQLite (Drizzle), oturum, OAuth, MCP sunucusu, zamanlayıcı, servisler
+src/web/           React + Vite web uygulaması (sayfalar, ana sayfa kartları, ayarlar, i18n, demo arka ucu)
+src/shared/        Sunucu, web ve demonun ortak mantığı: ödeme takvimi, katalog, görünüş, tipler
+tests/             Sunucu testleri (web testleri bileşenlerin yanında)
+widget/            Scriptable iPhone widget'ı
+deploy/            Unraid, CasaOS ve Portainer şablonları
+getcoinio/website  Tanıtım sitesi (getcoinio.me) ve kurulum betiği (ayrı depo)
+getcoinio/docs     Belge sitesi (docs.getcoinio.me, ayrı depo)
+docs/              Marka dosyaları ve README görselleri
 ```
 
 ## Teşekkürler

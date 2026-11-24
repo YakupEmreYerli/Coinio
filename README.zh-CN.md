@@ -181,7 +181,7 @@ pnpm build        # dist/server 和 dist/web
 pnpm build:demo   # 仅在浏览器中运行的演示，输出到 dist/demo/
 ```
 
-文档站是一个独立的包：`cd docs-site && pnpm install && pnpm dev`。其余内容请见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+官网和文档站在独立仓库中维护：[getcoinio/website](https://github.com/getcoinio/website) 与 [getcoinio/docs](https://github.com/getcoinio/docs)。其余内容请见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 项目结构
 

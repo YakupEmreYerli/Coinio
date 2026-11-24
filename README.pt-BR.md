@@ -181,7 +181,7 @@ pnpm build        # dist/server e dist/web
 pnpm build:demo   # demo que roda só no navegador, em dist/demo/
 ```
 
-O site de documentação é um pacote separado: `cd docs-site && pnpm install && pnpm dev`. Veja [CONTRIBUTING.md](CONTRIBUTING.md) para o resto.
+O site e a documentação ficam em repositórios separados: [getcoinio/website](https://github.com/getcoinio/website) e [getcoinio/docs](https://github.com/getcoinio/docs). Veja [CONTRIBUTING.md](CONTRIBUTING.md) para o resto.
 
 ## Estrutura do projeto
 
