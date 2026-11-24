@@ -10,7 +10,11 @@
 
 [ウェブサイト](https://getcoinio.me) · [ドキュメント](https://docs.getcoinio.me) · [ライブデモ](https://getcoinio.me/demo/) · [無料で使う](https://app.getcoinio.me/signup)
 
-![Coinio: すべてのサブスクを、1ページに](docs/banner.ja.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/banner.ja.dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/banner.ja.light.png">
+  <img src="docs/banner.ja.dark.png" alt="Coinio: すべてのサブスクを、1ページに">
+</picture>
 
 Coinio は、定期的な支払いをすべて1つのページにまとめます。動画配信、クラウドストレージ、ジム、家賃、年に1回更新するドメイン。今週の支払い、今月の残り、1年間の合計金額が、メインの通貨に換算されてひと目でわかります。他人のサーバーにアカウントを作る必要はなく、テレメトリーも有料プランもありません。
 

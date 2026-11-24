@@ -10,7 +10,11 @@
 
 [网站](https://getcoinio.me) · [文档](https://docs.getcoinio.me) · [在线演示](https://getcoinio.me/demo/) · [免费使用](https://app.getcoinio.me/signup)
 
-![Coinio：所有订阅，一页尽览](docs/banner.zh-CN.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/banner.zh-CN.dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/banner.zh-CN.light.png">
+  <img src="docs/banner.zh-CN.dark.png" alt="Coinio：所有订阅，一页尽览">
+</picture>
 
 Coinio 把所有周期性付款放在同一个页面：流媒体、云存储、健身房、房租，还有一年续费一次的域名。本周有哪些要扣款、本月还剩多少没付、全年一共要花多少钱，都会按汇率换算成你的主币种，一目了然。无需在别人的服务器上注册账户，没有遥测，也没有付费版。
 

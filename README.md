@@ -10,7 +10,11 @@ A self-hosted subscription and bill tracker: one Docker container, one data fold
 
 [Website](https://getcoinio.me) · [Documentation](https://docs.getcoinio.me) · [Live demo](https://getcoinio.me/demo/) · [Free hosted app](https://app.getcoinio.me/signup)
 
-![Coinio: every subscription, one calm page](docs/banner.en.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/banner.en.dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/banner.en.light.png">
+  <img src="docs/banner.en.dark.png" alt="Coinio: every subscription, one calm page">
+</picture>
 
 Coinio keeps every recurring payment on one page: streaming, cloud storage, the gym, rent, the domain you renew once a year. You see what is due this week, what is left to pay this month and what the whole year costs, converted to your main currency. There is no account on someone else's server, no telemetry and no paid tier.
 

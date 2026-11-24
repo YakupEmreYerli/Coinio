@@ -1,9 +1,10 @@
 <!doctype html>
 <!--
-  Source of docs/banner.<lang>.png (en, tr, de, fr, es, pt-BR, zh-CN, ja) (1280×640, README header and GitHub social preview).
-  Open banner.html?lang=<lang> at a 1280×640 viewport and take a screenshot.
+  Source of Coinio README, org, website, docs and OG banners.
+  Open banner.html?lang=<lang>&theme=<dark|light>&variant=<coinio|org|website|docs|og>
+  at a 1280x640 viewport (1200x630 for og) and take a screenshot.
 -->
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <title>Coinio banner</title>
@@ -13,21 +14,45 @@
 <style>
   :root {
     --bg: #07080c;
-    --line: rgba(255, 255, 255, 0.07);
+    --line: rgba(255, 255, 255, 0.065);
     --text: #eceef6;
+    --heading: #f4f5fb;
     --muted: #9a9fb4;
     --brand: #4f5bd5;
     --tint: #8e96ff;
+    --chip-text: #d6d9ee;
+    --chip-border: rgba(142, 150, 255, 0.22);
+    --chip-bg: linear-gradient(180deg, rgba(79, 91, 213, 0.18), rgba(79, 91, 213, 0.05));
+    --shot-bg: #0f1117;
+    --shot-border: rgba(255, 255, 255, 0.11);
+    --shot-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 40px 120px -30px rgba(79, 91, 213, 0.65), 0 20px 50px -20px rgba(0, 0, 0, 0.8);
+    --glow-a: rgba(79, 91, 213, 0.30);
+    --glow-b: rgba(79, 91, 213, 0.22);
+  }
+  html[data-theme="light"] {
+    --bg: #f8f8fb;
+    --line: rgba(79, 91, 213, 0.08);
+    --text: #0f172a;
+    --heading: #0f172a;
+    --muted: #475569;
+    --tint: #4f5bd5;
+    --chip-text: #3730a3;
+    --chip-border: rgba(79, 91, 213, 0.24);
+    --chip-bg: linear-gradient(180deg, rgba(79, 91, 213, 0.10), rgba(79, 91, 213, 0.03));
+    --shot-bg: #ffffff;
+    --shot-border: rgba(15, 23, 42, 0.10);
+    --shot-shadow: 0 32px 90px -24px rgba(79, 91, 213, 0.22), 0 16px 40px -18px rgba(15, 23, 42, 0.14);
+    --glow-a: rgba(79, 91, 213, 0.13);
+    --glow-b: rgba(124, 134, 247, 0.11);
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; width: 1280px; height: 640px; overflow: hidden; background: var(--bg); }
+  html, body { margin: 0; width: 100vw; height: 100vh; overflow: hidden; background: var(--bg); }
   body {
     position: relative;
     font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
     color: var(--text);
     -webkit-font-smoothing: antialiased;
   }
-  /* Fine grid fading out toward the edges, one indigo glow: same background as getcoinio.me. */
   .grid {
     position: absolute; inset: 0;
     background:
@@ -39,40 +64,52 @@
   .glow {
     position: absolute; inset: 0;
     background:
-      radial-gradient(ellipse 55% 45% at 22% 0%, rgba(79, 91, 213, 0.30), transparent 70%),
-      radial-gradient(ellipse 45% 55% at 82% 70%, rgba(79, 91, 213, 0.22), transparent 70%);
+      radial-gradient(ellipse 55% 45% at 22% 0%, var(--glow-a), transparent 70%),
+      radial-gradient(ellipse 45% 55% at 82% 70%, var(--glow-b), transparent 70%);
   }
   .copy {
-    position: absolute; left: 72px; top: 0; bottom: 0; width: 530px;
+    position: absolute; left: 68px; top: 0; bottom: 0; width: 540px;
     display: flex; flex-direction: column; justify-content: center;
   }
-  .logo { height: 46px; width: auto; align-self: flex-start; }
+  .logo { height: 44px; width: auto; align-self: flex-start; }
   h1 {
-    margin: 38px 0 0;
+    margin: 30px 0 0;
     font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-    font-weight: 800; font-size: 54px; line-height: 1.06; letter-spacing: -0.035em;
-    color: #f4f5fb;
+    font-weight: 800; font-size: 50px; line-height: 1.07; letter-spacing: -0.035em;
+    color: var(--heading);
   }
   h1 .pd { color: var(--tint); }
-  p { margin: 22px 0 0; font-size: 20px; line-height: 1.5; color: var(--muted); max-width: 470px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+  p.lede {
+    margin: 20px 0 0; font-size: 19px; line-height: 1.5; color: var(--muted); max-width: 495px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; max-width: 520px; }
   .chip {
-    font-size: 14px; font-weight: 500; color: #d6d9ee;
+    font-size: 13.5px; font-weight: 500; color: var(--chip-text);
     padding: 7px 13px; border-radius: 999px;
-    border: 1px solid rgba(142, 150, 255, 0.22);
-    background: linear-gradient(180deg, rgba(79, 91, 213, 0.18), rgba(79, 91, 213, 0.05));
+    border: 1px solid var(--chip-border);
+    background: var(--chip-bg);
+    white-space: nowrap;
   }
+  .og-foot {
+    display: none;
+    margin-top: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+  }
+  html[data-variant="og"] .chips { display: none; }
+  html[data-variant="og"] .og-foot { display: block; }
   .shot {
-    position: absolute; left: 628px; top: 88px; width: 860px; height: 560px;
+    position: absolute; left: 632px; top: 82px; width: 860px; height: 570px;
     border-radius: 16px; overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 40px 120px -30px rgba(79, 91, 213, 0.65), 0 20px 50px -20px rgba(0, 0, 0, 0.8);
-    background: #0f1117;
-    /* Fades the screenshot into the background at the bottom edge. */
-    -webkit-mask-image: linear-gradient(#000 70%, transparent 96%);
-            mask-image: linear-gradient(#000 70%, transparent 96%);
+    border: 1px solid var(--shot-border);
+    box-shadow: var(--shot-shadow);
+    background: var(--shot-bg);
+    -webkit-mask-image: linear-gradient(#000 72%, transparent 97%);
+            mask-image: linear-gradient(#000 72%, transparent 97%);
   }
-  .shot img { display: block; width: 1120px; height: auto; }
+  .shot img { display: block; width: 1080px; height: auto; }
 </style>
 </head>
 <body>
@@ -82,63 +119,101 @@
   <div class="shot"><img data-t="shot" src="../screenshots/dashboard-dark.en.webp" alt=""></div>
 
   <div class="copy">
-    <img class="logo" src="../brand/export/coinio-logo-on-dark.svg" alt="Coinio">
+    <img class="logo" data-t="logo" src="../brand/export/coinio-logo-on-dark.svg" alt="Coinio">
     <h1 data-t="headline"></h1>
-    <p data-t="lede"></p>
+    <p class="lede" data-t="lede"></p>
     <div class="chips" data-t="chips"></div>
+    <div class="og-foot" data-t="ogfoot"></div>
   </div>
 
 <script>
-  const TEXT = {
+  const COINIO_TEXT = {
     en: {
       headline: 'Every subscription,<br>one calm page<span class="pd">.</span>',
-      lede: 'A self-hosted tracker for subscriptions and bills. Reminders before every charge, totals in your own currency.',
-      chips: ['Open source · MIT', 'One Docker container', 'MCP for Claude &amp; ChatGPT'],
+      lede: 'Subscriptions and bills on one calm page. Use the free cloud or self-host in one Docker container.',
+      chips: ['Free cloud · Self-hosted', 'Family &amp; shared plans', 'MCP for Claude &amp; ChatGPT', 'Open source · MIT'],
     },
     tr: {
       headline: 'Bütün aboneliklerin<br>tek sakin sayfada<span class="pd">.</span>',
-      lede: 'Kendi sunucunda çalışan abonelik ve fatura takibi. Her ödemeden önce hatırlatır, toplamı kendi para biriminde gösterir.',
-      chips: ['Açık kaynak · MIT', 'Tek Docker kapsayıcısı', 'Claude ve ChatGPT için MCP'],
+      lede: 'Abonelikler ve faturalar tek sakin sayfada. Ücretsiz bulutta kullan ya da tek Docker kapsayıcısıyla kendi sunucunda çalıştır.',
+      chips: ['Ücretsiz bulut · Kendi sunucun', 'Aile ve ortak planlar', 'Claude ve ChatGPT için MCP', 'Açık kaynak · MIT'],
     },
     de: {
       headline: 'Alle Abos,<br>eine ruhige Seite<span class="pd">.</span>',
-      lede: 'Abos und Rechnungen auf dem eigenen Server. Erinnerungen vor jeder Abbuchung, Summen in Ihrer Währung.',
-      chips: ['Open Source · MIT', 'Ein Docker-Container', 'MCP für Claude &amp; ChatGPT'],
+      lede: 'Abos und Rechnungen auf einer ruhigen Seite. Kostenlos in der Cloud nutzen oder per Docker selbst hosten.',
+      chips: ['Kostenlose Cloud · Self-hosted', 'Familie &amp; geteilte Abos', 'MCP für Claude &amp; ChatGPT', 'Open Source · MIT'],
     },
     fr: {
       headline: 'Tous vos abonnements,<br>sur une seule page<span class="pd">.</span>',
-      lede: 'Le suivi de vos abonnements et factures, sur votre serveur. Un rappel avant chaque prélèvement, les totaux dans votre devise.',
-      chips: ['Open source · MIT', 'Un seul conteneur Docker', 'MCP pour Claude et ChatGPT'],
+      lede: 'Abonnements et factures sur une page claire. Utilisez le cloud gratuit ou hébergez-le dans un seul conteneur Docker.',
+      chips: ['Cloud gratuit · Auto-hébergé', 'Famille &amp; partage', 'MCP pour Claude &amp; ChatGPT', 'Open source · MIT'],
     },
     es: {
       headline: 'Todas tus suscripciones,<br>en una página tranquila<span class="pd">.</span>',
-      lede: 'Suscripciones y facturas en tu propio servidor. Avisos antes de cada cobro y totales en tu moneda.',
-      chips: ['Código abierto · MIT', 'Un solo contenedor Docker', 'MCP para Claude y ChatGPT'],
+      lede: 'Suscripciones y facturas en una sola página. Úsalo gratis en la nube o en tu servidor con un contenedor Docker.',
+      chips: ['Nube gratis · Self-hosted', 'Familia y planes compartidos', 'MCP para Claude y ChatGPT', 'Código abierto · MIT'],
     },
     'pt-BR': {
       headline: 'Todas as assinaturas,<br>numa página tranquila<span class="pd">.</span>',
-      lede: 'Assinaturas e contas no seu próprio servidor. Lembretes antes de cada cobrança, totais na sua moeda.',
-      chips: ['Código aberto · MIT', 'Um contêiner Docker', 'MCP para Claude e ChatGPT'],
+      lede: 'Assinaturas e contas em uma página clara. Use grátis na nuvem ou rode no seu servidor com um contêiner Docker.',
+      chips: ['Nuvem grátis · Self-hosted', 'Família e planos divididos', 'MCP para Claude e ChatGPT', 'Código aberto · MIT'],
     },
     'zh-CN': {
       headline: '所有订阅，<br>一页看清<span class="pd">。</span>',
-      lede: '部署在自己服务器上的订阅与账单管理。每次扣费前提醒，按你的货币汇总。',
-      chips: ['开源 · MIT', '一个 Docker 容器', '支持 Claude 和 ChatGPT 的 MCP'],
+      lede: '订阅与账单一页掌握。可直接免费使用云端版，或用单个 Docker 容器自托管。',
+      chips: ['免费云端 · 自托管', '家庭与共享订阅', '支持 Claude 与 ChatGPT 的 MCP', '开源 · MIT'],
     },
     ja: {
       headline: 'すべてのサブスクを、<br>1ページに<span class="pd">。</span>',
-      lede: '自分のサーバーで動くサブスク・請求管理。引き落としの前にお知らせし、合計を自分の通貨で表示します。',
-      chips: ['オープンソース · MIT', 'Docker コンテナ1つ', 'Claude・ChatGPT 向け MCP'],
+      lede: 'サブスクと請求をひとつの画面に。無料クラウド版も、Docker コンテナ1つのセルフホストも選べます。',
+      chips: ['無料クラウド · セルフホスト', '家族・共有プラン', 'Claude・ChatGPT 向け MCP', 'オープンソース · MIT'],
     },
   };
-  const q = new URLSearchParams(location.search).get('lang');
-  const lang = q in TEXT ? q : 'en';
-  const t = TEXT[lang];
-  document.documentElement.lang = lang;
-  document.querySelector('[data-t="shot"]').src = `../screenshots/dashboard-dark.${lang}.webp`;
+
+  const VARIANTS = {
+    org: {
+      headline: 'Every subscription,<br>one calm page<span class="pd">.</span>',
+      lede: 'Open-source subscription and bill tracker. Free hosted cloud at app.getcoinio.me, or one Docker container on your server.',
+      chips: ['getcoinio/coinio', 'getcoinio/website', 'getcoinio/docs', 'Open source · MIT'],
+    },
+    website: {
+      headline: 'Coinio Website<br>&amp; Live Demo<span class="pd">.</span>',
+      lede: 'Marketing site and interactive browser demo for Coinio, served at getcoinio.me in 8 languages.',
+      chips: ['Astro 5 · Static', '8 languages', 'Live browser demo', '100/100 PageSpeed'],
+    },
+    docs: {
+      headline: 'Coinio<br>Documentation<span class="pd">.</span>',
+      lede: 'Install guides, Docker &amp; Dokploy setup, MCP, Firefly III and API reference at docs.getcoinio.me.',
+      chips: ['Fumadocs · Next.js', 'Docker &amp; Dokploy', 'MCP &amp; Firefly III', 'LLMs.txt ready'],
+    },
+    og: {
+      headline: 'Every subscription,<br>one calm page<span class="pd">.</span>',
+      lede: 'Track subscriptions, bills and shared family plans. Use the free cloud or self-host in one Docker container.',
+      chips: [],
+      ogfoot: 'getcoinio.me  ·  Free cloud & Self-hosted  ·  MIT',
+    },
+  };
+
+  const params = new URLSearchParams(location.search);
+  const qLang = params.get('lang');
+  const lang = qLang in COINIO_TEXT ? qLang : 'en';
+  const theme = params.get('theme') === 'light' ? 'light' : 'dark';
+  const variant = params.get('variant') || 'coinio';
+
+  document.documentElement.lang = variant === 'coinio' ? lang : 'en';
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.dataset.variant = variant;
+
+  const shotFile = theme === 'light' ? `dashboard.${lang}.webp` : `dashboard-dark.${lang}.webp`;
+  document.querySelector('[data-t="shot"]').src = `../screenshots/${shotFile}`;
+  document.querySelector('[data-t="logo"]').src =
+    theme === 'light' ? '../brand/export/coinio-logo.svg' : '../brand/export/coinio-logo-on-dark.svg';
+
+  const t = variant === 'coinio' ? COINIO_TEXT[lang] : (VARIANTS[variant] || COINIO_TEXT.en);
   document.querySelector('[data-t="headline"]').innerHTML = t.headline;
-  document.querySelector('[data-t="lede"]').textContent = t.lede;
-  document.querySelector('[data-t="chips"]').innerHTML = t.chips.map((c) => `<span class="chip">${c}</span>`).join('');
+  document.querySelector('[data-t="lede"]').innerHTML = t.lede;
+  document.querySelector('[data-t="chips"]').innerHTML = (t.chips || []).map((c) => `<span class="chip">${c}</span>`).join('');
+  document.querySelector('[data-t="ogfoot"]').textContent = t.ogfoot || '';
 </script>
 </body>
 </html>

@@ -10,7 +10,11 @@ Kendi sunucunda çalışan abonelik ve fatura takibi: tek Docker kapsayıcısı,
 
 [Site](https://getcoinio.me) · [Belgeler](https://docs.getcoinio.me) · [Canlı demo](https://getcoinio.me/demo/) · [Ücretsiz kullan](https://app.getcoinio.me/signup)
 
-![Coinio: bütün aboneliklerin tek sakin sayfada](docs/banner.tr.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/banner.tr.dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/banner.tr.light.png">
+  <img src="docs/banner.tr.dark.png" alt="Coinio: bütün aboneliklerin tek sakin sayfada">
+</picture>
 
 Coinio düzenli ödediğin her şeyi tek sayfada toplar: dizi platformu, bulut depolama, spor salonu, kira, yılda bir yenilediğin alan adı. Bu hafta neyin çekileceğini, bu ay ne kadar ödemen kaldığını ve bütün yılın sana kaça patladığını kendi para biriminde görürsün. Başkasının sunucusunda hesap açmazsın; telemetri ve ücretli sürüm de yok.
 

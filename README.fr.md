@@ -10,7 +10,11 @@ Un gestionnaire d’abonnements et de factures auto-hébergé : un seul conteneu
 
 [Site](https://getcoinio.me) · [Documentation](https://docs.getcoinio.me) · [Démo en direct](https://getcoinio.me/demo/) · [Utiliser gratuitement](https://app.getcoinio.me/signup)
 
-![Coinio : tous vos abonnements, sur une seule page](docs/banner.fr.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/banner.fr.dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/banner.fr.light.png">
+  <img src="docs/banner.fr.dark.png" alt="Coinio : tous vos abonnements, sur une seule page">
+</picture>
 
 Coinio réunit chaque paiement récurrent sur une seule page : streaming, stockage cloud, salle de sport, loyer, le nom de domaine que vous renouvelez une fois par an. Vous voyez ce qui arrive à échéance cette semaine, ce qu’il reste à payer ce mois-ci et ce que coûte l’année entière, converti dans votre devise principale. Pas de compte sur le serveur de quelqu’un d’autre, pas de télémétrie et pas d’offre payante.
 

@@ -10,7 +10,11 @@ Selbst gehostete Verwaltung für Abos und Rechnungen: ein Docker-Container, ein 
 
 [Website](https://getcoinio.me) · [Dokumentation](https://docs.getcoinio.me) · [Live-Demo](https://getcoinio.me/demo/) · [Kostenlos nutzen](https://app.getcoinio.me/signup)
 
-![Coinio: Alle Abos, eine ruhige Seite](docs/banner.de.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/banner.de.dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/banner.de.light.png">
+  <img src="docs/banner.de.dark.png" alt="Coinio: Alle Abos, eine ruhige Seite">
+</picture>
 
 Coinio sammelt jede wiederkehrende Zahlung auf einer Seite: Streaming, Cloud-Speicher, Fitnessstudio, Miete, die Domain, die Sie einmal im Jahr verlängern. Sie sehen, was diese Woche fällig ist, was diesen Monat noch zu zahlen bleibt und was das ganze Jahr kostet, umgerechnet in Ihre Hauptwährung. Es gibt kein Konto auf dem Server eines Fremden, kein Tracking und keine Bezahlversion.
 
