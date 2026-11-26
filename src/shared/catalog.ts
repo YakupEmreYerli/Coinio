@@ -154,6 +154,7 @@ export const CATALOG: CatalogEntry[] = [
   { id: 'aws', name: 'AWS', domain: 'aws.amazon.com', category: 'hosting', cycle: 'monthly' },
   { id: 'namecheap', name: 'Namecheap', domain: 'namecheap.com', category: 'hosting', cycle: 'yearly' },
   { id: 'godaddy', name: 'GoDaddy', domain: 'godaddy.com', category: 'hosting', cycle: 'yearly' },
+  { id: 'atak-domain', name: 'Atak Domain', domain: 'atakdomain.com', category: 'hosting', cycle: 'yearly' },
   { id: 'squarespace', name: 'Squarespace', domain: 'squarespace.com', category: 'hosting', cycle: 'yearly' },
   { id: 'wix', name: 'Wix', domain: 'wix.com', category: 'hosting', cycle: 'yearly' },
   { id: 'webflow', name: 'Webflow', domain: 'webflow.com', category: 'hosting', cycle: 'monthly' },
